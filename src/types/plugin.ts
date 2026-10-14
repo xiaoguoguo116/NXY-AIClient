@@ -1,6 +1,6 @@
 import type { Application } from '@/types/api/application'
 
-export type PluginCenterView = 'market' | 'installed' | 'development'
+export type PluginCenterView = 'local' | 'market' | 'installed' | 'development'
 
 export type PluginSource = 'official' | 'community' | 'local'
 

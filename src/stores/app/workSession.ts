@@ -69,7 +69,7 @@ const normalizeStepStatus = (status: string): WorkStepRecord['status'] => {
 
 const resolveUserId = () => {
   const userStore = useUserStore()
-  return userStore.userInfo.id || userStore.authInfo.userId || ''
+  return userStore.authInfo.token ? userStore.userInfo.id || userStore.authInfo.userId || '' : 'em-local-user'
 }
 
 export const useWorkSessionStore = defineStore('workSession', {

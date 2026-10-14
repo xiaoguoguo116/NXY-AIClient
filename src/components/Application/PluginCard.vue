@@ -124,11 +124,11 @@
   .plugin-card {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     min-width: 0;
-    padding: 16px;
+    padding: 14px;
     border: 1px solid color-mix(in srgb, var(--border-color) 65%, transparent);
-    border-radius: 12px;
+    border-radius: 9px;
     background-color: var(--content-card-bg);
     cursor: pointer;
     outline: none;
@@ -151,8 +151,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 46px;
-      height: 46px;
+      width: 40px;
+      height: 40px;
       border-radius: 11px;
       overflow: hidden;
       color: var(--text-on-primary-color);

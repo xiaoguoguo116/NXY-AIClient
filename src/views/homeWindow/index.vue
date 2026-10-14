@@ -3,28 +3,23 @@
     <SessionLockOverlay v-if="sessionLock.locked" />
     <!-- 顶部 -->
     <ToolBar v-show="!sessionLock.locked" class="home__header" @maximized="(is) => (isMaximize = is)">
-      <div class="w-50px flex items-center justify-center">
-        <div
-          class="text-12px m-l-2 font-900 select-none bg-gradient-to-r from-[var(--primary-color)] to-[var(--primary-strong-color)] bg-clip-text text-transparent">
-          Linyu
-        </div>
+      <div class="home__brand">
+        <svg viewBox="0 0 96 72" aria-hidden="true">
+          <path d="M13 16 37 4l16 17-12 12 13 17-20 18H13l17-20-17-19Z" fill="#fff" />
+          <path d="m83 16-24-12-16 17 12 12-13 17 20 18h21L66 48l17-19Z" fill="#fff" />
+          <circle cx="48" cy="18" r="11" fill="#ff6a5d" />
+        </svg>
       </div>
-      <div class="flex justify-between items-center flex-1 pointer-events-none">
-        <div class="m-l-10px flex items-center pointer-events-auto">
-          <div class="flex position-relative items-center">
-            <Avatar :id="userStore.userInfo.id" class="size-24px rounded-5px bg-#FFF" :profile-enabled="true" />
+      <div class="home__topbar">
+        <LocalGlobalSearch v-if="previewMode" @navigate="(tab) => onClickMenu({ id: tab, path: `/home/${tab}` })" />
+        <button v-else class="home__global-search" style="pointer-events: auto" @click="openSearchChatRecord()">
+          搜索消息记录
+        </button>
+        <div class="home__topbar-right">
+          <div class="home__user-summary" @click="onUserSummaryClick">
+            <span>{{ userStore.userInfo.username || 'EM 本地聊天' }}</span>
+            <EmotionIcon v-if="userStore.userInfo.emotionId" :url="userStore.userInfo.emotionUrl" :size="18" />
           </div>
-          <div class="m-l-8px text-14px font-bold">{{ userStore.userInfo.username }}</div>
-          <div
-            class="flex items-center justify-center text-12px cursor-pointer text-[var(--text-muted-color)] m-l-10px"
-            @click="() => createEmotionWinodw()">
-            <EmotionIcon v-if="userStore.userInfo.emotionId" :url="userStore.userInfo.emotionUrl" :size="20" />
-            <div class="m-l-2px">
-              {{ userStore.userInfo.emotionId ? userStore.userInfo.emotionName : t('home.emotion.setText') }}
-            </div>
-          </div>
-        </div>
-        <div class="flex pointer-events-auto">
           <SvgIconButton href="#minimize" @click="minimizeCurrentWindow" />
           <SvgIconButton
             :href="isMaximize ? '#restore' : '#maximize'"
@@ -37,26 +32,34 @@
     <div v-show="!sessionLock.locked" class="home__layout">
       <!-- 左侧 -->
       <ToolBar class="home__sider" @maximized="(is) => (isMaximize = is)">
-        <div class="flex flex-col gap-8px">
-          <n-popover v-for="item in menuOptions" :key="item.id" :show-arrow="false" placement="right" trigger="hover">
-            <template #trigger>
-              <n-badge
-                :show="homeNavBadgeStore.shouldShowBadge(item.id)"
-                dot
-                :color="'var(--red)'"
-                class="home__tab-badge"
-                :offset="[-2, 2]">
-                <SvgIconButton
-                  :size="34"
-                  :radius="5"
-                  :href="homeTabStore.activeTabId === item.id ? item.activeIcon : item.icon"
-                  :active="item.id === homeTabStore.activeTabId"
-                  icon-size="22px"
-                  @click="() => onClickMenu(item)" />
-              </n-badge>
-            </template>
-            <span class="select-none">{{ item.label }}</span>
-          </n-popover>
+        <div class="home__sider-top">
+          <Avatar :id="userStore.userInfo.id" class="home__sider-avatar" :profile-enabled="!previewMode" round />
+          <div class="home__sider-nav">
+            <n-popover v-for="item in menuOptions" :key="item.id" :show-arrow="false" placement="right" trigger="hover">
+              <template #trigger>
+                <n-badge
+                  :show="homeNavBadgeStore.shouldShowBadge(item.id)"
+                  dot
+                  :color="'var(--red)'"
+                  class="home__tab-badge"
+                  :offset="[-2, 2]">
+                  <SvgIconButton
+                    :aria-label="item.label"
+                    :title="item.label"
+                    :size="34"
+                    :radius="5"
+                    :href="homeTabStore.activeTabId === item.id ? item.activeIcon : item.icon"
+                    :active="item.id === homeTabStore.activeTabId"
+                    color="#fff"
+                    hover-color="#fff"
+                    hover-bg="rgba(255,255,255,.14)"
+                    icon-size="22px"
+                    @click="() => onClickMenu(item)" />
+                </n-badge>
+              </template>
+              <span class="select-none">{{ item.label }}</span>
+            </n-popover>
+          </div>
         </div>
         <div>
           <n-dropdown
@@ -69,7 +72,14 @@
             <n-popover :z-index="99" :show-arrow="false" placement="right" trigger="hover">
               <template #trigger>
                 <n-badge :show="homeNavBadgeStore.shouldShowBadge('more')" dot :color="'var(--red)'" :offset="[-2, 2]">
-                  <SvgIconButton :size="34" :radius="5" href="#list" icon-size="22px" />
+                  <SvgIconButton
+                    :size="34"
+                    :radius="5"
+                    href="#list"
+                    color="#fff"
+                    hover-color="#fff"
+                    hover-bg="rgba(255,255,255,.14)"
+                    icon-size="22px" />
                 </n-badge>
               </template>
               <span class="select-none">{{ t('home.options.more.text') }}</span>
@@ -92,6 +102,7 @@
 
 <script setup lang="ts">
   import UpdateModal from '@/components/Modal/UpdateModal.vue'
+  import LocalGlobalSearch from '@/components/Chat/LocalGlobalSearch.vue'
   import SessionLockOverlay from '@/components/SessionLockOverlay.vue'
   import { dismissTopEscapeOverlay } from '@/composables/useEscapeOverlayStack'
   import { userApi } from '@/api'
@@ -133,6 +144,7 @@
   import { storeToRefs } from 'pinia'
 
   const userStore = useUserStore()
+  const previewMode = computed(() => !userStore.authInfo.token)
   const appSettings = useAppSettingsStore()
   const sessionLock = useSessionLockStore()
   const homeTabStore = useHomeTabStore()
@@ -191,25 +203,11 @@
       path: '/home/contacts'
     },
     {
-      id: 'moment' as HomeTabId,
-      label: t('home.options.moment'),
-      icon: '#moment',
-      activeIcon: '#moment-active',
-      path: '/home/moment'
-    },
-    {
       id: 'ai' as HomeTabId,
       label: t('home.options.ai'),
       icon: '#ai',
       activeIcon: '#ai-active',
       path: '/home/ai'
-    },
-    {
-      id: 'drive' as HomeTabId,
-      label: t('home.options.drive'),
-      icon: '#drive',
-      activeIcon: '#drive-active',
-      path: '/home/drive'
     },
     {
       id: 'application' as HomeTabId,
@@ -314,6 +312,11 @@
   }
 
   const onMoreMenuSelect = (key: string) => {
+    if (previewMode.value) {
+      if (key === 'exit') exitApp()
+      return
+    }
+
     if (key === 'setting') {
       createSetWinodw()
     } else if (key === 'update') {
@@ -343,6 +346,10 @@
   }
 
   const onClickMenu = (item: { id: HomeTabId; path: string }) => {
+    if (previewMode.value && !['message', 'application', 'ai'].includes(item.id)) {
+      window.$message?.info('此功能需要连接聊天服务端；本地模式可使用消息、应用和 AI Work。')
+      return
+    }
     if (homeTabStore.activeTabId === item.id && route.path === item.path) {
       return
     }
@@ -386,6 +393,7 @@
   )
 
   const onCurrentUserInfo = () => {
+    if (previewMode.value) return
     userApi.currentUserInfo().then((res) => {
       if (res.code === 0 && res.data) {
         userStore.setUserInfo(res.data)
@@ -395,24 +403,32 @@
     })
   }
 
+  const onUserSummaryClick = () => {
+    if (previewMode.value) return
+    createEmotionWinodw()
+  }
+
   onMounted(() => {
-    void connectWebSocket().catch((err) => console.error('[WebSocket] connect failed:', err))
-    void createPluginRuntimeWindow()
-    void ensureNotificationActionListener()
-    onCurrentUserInfo()
-    void homeNavBadgeStore.refreshContactsBadges()
-    prefetchHomePages(route.name as string)
+    if (!previewMode.value) {
+      void connectWebSocket().catch((err) => console.error('[WebSocket] connect failed:', err))
+      void createPluginRuntimeWindow()
+      void ensureNotificationActionListener()
+      onCurrentUserInfo()
+      void homeNavBadgeStore.refreshContactsBadges()
+      prefetchHomePages(route.name as string)
+      void appUpdateStore
+        .check({ silent: true })
+        .then((info) => {
+          if (info.needUpdate || info.needForce) {
+            showUpdateModal.value = true
+          }
+        })
+        .catch(() => undefined)
+    }
     window.addEventListener('keydown', onKeyDown)
     initGlobalShortcuts()
-    void appUpdateStore
-      .check({ silent: true })
-      .then((info) => {
-        if (info.needUpdate || info.needForce) {
-          showUpdateModal.value = true
-        }
-      })
-      .catch(() => undefined)
     void listen<HomeTabNavigatePayload>(HOME_TAB_NAVIGATE_EVENT, (event) => {
+      if (previewMode.value) return
       const { tabId, payload } = event.payload
       if (!tabId) return
       void homeTabStore.navigateTo(tabId, payload)
@@ -437,10 +453,12 @@
   onUnmounted(() => {
     unlistenCloseRequested?.()
     unlistenHomeTabNavigate?.()
-    void stopNotificationActionListener()
+    if (!previewMode.value) void stopNotificationActionListener()
     window.removeEventListener('keydown', onKeyDown)
     disposeGlobalShortcuts()
-    void disconnectWebSocket().catch((err) => console.error('[WebSocket] disconnect failed:', err))
+    if (!previewMode.value) {
+      void disconnectWebSocket().catch((err) => console.error('[WebSocket] disconnect failed:', err))
+    }
   })
 </script>
 
@@ -503,6 +521,127 @@
         background-color: var(--bg-secondary-color);
         border-radius: 5px 0 0 0;
       }
+    }
+
+    /* 参考企业 IM 的蓝白主框架 */
+    .home__header {
+      height: 42px;
+      padding: 0;
+      background: #fff;
+      border-bottom: 1px solid #e4e9ef;
+      box-shadow: 0 1px 3px rgba(30, 75, 110, 0.05);
+    }
+
+    .home__brand {
+      width: 72px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background: #2f92ed;
+
+      svg {
+        width: 34px;
+        height: 27px;
+      }
+    }
+
+    .home__topbar {
+      flex: 1;
+      min-width: 0;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+
+    .home__global-search {
+      min-width: 260px;
+      margin-left: 18px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: #b1b8c1;
+      font-size: 13px;
+
+      svg {
+        width: 16px;
+        height: 16px;
+        fill: currentColor;
+      }
+    }
+
+    .home__topbar-right {
+      display: flex;
+      align-items: center;
+      pointer-events: auto;
+    }
+
+    .home__user-summary {
+      max-width: 180px;
+      margin-right: 12px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: #667282;
+      font-size: 12px;
+      cursor: pointer;
+
+      span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+
+    .home__layout {
+      height: calc(100% - 42px);
+      background: #f5f7fa;
+
+      .home__sider {
+        width: 72px;
+        padding: 12px 0 14px;
+        background: linear-gradient(180deg, #3d9cf0 0%, #2f8ce6 100%);
+        box-shadow: 1px 0 4px rgba(19, 98, 166, 0.12);
+      }
+
+      .home__content {
+        border-radius: 0;
+        background: #f5f7fa;
+      }
+    }
+
+    .home__sider-top,
+    .home__sider-nav {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .home__sider-top {
+      gap: 18px;
+    }
+
+    .home__sider-nav {
+      gap: 10px;
+    }
+
+    .home__sider-avatar {
+      width: 44px !important;
+      height: 44px !important;
+      border: 2px solid rgba(255, 255, 255, 0.85);
+      background: #fff;
+      box-shadow: 0 3px 10px rgba(25, 86, 139, 0.22);
+    }
+
+    :deep(.home__sider .icon-wrapper.is-active) {
+      background: rgba(255, 255, 255, 0.22) !important;
+    }
+
+    :deep(.home__sider .icon-wrapper.is-active svg) {
+      color: #fff !important;
     }
   }
 </style>

@@ -36,14 +36,14 @@ export const PLUGIN_UI_WINDOW_URL = '/plugin'
 export const FILE_PREVIEW_WINDOW_URL = '/filePreview'
 
 // 主窗口
-export const HOME_WINDOW_WIDTH = 960
-export const HOME_WINDOW_HEIGHT = 675
-export const HOME_WINDOW_MIN_WIDTH = 800
-export const HOME_WINDOW_MIN_HEIGHT = 600
+export const HOME_WINDOW_WIDTH = 1100
+export const HOME_WINDOW_HEIGHT = 720
+export const HOME_WINDOW_MIN_WIDTH = 900
+export const HOME_WINDOW_MIN_HEIGHT = 620
 
 // 登录窗口（与 tauri.conf 静态 login 一致，供动态重建）
-export const LOGIN_WINDOW_WIDTH = 336
-export const LOGIN_WINDOW_HEIGHT = 580
+export const LOGIN_WINDOW_WIDTH = 420
+export const LOGIN_WINDOW_HEIGHT = 680
 
 // 注册 / 重置密码窗口
 export const REGISTER_WINDOW_WIDTH = 1020

@@ -1,0 +1,44 @@
+const {chromium} = require('C:/Users/94719/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const assert = require('node:assert/strict');
+(async()=>{
+ const browser = await chromium.connectOverCDP('http://127.0.0.1:19224');
+ try {
+  const page = browser.contexts().flatMap(c=>c.pages()).find(p=>p.url().includes('/home'));
+  const errors=[]; page.on('pageerror',e=>errors.push(e.message));
+  await page.reload();
+  const search=page.getByRole('textbox',{name:'全局搜索'});
+  await search.fill('联合索引');
+  assert((await page.locator('.search-results button').count())>1);
+  await page.locator('.search-results button').first().click();
+  await page.locator('.message.highlighted').waitFor();
+  await search.fill('张工');
+  await page.locator('.search-results button',{hasText:'成员'}).first().click();
+  await search.fill('没有此项-xyz');
+  await page.getByText('没有找到匹配结果',{exact:true}).waitFor();
+  await search.press('Escape');
+  assert.equal(await page.locator('.search-results').count(),0);
+  await page.locator('.home__sider-nav [aria-label="应用"]').click();
+  await page.locator('.application-center').waitFor();
+  assert(page.url().includes('/home/application'));
+  await page.getByText('本地模式：常用应用与本地插件可用；原有在线市场应用未删除，连接服务端并登录后可加载。',{exact:true}).waitFor();
+  await page.waitForTimeout(1000);
+  assert.equal(await page.locator('.n-message--error').count(),0);
+  await search.fill('AI Work');
+  await page.locator('.search-results button').first().click();
+  await page.locator('.workbench').waitFor();
+  assert(page.url().includes('/home/ai'));
+  await page.waitForTimeout(1500);
+  assert(!/unauthorized/i.test(await page.locator('body').innerText()));
+  assert(!(await page.locator('body').innerText()).includes('任务执行失败'));
+  await page.screenshot({path:'C:/Users/94719/.codex/visualizations/2026/10/12/01a12e05-f80d-7992-8795-27ce084b02ee/em-ai-work.png'});
+  await search.fill('技术交流');
+  await page.locator('.search-results button').first().click();
+  await page.locator('.local-chat').waitFor();
+  assert((await page.locator('.chat-title').innerText()).includes('技术交流'));
+  assert((await page.locator('.message').count())>=9);
+  await page.locator('.home__sider-nav [aria-label="AI Work"]').click();
+  await page.locator('.workbench').waitFor();
+  assert.equal(errors.length,0,errors.join('\n'));
+  console.log('PASS: local message/member search, empty search, Escape, application navigation, AI Work navigation, cross-page search, preserved chat');
+ }finally{await browser.close()}
+})().catch(e=>{console.error(e);process.exit(1)});

@@ -78,7 +78,7 @@ async fn download_inner(
     fs::create_dir_all(&updates_dir).await.map_err(|e| e.to_string())?;
 
     let safe_version = version.replace(['/', '\\', ':', '*', '?', '"', '<', '>', '|'], "_");
-    let file_name = format!("Linyu_{safe_version}.exe");
+    let file_name = format!("EM_{safe_version}.exe");
     let destination = updates_dir.join(&file_name);
     let part_path = updates_dir.join(format!("{file_name}.part"));
 

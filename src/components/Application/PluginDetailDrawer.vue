@@ -1,5 +1,10 @@
 <template>
-  <n-drawer :show="show" :width="430" placement="right" @update:show="emit('update:show', $event)">
+  <n-drawer
+    class="application-light"
+    :show="show"
+    width="min(380px, 90vw)"
+    placement="right"
+    @update:show="emit('update:show', $event)">
     <n-drawer-content v-if="item" closable>
       <template #header>
         <span>{{ t('application.detail.title') }}</span>

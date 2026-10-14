@@ -1,6 +1,7 @@
 import { invoke } from '@tauri-apps/api/core'
 import { getPlugin, listPlugins, removePlugin, setPluginEnabled, upsertPlugin } from '@/db/plugin'
 import { useUserStore } from '@/stores/user/user'
+import { initDatabase } from '@/db'
 import type { Application } from '@/types/api/application'
 import type { InstalledPlugin, PluginEntry, PluginPermission, PluginSystemInfo, PreparedPlugin } from '@/types/plugin'
 import { isApiOriginUrl, resolveResourceUrl } from '@/utils/network/http'
@@ -47,7 +48,7 @@ interface ExportDevelopmentInput {
 
 const resolveUserId = () => {
   const userStore = useUserStore()
-  return userStore.userInfo.id || userStore.authInfo.userId || ''
+  return userStore.authInfo.token ? userStore.userInfo.id || userStore.authInfo.userId || '' : 'em-local-user'
 }
 
 const requireUserId = () => {
@@ -60,7 +61,8 @@ export function getSystemInfo() {
   return invoke<PluginSystemInfo>('plugin_get_system_info')
 }
 
-export function list() {
+export async function list() {
+  await initDatabase()
   return listPlugins(requireUserId())
 }
 

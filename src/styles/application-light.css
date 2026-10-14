@@ -1,0 +1,26 @@
+/* Scoped to the application center, including its teleported dialogs. */
+.application-light {
+  color-scheme: light;
+  --text-color: #24354b;
+  --text-muted-color: #66788f;
+  --text-secondary-color: #718198;
+  --text-on-primary-color: #ffffff;
+  --bg-content-color: #f6f9fe;
+  --bg-primary-color: #ffffff;
+  --bg-secondary-color: #f0f5fc;
+  --bg-tertiary-color: #edf3fb;
+  --bg-muted-color: #f0f5fc;
+  --input-soft-bg: #ffffff;
+  --divider-color: #e3ebf5;
+  --icon-hover-color: #e5f0ff;
+  --scrollbar-color: #bdcbdd;
+  --primary-rgb: 38, 133, 237;
+  --red: #df4b59;
+  --content-card-bg: #ffffff;
+  --border-color: #dce6f2;
+  --button-soft-bg: #edf4ff;
+  --primary-color: #2685ed;
+  --primary-soft-color: #67baff;
+  --primary-strong-color: #1769c6;
+  color: var(--text-color);
+}

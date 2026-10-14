@@ -1,9 +1,12 @@
 <template>
-  <div class="application-center">
+  <n-config-provider :theme="lightTheme" class="application-light application-center">
     <header class="application-center__header">
       <div class="application-center__heading">
         <h1>{{ t('application.title') }}</h1>
         <p>{{ t('application.subtitle') }}</p>
+        <p v-if="!userStore.authInfo.token">
+          本地模式：常用应用与本地插件可用；原有在线市场应用未删除，连接服务端并登录后可加载。
+        </p>
       </div>
 
       <div class="application-center__header-actions">
@@ -52,7 +55,7 @@
           <h2>{{ currentViewTitle }}</h2>
           <p>{{ currentViewDescription }}</p>
         </div>
-        <span>{{ t('application.count', { count: visibleItems.length }) }}</span>
+        <span v-if="activeView !== 'local'">{{ t('application.count', { count: visibleItems.length }) }}</span>
       </div>
 
       <div v-if="activeView === 'development'" class="application-center__development-banner">
@@ -67,7 +70,13 @@
       </div>
 
       <n-scrollbar class="application-center__scroll">
-        <div v-if="loading && activeView === 'market'" class="application-center__loading">
+        <LocalApplications v-if="activeView === 'local'" :keyword="searchKeyword" @open="openKnowledge" />
+        <div v-else-if="!userStore.authInfo.token && activeView === 'market'" class="application-center__empty">
+          <strong>在线应用市场暂不可用</strong>
+          <p>原有应用列表来自服务端，未被删除。本地模式没有登录凭证，不能加载该列表。</p>
+          <n-button @click="activeView = 'local'">查看常用应用</n-button>
+        </div>
+        <div v-else-if="loading && activeView === 'market'" class="application-center__loading">
           <n-spin size="small" />
           <span>{{ t('application.loading') }}</span>
         </div>
@@ -112,7 +121,7 @@
 
     <n-modal
       v-model:show="showPermissionModal"
-      class="application-center__modal"
+      class="application-light application-center__modal"
       preset="card"
       :style="pluginModalStyle"
       :closable="false"
@@ -160,7 +169,7 @@
 
     <n-modal
       v-model:show="showRemovalModal"
-      class="application-center__modal"
+      class="application-light application-center__modal"
       preset="card"
       :style="pluginModalStyle"
       :closable="!removing"
@@ -186,14 +195,22 @@
         </div>
       </template>
     </n-modal>
-  </div>
+  </n-config-provider>
 </template>
 
 <script setup lang="ts">
   defineOptions({ name: 'application' })
+  import { lightTheme } from 'naive-ui'
+  import '@/styles/application-light.css'
   import { open, save } from '@tauri-apps/plugin-dialog'
   import type { CSSProperties } from 'vue'
   import { applicationApi } from '@/api'
+  import LocalApplications from '@/components/Application/LocalApplications.vue'
+  import { useRouter } from 'vue-router'
+  const router = useRouter()
+  function openKnowledge() {
+    void router.push({ path: '/home/ai', query: { view: 'knowledge' } })
+  }
   import PluginCard from '@/components/Application/PluginCard.vue'
   import PluginDetailDrawer from '@/components/Application/PluginDetailDrawer.vue'
   import * as pluginService from '@/services/pluginService'
@@ -207,7 +224,7 @@
   const { t } = useI18n()
   const pluginStore = usePluginStore()
   const userStore = useUserStore()
-  const activeView = ref<PluginCenterView>('market')
+  const activeView = ref<PluginCenterView>('local')
   const searchKeyword = ref('')
   const applicationList = ref<Application[]>([])
   const loading = ref(false)
@@ -373,6 +390,7 @@
   )
 
   const currentItems = computed(() => {
+    if (activeView.value === 'local') return []
     if (activeView.value === 'installed') return installedItems.value
     if (activeView.value === 'development') return developmentItems.value
     return marketItems.value
@@ -388,6 +406,7 @@
   })
 
   const views = computed(() => [
+    { value: 'local' as const, label: '常用应用', icon: '#application', count: 1 },
     {
       value: 'market' as const,
       label: t('application.views.market.title'),
@@ -408,13 +427,24 @@
     }
   ])
 
-  const currentViewTitle = computed(() => t(`application.views.${activeView.value}.title`))
-  const currentViewDescription = computed(() => t(`application.views.${activeView.value}.description`))
+  const currentViewTitle = computed(() =>
+    activeView.value === 'local' ? '常用应用' : t(`application.views.${activeView.value}.title`)
+  )
+  const currentViewDescription = computed(() =>
+    activeView.value === 'local'
+      ? '接入已有业务系统，保留原系统功能和数据。'
+      : t(`application.views.${activeView.value}.description`)
+  )
   const emptyTitle = computed(() => t(`application.views.${activeView.value}.emptyTitle`))
   const emptyDescription = computed(() => t(`application.views.${activeView.value}.emptyDescription`))
   const selectedItem = computed(() => currentItems.value.find((item) => item.id === selectedId.value) || null)
 
   const fetchApplicationList = () => {
+    if (!userStore.authInfo.token) {
+      applicationList.value = []
+      loading.value = false
+      return
+    }
     loading.value = true
     applicationApi.list({ keyword: '' }).then((res) => {
       loading.value = false
@@ -673,6 +703,7 @@
 
 <style scoped lang="scss">
   .application-center {
+    position: relative;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -686,7 +717,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 20px;
-      padding: 20px 24px 16px;
+      padding: 16px 20px 12px;
     }
 
     &__heading {
@@ -694,7 +725,7 @@
 
       h1 {
         margin: 0;
-        font-size: 20px;
+        font-size: 18px;
         font-weight: 700;
       }
 
@@ -721,7 +752,7 @@
       display: flex;
       align-items: center;
       gap: 4px;
-      padding: 0 24px 12px;
+      padding: 0 20px 10px;
       border-bottom: 1px solid color-mix(in srgb, var(--border-color) 65%, transparent);
     }
 
@@ -772,7 +803,7 @@
       display: flex;
       flex-direction: column;
       min-height: 0;
-      padding: 16px 24px 0;
+      padding: 14px 20px 0;
     }
 
     &__section-header {
@@ -967,13 +998,7 @@
     }
   }
 
-  @media (min-width: 1200px) {
-    .application-center__grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-
-  @media (max-width: 760px) {
+  @media (max-width: 640px) {
     .application-center {
       &__header {
         align-items: stretch;

@@ -19,11 +19,11 @@
       "password": "Password"
     },
     "register": {
-      "tip": "New to Linyu?",
+      "tip": "New to EM?",
       "text": "Sign Up"
     },
     "welcome": {
-      "text1": "Welcome to Linyu",
+      "text1": "Welcome to EM",
       "text2": "Start your journey"
     },
     "terms": {
@@ -32,7 +32,7 @@
       "text3": "Privacy Policy"
     },
     "footer": {
-      "provider": "© 2026 Linyu Team",
+      "provider": "© 2026 EM Team",
       "support": "Support"
     },
     "settings": {
@@ -86,14 +86,14 @@
     },
     "success": {
       "title": "Password updated",
-      "subtitle": "Your login password has been updated. You can now sign in to Linyu with the new password",
+      "subtitle": "Your login password has been updated. You can now sign in to EM with the new password",
       "securityTip": "For security, other devices may need to sign in again",
       "backToLogin": "Back to login"
     }
   },
   "register": {
     "welcome": {
-      "title": "Welcome to Linyu",
+      "title": "Welcome to EM",
       "subtitle": "Create an account for secure and seamless messaging"
     },
     "features": {
@@ -146,8 +146,8 @@
     },
     "success": {
       "title": "Account created",
-      "subtitle": "Registration complete. You can start using Linyu now",
-      "accountLabel": "Your Linyu account",
+      "subtitle": "Registration complete. You can start using EM now",
+      "accountLabel": "Your EM account",
       "accountTip": "Please save this account for future logins",
       "copyAccount": "Copy account",
       "copySuccess": "Account copied",
@@ -156,7 +156,7 @@
     }
   },
   "tray": {
-    "open": "Open Linyu",
+    "open": "Open EM",
     "lock": "Lock",
     "settings": "Settings",
     "exit": "Exit"
@@ -483,7 +483,7 @@
       "audioCall": "Audio Call"
     },
     "fields": {
-      "linyuId": "Linyu ID",
+      "linyuId": "EM ID",
       "remark": "Remark",
       "tag": "Contact Tag",
       "signature": "Signature",
@@ -948,7 +948,7 @@
       "imageAlt": "Image"
     },
     "work": {
-      "brand": "Linyu Work",
+      "brand": "EM Work",
       "nav": { "skills": "Skills marketplace" },
       "welcome": {
         "title": "What would you like to get done?",
@@ -971,7 +971,7 @@
         "runtimeTitle": "Install an Agent runtime",
         "runtimeDesc": "The AI assistant runs on Reasonix. Please install Reasonix before you get started",
         "providerTitle": "No model is configured",
-        "providerDesc": "Configure Base API, API Key, and models in Linyu without editing Reasonix files",
+        "providerDesc": "Configure Base API, API Key, and models in EM without editing Reasonix files",
         "workspaceTitle": "Choose a work folder",
         "workspaceDesc": "The Agent uses this folder as the work scope for the current task",
         "install": "Download and install Reasonix",
@@ -1104,7 +1104,7 @@
         "setup": "Setup needed"
       },
       "skills": {
-        "eyebrow": "Linyu Skills",
+        "eyebrow": "EM Skills",
         "title": "Add capabilities to your assistant",
         "subtitle": "Install reviewed workflows that the Agent can use for matching tasks.",
         "search": "Search Skills",
@@ -1156,7 +1156,7 @@
   },
   "application": {
     "title": "App Center",
-    "subtitle": "Discover, install, and manage plugins that extend Linyu",
+    "subtitle": "Discover, install, and manage plugins that extend EM",
     "searchPlaceholder": "Search plugins, publishers, or tags",
     "navigationLabel": "Plugin center navigation",
     "count": "{count} apps",
@@ -1216,7 +1216,7 @@
       "windows": "Windows"
     },
     "permissions": {
-      "defaultDescription": "Allow the plugin to use this Linyu capability",
+      "defaultDescription": "Allow the plugin to use this EM capability",
       "storage": {
         "title": "Plugin storage",
         "description": "Save settings and data in the plugin's isolated storage"
@@ -1292,7 +1292,7 @@
     },
     "windowMode": {
       "native": "Native title bar",
-      "linyu": "Linyu title bar",
+      "linyu": "EM title bar",
       "none": "No title bar"
     },
     "window": {
@@ -1314,7 +1314,7 @@
       "exportTitle": "Export development plugin",
       "loadFolder": "Load local folder",
       "selectPackage": "Select a .lyp plugin package",
-      "packageFilter": "Linyu plugin package",
+      "packageFilter": "EM plugin package",
       "selectFolder": "Select a plugin folder containing manifest.json",
       "enableFirst": "Enable developer mode first",
       "itemDescription": "Development plugin loaded from a local folder",
@@ -1407,11 +1407,11 @@
       "runtime": {
         "ready": "Runtime ready",
         "missing": "Installation needed",
-        "missingDesc": "Linyu detects default system locations. You never need to enter a CLI path manually",
+        "missingDesc": "EM detects default system locations. You never need to enter a CLI path manually",
         "install": "Download and install",
         "detect": "Detect again",
         "protocol": "Runtime protocol",
-        "protocolDesc": "Linyu connects through a generic ACP layer so more CLIs can be added later",
+        "protocolDesc": "EM connects through a generic ACP layer so more CLIs can be added later",
         "installerOpened": "The installer is open",
         "updateTitle": "Update available",
         "updateConfirm": "A newer Reasonix version is available.\nCurrent: {current}\nLatest: {latest}\nInstall the latest version?",
@@ -1504,11 +1504,11 @@
       "fontSmall": "Small",
       "fontStandard": "Standard",
       "fontLarge": "Large",
-      "autoLaunchOnStartup": "Launch Linyu on startup",
+      "autoLaunchOnStartup": "Launch EM on startup",
       "autoLaunchFailed": "Failed to update launch on startup",
       "closeMainPanel": "When closing main window",
       "closeMinimizeToTray": "Minimize to tray",
-      "closeExitApp": "Exit Linyu",
+      "closeExitApp": "Exit EM",
       "voiceToText": "Auto-convert voice messages to text",
       "langZh": "Chinese",
       "langEn": "English"
@@ -1567,8 +1567,8 @@
       "terms": "Terms of Service",
       "privacy": "Privacy Policy",
       "feedback": "Feedback",
-      "copyright": "Linyu Team. All rights reserved.",
-      "rights": "Copyright © 2026 Linyu. All Rights Reserved."
+      "copyright": "EM Team. All rights reserved.",
+      "rights": "Copyright © 2026 EM. All Rights Reserved."
     }
   },
   "feedback": {
@@ -1712,7 +1712,7 @@
     "groupCallMore": "{count} more",
     "errors": {
       "deviceInUse": "Camera or microphone is in use by another app. Close other call windows, browser tabs, or meeting apps and try again",
-      "permissionDenied": "Camera or microphone permission denied. Allow access for Linyu in system settings and try again",
+      "permissionDenied": "Camera or microphone permission denied. Allow access for EM in system settings and try again",
       "deviceNotFound": "No camera or microphone found. Please check your devices",
       "connectFailed": "Failed to connect the call. Please try again later"
     }
@@ -1784,7 +1784,7 @@
       }
     },
     "user": {
-      "linyuId": "Linyu ID: {id}",
+      "linyuId": "EM ID: {id}",
       "add": "Add",
       "sendMessage": "Send Message",
       "applyModal": {
@@ -1807,7 +1807,7 @@
     "responseBodyEmpty": "Response body is empty"
   },
   "groupNotice": {
-    "windowTitle": "Linyu",
+    "windowTitle": "EM",
     "publish": "New Announcement",
     "publishTitle": "New Announcement",
     "pinned": "Pinned",

@@ -51,7 +51,7 @@
   const homeTabStore = useHomeTabStore()
   const messageRemindStore = useMessageRemindStore()
 
-  const displayName = computed(() => userStore.userInfo.username || 'Linyu')
+  const displayName = computed(() => userStore.userInfo.username || 'EM')
   const remindItems = computed(() => messageRemindStore.items)
 
   const remindLayoutStyle = computed(() => {

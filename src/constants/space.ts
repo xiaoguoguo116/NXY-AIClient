@@ -30,4 +30,4 @@ export const SpaceFileCategory = {
 export type SpaceFileCategory = (typeof SpaceFileCategory)[keyof typeof SpaceFileCategory]
 
 /** 网盘默认本地下载目录 */
-export const DEFAULT_SPACE_DOWNLOAD_PATH = 'D:/LinyuDownload'
+export const DEFAULT_SPACE_DOWNLOAD_PATH = 'D:/EMDownload'

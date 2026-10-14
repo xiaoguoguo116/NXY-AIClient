@@ -1420,6 +1420,46 @@ dependencies = [
 ]
 
 [[package]]
+name = "em"
+version = "2.0.1"
+dependencies = [
+ "base64 0.22.1",
+ "clipboard-rs",
+ "ed25519-dalek",
+ "futures-util",
+ "keyring",
+ "notify-rust",
+ "reqwest 0.12.28",
+ "screenshots",
+ "semver",
+ "serde",
+ "serde_json",
+ "sha2",
+ "tauri",
+ "tauri-build",
+ "tauri-plugin-autostart",
+ "tauri-plugin-clipboard-manager",
+ "tauri-plugin-dialog",
+ "tauri-plugin-drag",
+ "tauri-plugin-fs",
+ "tauri-plugin-global-shortcut",
+ "tauri-plugin-http",
+ "tauri-plugin-notification",
+ "tauri-plugin-opener",
+ "tauri-plugin-os",
+ "tauri-plugin-process",
+ "tauri-plugin-shell",
+ "tauri-plugin-single-instance",
+ "tauri-plugin-sql",
+ "tauri-plugin-upload",
+ "tauri-plugin-websocket",
+ "tokio",
+ "url",
+ "uuid",
+ "zip",
+]
+
+[[package]]
 name = "embed-resource"
 version = "3.0.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2979,46 +3019,6 @@ name = "linux-raw-sys"
 version = "0.12.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "32a66949e030da00e8c7d4434b251670a91556f4144941d37452769c25d58a53"
-
-[[package]]
-name = "linyu"
-version = "2.0.1"
-dependencies = [
- "base64 0.22.1",
- "clipboard-rs",
- "ed25519-dalek",
- "futures-util",
- "keyring",
- "notify-rust",
- "reqwest 0.12.28",
- "screenshots",
- "semver",
- "serde",
- "serde_json",
- "sha2",
- "tauri",
- "tauri-build",
- "tauri-plugin-autostart",
- "tauri-plugin-clipboard-manager",
- "tauri-plugin-dialog",
- "tauri-plugin-drag",
- "tauri-plugin-fs",
- "tauri-plugin-global-shortcut",
- "tauri-plugin-http",
- "tauri-plugin-notification",
- "tauri-plugin-opener",
- "tauri-plugin-os",
- "tauri-plugin-process",
- "tauri-plugin-shell",
- "tauri-plugin-single-instance",
- "tauri-plugin-sql",
- "tauri-plugin-upload",
- "tauri-plugin-websocket",
- "tokio",
- "url",
- "uuid",
- "zip",
-]
 
 [[package]]
 name = "litemap"

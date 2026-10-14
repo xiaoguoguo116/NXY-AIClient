@@ -2,5 +2,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 fn main() {
-    linyu_client_lib::run()
+    em_client_lib::run()
 }

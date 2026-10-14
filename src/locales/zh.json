@@ -19,20 +19,20 @@
       "password": "请输入密码"
     },
     "register": {
-      "tip": "首次使用Linyu?",
+      "tip": "首次使用 EM？",
       "text": "创建账号"
     },
     "welcome": {
-      "text1": "欢迎使用林语",
+      "text1": "欢迎使用 EM",
       "text2": "开始你的探索之旅"
     },
     "terms": {
       "text1": "已阅读并同意{text2}和{text3}",
       "text2": "服务协议",
-      "text3": "Linyu隐私保护指引"
+      "text3": "EM 隐私保护指引"
     },
     "footer": {
-      "provider": "© 2026 Linyu Team",
+      "provider": "© 2026 EM Team",
       "support": "技术支持"
     },
     "settings": {
@@ -86,14 +86,14 @@
     },
     "success": {
       "title": "修改成功",
-      "subtitle": "你的登录密码已成功更新，现在可以使用新密码重新登录 Linyu",
+      "subtitle": "你的登录密码已成功更新，现在可以使用新密码重新登录 EM",
       "securityTip": "为保障安全，其他设备上的登录状态可能需要重新验证",
       "backToLogin": "返回登录"
     }
   },
   "register": {
     "welcome": {
-      "title": "欢迎使用 Linyu",
+      "title": "欢迎使用 EM",
       "subtitle": "注册账号，开启安全、便捷的沟通体验"
     },
     "features": {
@@ -146,8 +146,8 @@
     },
     "success": {
       "title": "账号创建成功",
-      "subtitle": "注册完成，现在可以开始使用 Linyu",
-      "accountLabel": "你的 Linyu 账号",
+      "subtitle": "注册完成，现在可以开始使用 EM",
+      "accountLabel": "你的 EM 账号",
       "accountTip": "请妥善保存该账号，可用于后续登录",
       "copyAccount": "复制账号",
       "copySuccess": "账号已复制",
@@ -156,7 +156,7 @@
     }
   },
   "tray": {
-    "open": "打开林语",
+    "open": "打开 EM",
     "lock": "锁定",
     "settings": "设置",
     "exit": "退出"
@@ -483,7 +483,7 @@
       "audioCall": "音频通话"
     },
     "fields": {
-      "linyuId": "林语号",
+      "linyuId": "EM 号",
       "remark": "备注",
       "tag": "好友标签",
       "signature": "个性签名",
@@ -948,7 +948,7 @@
       "imageAlt": "图片"
     },
     "work": {
-      "brand": "林语工作助手",
+      "brand": "EM 工作助手",
       "nav": {
         "skills": "Skills市场"
       },
@@ -973,7 +973,7 @@
         "runtimeTitle": "需要安装 Agent 运行时",
         "runtimeDesc": "AI 助手基于 Reasonix 运行，请先安装 Reasonix 后再开始使用",
         "providerTitle": "还没有可用的模型",
-        "providerDesc": "在林语中配置 Base API、API Key 和模型，无需修改 Reasonix 文件",
+        "providerDesc": "在 EM 中配置 Base API、API Key 和模型，无需修改 Reasonix 文件",
         "workspaceTitle": "请选择工作文件夹",
         "workspaceDesc": "Agent 只会把此文件夹作为当前任务的工作范围",
         "install": "下载并安装 Reasonix",
@@ -1087,7 +1087,7 @@
         "setup": "待配置"
       },
       "skills": {
-        "eyebrow": "Linyu Skills",
+        "eyebrow": "EM Skills",
         "title": "给工作助手添加能力",
         "subtitle": "安装经过审核的工作流，Agent 会在合适的任务中自动调用。",
         "search": "搜索 Skills",
@@ -1134,7 +1134,7 @@
   },
   "application": {
     "title": "应用中心",
-    "subtitle": "发现、安装和管理扩展林语能力的插件",
+    "subtitle": "发现、安装和管理扩展 EM 能力的插件",
     "searchPlaceholder": "搜索插件、作者或标签",
     "navigationLabel": "插件中心导航",
     "count": "共 {count} 个",
@@ -1194,7 +1194,7 @@
       "windows": "窗口"
     },
     "permissions": {
-      "defaultDescription": "允许插件调用该项林语能力",
+      "defaultDescription": "允许插件调用该项 EM 能力",
       "storage": {
         "title": "插件存储",
         "description": "在插件独立的数据空间中保存配置和数据"
@@ -1270,7 +1270,7 @@
     },
     "windowMode": {
       "native": "系统标题栏",
-      "linyu": "林语标题栏",
+      "linyu": "EM 标题栏",
       "none": "无标题栏"
     },
     "window": {
@@ -1292,7 +1292,7 @@
       "exportTitle": "导出开发插件包",
       "loadFolder": "加载本地目录",
       "selectPackage": "选择 .lyp 插件包",
-      "packageFilter": "林语插件包",
+      "packageFilter": "EM 插件包",
       "selectFolder": "选择包含 manifest.json 的插件目录",
       "enableFirst": "请先开启开发者模式",
       "itemDescription": "从本地目录加载的开发版本插件",
@@ -1385,11 +1385,11 @@
       "runtime": {
         "ready": "运行时就绪",
         "missing": "需要安装",
-        "missingDesc": "林语会自动检测系统默认安装位置，无需手动填写 CLI 路径",
+        "missingDesc": "EM 会自动检测系统默认安装位置，无需手动填写 CLI 路径",
         "install": "下载并安装",
         "detect": "重新检测",
         "protocol": "运行时协议",
-        "protocolDesc": "林语通过通用 ACP 层连接 Agent，后续可扩展其他 CLI",
+        "protocolDesc": "EM 通过通用 ACP 层连接 Agent，后续可扩展其他 CLI",
         "installerOpened": "安装程序已打开",
         "updateTitle": "发现新版本",
         "updateConfirm": "检测到 Reasonix 有新版本可用。\n当前版本：{current}\n最新版本：{latest}\n是否安装最新版本？",
@@ -1478,11 +1478,11 @@
       "fontSmall": "小",
       "fontStandard": "标准",
       "fontLarge": "大",
-      "autoLaunchOnStartup": "开机时自动打开林语",
+      "autoLaunchOnStartup": "开机时自动打开 EM",
       "autoLaunchFailed": "设置开机自启失败",
       "closeMainPanel": "关闭主面板时",
       "closeMinimizeToTray": "最小化至托盘",
-      "closeExitApp": "退出林语",
+      "closeExitApp": "退出 EM",
       "voiceToText": "聊天中的语音消息自动转成文字",
       "langZh": "中文",
       "langEn": "English"
@@ -1541,8 +1541,8 @@
       "terms": "服务协议",
       "privacy": "隐私政策",
       "feedback": "意见反馈",
-      "copyright": "Linyu Team 版权所有",
-      "rights": "Copyright © 2026 Linyu. All Rights Reserved."
+      "copyright": "EM Team 版权所有",
+      "rights": "Copyright © 2026 EM. All Rights Reserved."
     }
   },
   "feedback": {
@@ -1686,7 +1686,7 @@
     "groupCallMore": "另有 {count} 人",
     "errors": {
       "deviceInUse": "摄像头或麦克风正被其它应用占用，请关闭其它通话窗口、浏览器标签或会议软件后重试",
-      "permissionDenied": "未获得摄像头或麦克风权限，请在系统设置中允许林语访问后重试",
+      "permissionDenied": "未获得摄像头或麦克风权限，请在系统设置中允许 EM 访问后重试",
       "deviceNotFound": "未检测到摄像头或麦克风，请检查设备是否已连接",
       "connectFailed": "通话连接失败，请稍后重试"
     }
@@ -1758,7 +1758,7 @@
       }
     },
     "user": {
-      "linyuId": "林语号：{id}",
+      "linyuId": "EM 号：{id}",
       "add": "添加",
       "sendMessage": "发送消息",
       "applyModal": {
@@ -1781,7 +1781,7 @@
     "responseBodyEmpty": "响应内容为空"
   },
   "groupNotice": {
-    "windowTitle": "Linyu",
+    "windowTitle": "EM",
     "publish": "发布新公告",
     "publishTitle": "发布新公告",
     "pinned": "置顶",

@@ -191,7 +191,7 @@ impl AcpConnection {
                 json!({
                     "protocolVersion": 1,
                     "clientCapabilities": {},
-                    "clientInfo": { "name": "Linyu Work", "version": env!("CARGO_PKG_VERSION") }
+                    "clientInfo": { "name": "EM Work", "version": env!("CARGO_PKG_VERSION") }
                 }),
             )
             .await?;

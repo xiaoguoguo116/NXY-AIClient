@@ -116,7 +116,7 @@ export const initSystemTray = async () => {
 
   const options: TrayIconOptions = {
     id: TRAY_ID,
-    tooltip: '林语',
+    tooltip: 'EM',
     action: (event: TrayIconEvent) => {
       const messageRemindStore = useMessageRemindStore()
 

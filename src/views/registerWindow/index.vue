@@ -73,9 +73,7 @@
     <div v-else class="register__body">
       <section class="register__hero" data-tauri-drag-region>
         <div class="register__hero-header">
-          <svg class="register__hero-logo">
-            <use href="#linyu"></use>
-          </svg>
+          <div class="register__hero-logo">EM</div>
           <div>
             <h1 class="register__hero-title">{{ t('register.welcome.title') }}</h1>
             <p class="register__hero-subtitle">{{ t('register.welcome.subtitle') }}</p>
@@ -831,8 +829,17 @@
     &__hero-logo {
       width: 42px;
       height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       flex-shrink: 0;
-      color: var(--primary-color);
+      border-radius: 10px;
+      color: #fff;
+      background: linear-gradient(135deg, #3c9cf0, #3977e8);
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      box-shadow: 0 5px 14px rgba(47, 146, 237, 0.25);
     }
 
     &__hero-title {

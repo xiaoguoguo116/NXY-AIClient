@@ -451,7 +451,7 @@ mod tests {
             id: "official.example".into(),
             name: "Example".into(),
             version: "1.0.0".into(),
-            publisher: "Linyu".into(),
+            publisher: "EM".into(),
             description: String::new(),
             engines: PluginEngine { linyu: ">=0.1.0".into() },
             main: "dist/worker.js".into(),

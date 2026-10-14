@@ -1,0 +1,56 @@
+const { chromium } = require('C:/Users/94719/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const assert = require('node:assert/strict');
+(async () => {
+ const browser = await chromium.connectOverCDP('http://127.0.0.1:19224');
+ const page = browser.contexts().flatMap(c => c.pages()).find(p => p.url().includes('/home'));
+ await page.locator('.conversation', { hasText: '技术交流群' }).click();
+ const backup = await page.evaluate(() => localStorage.getItem('em.local-chat.v1'));
+ try {
+  assert.equal(await page.locator('.header-icons button').count(), 3);
+  await page.getByRole('button',{name:'设置',exact:true}).click();
+  assert.equal(await page.locator('.member-card').count(),8);
+  await page.getByRole('button',{name:'搜索群成员',exact:true}).click();
+  await page.getByRole('textbox',{name:'搜索成员姓名'}).fill('张工');
+  assert.equal(await page.locator('.member-card').count(),1);
+  await page.getByRole('textbox',{name:'搜索成员姓名'}).fill('');
+  await page.getByRole('switch',{name:'置顶会话'}).check();
+  await page.getByRole('switch',{name:'允许消息通知'}).uncheck();
+  await page.getByRole('button',{name:'添加本地模拟成员'}).click();
+  await page.getByRole('textbox',{name:'模拟成员姓名'}).fill('测试成员');
+  await page.getByRole('button',{name:'添加',exact:true}).click();
+  assert.equal(await page.locator('.member-card').count(),9);
+  await page.getByRole('button',{name:'群管理'}).click();
+  await page.getByLabel('群名称',{exact:true}).fill('设置测试群');
+  await page.getByRole('button',{name:'保存群名称'}).click();
+  assert((await page.locator('.chat-title').textContent()).includes('设置测试群'));
+  await page.getByRole('button',{name:'关闭面板'}).click();
+  await page.getByRole('button',{name:'群通知',exact:true}).click();
+  await page.getByLabel('编辑群通知').fill('验证群通知持久化');
+  await page.getByRole('button',{name:'保存群通知'}).click();
+  await page.reload();
+  await page.getByRole('button',{name:'群通知',exact:true}).click();
+  assert.equal(await page.locator('.announcement').textContent(),'验证群通知持久化');
+  await page.getByRole('button',{name:'关闭面板'}).click();
+  await page.getByRole('button',{name:'设置',exact:true}).click();
+  assert(await page.getByRole('switch',{name:'置顶会话'}).isChecked());
+  assert(!(await page.getByRole('switch',{name:'允许消息通知'}).isChecked()));
+  await page.getByRole('button',{name:'关闭面板'}).click();
+  await page.getByRole('button',{name:'消息记录',exact:true}).click();
+  await page.getByRole('textbox',{name:'搜索消息记录'}).fill('联合索引');
+  assert((await page.locator('.history-item').count()) > 0);
+  await page.locator('.history-item').first().click();
+  assert.equal(await page.locator('.chat-drawer').count(),0);
+  assert.equal(await page.locator('.message.highlighted').count(),1);
+  await page.locator('.bubble').first().click({button:'right'});
+  await page.getByText('多选',{exact:true}).click();
+  assert((await page.getByRole('checkbox').count()) > 0);
+  await page.getByRole('button',{name:'取消多选'}).click();
+  console.log('PASS: three icons, members/search/add, pin/mute persistence, announcement, history search/location, right-click multi-select');
+ } finally {
+  await page.evaluate(raw => localStorage.setItem('em.local-chat.v1',raw),backup);
+  await page.reload();
+  await page.getByRole('button',{name:'设置',exact:true}).click();
+  await page.screenshot({path:'C:/Users/94719/.codex/visualizations/2026/10/12/01a12e05-f80d-7992-8795-27ce084b02ee/em-chat-settings.png'});
+  await browser.close();
+ }
+})().catch(e => { console.error(e); process.exit(1); });

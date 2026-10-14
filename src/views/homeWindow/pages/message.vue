@@ -1,86 +1,89 @@
 <template>
   <div class="message">
-    <Split :min-size="220" :max-size="320" :default-size="270">
-      <template #first>
-        <div class="chatlist">
-          <div class="chatlist__toolbar">
-            <ContactsSearchPopover :placeholder="t('message.searchPlaceholder')" />
-            <n-dropdown :options="addMenuOptions" placement="bottom-start" trigger="click" @select="onAddMenuSelect">
-              <n-button class="chatlist__toolbar-btn">
-                <svg class="size-16px text-[var(--text-secondary-color)] bg-transparent">
-                  <use href="#plus"></use>
-                </svg>
-              </n-button>
-            </n-dropdown>
-          </div>
-          <div v-if="messageDbStore.syncingMessages" class="chatlist__sync-tip">
-            <span class="chatlist__sync-spinner" />
-            <span>{{ t('message.syncingMessages') }}</span>
-          </div>
-          <n-scrollbar v-if="chatStore.chatList.length > 0" style="margin-top: 10px">
-            <div class="chatlist__content">
-              <div
-                v-for="item in chatStore.chatList"
-                :key="item.id"
-                class="chatlist__item"
-                :class="{ top: item.peerIsTop, active: chatStore.selectedChatId === item.id }"
-                @click="() => onSelectChat(item)"
-                @contextmenu="(e: MouseEvent) => onContextMenu(e, item)">
-                <n-badge
-                  :value="item.unreadNum"
-                  :dot="item.peerIsMute"
-                  :show="item.unreadNum > 0"
-                  :max="99"
-                  class="chatlist__badge select-none pointer-events-none p-0 text-1px"
-                  :offset="[-2, 2]">
-                  <Avatar class="size-38px rounded-5px bg-#FFF" :id="item.peerId" :type="item.sceneType" />
-                </n-badge>
-                <div class="flex-1 min-w-0 m-l-12px h-40px flex flex-col justify-center gap-6px">
-                  <div class="flex justify-between items-center h-14px">
-                    <div class="text-14px truncate">{{ item.peerRemark ? item.peerRemark : item.peerName }}</div>
-                    <div class="text-[var(--text-secondary-color)] text-10px flex-shrink-0 m-l-5px">
-                      {{ formatTime(item.updatedAt) }}
+    <LocalChat v-if="previewMode" />
+    <template v-else>
+      <Split :min-size="220" :max-size="320" :default-size="270">
+        <template #first>
+          <div class="chatlist">
+            <div class="chatlist__toolbar">
+              <ContactsSearchPopover :placeholder="t('message.searchPlaceholder')" />
+              <n-dropdown :options="addMenuOptions" placement="bottom-start" trigger="click" @select="onAddMenuSelect">
+                <n-button class="chatlist__toolbar-btn">
+                  <svg class="size-16px text-[var(--text-secondary-color)] bg-transparent">
+                    <use href="#plus"></use>
+                  </svg>
+                </n-button>
+              </n-dropdown>
+            </div>
+            <div v-if="messageDbStore.syncingMessages" class="chatlist__sync-tip">
+              <span class="chatlist__sync-spinner" />
+              <span>{{ t('message.syncingMessages') }}</span>
+            </div>
+            <n-scrollbar v-if="chatStore.chatList.length > 0" style="margin-top: 10px">
+              <div class="chatlist__content">
+                <div
+                  v-for="item in chatStore.chatList"
+                  :key="item.id"
+                  class="chatlist__item"
+                  :class="{ top: item.peerIsTop, active: chatStore.selectedChatId === item.id }"
+                  @click="() => onSelectChat(item)"
+                  @contextmenu="(e: MouseEvent) => onContextMenu(e, item)">
+                  <n-badge
+                    :value="item.unreadNum"
+                    :dot="item.peerIsMute"
+                    :show="item.unreadNum > 0"
+                    :max="99"
+                    class="chatlist__badge select-none pointer-events-none p-0 text-1px"
+                    :offset="[-2, 2]">
+                    <Avatar class="size-38px rounded-5px bg-#FFF" :id="item.peerId" :type="item.sceneType" />
+                  </n-badge>
+                  <div class="flex-1 min-w-0 m-l-12px h-40px flex flex-col justify-center gap-6px">
+                    <div class="flex justify-between items-center h-14px">
+                      <div class="text-14px truncate">{{ item.peerRemark ? item.peerRemark : item.peerName }}</div>
+                      <div class="text-[var(--text-secondary-color)] text-10px flex-shrink-0 m-l-5px">
+                        {{ formatTime(item.updatedAt) }}
+                      </div>
                     </div>
-                  </div>
-                  <div class="flex justify-between items-center h-14px">
-                    <component :is="toShowChatMessage(item.lastMsgContent)" />
-                    <div class="flex items-center flex-shrink-0 m-l-5px gap-4px">
-                      <svg v-if="item.peerIsTop" class="size-14px text-[var(--text-secondary-color)] flex-shrink-0">
-                        <use href="#pin"></use>
-                      </svg>
-                      <svg v-if="item.peerIsMute" class="size-14px text-[var(--text-secondary-color)] flex-shrink-0">
-                        <use href="#bell-mute"></use>
-                      </svg>
+                    <div class="flex justify-between items-center h-14px">
+                      <component :is="toShowChatMessage(item.lastMsgContent)" />
+                      <div class="flex items-center flex-shrink-0 m-l-5px gap-4px">
+                        <svg v-if="item.peerIsTop" class="size-14px text-[var(--text-secondary-color)] flex-shrink-0">
+                          <use href="#pin"></use>
+                        </svg>
+                        <svg v-if="item.peerIsMute" class="size-14px text-[var(--text-secondary-color)] flex-shrink-0">
+                          <use href="#bell-mute"></use>
+                        </svg>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+            </n-scrollbar>
+            <div
+              v-else
+              class="flex-1 flex w-full h-full justify-center items-center text-[12px] text-[var(--text-secondary-color)]">
+              {{ t('message.noChat') }}
             </div>
-          </n-scrollbar>
-          <div
-            v-else
-            class="flex-1 flex w-full h-full justify-center items-center text-[12px] text-[var(--text-secondary-color)]">
-            {{ t('message.noChat') }}
           </div>
-        </div>
-      </template>
-      <template #second>
-        <chat-session v-if="activeChat" ref="chatSessionRef" :chat="activeChat" />
-        <div v-else class="message__empty">
-          <LinyuEmpty />
-        </div>
-      </template>
-    </Split>
-    <n-dropdown
-      trigger="manual"
-      placement="bottom-start"
-      :x="contextMenuX"
-      :y="contextMenuY"
-      :options="contextMenuOptions"
-      :show="contextMenuShow"
-      @select="onContextMenuSelect"
-      @clickoutside="onContextMenuClickoutside" />
-    <CreateGroupModal v-model:show="showCreateGroupModal" />
+        </template>
+        <template #second>
+          <chat-session v-if="activeChat" ref="chatSessionRef" :chat="activeChat" />
+          <div v-else class="message__empty">
+            <LinyuEmpty />
+          </div>
+        </template>
+      </Split>
+      <n-dropdown
+        trigger="manual"
+        placement="bottom-start"
+        :x="contextMenuX"
+        :y="contextMenuY"
+        :options="contextMenuOptions"
+        :show="contextMenuShow"
+        @select="onContextMenuSelect"
+        @clickoutside="onContextMenuClickoutside" />
+      <CreateGroupModal v-model:show="showCreateGroupModal" />
+    </template>
   </div>
 </template>
 <script setup lang="tsx">
@@ -90,6 +93,7 @@
   import { useMessageDbStore } from '@/stores/message/messageDb'
   import { useMessageRemindStore } from '@/stores/message/messageRemind'
   import ChatSession from '@/components/Chat/ChatSession.vue'
+  import LocalChat from '@/components/Chat/LocalChat.vue'
   import ContactsSearchPopover from '@/components/Contacts/ContactsSearchPopover.vue'
   import CreateGroupModal from '@/components/Modal/CreateGroupModal.vue'
   import { Chat } from '@/types/api/chat'
@@ -98,9 +102,12 @@
   import { formatCallRecordSummary } from '@/utils/message/callRecord'
   import { createAddContactsWindow, createChatSessionWindow, hasChatSessionWindow } from '@/utils/desktop/window'
   import { useI18n } from 'vue-i18n'
+  import { useUserStore } from '@/stores/user/user'
 
   const { t } = useI18n()
   const chatStore = useChatStore()
+  const userStore = useUserStore()
+  const previewMode = computed(() => !userStore.authInfo.token)
   const chatDetachedStore = useChatDetachedStore()
   const messageDbStore = useMessageDbStore()
   const messageRemindStore = useMessageRemindStore()
@@ -304,6 +311,7 @@
   watch(
     () => [chatStore.selectedChatId, chatDetachedStore.detachedChatIds] as const,
     () => {
+      if (previewMode.value) return
       chatStore.reportActiveSessions(messagePageActive.value)
     },
     { deep: true }
@@ -345,12 +353,14 @@
   )
 
   onMounted(() => {
+    if (previewMode.value) return
     chatStore.loadList(true).then(() => {
       chatStore.reportActiveSessions(messagePageActive.value)
     })
   })
 
   onActivated(() => {
+    if (previewMode.value) return
     messagePageActive.value = true
     chatStore.reportActiveSessions(true)
     // 从其它 Tab 回来时，若仍选中会话，补已读（离开期间 isChatActive 为 false 会累计未读）
@@ -363,6 +373,7 @@
   })
 
   onDeactivated(() => {
+    if (previewMode.value) return
     messagePageActive.value = false
     chatStore.reportActiveSessions(false)
   })
@@ -472,6 +483,83 @@
         :deep(.n-badge-sup.fade-in-scale-up-transition-leave-active) {
           transition: none !important;
         }
+      }
+    }
+
+    /* 会话列表：白底、紧凑、选中态清晰 */
+    & {
+      background: #fff;
+    }
+
+    :deep(.split__first) {
+      background: #fff;
+    }
+
+    :deep(.split__handle) {
+      background: #e5e9ee;
+    }
+
+    .chatlist {
+      padding: 0;
+      background: #fff;
+
+      .chatlist__toolbar {
+        height: 58px;
+        padding: 11px 12px;
+        border-bottom: 1px solid #edf0f3;
+        background: #fff;
+      }
+
+      .chatlist__toolbar-btn {
+        width: 30px;
+        height: 30px;
+        margin-left: 8px;
+        border-radius: 2px;
+        background: #f0f2f5;
+      }
+
+      :deep(.n-scrollbar) {
+        margin-top: 0 !important;
+      }
+
+      .chatlist__content {
+        gap: 0;
+
+        .chatlist__item {
+          min-height: 66px;
+          padding: 9px 12px;
+          border: 0;
+          border-bottom: 1px solid #f2f3f5;
+          border-radius: 0;
+          background: #fff;
+          transition: background-color 0.12s ease;
+
+          &:hover,
+          &.top:hover {
+            background: #f2f6fa;
+          }
+
+          &.top {
+            background: #f7f9fb;
+          }
+
+          &.active {
+            padding-left: 9px;
+            border-left: 3px solid #2f92ed;
+            border-bottom-color: #e5ebf1;
+            background: #e8eef4;
+          }
+        }
+      }
+
+      :deep(.n-input) {
+        --n-border: 1px solid #e1e6ec !important;
+        --n-border-hover: 1px solid #b9d7f5 !important;
+        --n-border-focus: 1px solid #3c95ea !important;
+        --n-box-shadow-focus: 0 0 0 2px rgba(47, 146, 237, 0.08) !important;
+        --n-color: #f7f9fb !important;
+        --n-color-focus: #fff !important;
+        border-radius: 3px;
       }
     }
   }

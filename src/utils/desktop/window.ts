@@ -370,7 +370,7 @@ export const exitApp = async () => {
 }
 
 export const createHomeWinodw = () =>
-  createWebviewWindow('林语', HOME_WINDOW_LABEL, {
+  createWebviewWindow('EM', HOME_WINDOW_LABEL, {
     width: HOME_WINDOW_WIDTH,
     height: HOME_WINDOW_HEIGHT,
     minWidth: HOME_WINDOW_MIN_WIDTH,
@@ -466,7 +466,7 @@ export const createPluginRuntimeWindow = async () => {
     return runtimeWindow
   }
 
-  return createWebviewWindow('Linyu Plugin Runtime', PLUGIN_RUNTIME_WINDOW_LABEL, {
+  return createWebviewWindow('EM Plugin Runtime', PLUGIN_RUNTIME_WINDOW_LABEL, {
     url: PLUGIN_RUNTIME_WINDOW_URL,
     width: PLUGIN_RUNTIME_WINDOW_WIDTH,
     height: PLUGIN_RUNTIME_WINDOW_HEIGHT,

@@ -1,6 +1,7 @@
 import { invoke } from '@tauri-apps/api/core'
 import { listen, type UnlistenFn } from '@tauri-apps/api/event'
 import { skillApi } from '@/api'
+import { useUserStore } from '@/stores/user/user'
 import { WORK_EVENT } from '@/constants/event'
 import type { Skill, SkillListParam } from '@/types/api/skill'
 import type {
@@ -54,26 +55,28 @@ const normalizeCapabilities = (value: unknown): string[] => {
 }
 
 export const listSkills = (param?: SkillListParam): Promise<WorkSkill[]> =>
-  Promise.all([skillApi.list(param ?? {}), getSkillLocalState()]).then(([remote, local]) => {
-    if (remote.code !== 0) {
-      return Promise.reject(new Error('WORK_SKILL_LIST_FAILED'))
-    }
-    const rows = Array.isArray(remote.data) ? remote.data : []
-    const installed = new Set(local.installedIds)
-    const disabled = new Set(local.disabledIds)
-    return rows.map((skill) => {
-      const isInstalled = installed.has(skill.id)
-      const raw = skill as Skill & { icon_url?: string }
-      return {
-        ...skill,
-        capabilities: normalizeCapabilities(skill.capabilities),
-        content: skill.content || '',
-        iconUrl: (raw.iconUrl || raw.icon_url || '').trim(),
-        installed: isInstalled,
-        enabled: isInstalled && !disabled.has(skill.id)
-      }
-    })
-  })
+  !useUserStore().authInfo.token
+    ? Promise.resolve([])
+    : Promise.all([skillApi.list(param ?? {}), getSkillLocalState()]).then(([remote, local]) => {
+        if (remote.code !== 0) {
+          return Promise.reject(new Error('WORK_SKILL_LIST_FAILED'))
+        }
+        const rows = Array.isArray(remote.data) ? remote.data : []
+        const installed = new Set(local.installedIds)
+        const disabled = new Set(local.disabledIds)
+        return rows.map((skill) => {
+          const isInstalled = installed.has(skill.id)
+          const raw = skill as Skill & { icon_url?: string }
+          return {
+            ...skill,
+            capabilities: normalizeCapabilities(skill.capabilities),
+            content: skill.content || '',
+            iconUrl: (raw.iconUrl || raw.icon_url || '').trim(),
+            installed: isInstalled,
+            enabled: isInstalled && !disabled.has(skill.id)
+          }
+        })
+      })
 
 export const installSkill = (id: string, content: string) => invoke<void>('work_skill_install', { id, content })
 export const uninstallSkill = (id: string) => invoke<void>('work_skill_uninstall', { id })

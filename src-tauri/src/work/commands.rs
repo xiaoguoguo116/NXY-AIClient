@@ -121,7 +121,7 @@ async fn fetch_latest_reasonix_version() -> Result<String, String> {
 
     let release = reqwest::Client::new()
         .get("https://api.github.com/repos/esengine/DeepSeek-Reasonix/releases/latest")
-        .header("User-Agent", "Linyu-Work-Agent")
+        .header("User-Agent", "EM-Work-Agent")
         .send()
         .await
         .map_err(|error| format!("WORK_UPDATE_NETWORK: {error}"))?
@@ -211,7 +211,7 @@ pub async fn work_runtime_install(
 
     let release = reqwest::Client::new()
         .get("https://api.github.com/repos/esengine/DeepSeek-Reasonix/releases/latest")
-        .header("User-Agent", "Linyu-Work-Agent")
+        .header("User-Agent", "EM-Work-Agent")
         .send()
         .await
         .map_err(|error| format!("WORK_INSTALL_NETWORK: {error}"))?

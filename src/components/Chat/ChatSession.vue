@@ -1526,5 +1526,58 @@
         min-width: 0;
       }
     }
+
+    /* 右侧聊天区：轻量企业通信风格 */
+    & {
+      background: #f5f7f9;
+    }
+
+    .chat-session__header {
+      height: 68px;
+      padding: 0 18px;
+      border-bottom: 1px solid #e5e9ee;
+      background: #fff;
+      box-shadow: 0 1px 2px rgba(22, 67, 101, 0.04);
+    }
+
+    .chat-session__header-info {
+      color: #2f3945;
+    }
+
+    .chat-session__content {
+      background: #f4f6f8;
+    }
+
+    .chat-session__input {
+      padding: 9px 14px 10px;
+      border-top: 1px solid #e4e8ed;
+      background: #fff;
+
+      > .flex:last-child {
+        order: -1;
+        margin-top: 0 !important;
+        margin-bottom: 7px;
+      }
+    }
+
+    :deep(.message-list) {
+      background: #f4f6f8;
+    }
+
+    :deep(.message-list__bubble) {
+      border-radius: 3px;
+      box-shadow: 0 1px 2px rgba(32, 75, 108, 0.08);
+    }
+
+    :deep(.message-list__bubble--self) {
+      color: #243648;
+      background: #cfe8fb;
+    }
+
+    :deep(.message-editor) {
+      border: 0;
+      border-radius: 0;
+      background: #fff;
+    }
   }
 </style>
