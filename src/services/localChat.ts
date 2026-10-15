@@ -1,3 +1,5 @@
+import { ragQuestion } from './ragChat.ts'
+
 export interface LocalMessage {
   id: string
   role: 'user' | 'assistant'
@@ -6,9 +8,14 @@ export interface LocalMessage {
   status: 'done' | 'pending' | 'error'
   error?: string
   replyTo?: string
+  assistant?: 'ragflow'
+  rag?: import('./ragChat.ts').RagResult
+  ragFollowup?: { previous: import('./ragChat.ts').RagResult; selection?: { cache_id: string; option_id: string } }
   summarySourceIds?: string[]
   quoteId?: string
   senderId?: string
+  todoRecipients?: { id: string; name: string; kind: 'self' | 'simulated' | 'ai' }[]
+  todoSuggestions?: { title: string; dueAt?: string; dismissed?: boolean }[]
 }
 export interface LocalMember {
   id: string
@@ -21,6 +28,7 @@ export interface LocalConversation {
   name: string
   messages: LocalMessage[]
   members?: LocalMember[]
+  archivedMembers?: LocalMember[]
   pinned?: boolean
   notifications?: boolean
   announcement?: string
@@ -28,8 +36,8 @@ export interface LocalConversation {
 const selfMember: LocalMember = { id: 'self', name: '我', color: '#2f92ed', kind: 'self' }
 const aiMember: LocalMember = { id: 'ai', name: 'AI 助手', color: '#7865c4', kind: 'ai' }
 export function messageSender(chat: LocalConversation, msg: LocalMessage): LocalMember {
-  if (msg.role === 'assistant') return aiMember
-  return chat.members?.find((member) => member.id === msg.senderId) ?? selfMember
+  if (msg.role === 'assistant') return msg.assistant === 'ragflow' ? { ...aiMember, id: 'ragflow', name: 'AI RAG助手', color: '#298478' } : aiMember
+  return chat.members?.find((member) => member.id === msg.senderId) ?? chat.archivedMembers?.find((member) => member.id === msg.senderId) ?? selfMember
 }
 
 // Upgrade only the explicitly seeded test group; never reinterpret ordinary user messages.
@@ -62,8 +70,9 @@ export interface AiConfig {
 }
 export const CHAT_KEY = 'em.local-chat.v1'
 export const CONFIG_KEY = 'em.local-ai.v1'
+export const API_KEY_KEY = 'em.local-ai-key.v1'
 export const DEFAULT_CONFIG: AiConfig = { baseUrl: '', model: '', contextCount: 12 }
-export const mentionsAi = (text: string) => /(^|\s)@ai(?=\s|$|[，,：:？！?!。])/i.test(text)
+export const mentionsAi = (text: string) => ragQuestion(text) === null && /(^|\s)@ai(?=\s|$|[，,：:？！?!。\u4e00-\u9fff])/i.test(text)
 
 export function newConversation(name = '我的本地会话'): LocalConversation {
   return { id: crypto.randomUUID(), name, messages: [] }
@@ -178,7 +187,7 @@ export function buildContext(chat: LocalConversation, requestId: string, count: 
       }
     ]
   }
-  const previous = chat.messages.slice(0, index).filter((msg) => msg.status === 'done')
+  const previous = chat.messages.slice(0, index).filter((msg) => msg.status === 'done' && msg.assistant !== 'ragflow' && ragQuestion(msg.text) === null)
   const history = count > 0 ? previous.slice(-count) : []
   return [
     { role: 'system', content: '你是 EM 聊天助手。请用中文清晰回答用户问题。' },
@@ -199,25 +208,58 @@ export async function requestAi(
   apiKey: string,
   messages: { role: string; content: string }[],
   signal: AbortSignal,
-  fetcher?: Fetcher
+  fetcher?: Fetcher,
+  options: { connectionTest?: boolean } = {}
 ): Promise<string> {
   const normalized = validateConfig(config)
+  if (new URL(normalized.baseUrl).hostname === 'api.deepseek.com' && !apiKey.trim())
+    throw new Error('请输入 API 密钥，并保存全局模型设置。')
+  // Race the entire operation, including body reads: native HTTP cancellation
+  // alone may not settle a stalled WebView response promptly.
+  const controller = new AbortController()
+  let rejectAbort: (reason: Error) => void = () => {}
+  const cancelled = new Promise<never>((_, reject) => { rejectAbort = reject })
+  const abort = () => {
+    rejectAbort(new Error('模型接口请求已取消。'))
+    controller.abort()
+  }
+  signal.addEventListener('abort', abort, { once: true })
+  if (signal.aborted) abort()
+  const timer = setTimeout(() => {
+    rejectAbort(new Error('模型接口响应超时，请稍后重试；这不代表密钥无效。'))
+    controller.abort()
+  }, options.connectionTest ? 25_000 : 120_000)
+  try {
+    return await Promise.race([cancelled, performRequest()])
+  } finally {
+    clearTimeout(timer)
+    signal.removeEventListener('abort', abort)
+  }
+  async function performRequest(): Promise<string> {
+  if (controller.signal.aborted) throw new Error('模型接口请求已取消。')
   const nativeFetch = fetcher ?? (await import('@tauri-apps/plugin-http')).fetch
   const response = await nativeFetch(`${normalized.baseUrl}/chat/completions`, {
     method: 'POST',
-    signal,
+    signal: controller.signal,
+    connectTimeout: 20_000,
     headers: {
       'Content-Type': 'application/json',
       ...(apiKey.trim() ? { Authorization: `Bearer ${apiKey.trim()}` } : {})
     },
-    body: JSON.stringify({ model: normalized.model, messages, stream: false })
+    body: JSON.stringify({ model: normalized.model, messages, stream: false,
+      ...(options.connectionTest ? { max_tokens: 64 } : {}),
+      ...(options.connectionTest && new URL(normalized.baseUrl).hostname === 'api.deepseek.com'
+        ? { thinking: { type: 'disabled' } } : {})
+    })
   })
   if (!response.ok) {
     const hints: Record<number, string> = {
       401: '模型接口鉴权失败，请检查 API 密钥。',
+      402: '模型接口余额不足，请在服务商控制台充值。',
       403: '模型接口拒绝访问，请检查密钥权限。',
       404: '接口路径或模型不存在，请检查地址和模型名称。',
-      429: '请求过于频繁或额度不足，请稍后重试。'
+      429: '请求过于频繁或额度不足，请稍后重试。',
+      503: '模型接口服务繁忙（HTTP 503），请稍后重试；这不代表密钥无效。'
     }
     throw new Error(hints[response.status] || `模型接口返回 HTTP ${response.status}，请稍后重试。`)
   }
@@ -226,4 +268,5 @@ export async function requestAi(
   if (typeof answer !== 'string' || !answer.trim())
     throw new Error('接口没有返回文字回复，请确认支持 Chat Completions 协议。')
   return answer.trim()
+  }
 }

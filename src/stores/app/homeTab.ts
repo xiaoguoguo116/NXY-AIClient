@@ -9,7 +9,7 @@ import { HOME_WINDOW_LABEL } from '@/constants/window'
 import router from '@/router'
 import { useChatStore } from '@/stores/chat/chat'
 
-export type HomeTabId = 'message' | 'contacts' | 'moment' | 'ai' | 'drive' | 'application'
+export type HomeTabId = 'message' | 'contacts' | 'moment' | 'ai' | 'drive' | 'application' | 'todos'
 
 export interface HomeTabMessagePayload {
   chatId?: string
@@ -27,6 +27,7 @@ export interface HomeTabAiPayload {
 }
 
 type HomeTabPayloadMap = {
+  todos: Record<string, never>
   message: HomeTabMessagePayload
   contacts: HomeTabContactsPayload
   moment: Record<string, never>
@@ -46,6 +47,7 @@ type HomeTabStore = {
 }
 
 const TAB_PATHS: Record<HomeTabId, string> = {
+  todos: '/home/todos',
   message: '/home/message',
   contacts: '/home/contacts',
   moment: '/home/moment',

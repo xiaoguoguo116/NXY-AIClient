@@ -1,9 +1,10 @@
 <template>
-  <div class="ai-shell">
+  <n-config-provider :theme="lightTheme" class="ai-shell ai-work-light">
     <nav class="ai-sections" aria-label="AI Work 功能">
       <strong>AI Work</strong>
       <button :class="{ selected: knowledgeMode }" @click="selectSection('knowledge')">知识问答</button>
-      <button :class="{ selected: !knowledgeMode }" @click="selectSection('tasks')">任务助手</button>
+      <button v-for="(label, view) in MODE_LABELS" :key="view" :class="{ selected: route.query.view === view }" @click="selectSection(view)">{{ label }}</button>
+      <button :class="{ selected: !knowledgeMode && !complianceMode }" @click="selectSection('tasks')">任务助手</button>
     </nav>
     <div v-show="knowledgeMode" class="knowledge-slot">
       <p v-if="knowledgeError" role="alert">{{ knowledgeError }}，请到应用中心配置 RAGFlow 地址。</p>
@@ -12,10 +13,12 @@
           v-if="knowledgeMode && !knowledgeError"
           :key="knowledgeUrl"
           :url="knowledgeUrl"
+          compact
           @close="selectSection('tasks')" />
       </KeepAlive>
     </div>
-    <div v-show="!knowledgeMode" class="workbench" @keydown.capture="onWorkbenchKeydown">
+    <ComplianceWorkbench v-if="complianceMode" :mode="complianceMode" class="compliance-slot" />
+    <div v-show="!knowledgeMode && !complianceMode" class="workbench" @keydown.capture="onWorkbenchKeydown">
       <div class="workbench__body">
         <aside class="workbench__sidebar">
           <nav class="workbench__nav">
@@ -316,17 +319,22 @@
         :request="sessionStore.permissionRequest"
         @answer="answerPermission" />
     </div>
-  </div>
+  </n-config-provider>
 </template>
 
 <script setup lang="ts">
   defineOptions({ name: 'ai' })
+  import { lightTheme } from 'naive-ui'
+  import '@/styles/ai-work-light.css'
   import EmbeddedApplication from '@/components/Application/EmbeddedApplication.vue'
+  import ComplianceWorkbench from '@/components/AI/ComplianceWorkbench.vue'
+  import { MODE_LABELS, type WorkMode as ComplianceMode } from '@/services/compliance'
   import { DEFAULT_RAGFLOW, loadRagflowLinks } from '@/services/localApplications'
   import { useRoute, useRouter } from 'vue-router'
   const route = useRoute(),
     router = useRouter()
   const knowledgeMode = computed(() => route.query.view === 'knowledge')
+  const complianceMode = computed(() => Object.prototype.hasOwnProperty.call(MODE_LABELS, String(route.query.view)) ? String(route.query.view) as ComplianceMode : undefined)
   const knowledgeUrl = ref(DEFAULT_RAGFLOW.url),
     knowledgeError = ref('')
   function selectSection(view: string) {
@@ -1023,7 +1031,8 @@
   .ai-sections {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 4px;
+    overflow-x: auto;
     flex-shrink: 0;
     padding: 9px 18px;
     background: var(--bg-primary-color);
@@ -1033,7 +1042,8 @@
     margin-right: 14px;
   }
   .ai-sections button {
-    padding: 8px 20px;
+    padding: 8px 12px;
+    white-space: nowrap;
     border: 0;
     border-radius: 5px;
     background: transparent;
@@ -1049,6 +1059,7 @@
     flex: 1;
     min-height: 0;
   }
+  .compliance-slot { flex: 1; min-height: 0; }
   .ai-shell > .workbench {
     flex: 1;
     min-height: 0;

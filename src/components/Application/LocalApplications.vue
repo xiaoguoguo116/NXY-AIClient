@@ -1,5 +1,11 @@
 <template>
   <section class="local-applications">
+    <article v-if="matchesCompliance" class="ragflow-card">
+      <div class="card-heading"><span class="app-logo">合</span><div><h3>合规工作台</h3><small>AI Work · 本地辅助审核</small></div><span class="local-badge">内置功能</span></div>
+      <p>制度问答与原文定位、制度比对、文本合规初审、报送草稿。结果待人工审核。</p>
+      <div class="tags"><span>原文溯源</span><span>条款比对</span><span>风险初审</span><span>Word 草稿</span></div>
+      <div class="actions"><button class="primary" @click="router.push({ path: '/home/ai', query: { view: 'policy' } })">进入 AI Work</button></div>
+    </article>
     <article v-if="matches" class="ragflow-card">
       <div class="card-heading">
         <span class="app-logo">R</span>
@@ -33,20 +39,79 @@
       </form>
       <p v-if="status" role="status" class="status">{{ status }}</p>
     </article>
-    <p v-else class="hint">没有匹配的常用应用。</p>
+    <article v-if="matchesMarkdown" class="ragflow-card">
+      <div class="card-heading">
+        <span class="app-logo markdown-logo">MD</span>
+        <div>
+          <h3>Markdown 文档上传智能体</h3>
+          <small>本机应用 · 文档上传</small>
+        </div>
+        <span class="local-badge">内嵌应用</span>
+      </div>
+      <p>在软件内直接使用 Markdown 文档上传智能体，无需切换浏览器。</p>
+      <div class="tags"><span>Markdown</span><span>文档上传</span><span>智能体</span></div>
+      <div class="actions">
+        <button class="primary" @click="launchMarkdown">打开智能体</button>
+        <button @click="markdownEdit = !markdownEdit">配置地址</button>
+      </div>
+      <form v-if="markdownEdit" @submit.prevent="saveMarkdown">
+        <label>智能体地址<input v-model="markdownDraft" required aria-label="智能体地址" /></label>
+        <div class="actions">
+          <button class="primary">保存地址</button>
+          <button type="button" @click="markdownEdit = false">取消</button>
+        </div>
+      </form>
+      <p v-if="markdownStatus" role="status" class="status">{{ markdownStatus }}</p>
+    </article>
+    <p v-if="!matches && !matchesMarkdown && !matchesCompliance" class="hint">没有匹配的常用应用。</p>
+    <p class="hint service-hint">文档上传智能体在应用中心内打开；需保持 8092 服务运行。</p>
     <p class="hint service-hint">RAGFlow 在 AI Work → 知识问答中使用；需保持本机服务运行。</p>
   </section>
 </template>
 <script setup lang="ts">
   import { computed, reactive, ref } from 'vue'
+  import { useRouter } from 'vue-router'
+  const router = useRouter()
   import {
     DEFAULT_RAGFLOW,
+    DEFAULT_MARKDOWN_AGENT,
+    MARKDOWN_AGENT_KEY,
+    loadMarkdownAgent,
     LOCAL_APPS_KEY,
     loadRagflowLinks,
     validateApplicationUrl
   } from '@/services/localApplications'
   const props = defineProps<{ keyword: string }>()
-  const emit = defineEmits<{ open: [url: string] }>()
+  const matchesCompliance = computed(() => '合规 工作台 制度 问答 比对 初审 监管 报送 原文 溯源'.includes(props.keyword.trim().toLowerCase()))
+  const emit = defineEmits<{ open: [url: string]; openMarkdown: [url: string] }>()
+  const markdownUrl = ref(DEFAULT_MARKDOWN_AGENT.url)
+  const markdownDraft = ref(DEFAULT_MARKDOWN_AGENT.url)
+  const markdownEdit = ref(false)
+  const markdownStatus = ref('')
+  try {
+    markdownUrl.value = loadMarkdownAgent(localStorage).url
+    markdownDraft.value = markdownUrl.value
+  } catch {
+    markdownStatus.value = '原有地址配置无法读取，请重新配置并保存。'
+  }
+  const matchesMarkdown = computed(() =>
+    'markdown md 文档 上传 智能体 agent'.includes(props.keyword.trim().toLowerCase())
+  )
+  function saveMarkdown() {
+    try {
+      const url = validateApplicationUrl(markdownDraft.value)
+      localStorage.setItem(MARKDOWN_AGENT_KEY, JSON.stringify({ url }))
+      markdownUrl.value = url
+      markdownDraft.value = url
+      markdownEdit.value = false
+      markdownStatus.value = '地址已保存。'
+    } catch (error) {
+      markdownStatus.value = error instanceof Error ? error.message : '地址保存失败。'
+    }
+  }
+  function launchMarkdown() {
+    emit('openMarkdown', validateApplicationUrl(markdownUrl.value))
+  }
   const links = reactive({ ...DEFAULT_RAGFLOW }),
     draft = reactive({ ...DEFAULT_RAGFLOW })
   const edit = ref(false),
@@ -119,6 +184,10 @@
   .card-heading h3 {
     font-size: 14px;
     margin: 0 0 4px;
+  }
+  .markdown-logo {
+    background: linear-gradient(145deg, #5ddcc2, #18a999);
+    font-size: 18px;
   }
   .card-heading small,
   .hint {

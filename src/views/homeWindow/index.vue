@@ -16,6 +16,7 @@
           搜索消息记录
         </button>
         <div class="home__topbar-right">
+          <button v-if="todoState.alert" style="color:#c13c4b;background:#fff3e5;border:0;border-radius:5px;padding:6px;cursor:pointer" :title="todoState.alert" @click="openTodoReminder">待办到期 · 查看</button>
           <div class="home__user-summary" @click="onUserSummaryClick">
             <span>{{ userStore.userInfo.username || 'EM 本地聊天' }}</span>
             <EmotionIcon v-if="userStore.userInfo.emotionId" :url="userStore.userInfo.emotionUrl" :size="18" />
@@ -101,6 +102,10 @@
 </template>
 
 <script setup lang="ts">
+  import { todoState, startTodoReminders } from '@/stores/localTodos'
+  const stopTodoReminders = startTodoReminders()
+  onBeforeUnmount(stopTodoReminders)
+  function openTodoReminder() { todoState.alert = ''; void router.push('/home/todos') }
   import UpdateModal from '@/components/Modal/UpdateModal.vue'
   import LocalGlobalSearch from '@/components/Chat/LocalGlobalSearch.vue'
   import SessionLockOverlay from '@/components/SessionLockOverlay.vue'
@@ -188,6 +193,7 @@
   const router = useRouter()
 
   const menuOptions = computed(() => [
+    { id: 'todos' as HomeTabId, label: '待办事项', icon: '#check', activeIcon: '#check', path: '/home/todos' },
     {
       id: 'message' as HomeTabId,
       label: t('home.options.message'),
@@ -314,6 +320,7 @@
   const onMoreMenuSelect = (key: string) => {
     if (previewMode.value) {
       if (key === 'exit') exitApp()
+      else if (key === 'setting') void createSetWinodw('aiModel')
       return
     }
 
@@ -346,7 +353,7 @@
   }
 
   const onClickMenu = (item: { id: HomeTabId; path: string }) => {
-    if (previewMode.value && !['message', 'application', 'ai'].includes(item.id)) {
+    if (previewMode.value && !['message', 'application', 'ai', 'todos'].includes(item.id)) {
       window.$message?.info('此功能需要连接聊天服务端；本地模式可使用消息、应用和 AI Work。')
       return
     }
@@ -409,10 +416,10 @@
   }
 
   onMounted(() => {
+    void ensureNotificationActionListener()
     if (!previewMode.value) {
       void connectWebSocket().catch((err) => console.error('[WebSocket] connect failed:', err))
       void createPluginRuntimeWindow()
-      void ensureNotificationActionListener()
       onCurrentUserInfo()
       void homeNavBadgeStore.refreshContactsBadges()
       prefetchHomePages(route.name as string)
@@ -428,7 +435,7 @@
     window.addEventListener('keydown', onKeyDown)
     initGlobalShortcuts()
     void listen<HomeTabNavigatePayload>(HOME_TAB_NAVIGATE_EVENT, (event) => {
-      if (previewMode.value) return
+      if (previewMode.value && event.payload.tabId !== 'todos') return
       const { tabId, payload } = event.payload
       if (!tabId) return
       void homeTabStore.navigateTo(tabId, payload)
@@ -453,7 +460,7 @@
   onUnmounted(() => {
     unlistenCloseRequested?.()
     unlistenHomeTabNavigate?.()
-    if (!previewMode.value) void stopNotificationActionListener()
+    void stopNotificationActionListener()
     window.removeEventListener('keydown', onKeyDown)
     disposeGlobalShortcuts()
     if (!previewMode.value) {

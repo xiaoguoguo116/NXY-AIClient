@@ -63,6 +63,10 @@ export const showNotification = async (options: AppNotificationOptions): Promise
 }
 
 const handleWorkNotificationAction = (extra: Record<string, unknown> | undefined) => {
+  if (extra?.type === 'todo') {
+    void createHomeWinodw().then(() => useHomeTabStore().navigateTo('todos')).catch(() => undefined)
+    return
+  }
   if (!extra || extra.type !== 'work') return
   const conversationId = String(extra.conversationId || '')
   if (!conversationId) return

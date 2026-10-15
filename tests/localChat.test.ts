@@ -159,6 +159,25 @@ test('@AI detection, URL validation and context stay bounded to the original req
     ['当前问题']
   )
 })
+test('cancellation settles even when transport ignores abort', async () => {
+  const controller = new AbortController()
+  const pending = requestAi({ baseUrl: 'https://models.example/v1', model: 'test', contextCount: 0 }, '', [], controller.signal,
+    async () => new Promise<Response>(() => {}))
+  controller.abort()
+  await assert.rejects(pending, /已取消/)
+})
+
+test('DeepSeek connection test is short, non-thinking and reports busy separately', async () => {
+  const config = { baseUrl: 'https://api.deepseek.com/v1', model: 'deepseek-flash', contextCount: 0 }
+  await assert.rejects(requestAi(config, '', [], new AbortController().signal), /请输入 API 密钥/)
+  await assert.rejects(requestAi(config, 'test-key', [], new AbortController().signal, async (_, init) => {
+    const body = JSON.parse(init.body as string)
+    assert.equal(body.max_tokens, 64)
+    assert.deepEqual(body.thinking, { type: 'disabled' })
+    return new Response('', { status: 503 })
+  }, { connectionTest: true }), /服务繁忙/)
+})
+
 test('compatible request uses only configured key and parses real response/error', async () => {
   const config = { baseUrl: 'https://models.example/v1', model: 'test-model', contextCount: 12 }
   const signal = new AbortController().signal
@@ -166,7 +185,7 @@ test('compatible request uses only configured key and parses real response/error
     assert.equal(url, 'https://models.example/v1/chat/completions')
     assert.equal((init.headers as Record<string, string>).Authorization, 'Bearer test-key')
     assert.equal(JSON.parse(init.body as string).model, 'test-model')
-    assert.equal(init.signal, signal)
+    assert.equal(init.signal?.aborted, false)
     return new Response(JSON.stringify({ choices: [{ message: { content: '真实回复' } }] }))
   })
   assert.equal(reply, '真实回复')

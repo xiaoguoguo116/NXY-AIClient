@@ -5,6 +5,7 @@ export interface HomePage {
 }
 
 export const HOME_PAGES: HomePage[] = [
+  { name: 'todos', path: '/home/todos', loader: () => import('@/views/homeWindow/pages/todos.vue') },
   {
     name: 'message',
     path: '/home/message',

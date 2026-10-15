@@ -14,10 +14,7 @@
     <button
       v-if="query"
       aria-label="清空搜索"
-      @click="
-        query = ''
-        open = false
-      ">
+      @click="clearSearch">
       ×
     </button>
     <div v-if="open && query.trim()" class="search-results">
@@ -59,6 +56,10 @@
       error.value = '本地记录无法读取，原始数据未修改。'
       chats.value = []
     }
+  }
+  function clearSearch() {
+    query.value = ''
+    open.value = false
   }
   const results = computed(() => {
     const q = query.value.trim().toLowerCase()

@@ -70,7 +70,7 @@
       </div>
 
       <n-scrollbar class="application-center__scroll">
-        <LocalApplications v-if="activeView === 'local'" :keyword="searchKeyword" @open="openKnowledge" />
+        <LocalApplications v-if="activeView === 'local'" :keyword="searchKeyword" @open="openKnowledge" @open-markdown="openMarkdown" />
         <div v-else-if="!userStore.authInfo.token && activeView === 'market'" class="application-center__empty">
           <strong>在线应用市场暂不可用</strong>
           <p>原有应用列表来自服务端，未被删除。本地模式没有登录凭证，不能加载该列表。</p>
@@ -109,6 +109,15 @@
         </div>
       </n-scrollbar>
     </section>
+
+    <EmbeddedApplication
+      v-if="markdownUrl"
+      :key="markdownUrl"
+      :url="markdownUrl"
+      title="Markdown 文档上传智能体"
+      view-label="markdown-agent-embedded"
+      closable
+      @close="markdownUrl = ''" />
 
     <PluginDetailDrawer
       v-model:show="showDetail"
@@ -206,6 +215,11 @@
   import type { CSSProperties } from 'vue'
   import { applicationApi } from '@/api'
   import LocalApplications from '@/components/Application/LocalApplications.vue'
+  import EmbeddedApplication from '@/components/Application/EmbeddedApplication.vue'
+  const markdownUrl = ref('')
+  function openMarkdown(url: string) {
+    markdownUrl.value = url
+  }
   import { useRouter } from 'vue-router'
   const router = useRouter()
   function openKnowledge() {
@@ -406,7 +420,7 @@
   })
 
   const views = computed(() => [
-    { value: 'local' as const, label: '常用应用', icon: '#application', count: 1 },
+    { value: 'local' as const, label: '常用应用', icon: '#application', count: 2 },
     {
       value: 'market' as const,
       label: t('application.views.market.title'),

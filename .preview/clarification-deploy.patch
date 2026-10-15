@@ -1,0 +1,6 @@
+*** Begin Patch
+*** Update File: D:/work/PythonProject/deployment/docker-v0.27.1/.env
+@@
+-RAGFLOW_IMAGE=ragflow-custom:v0.27.1-clarification-6
++RAGFLOW_IMAGE=ragflow-custom:v0.27.1-clarification-7
+*** End Patch

@@ -19,7 +19,7 @@ const appVersion = String(packageJson.version ?? '0.0.0')
 const appVersionCode = Number(packageJson.versionCode ?? 101)
 
 // https://vite.dev/config/
-export default defineConfig(async () => ({
+export default defineConfig(async ({ command }) => ({
   plugins: [
     vue(),
     vueJsx(),
@@ -31,11 +31,11 @@ export default defineConfig(async () => ({
           'naive-ui': ['useDialog', 'useMessage', 'useNotification', 'useLoadingBar']
         }
       ],
-      dts: 'src/typings/auto-imports.d.ts'
+      dts: command === 'serve' ? 'src/typings/auto-imports.d.ts' : false
     }),
     Components({
       resolvers: [NaiveUiResolver()],
-      dts: 'src/typings/components.d.ts'
+      dts: command === 'serve' ? 'src/typings/components.d.ts' : false
     }),
     createSvgIconsPlugin({
       iconDirs: [fileURLToPath(new URL('./src/assets/icons', import.meta.url))],

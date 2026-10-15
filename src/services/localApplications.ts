@@ -1,5 +1,14 @@
 export const LOCAL_APPS_KEY = 'em.local-applications.v1'
 export const DEFAULT_RAGFLOW = { url: 'http://127.0.0.1:8090/' }
+export const MARKDOWN_AGENT_KEY = 'em.markdown-agent.v1'
+export const DEFAULT_MARKDOWN_AGENT = { url: 'http://127.0.0.1:8092/' }
+export function loadMarkdownAgent(storage: Pick<Storage, 'getItem'>) {
+  const raw = storage.getItem(MARKDOWN_AGENT_KEY)
+  if (!raw) return { ...DEFAULT_MARKDOWN_AGENT }
+  const value = JSON.parse(raw)
+  if (typeof value?.url !== 'string') throw new Error('智能体地址配置损坏，请重新设置。')
+  return { url: validateApplicationUrl(value.url) }
+}
 export function validateApplicationUrl(value: string) {
   let url: URL
   try {

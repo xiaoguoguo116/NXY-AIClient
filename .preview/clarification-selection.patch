@@ -1,0 +1,7 @@
+*** Begin Patch
+*** Update File: D:/work/PythonProject/deployment/ragflow-query-rewrite/api/db/services/dialog_service.py
+@@
+     selection_request = selection_request if isinstance(selection_request, dict) else {}
++    if not selection_request.get("cache_id") or not selection_request.get("option_id"):
++        selection_request = {}
+*** End Patch

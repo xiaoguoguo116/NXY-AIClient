@@ -1396,6 +1396,7 @@
       "general": "General",
       "shortcuts": "Shortcuts",
       "notification": "Notifications",
+      "aiModel": "Global AI Model",
       "work": "AI Work",
       "plugins": "Plugins",
       "about": "About"

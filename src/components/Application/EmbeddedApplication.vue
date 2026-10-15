@@ -1,7 +1,8 @@
 <template>
   <section class="embedded-application">
-    <div class="embedded-toolbar">
-      <strong>RAGFlow 知识助手</strong>
+    <div v-if="!compact || error" class="embedded-toolbar">
+      <button v-if="closable" @click="$emit('close')">返回应用中心</button>
+      <strong>{{ title }}</strong>
       <small>{{ url }}</small>
       <button @click="reload">重新加载</button>
     </div>
@@ -9,9 +10,9 @@
       <p v-if="error" role="alert">
         {{ error }}
         <br />
-        请确认 RAGFlow 和 8090 前端服务已经启动，再点击重新加载。
+        请确认 {{ title }} 的服务（{{ url }}）已经启动，再点击重新加载。
       </p>
-      <p v-else>正在软件内加载 RAGFlow…</p>
+      <p v-else>正在软件内加载 {{ title }}…</p>
     </div>
   </section>
 </template>
@@ -21,7 +22,12 @@
   import { getCurrentWindow } from '@tauri-apps/api/window'
   import { LogicalPosition, LogicalSize } from '@tauri-apps/api/dpi'
   import { validateApplicationUrl } from '@/services/localApplications'
-  const props = defineProps<{ url: string }>()
+  const props = withDefaults(defineProps<{ url: string; title?: string; viewLabel?: string; closable?: boolean; compact?: boolean }>(), {
+    title: 'RAGFlow 知识助手',
+    viewLabel: 'ragflow-embedded',
+    closable: false,
+    compact: false
+  })
   defineEmits<{ close: [] }>()
   const host = ref<HTMLElement>(),
     error = ref('')
@@ -59,7 +65,7 @@
         additionalBrowserArgs:
           '--disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection --use-fake-ui-for-media-stream'
       }
-      const candidate = new Webview(getCurrentWindow(), 'ragflow-embedded', options)
+      const candidate = new Webview(getCurrentWindow(), props.viewLabel, options)
       await new Promise<void>((resolve, reject) => {
         const timer = setTimeout(() => {
           void candidate.close().catch(() => undefined)

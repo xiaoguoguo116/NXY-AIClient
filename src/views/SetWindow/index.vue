@@ -52,14 +52,15 @@
   import PluginsPage from './pages/plugins.vue'
   import AboutPage from './pages/about.vue'
   import WorkAssistantPage from './pages/work-assistant.vue'
+  import AiModelPage from './pages/ai-model.vue'
 
-  type SettingsMenuKey = 'account' | 'general' | 'shortcuts' | 'notification' | 'work' | 'plugins' | 'about'
+  type SettingsMenuKey = 'account' | 'general' | 'shortcuts' | 'notification' | 'aiModel' | 'work' | 'plugins' | 'about'
 
   const { t } = useI18n()
   const route = useRoute()
   const shortcutConflictStore = useShortcutConflictStore()
   const routeTab = String(route.query.tab || '')
-  const activeKey = ref<SettingsMenuKey>(routeTab === 'work' ? 'work' : 'account')
+  const activeKey = ref<SettingsMenuKey>(routeTab === 'work' ? 'work' : routeTab === 'aiModel' ? 'aiModel' : 'account')
 
   const mutedButtonText = {
     textColor: 'var(--text-muted-color)',
@@ -95,6 +96,7 @@
     { key: 'general', labelKey: 'settings.menu.general', icon: '#settings' },
     { key: 'shortcuts', labelKey: 'settings.menu.shortcuts', icon: '#keyboard' },
     { key: 'notification', labelKey: 'settings.menu.notification', icon: '#alarm' },
+    { key: 'aiModel', labelKey: 'settings.menu.aiModel', icon: '#ai' },
     { key: 'work', labelKey: 'settings.menu.work', icon: '#ai' },
     { key: 'plugins', labelKey: 'settings.menu.plugins', icon: '#plug' },
     { key: 'about', labelKey: 'settings.menu.about', icon: '#info' }
@@ -105,6 +107,7 @@
     general: markRaw(GeneralPage),
     shortcuts: markRaw(ShortcutsPage),
     notification: markRaw(NotificationPage),
+    aiModel: markRaw(AiModelPage),
     work: markRaw(WorkAssistantPage),
     plugins: markRaw(PluginsPage),
     about: markRaw(AboutPage)

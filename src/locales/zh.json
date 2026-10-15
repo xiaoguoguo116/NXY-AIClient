@@ -1374,6 +1374,7 @@
       "general": "通用",
       "shortcuts": "快捷键",
       "notification": "通知",
+      "aiModel": "全局模型",
       "work": "AI Work",
       "plugins": "插件",
       "about": "关于"

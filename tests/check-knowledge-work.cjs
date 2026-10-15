@@ -25,13 +25,13 @@ const assert=require('node:assert/strict');
   await page.getByRole('button',{name:'任务助手',exact:true}).click();
   await page.locator('.workbench').waitFor({state:'visible'});
   await page.getByRole('button',{name:'知识问答',exact:true}).click();
-  await page.locator('.embedded-toolbar').waitFor({state:'visible'});
+  await page.locator('.embedded-host').waitFor({state:'visible'});
   assert.equal(browser.contexts().flatMap(c=>c.pages()).filter(p=>p.url().startsWith('http://127.0.0.1:8090')).length,1);
   await page.locator('.home__sider-nav [aria-label="消息"]').click();
   await page.locator('.local-chat').waitFor({state:'visible'});
   await page.locator('.home__sider-nav [aria-label="AI Work"]').click();
   await page.getByRole('button',{name:'知识问答',exact:true}).click();
-  await page.locator('.embedded-toolbar').waitFor({state:'visible'});
+  await page.locator('.embedded-host').waitFor({state:'visible'});
   await child.screenshot({path:'C:/Users/94719/.codex/visualizations/2026/10/12/01a12e05-f80d-7992-8795-27ce084b02ee/em-knowledge-page.png'});
   console.log('PASS: app card routes to AI Work knowledge, live 8090 native WebView, remote filesystem denied, task/chat switching and one preserved child view');
  } finally { await browser.close(); }

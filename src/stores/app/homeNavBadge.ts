@@ -21,6 +21,7 @@ export const ACTIVE_UPLOAD_STATUSES = new Set(['pending', 'hashing', 'checking',
 export const ACTIVE_DOWNLOAD_STATUSES = new Set(['pending', 'downloading', 'paused', 'failed'])
 
 const createDefaultCounts = (): HomeNavBadgeCounts => ({
+  todos: 0,
   message: 0,
   contacts: 0,
   moment: 0,
@@ -67,6 +68,7 @@ export const useHomeNavBadgeStore = defineStore('homeNavBadge', {
     },
 
     isBadgeEnabled(slot: HomeNavBadgeSlot) {
+      if (slot === 'todos') return true
       const appSettings = useAppSettingsStore()
       const badges = appSettings.notifications.badges as Partial<Record<NotificationBadgeSlot, boolean>> | undefined
       if (!badges || badges[slot] === undefined) return true

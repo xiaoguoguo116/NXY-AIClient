@@ -1,0 +1,63 @@
+*** Begin Patch
+*** Update File: D:/work/PythonProject/deployment/ragflow-query-rewrite/api/db/services/clarification_service.py
+@@
+-async def decide_clarification(model, question, chunks, config, preprocessing=None, diagnostic=None):
++def input_clarification(question, diagnostic=None):
++    """Offer intent choices without claiming validated or reusable evidence."""
++    candidates = (diagnostic or {}).get("intent_questions", [])
++    questions = list(dict.fromkeys(q for q in candidates
++                                  if isinstance(q, str) and 4 <= len(q) <= 180))[:3]
++    if len(questions) < 2:
++        questions = [f"关于“{question}”，我想了解适用范围和适用对象。",
++                     f"关于“{question}”，我想了解办理流程和具体要求。",
++                     f"请整体介绍“{question}”涉及的各项事项，分别说明适用范围、流程和相关标准。"]
++    return {"needs_input": True, "mode": "intent", "options": [
++        {"id": f"intent-{i}", "question": q, "sources": []}
++        for i, q in enumerate(questions)]}
++
++
++async def decide_clarification(model, question, chunks, config, preprocessing=None, diagnostic=None):
+@@
+     allowed = {c["chunk_id"] for c in evidence}
++    # These are questions for the user, never cached evidence or factual answers.
++    raw_options = decision.get("options")
++    if decision.get("action") == "clarify" and isinstance(raw_options, list):
++        diagnostic["intent_questions"] = [o.get("question") for o in raw_options
++                                          if isinstance(o, dict) and isinstance(o.get("question"), str)]
+     options = validate_options(decision, [c for c in chunks if c.get("chunk_id") in allowed], config["max_options"])
+*** Update File: D:/work/PythonProject/deployment/ragflow-query-rewrite/api/db/services/dialog_service.py
+@@
+-                    yield {"answer": "您的问题“" + original_question + "”可能有不同含义。为避免只回答其中一部分，请补充：您想了解的具体制度或事项是什么？希望了解适用范围、办理流程、补偿标准，还是多个事项的整体说明？",
++                    yield {"answer": "您的问题“" + original_question + "”可能有不同含义。请选择想了解的方向，或在输入框补充具体事项。选择后将重新检索知识库。",
+                            "reference": {}, "audio_binary": None, "final": True,
+-                           "clarification": {"needs_input": True, "options": []}}
++                           "clarification": clarification.input_clarification(
++                               original_question, audit.get("clarification_decision"))}
+*** Update File: D:/work/PythonProject/ragflow-chat-module/ragflow-chat.js
+@@
+-        button.onclick = () => this.send(option.question, {cache_id:clarification.cache_id, option_id:option.id});
++        button.onclick = () => this.send(option.question, clarification.cache_id && clarification.mode !== 'intent'
++          ? {cache_id:clarification.cache_id, option_id:option.id} : undefined);
+@@
+-      card.append(options,make('small','', '也可以在下方补充说明。有效且足够的证据会直接复用，失效时自动重新检索。')); article.append(card);
++      card.append(options,make('small','', clarification.mode === 'intent'
++        ? '也可以在下方补充说明。选择后将重新检索知识库。'
++        : '也可以在下方补充说明。有效且足够的证据会直接复用，失效时自动重新检索。')); article.append(card);
+*** Update File: D:/work/PythonProject/deployment/ragflow-query-rewrite/tests/test_clarification.py
+@@
+ class ClarificationTests(unittest.TestCase):
++    def test_input_options_never_claim_cached_evidence(self):
++        result = s.input_clarification('加值班制度', {
++            'intent_questions': ['加班制度如何规定？', '值班制度如何规定？']})
++        self.assertEqual(len(result['options']), 2)
++        self.assertEqual(result['mode'], 'intent')
++        self.assertNotIn('cache_id', result)
++        self.assertTrue(all(o['sources'] == [] for o in result['options']))
++
++    def test_input_options_survive_empty_or_invalid_model_choices(self):
++        for candidates in ([], [None, '', 'x'], ['重复问题？', '重复问题？']):
++            result = s.input_clarification('加值班制度', {'intent_questions': candidates})
++            self.assertEqual(len(result['options']), 3)
++            self.assertTrue(all('加值班制度' in o['question'] for o in result['options']))
++
+*** End Patch

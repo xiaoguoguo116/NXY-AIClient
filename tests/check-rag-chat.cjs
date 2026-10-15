@@ -1,0 +1,66 @@
+const { chromium } = require('C:/Users/94719/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const assert = require('node:assert/strict');
+
+(async () => {
+  const browser = await chromium.launch({ headless: true, channel: 'msedge' });
+  const page = await browser.newPage();
+  let errorCount = 0;
+  page.on('pageerror', error => { if (errorCount++ < 3) console.error('Page error:', error.message); });
+  page.on('requestfailed', request => console.error('Request failed:', request.url(), request.failure()?.errorText));
+  page.setDefaultTimeout(15000);
+  const calls = [];
+  let sessionCount = 0;
+  try {
+    await page.route('**/@vite/client', route => route.fulfill({ contentType: 'text/javascript', body: 'export function createHotContext(){return {data:{},on(){},accept(){},prune(){},dispose(){},invalidate(){}}};export function injectQuery(url){return url};export function updateStyle(id,css){let el=document.getElementById(id);if(!el){el=document.createElement("style");el.id=id;document.head.append(el)}el.textContent=css};export function removeStyle(id){document.getElementById(id)?.remove()}' }));
+    await page.route('**/src/utils/desktop/notification.ts', route => route.fulfill({ contentType: 'text/javascript', body: 'export async function showNotification(){return true}' }));
+    await page.route('**/__rag-test.html', route => route.fulfill({ contentType: 'text/html', body: '<html><body style="margin:0"><div id="app" style="height:100vh"></div><script type="module">import {createApp} from "/node_modules/.vite/deps/vue.js";import Chat from "/src/components/Chat/LocalChat.vue";createApp(Chat).mount("#app")</script></body></html>' }));
+    await page.route('**/@tauri-apps_plugin-http.js*', route => route.fulfill({ contentType: 'text/javascript', body: 'export const fetch = globalThis.fetch.bind(globalThis)' }));
+    await page.route('http://127.0.0.1:8090/**', async route => {
+      const req = route.request(), path = new URL(req.url()).pathname;
+      const body = req.postDataJSON();
+      const headers = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Content-Type': 'application/json' };
+      if (req.method() === 'OPTIONS') return route.fulfill({ status: 204, headers });
+      calls.push({ path, body });
+      if (path === '/config') return route.fulfill({ headers, body: JSON.stringify({ chatId: 'policy' }) });
+      if (path.endsWith('/sessions')) return route.fulfill({ headers, body: JSON.stringify({ code: 0, data: { id: `s${++sessionCount}` } }) });
+      assert.equal(path, '/ragflow-api/chat/completions');
+      const question = body.messages[0].content;
+      const data = { final: true, answer: `制度回答：${question}`, reference: { chunks: [{ docnm_kwd: '员工请假管理制度', content: '第三条：提前提交申请。' }] }, clarification: { cache_id: 'cache', mode: 'knowledge', options: question === '请假要求' ? [{ id: 'annual', question: '年假申请' }] : [] } };
+      return route.fulfill({ headers: { ...headers, 'Content-Type': 'text/event-stream' }, body: `data: ${JSON.stringify({ code: 0, data })}\n\n` });
+    });
+    await page.addInitScript(() => {
+      if (!localStorage.getItem('em.local-chat.v1')) localStorage.setItem('em.local-chat.v1', JSON.stringify({ version: 1, selectedId: 'direct', conversations: [{ id: 'direct', name: '同事单聊', messages: [] }, { id: 'group', name: '制度讨论群', members: [{ id: 'self', name: '我', kind: 'self', color: '#2788ed' }, { id: 'colleague', name: '同事', kind: 'simulated', color: '#357' }], messages: [] }] }));
+    });
+    await page.goto(`${process.env.RAG_TEST_ORIGIN || 'http://127.0.0.1:1420'}/__rag-test.html`);
+    const input = page.getByRole('textbox', { name: '消息输入框', exact: true });
+    await page.getByRole('button', { name: '@AI 通用助手', exact: true }).waitFor();
+    await page.getByRole('button', { name: '@AI RAG助手 制度问答', exact: true }).waitFor();
+    await input.fill('@');
+    await page.getByRole('option', { name: /AI RAG助手/ }).click();
+    assert.equal(await input.inputValue(), '@AI RAG助手 ');
+    await input.fill('@AI RAG助手 请假要求');
+    await page.getByRole('button', { name: '发送', exact: true }).click();
+    await page.locator('.bubble').filter({ hasText: '制度回答：请假要求' }).waitFor();
+    assert.equal(await page.getByRole('heading', { name: '全局模型设置' }).count(), 0);
+    await page.getByText('制度依据（1）').click();
+    await page.getByText('第三条：提前提交申请。', { exact: false }).waitFor();
+    await page.getByRole('button', { name: '年假申请', exact: true }).click();
+    await page.locator('.bubble').filter({ hasText: '制度回答：年假申请' }).waitFor();
+    const completion = calls.filter(c => c.path.endsWith('/completions'));
+    assert.equal(completion.length, 2);
+    assert.equal(completion[0].body.session_id, completion[1].body.session_id);
+    assert.deepEqual(completion[1].body.clarification_selection, { cache_id: 'cache', option_id: 'annual' });
+    await page.getByRole('button', { name: /制度讨论群/ }).click();
+    await input.fill('@AI RAG助手 报销要求');
+    await page.getByRole('button', { name: '发送', exact: true }).click();
+    await page.locator('.bubble').filter({ hasText: '制度回答：报销要求' }).waitFor();
+    assert.equal(sessionCount, 2, 'a different conversation creates an isolated RAG session');
+    await page.reload();
+    await page.locator('.bubble').filter({ hasText: '制度回答：报销要求' }).waitFor();
+    await page.getByRole('button', { name: /同事单聊/ }).click();
+    await page.locator('.bubble').filter({ hasText: '制度回答：年假申请' }).waitFor();
+    const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('em.local-chat.v1')));
+    assert.equal(saved.conversations[0].messages.filter(m => m.assistant === 'ragflow').length, 2);
+    console.log('PASS: direct and group RAG mentions, no model setup, evidence, clarification session, isolation and reload');
+  } finally { await browser.close(); }
+})().catch(error => { console.error(error); process.exitCode = 1; });

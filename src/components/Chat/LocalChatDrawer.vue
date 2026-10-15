@@ -29,7 +29,12 @@
               <i v-if="member.kind === 'self'">群主</i>
             </span>
             <span :title="member.name">{{ member.name }}</span>
+            <button v-if="manage && member.kind === 'simulated'" :aria-label="`移除成员 ${member.name}`" @click="removeId = member.id">移除</button>
           </div>
+        </div>
+        <div v-if="removeId" class="edit-block" role="alert">
+          <p>确认移除 {{ members.find(m => m.id === removeId)?.name }}？历史消息和已分配待办保留，今后不再参与全体分配。</p>
+          <button @click="removeMember">确认移除</button><button @click="removeId = ''">取消</button>
         </div>
         <button v-if="filteredMembers.length > 10" class="load-more" @click="expanded = !expanded">
           {{ expanded ? '收起' : '加载更多' }}
@@ -57,10 +62,7 @@
             type="checkbox"
             role="switch"
             :checked="chat.notifications !== false"
-            @change="
-              chat.notifications = ($event.target as HTMLInputElement).checked
-              $emit('save')
-            " />
+            @change="setPreference('notifications', $event)" />
         </label>
         <label class="setting-row">
           置顶会话
@@ -69,10 +71,7 @@
             type="checkbox"
             role="switch"
             :checked="!!chat.pinned"
-            @change="
-              chat.pinned = ($event.target as HTMLInputElement).checked
-              $emit('save')
-            " />
+            @change="setPreference('pinned', $event)" />
         </label>
         <button class="setting-row" @click="$emit('ai')">
           AI 设置
@@ -91,11 +90,7 @@
         <p class="announcement">{{ chat.announcement || '暂无群通知' }}</p>
         <form
           class="edit-block"
-          @submit.prevent="
-            chat.announcement = announcementDraft.trim()
-            $emit('save')
-            feedback = '群通知已保存'
-          ">
+          @submit.prevent="saveAnnouncement">
           <label>
             编辑群通知
             <textarea v-model="announcementDraft" maxlength="5000" placeholder="填写群通知内容" />
@@ -125,6 +120,17 @@
   import { messageSender, type LocalConversation } from '@/services/localChat'
   const props = defineProps<{ chat: LocalConversation; mode: 'settings' | 'announcement' | 'history' }>()
   const emit = defineEmits<{ close: []; save: []; ai: []; export: []; locate: [id: string] }>()
+  function setPreference(key: 'notifications' | 'pinned', event: Event) {
+    const checked = (event.target as HTMLInputElement).checked
+    if (key === 'notifications') props.chat.notifications = checked
+    else props.chat.pinned = checked
+    emit('save')
+  }
+  function saveAnnouncement() {
+    props.chat.announcement = announcementDraft.value.trim()
+    emit('save')
+    feedback.value = '群通知已保存'
+  }
   const title = computed(() => ({ settings: '设置', announcement: '群通知', history: '消息记录' })[props.mode])
   const members = computed(
     () =>
@@ -142,6 +148,16 @@
     query = ref(''),
     date = ref(''),
     feedback = ref('')
+  const removeId = ref('')
+  function removeMember() {
+    const member = members.value.find(m => m.id === removeId.value && m.kind === 'simulated')
+    if (!member) return
+    props.chat.archivedMembers = [...(props.chat.archivedMembers || []), member]
+    props.chat.members = members.value.filter(m => m.id !== member.id)
+    removeId.value = ''
+    emit('save')
+    feedback.value = '已移除本地模拟成员；历史消息和待办保留。'
+  }
   const nameDraft = ref(props.chat.name),
     announcementDraft = ref(props.chat.announcement || '')
   const filteredMembers = computed(() =>
@@ -164,6 +180,10 @@
   function addMember() {
     const name = newName.value.trim()
     if (!name) return
+    if (/[\s@]/.test(name) || ['我', '自己', '全体成员', 'AI'].includes(name)) {
+      feedback.value = '成员名不能含空格或 @，也不能使用系统保留名称。'
+      return
+    }
     if (members.value.some((m) => m.name === name)) {
       feedback.value = '该成员名称已存在'
       return
