@@ -18,10 +18,16 @@
         class="conversation"
         :class="{ selected: chat.id === data.selectedId }"
         @click="selectChat(chat.id)">
-        <span class="avatar">{{ chat.name.slice(0, 1) }}</span>
+        <span class="avatar" :class="{ 'avatar--solid': !!chat.peerId }">
+          {{ chat.peerId ? '' : chat.name.slice(0, 1) }}
+        </span>
         <span class="summary">
           <strong>{{ chat.pinned ? '⌃ ' : '' }}{{ chat.name }}</strong>
-          <small>{{ chat.messages[chat.messages.length - 1]?.text || '输入消息，或 @AI 提问' }}</small>
+          <small>
+            {{
+              chat.messages[chat.messages.length - 1]?.text || (chat.peerId ? '开始本地对话' : '输入消息，或 @AI 提问')
+            }}
+          </small>
         </span>
       </button>
       <p class="local-note">
@@ -33,8 +39,11 @@
     <section class="session" v-if="activeChat">
       <header class="chat-header">
         <div class="chat-title">
-          <span class="avatar">{{ activeChat.name.slice(0, 1) }}</span>
+          <span class="avatar" :class="{ 'avatar--solid': !!activeChat.peerId }">
+            {{ activeChat.peerId ? '' : activeChat.name.slice(0, 1) }}
+          </span>
           <strong>{{ activeChat.name }}{{ activeChat.members ? ` (${activeChat.members.length})` : '' }}</strong>
+          <small v-if="activeChat.peerId">本地对话 · 消息仅保存在此设备</small>
         </div>
         <div class="header-icons">
           <button aria-label="群通知" title="群通知" @click="togglePanel('announcement')">
@@ -79,9 +88,15 @@
       </div>
       <main ref="messageArea" class="messages" aria-live="polite">
         <div v-if="!activeChat.messages.length" class="empty">
-          <b>开始一段新的对话</b>
-          <p>输入 @AI 和问题向模型提问，或 @AI RAG助手 查询相关制度，回答直接显示在聊天中。</p>
-          <button @click="openSettings">配置 AI 接口</button>
+          <template v-if="activeChat.peerId">
+            <b>和{{ activeChat.name }}开始对话</b>
+            <p>消息只保存在本机，不会送达对方。也可以用 @AI 或 @AI RAG助手 提问。</p>
+          </template>
+          <template v-else>
+            <b>开始一段新的对话</b>
+            <p>输入 @AI 和问题向模型提问，或 @AI RAG助手 查询相关制度，回答直接显示在聊天中。</p>
+            <button @click="openSettings">配置 AI 接口</button>
+          </template>
         </div>
         <article
           v-for="msg in activeChat.messages"
@@ -100,8 +115,13 @@
             :value="msg.id"
             :disabled="msg.status !== 'done'"
             :aria-label="`选择记录：${msg.text.slice(0, 40)}`" />
-          <span class="avatar" :style="{ background: messageSender(activeChat, msg).color }">
-            {{ msg.role === 'assistant' ? 'AI' : messageSender(activeChat, msg).name.slice(0, 1) }}
+          <span
+            class="avatar"
+            :class="{ 'avatar--solid': !!activeChat.peerId }"
+            :style="{ background: messageSender(activeChat, msg).color }">
+            {{
+              activeChat.peerId ? '' : msg.role === 'assistant' ? 'AI' : messageSender(activeChat, msg).name.slice(0, 1)
+            }}
           </span>
           <div class="bubble-wrap">
             <small>
@@ -111,10 +131,20 @@
             </small>
             <p class="bubble">{{ msg.status === 'pending' ? 'AI 正在思考…' : msg.text }}</p>
             <template v-if="msg.status === 'done' && msg.rag">
-              <button v-for="option in msg.rag.options" :key="option.id" :disabled="!!busy[activeChat.id]" @click="ragFollowup(msg, option)">{{ option.question }}</button>
+              <button
+                v-for="option in msg.rag.options"
+                :key="option.id"
+                :disabled="!!busy[activeChat.id]"
+                @click="ragFollowup(msg, option)">
+                {{ option.question }}
+              </button>
               <details v-if="msg.rag.references.length" class="source-records">
                 <summary>制度依据（{{ msg.rag.references.length }}）</summary>
-                <p v-for="(source, index) in msg.rag.references" :key="index">{{ index + 1 }}. {{ source.name }}<br />{{ source.text }}</p>
+                <p v-for="(source, index) in msg.rag.references" :key="index">
+                  {{ index + 1 }}. {{ source.name }}
+                  <br />
+                  {{ source.text }}
+                </p>
               </details>
             </template>
             <div v-if="msg.status === 'done' && msg.todoSuggestions?.length" class="todo-followups">
@@ -122,12 +152,26 @@
               <div v-for="(suggestion, index) in msg.todoSuggestions" :key="index">
                 <template v-if="!suggestion.dismissed">
                   <p>{{ suggestion.title }}</p>
-                  <small>{{ suggestion.dueAt ? `建议提醒：${new Date(suggestion.dueAt).toLocaleString()}` : '未明确时间，添加后可在待办页设置提醒。' }}</small>
-                  <span v-if="todoState.items.some(t => t.sourceKey === `${msg.id}:${index}` || t.assignmentKey === `${msg.id}:${index}`)">已添加到待办 ✓（分配范围已保存）</span>
+                  <small>
+                    {{
+                      suggestion.dueAt
+                        ? `建议提醒：${new Date(suggestion.dueAt).toLocaleString()}`
+                        : '未明确时间，添加后可在待办页设置提醒。'
+                    }}
+                  </small>
+                  <span
+                    v-if="
+                      todoState.items.some(
+                        (t) => t.sourceKey === `${msg.id}:${index}` || t.assignmentKey === `${msg.id}:${index}`
+                      )
+                    ">
+                    已添加到待办 ✓（分配范围已保存）
+                  </span>
                   <template v-else>
                     <small>接收人：{{ suggestionRecipientLabel(msg) }}（沿用提问中的 @ 成员）</small>
                     <small>仅本机演示，不会通知其他人。</small>
-                    <button @click="acceptTodo(msg, index)">添加到待办</button><button @click="dismissTodo(msg, index)">暂不添加</button>
+                    <button @click="acceptTodo(msg, index)">添加到待办</button>
+                    <button @click="dismissTodo(msg, index)">暂不添加</button>
                   </template>
                 </template>
                 <small v-else>已忽略：{{ suggestion.title }}</small>
@@ -157,30 +201,68 @@
           <button aria-label="取消回复" @click="quoteId = ''">×</button>
         </div>
         <div class="tools">
-          <button class="assistant-shortcut" title="通用模型问答，使用 AI 模型设置" @click="mention">@AI <small>通用助手</small></button>
-          <button class="assistant-shortcut rag-shortcut" title="查询制度知识库，使用独立的 RAGFlow 服务" @click="mentionRag">@AI RAG助手 <small>制度问答</small></button>
-          <button @click="ragSettingsOpen = true">RAG 设置</button>
+          <button class="assistant-shortcut" title="通用模型问答，使用 AI 模型设置" @click="mention">
+            @AI
+            <small>通用助手</small>
+          </button>
+          <button
+            class="assistant-shortcut rag-shortcut"
+            title="查询制度知识库，使用独立的 RAGFlow 服务"
+            @click="mentionRag">
+            @AI RAG助手
+            <small>制度问答</small>
+          </button>
+          <button
+            class="assistant-shortcut meeting-shortcut"
+            title="向全体或指定成员发布会议"
+            @click="meetingAssistantOpen = true">
+            📅
+            <small>发布会议</small>
+          </button>
           <span>{{ config.model ? `模型：${config.model}` : '尚未配置模型' }}</span>
           <span>最近 {{ config.contextCount }} 条 + 本次提问</span>
+          <span v-if="activeChat.peerId">本地演示会话 · 消息不会送达对方</span>
         </div>
         <div class="mention-composer">
-        <div v-if="mentionOpen" class="mention-popup" role="listbox" aria-label="选择群成员">
-          <button v-for="(member, index) in mentionOptions" :key="member.id" type="button" role="option" :aria-selected="index === mentionIndex" :class="{selected:index===mentionIndex}" @mousedown.prevent="chooseMention(member.name)">{{ member.name }}<small>{{ member.id === 'ragflow' ? '制度知识问答' : member.id === 'ai' ? '聊天助手' : member.id === 'all' ? '当前全体成员' : '群成员' }}</small></button>
-          <p v-if="!mentionOptions.length">没有匹配的成员</p>
-        </div>
-        <textarea
-          ref="input"
-          v-model="drafts[activeChat.id]"
-          aria-label="消息输入框"
-          placeholder="输入消息，或 @AI RAG助手 查询制度…"
-          :disabled="loadFailed"
-          :aria-expanded="mentionOpen"
-          @input="updateMention"
-          @click="updateMention"
-          @keyup.left="updateMention"
-          @keyup.right="updateMention"
-          @blur="mentionOpen = false"
-          @keydown="composerKeyDown" />
+          <div v-if="mentionOpen" class="mention-popup" role="listbox" aria-label="选择群成员">
+            <button
+              v-for="(member, index) in mentionOptions"
+              :key="member.id"
+              type="button"
+              role="option"
+              :aria-selected="index === mentionIndex"
+              :class="{ selected: index === mentionIndex }"
+              @mousedown.prevent="chooseMention(member.name)">
+              {{ member.name }}
+              <small>
+                {{
+                  member.id === 'ragflow'
+                    ? '制度知识问答'
+                    : member.id === 'ai'
+                      ? '聊天助手'
+                      : member.id === 'all'
+                        ? '当前全体成员'
+                        : '群成员'
+                }}
+              </small>
+            </button>
+            <p v-if="!mentionOptions.length">没有匹配的成员</p>
+          </div>
+          <textarea
+            ref="input"
+            v-model="drafts[activeChat.id]"
+            aria-label="消息输入框"
+            :placeholder="
+              activeChat.peerId ? '输入消息，或 @AI 提问（仅保存在本机）…' : '输入消息，或 @AI RAG助手 查询制度…'
+            "
+            :disabled="loadFailed"
+            :aria-expanded="mentionOpen"
+            @input="updateMention"
+            @click="updateMention"
+            @keyup.left="updateMention"
+            @keyup.right="updateMention"
+            @blur="mentionOpen = false"
+            @keydown="composerKeyDown" />
         </div>
         <div class="send-row">
           <span>Enter 发送 · Ctrl / Shift + Enter 换行</span>
@@ -216,14 +298,6 @@
       :options="messageMenuOptions"
       @select="onMessageMenuSelect"
       @clickoutside="messageMenu.show = false" />
-    <div v-if="ragSettingsOpen" class="modal-backdrop" @keydown.esc.stop="ragSettingsOpen = false">
-      <form class="settings" @submit.prevent="setRagCredential(ragCredential); ragCredential = ''; ragSettingsOpen = false">
-        <h2>RAGFlow 聊天接入</h2>
-        <p>沿用应用中心的 RAGFlow 地址和知识助手。本机演示无需填写凭证；其他环境填写 RAGFlow 访问凭证（不是模型密钥），仅在本次运行中保留。</p>
-        <label>RAGFlow 访问凭证<input v-model="ragCredential" type="password" autocomplete="off" /></label>
-        <div class="actions"><button type="button" @click="ragSettingsOpen = false">关闭</button><button type="submit">保存</button></div>
-      </form>
-    </div>
     <div v-if="settingsOpen" class="modal-backdrop" @keydown.esc.stop="settingsOpen = false">
       <form class="settings" @submit.prevent="saveSettings">
         <h2>全局模型设置</h2>
@@ -238,18 +312,15 @@
         </label>
         <label>
           API 密钥
-          <input
-            v-model="keyDraft"
-            type="password"
-            autocomplete="off"
-          placeholder="保存到本机；本机免鉴权服务可留空" />
+          <input v-model="keyDraft" type="password" autocomplete="off" placeholder="保存到本机；本机免鉴权服务可留空" />
         </label>
         <label>
           携带最近消息条数（0–30）
           <input v-model.number="settingsDraft.contextCount" type="number" min="0" max="30" required />
         </label>
         <p class="settings-help">
-          设置在本机全局保存，重启后继续使用。仅在 @AI 时向此地址发送当前会话的上下文和提问；密钥保存在本机浏览器数据中，不写入聊天记录。
+          设置在本机全局保存，重启后继续使用。仅在 @AI
+          时向此地址发送当前会话的上下文和提问；密钥保存在本机浏览器数据中，不写入聊天记录。
         </p>
         <p v-if="settingsResult" role="status">{{ settingsResult }}</p>
         <div class="actions">
@@ -261,14 +332,22 @@
         </div>
       </form>
     </div>
+    <WorkAssistantDialog
+      v-if="meetingAssistantOpen && activeChat"
+      :participants="todoMembers"
+      :source-id="activeChat.id"
+      :source-name="activeChat.name"
+      @close="meetingAssistantOpen = false"
+      @published="onChatMeetingPublished" />
   </div>
 </template>
 
 <script setup lang="ts">
   import { computed, nextTick, onBeforeUnmount, reactive, ref, watch } from 'vue'
   import LocalChatDrawer from './LocalChatDrawer.vue'
-  import { ragQuestion, requestRag, setRagCredential } from '@/services/ragChat'
-  const ragSettingsOpen = ref(false), ragCredential = ref('')
+  import WorkAssistantDialog from '@/components/WorkAssistantDialog.vue'
+  import { meetingState } from '@/stores/localMeetings'
+  import { ragQuestion, requestRag } from '@/services/ragChat'
   let pendingRagFollowup: LocalMessage['ragFollowup']
   function mentionRag() {
     if (!activeChat.value) return
@@ -277,38 +356,80 @@
   }
   async function ragFollowup(msg: LocalMessage, option: { id: string; question: string }) {
     if (!activeChat.value || !msg.rag || busy[activeChat.value.id]) return
-    pendingRagFollowup = { previous: msg.rag, ...(msg.rag.cacheId && msg.rag.mode !== 'intent' ? { selection: { cache_id: msg.rag.cacheId, option_id: option.id } } : {}) }
+    pendingRagFollowup = {
+      previous: msg.rag,
+      ...(msg.rag.cacheId && msg.rag.mode !== 'intent'
+        ? { selection: { cache_id: msg.rag.cacheId, option_id: option.id } }
+        : {})
+    }
     drafts[activeChat.value.id] = `@AI RAG助手 ${option.question}`
-    try { await send() } finally { pendingRagFollowup = undefined }
+    try {
+      await send()
+    } finally {
+      pendingRagFollowup = undefined
+    }
   }
-  import { parseAssignedCommand, resolveRecipients, parseTodoSuggestions, todoPrompt, type TodoRecipient } from '@/services/localTodos'
+  import {
+    parseAssignedCommand,
+    resolveRecipients,
+    parseTodoSuggestions,
+    todoPrompt,
+    type TodoRecipient
+  } from '@/services/localTodos'
   function mentionedRecipients(text: string, members: TodoRecipient[]) {
-    const names = [...text.matchAll(/(?:^|\s)@([^\s@，,。！？?!；;：:]+)/g)].map(match => match[1]).filter(name => !/^ai(?:助手)?$/i.test(name))
-    return resolveRecipients(members, names.map(name => {
-      if (name === '全体成员') return 'all'
-      if (name === '自己' || name === '我') return 'self'
-      const matches = members.filter(member => member.name === name && member.kind !== 'ai')
-      if (matches.length !== 1) throw new Error(`无法唯一找到群成员“${name}”，请从群成员中选择。`)
-      return matches[0].id
-    }))
+    const names = [...text.matchAll(/(?:^|\s)@([^\s@，,。！？?!；;：:]+)/g)]
+      .map((match) => match[1])
+      .filter((name) => !/^ai(?:助手)?$/i.test(name))
+    return resolveRecipients(
+      members,
+      names.map((name) => {
+        if (name === '全体成员') return 'all'
+        if (name === '自己' || name === '我') return 'self'
+        const matches = members.filter((member) => member.name === name && member.kind !== 'ai')
+        if (matches.length !== 1) throw new Error(`无法唯一找到群成员“${name}”，请从群成员中选择。`)
+        return matches[0].id
+      })
+    )
   }
   import { addAssignedTodos, initTodos, todoState } from '@/stores/localTodos'
   initTodos()
-  const groupCreating = ref(false), groupName = ref(''), groupNames = ref('')
-  const mentionOpen = ref(false), mentionQuery = ref(''), mentionIndex = ref(0)
-  let mentionStart = 0, mentionEnd = 0
+  const groupCreating = ref(false),
+    groupName = ref(''),
+    groupNames = ref('')
+  const meetingAssistantOpen = ref(false)
+  const mentionOpen = ref(false),
+    mentionQuery = ref(''),
+    mentionIndex = ref(0)
+  let mentionStart = 0,
+    mentionEnd = 0
   const mentionOptions = computed(() => {
-    const candidates = [{id:'ai',name:'AI'}, {id:'ragflow',name:'AI RAG助手'}, ...(activeChat.value?.members ? [{id:'all',name:'全体成员'}, ...todoMembers.value] : [])]
+    const candidates = [
+      { id: 'ai', name: 'AI' },
+      { id: 'ragflow', name: 'AI RAG助手' },
+      ...(activeChat.value?.members ? [{ id: 'all', name: '全体成员' }, ...todoMembers.value] : [])
+    ]
     const query = mentionQuery.value.toLowerCase()
-    return candidates.filter(m => { let i = 0; for (const c of m.name.toLowerCase()) if (c === query[i]) i++; return i === query.length })
+    return candidates.filter((m) => {
+      let i = 0
+      for (const c of m.name.toLowerCase()) if (c === query[i]) i++
+      return i === query.length
+    })
   })
   function updateMention() {
     const el = input.value
-    if (!el || el.selectionStart !== el.selectionEnd) { mentionOpen.value = false; return }
+    if (!el || el.selectionStart !== el.selectionEnd) {
+      mentionOpen.value = false
+      return
+    }
     const before = el.value.slice(0, el.selectionStart)
     const match = /(?:^|\s)@([^\s@，,：:。！？]*)$/.exec(before)
     mentionOpen.value = !!match
-    if (match) { mentionQuery.value = match[1]; mentionStart = before.lastIndexOf('@'); mentionEnd = el.selectionStart; mentionIndex.value = 0 }
+    if (match) {
+      mentionQuery.value = match[1]
+      mentionStart = before.lastIndexOf('@')
+      mentionEnd = el.selectionStart
+      mentionIndex.value = 0
+    }
   }
   async function chooseMention(name: string) {
     if (!activeChat.value || !input.value) return
@@ -316,39 +437,95 @@
     const value = el.value.slice(0, mentionStart) + `@${name} ` + el.value.slice(mentionEnd)
     drafts[activeChat.value.id] = value
     mentionOpen.value = false
-    await nextTick(); el.focus(); el.setSelectionRange(mentionStart + name.length + 2, mentionStart + name.length + 2)
+    await nextTick()
+    el.focus()
+    el.setSelectionRange(mentionStart + name.length + 2, mentionStart + name.length + 2)
   }
   function composerKeyDown(event: KeyboardEvent) {
     if (event.isComposing) return
     if (mentionOpen.value) {
-      if (event.key === 'Escape') { event.preventDefault(); mentionOpen.value = false; return }
-      if (['ArrowDown','ArrowUp'].includes(event.key)) { event.preventDefault(); const n=mentionOptions.value.length; if(n) mentionIndex.value=(mentionIndex.value+(event.key==='ArrowDown'?1:n-1))%n; return }
-      if (['Enter','Tab'].includes(event.key)) { event.preventDefault(); const member=mentionOptions.value[mentionIndex.value]; if(member) void chooseMention(member.name); return }
+      if (event.key === 'Escape') {
+        event.preventDefault()
+        mentionOpen.value = false
+        return
+      }
+      if (['ArrowDown', 'ArrowUp'].includes(event.key)) {
+        event.preventDefault()
+        const n = mentionOptions.value.length
+        if (n) mentionIndex.value = (mentionIndex.value + (event.key === 'ArrowDown' ? 1 : n - 1)) % n
+        return
+      }
+      if (['Enter', 'Tab'].includes(event.key)) {
+        event.preventDefault()
+        const member = mentionOptions.value[mentionIndex.value]
+        if (member) void chooseMention(member.name)
+        return
+      }
     }
     onKeyDown(event)
   }
-  const todoMembers = computed(() => (activeChat.value?.members || [{id:'self',name:'我',kind:'self' as const}]).filter(m => m.kind !== 'ai'))
+  const todoMembers = computed(() =>
+    (activeChat.value?.members || [{ id: 'self', name: '我', kind: 'self' as const }]).filter((m) => m.kind !== 'ai')
+  )
+  function onChatMeetingPublished(meetingId: string) {
+    const chat = activeChat.value
+    const meeting = meetingState.items.find((item) => item.id === meetingId)
+    if (!chat || !meeting) return
+    chat.messages.push({
+      id: crypto.randomUUID(),
+      role: 'assistant',
+      text: `会议已发布：${meeting.title}\n时间：${new Date(meeting.startAt).toLocaleString()}${meeting.location ? `\n地点：${meeting.location}` : ''}\n参会人：${meeting.participants.map((person) => person.name).join('、')}\n可在“待办事项 → 会议提醒”查看反馈，在“日程”查看安排。`,
+      createdAt: new Date().toISOString(),
+      status: 'done'
+    })
+    persist()
+  }
   function createLocalGroup() {
     if (loadFailed.value || storageError.value) return
-    const names = groupNames.value.split(/[,，、\n]/).map(s => s.trim()).filter(Boolean)
-    if (!groupName.value.trim() || names.length > 50 || new Set(names).size !== names.length || names.some(n => n.length > 30 || /[\s@]/.test(n) || ['我','自己','全体成员','AI'].includes(n))) {
+    const names = groupNames.value
+      .split(/[,，、\n]/)
+      .map((s) => s.trim())
+      .filter(Boolean)
+    if (
+      !groupName.value.trim() ||
+      names.length > 50 ||
+      new Set(names).size !== names.length ||
+      names.some((n) => n.length > 30 || /[\s@]/.test(n) || ['我', '自己', '全体成员', 'AI'].includes(n))
+    ) {
       notice.value = '请填写群名称；成员名须唯一，不含空格或 @，且不能使用我、自己、全体成员、AI。最多 50 人。'
       return
     }
     const chat = newConversation(groupName.value.trim())
-    chat.members = [{id:'self',name:'我',color:'#2685ed',kind:'self'}, ...names.map(name => ({id:crypto.randomUUID(),name,color:'#5b9fbb',kind:'simulated' as const})), {id:'ai',name:'AI 助手',color:'#7865c4',kind:'ai'}]
+    chat.members = [
+      { id: 'self', name: '我', color: '#2685ed', kind: 'self' },
+      ...names.map((name) => ({ id: crypto.randomUUID(), name, color: '#5b9fbb', kind: 'simulated' as const })),
+      { id: 'ai', name: 'AI 助手', color: '#7865c4', kind: 'ai' }
+    ]
     const previous = data.selectedId
-    data.conversations.push(chat); data.selectedId = chat.id
-    if (!persist()) { data.conversations.pop(); data.selectedId = previous; return }
-    groupCreating.value = false; groupName.value = ''; groupNames.value = ''
+    data.conversations.push(chat)
+    data.selectedId = chat.id
+    if (!persist()) {
+      data.conversations.pop()
+      data.selectedId = previous
+      return
+    }
+    groupCreating.value = false
+    groupName.value = ''
+    groupNames.value = ''
     notice.value = '本地演示群已创建，可在设置 → 群管理中添加或移除模拟成员。'
   }
   function suggestionRecipients(msg: LocalMessage) {
-    const request = activeChat.value?.messages.find(m => m.id === msg.replyTo)
+    const request = activeChat.value?.messages.find((m) => m.id === msg.replyTo)
     return msg.todoRecipients || request?.todoRecipients || mentionedRecipients(request?.text || '', todoMembers.value)
   }
   function suggestionRecipientLabel(msg: LocalMessage) {
-    try { return suggestionRecipients(msg).map(m => m.name).join('、') } catch { return '原提问中的成员已不可用，请重新提问' }
+    try {
+      return suggestionRecipients(msg)
+        .map((m) => m.name)
+        .join('、')
+    } catch {
+      return '原提问中的成员已不可用，请重新提问'
+    }
   }
   function acceptTodo(msg: LocalMessage, index: number) {
     const suggestion = msg.todoSuggestions?.[index]
@@ -356,12 +533,17 @@
     try {
       const recipients = suggestionRecipients(msg)
       addAssignedTodos(suggestion, recipients, `${msg.id}:${index}`, activeChat.value!.id, activeChat.value!.name)
-      notice.value = `已在本机分配给：${recipients.map(m => m.name).join('、')}。其他人不会实际收到。`
-    } catch (error) { notice.value = error instanceof Error ? error.message : '待办保存失败。' }
+      notice.value = `已在本机分配给：${recipients.map((m) => m.name).join('、')}。其他人不会实际收到。`
+    } catch (error) {
+      notice.value = error instanceof Error ? error.message : '待办保存失败。'
+    }
   }
   function dismissTodo(msg: LocalMessage, index: number) {
     const suggestion = msg.todoSuggestions?.[index]
-    if (suggestion) { suggestion.dismissed = true; persist() }
+    if (suggestion) {
+      suggestion.dismissed = true
+      persist()
+    }
   }
   import { localChatTarget } from '@/services/localChatNavigation'
   import {
@@ -370,6 +552,7 @@
     CONFIG_KEY,
     DEFAULT_CONFIG,
     buildContext,
+    ensureDirectConversation,
     loadChats,
     mentionsAi,
     newConversation,
@@ -477,7 +660,17 @@
   watch(
     localChatTarget,
     async (target) => {
-      if (!target || !data.conversations.some((chat) => chat.id === target.chatId)) return
+      if (!target) return
+      if ('peerId' in target) {
+        if (loadFailed.value || storageError.value) return
+        const chat = ensureDirectConversation(data, target.peerId, target.peerName)
+        selectChat(chat.id)
+        localChatTarget.value = null
+        await nextTick()
+        input.value?.focus()
+        return
+      }
+      if (!data.conversations.some((chat) => chat.id === target.chatId)) return
       selectChat(target.chatId)
       localChatTarget.value = null
       await nextTick()
@@ -615,13 +808,25 @@
     if (!chat || !text || loadFailed.value || storageError.value) return
     const rag = ragQuestion(text)
     const ask = rag !== null || mentionsAi(text)
-    if (rag !== null && !rag) { notice.value = '请在 @AI RAG助手 后输入制度问题。'; return }
+    if (rag !== null && !rag) {
+      notice.value = '请在 @AI RAG助手 后输入制度问题。'
+      return
+    }
     let recipients
-    try { recipients = ask && rag === null ? mentionedRecipients(text, todoMembers.value) : undefined }
-    catch(error) { notice.value = error instanceof Error ? error.message : '请重新选择群成员'; return }
+    try {
+      recipients = ask && rag === null ? mentionedRecipients(text, todoMembers.value) : undefined
+    } catch (error) {
+      notice.value = error instanceof Error ? error.message : '请重新选择群成员'
+      return
+    }
     let todoCommand
-    try { todoCommand = rag === null && !selecting.value && !quotedMessage.value ? parseAssignedCommand(text, todoMembers.value) : null }
-    catch (error) { notice.value = error instanceof Error ? error.message : '待办内容无效。'; return }
+    try {
+      todoCommand =
+        rag === null && !selecting.value && !quotedMessage.value ? parseAssignedCommand(text, todoMembers.value) : null
+    } catch (error) {
+      notice.value = error instanceof Error ? error.message : '待办内容无效。'
+      return
+    }
     if (ask) {
       if (busy[chat.id]) {
         notice.value = '此会话的 AI 正在回复，请等待或停止后再提问。'
@@ -675,17 +880,32 @@
     }
     if (todoCommand) {
       try {
-        const todos = addAssignedTodos(todoCommand.draft, todoCommand.recipients, `${msg.id}:command`, chat.id, chat.name)
+        const todos = addAssignedTodos(
+          todoCommand.draft,
+          todoCommand.recipients,
+          `${msg.id}:command`,
+          chat.id,
+          chat.name
+        )
         const todo = todos[0]
-        chat.messages.push({ id: crypto.randomUUID(), role: 'assistant', text: `已添加到待办：${todo.title}\n分配给：${todos.map(t => t.assigneeName).join('、')}（仅本机演示，不向其他人发送）\n${todo.dueAt ? `提醒时间：${new Date(todo.dueAt).toLocaleString()}` : '未识别到明确的未来提醒时间，已保存为无提醒待办，请在左侧“待办事项”中设置。'}`, createdAt: new Date().toISOString(), status: 'done', replyTo: msg.id })
+        chat.messages.push({
+          id: crypto.randomUUID(),
+          role: 'assistant',
+          text: `已添加到待办：${todo.title}\n分配给：${todos.map((t) => t.assigneeName).join('、')}（仅本机演示，不向其他人发送）\n${todo.dueAt ? `提醒时间：${new Date(todo.dueAt).toLocaleString()}` : '未识别到明确的未来提醒时间，已保存为无提醒待办，请在左侧“待办事项”中设置。'}`,
+          createdAt: new Date().toISOString(),
+          status: 'done',
+          replyTo: msg.id
+        })
         persist()
-      } catch (error) { notice.value = error instanceof Error ? error.message : '待办保存失败，请重试。' }
+      } catch (error) {
+        notice.value = error instanceof Error ? error.message : '待办保存失败，请重试。'
+      }
     } else if (ask) await runAi(chat.id, msg.id)
   }
   async function runAi(chatId: string, requestId: string, existing?: LocalMessage) {
     const chat = data.conversations.find((item) => item.id === chatId)
     if (!chat || busy[chatId]) return
-    const request = chat.messages.find(item => item.id === requestId)
+    const request = chat.messages.find((item) => item.id === requestId)
     const question = request ? ragQuestion(request.text) : null
     const answer: LocalMessage = existing || {
       id: crypto.randomUUID(),
@@ -735,7 +955,7 @@
       const extracted = parseTodoSuggestions(target.text)
       target.text = extracted.text
       target.todoSuggestions = extracted.suggestions
-      target.todoRecipients = chat.messages.find(m => m.id === requestId)?.todoRecipients
+      target.todoRecipients = chat.messages.find((m) => m.id === requestId)?.todoRecipients
       target.status = 'done'
       if (chat.notifications !== false) notice.value = `「${chat.name}」AI 回复已完成。`
     } catch (error) {
@@ -744,7 +964,11 @@
         ? timedOut
           ? '请求超时，请稍后重试。'
           : '已停止，可以重试。'
-        : question !== null ? (error instanceof Error && error.message.startsWith('RAGFlow：') ? error.message : 'RAGFlow：连接失败，请检查应用中心的地址和服务状态。') : friendlyError(error)
+        : question !== null
+          ? error instanceof Error && error.message.startsWith('RAGFlow：')
+            ? error.message
+            : 'RAGFlow：连接失败，请检查应用中心的地址和服务状态。'
+          : friendlyError(error)
     } finally {
       clearTimeout(timer)
       requests.delete(chatId)
@@ -793,20 +1017,100 @@
 </script>
 
 <style scoped>
-  .mention-composer { position:relative; flex:1; min-height:0; display:flex; }
-  .mention-composer textarea { width:100%; }
-  .mention-popup { position:absolute; bottom:100%; left:12px; z-index:50; width:260px; max-height:240px; overflow:auto; background:white; color:#24354b; border:1px solid #dce6f2; border-radius:8px; box-shadow:0 5px 20px #24354b22; padding:5px; }
-  .mention-popup button { display:flex; justify-content:space-between; width:100%; padding:9px; border:0; background:white; color:#24354b; cursor:pointer; }
-  .mention-popup button.selected,.mention-popup button:hover { background:#e5f0ff; }
-  .mention-popup small { color:#718198; }
-  .group-create { padding: 12px; display: flex; flex-direction: column; gap: 8px; background: #f0f5fc; }
-  .group-create input, .todo-followups select { padding: 7px; border: 1px solid #dce6f2; border-radius: 5px; background: white; color: #24354b; }
-  .todo-followups select { display: block; width: 100%; min-height: 80px; }
-  .todo-followups { margin-top: 10px; padding: 14px; border: 1px solid #dce6f2; border-radius: 10px; background: #f5f9ff; color: #24354b; max-width: 520px; }
-  .todo-followups > div { border-top: 1px solid #e3ebf5; margin-top: 10px; padding-top: 8px; }
-  .todo-followups p { margin: 4px 0; white-space: pre-wrap; }
-  .todo-followups small, .todo-followups span { display: block; color: #66788f; margin: 6px 0; }
-  .todo-followups button { padding: 6px 10px; margin: 6px 8px 0 0; border: 1px solid #b9d5f5; border-radius: 5px; background: white; color: #1769c6; cursor: pointer; }
+  .mention-composer {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+  }
+  .mention-composer textarea {
+    width: 100%;
+  }
+  .mention-popup {
+    position: absolute;
+    bottom: 100%;
+    left: 12px;
+    z-index: 50;
+    width: 260px;
+    max-height: 240px;
+    overflow: auto;
+    background: white;
+    color: #24354b;
+    border: 1px solid #dce6f2;
+    border-radius: 8px;
+    box-shadow: 0 5px 20px #24354b22;
+    padding: 5px;
+  }
+  .mention-popup button {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 9px;
+    border: 0;
+    background: white;
+    color: #24354b;
+    cursor: pointer;
+  }
+  .mention-popup button.selected,
+  .mention-popup button:hover {
+    background: #e5f0ff;
+  }
+  .mention-popup small {
+    color: #718198;
+  }
+  .group-create {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #f0f5fc;
+  }
+  .group-create input,
+  .todo-followups select {
+    padding: 7px;
+    border: 1px solid #dce6f2;
+    border-radius: 5px;
+    background: white;
+    color: #24354b;
+  }
+  .todo-followups select {
+    display: block;
+    width: 100%;
+    min-height: 80px;
+  }
+  .todo-followups {
+    margin-top: 10px;
+    padding: 14px;
+    border: 1px solid #dce6f2;
+    border-radius: 10px;
+    background: #f5f9ff;
+    color: #24354b;
+    max-width: 520px;
+  }
+  .todo-followups > div {
+    border-top: 1px solid #e3ebf5;
+    margin-top: 10px;
+    padding-top: 8px;
+  }
+  .todo-followups p {
+    margin: 4px 0;
+    white-space: pre-wrap;
+  }
+  .todo-followups small,
+  .todo-followups span {
+    display: block;
+    color: #66788f;
+    margin: 6px 0;
+  }
+  .todo-followups button {
+    padding: 6px 10px;
+    margin: 6px 8px 0 0;
+    border: 1px solid #b9d5f5;
+    border-radius: 5px;
+    background: white;
+    color: #1769c6;
+    cursor: pointer;
+  }
   .session {
     position: relative;
   }
@@ -1016,6 +1320,9 @@
     color: white;
     background: #2f92ed;
   }
+  .avatar--solid {
+    background: #6aa7e8;
+  }
   .summary {
     min-width: 0;
   }
@@ -1134,9 +1441,27 @@
     flex-wrap: wrap;
     gap: 8px;
   }
-  .assistant-shortcut { display: inline-flex; align-items: center; gap: 6px; padding: 6px 9px; border: 1px solid #b5d2ef; border-radius: 6px; background: #eef6ff; color: #2168a8; cursor: pointer; white-space: nowrap; }
-  .assistant-shortcut small { font-size: 11px; opacity: .8; }
-  .rag-shortcut { background: #edf8f3; color: #23795d; border-color: #a5d2c0; }
+  .assistant-shortcut {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 9px;
+    border: 1px solid #b5d2ef;
+    border-radius: 6px;
+    background: #eef6ff;
+    color: #2168a8;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .assistant-shortcut small {
+    font-size: 11px;
+    opacity: 0.8;
+  }
+  .rag-shortcut {
+    background: #edf8f3;
+    color: #23795d;
+    border-color: #a5d2c0;
+  }
   .tools span,
   .send-row span {
     color: #94a0ad;

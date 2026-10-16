@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { contactsApi } from '@/api'
+import { getLocalEnterpriseList, getLocalFriendList } from '@/services/localContacts'
 import { usePeerInfoStore } from '@/stores/user/peerInfo'
 import type { Contact, ContactsSearchResult } from '@/types/api/contacts'
 import type { GroupInfoResult } from '@/types/api/group'
@@ -78,6 +79,12 @@ export const useContactsStore = defineStore('contacts', {
         state.friendListLoading = loading
       })
     },
+    ensureLocalDirectory() {
+      this.$patch((state) => {
+        if (state.enterpriseList.length === 0) state.enterpriseList = getLocalEnterpriseList()
+        if (state.friendList.length === 0) state.friendList = getLocalFriendList()
+      })
+    },
     removeFriendLocal(peerId: string) {
       if (!peerId) return
       this.$patch((state) => {
@@ -111,7 +118,7 @@ export const useContactsStore = defineStore('contacts', {
       const friends = this.friendList.filter((item) => {
         const user = peerInfoStore.read(item.peerId, 'user') as User | null
         const account = pickText(item.account, user?.account)
-        return matchFields([item.username, account, item.remark], trimmed)
+        return matchFields([item.username, account, item.remark, item.tag], trimmed)
       })
 
       const groups = this.groupList.filter((item) => {
@@ -125,16 +132,18 @@ export const useContactsStore = defineStore('contacts', {
     },
     fetchEnterpriseList() {
       if (this.enterpriseListLoading) return
+      this.ensureLocalDirectory()
       if (this.enterpriseList.length === 0) this.setEnterpriseListLoading(true)
       contactsApi
         .enterpriseList()
         .then((res) => {
-          if (res.code === 0 && res.data) {
+          if (res.code === 0 && res.data?.length) {
             this.setEnterpriseList(res.data)
-          } else {
+          } else if (res.code !== 0 && this.enterpriseList.length === 0) {
             window.$message.error(res.msg)
           }
         })
+        .catch(() => undefined)
         .finally(() => {
           this.setEnterpriseListLoading(false)
         })
@@ -157,16 +166,18 @@ export const useContactsStore = defineStore('contacts', {
     },
     fetchFriendList() {
       if (this.friendListLoading) return
+      this.ensureLocalDirectory()
       if (this.friendList.length === 0) this.setFriendListLoading(true)
       contactsApi
         .friendList()
         .then((res) => {
-          if (res.code === 0 && res.data) {
+          if (res.code === 0 && res.data?.length) {
             this.setFriendList(res.data)
-          } else {
+          } else if (res.code !== 0 && this.friendList.length === 0) {
             window.$message.error(res.msg)
           }
         })
+        .catch(() => undefined)
         .finally(() => {
           this.setFriendListLoading(false)
         })
@@ -177,6 +188,7 @@ export const useContactsStore = defineStore('contacts', {
         state.groupListLoading = false
         state.friendListLoading = false
       })
+      this.ensureLocalDirectory()
       this.fetchEnterpriseList()
       this.fetchGroupList()
       this.fetchFriendList()

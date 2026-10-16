@@ -480,6 +480,7 @@
       "unknown": "Unknown",
       "share": "Share",
       "sendMessage": "Send Message",
+      "viewProfile": "View Profile",
       "audioCall": "Audio Call"
     },
     "fields": {
@@ -509,8 +510,19 @@
         "removeMember": "Remove"
       },
       "labels": {
-        "joinedDays": "Joined {days} days"
+        "joinedDays": "Joined {days} days",
+        "localDirectory": "Local organization directory",
+        "localSummary": "{members} colleagues · {departments} departments",
+        "memberTotal": "{count} people",
+        "organization": "Organization"
       },
+      "placeholders": {
+        "searchDepartment": "Search departments",
+        "searchMember": "Search people in this department"
+      },
+      "emptyDepartments": "No matching departments",
+      "emptyMembers": "No matching colleagues in this department",
+      "selectDepartment": "Select a department to view colleagues",
       "roles": {
         "owner": "Boos",
         "admin": "Admin",

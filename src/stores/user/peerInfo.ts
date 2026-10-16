@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { enterpriseApi, groupApi, userApi } from '@/api'
 import { SceneType } from '@/constants/common'
+import { getLocalEnterprise, getLocalUser } from '@/services/localContacts'
 import type { EnterprisInfo } from '@/types/api/enterprise'
 import type { GroupInfoResult } from '@/types/api/group'
 import type { User } from '@/types/api/user'
@@ -134,6 +135,14 @@ export const usePeerInfoStore = defineStore('peerInfo', {
     fetchUser(userId: string): Promise<User | null> {
       if (!userId) return Promise.resolve(null)
 
+      const localUser = getLocalUser(userId)
+      if (localUser) {
+        this.$patch((state) => {
+          state.users = writeCache(state.users, userId, localUser, PEER_INFO_CACHE_MAX)
+        })
+        return Promise.resolve(localUser)
+      }
+
       const key = `user:${userId}`
       const pending = inflight.get(key) as Promise<User | null> | undefined
       if (pending) return pending
@@ -203,6 +212,14 @@ export const usePeerInfoStore = defineStore('peerInfo', {
     },
     fetchEnterprise(enterpriseId: string): Promise<EnterprisInfo | null> {
       if (!enterpriseId) return Promise.resolve(null)
+
+      const localEnterprise = getLocalEnterprise(enterpriseId)
+      if (localEnterprise) {
+        this.$patch((state) => {
+          state.enterprises = writeCache(state.enterprises, enterpriseId, localEnterprise, PEER_INFO_CACHE_MAX)
+        })
+        return Promise.resolve(localEnterprise)
+      }
 
       const key = `enterprise:${enterpriseId}`
       const pending = inflight.get(key) as Promise<EnterprisInfo | null> | undefined

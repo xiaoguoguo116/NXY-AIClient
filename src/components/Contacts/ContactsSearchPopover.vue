@@ -62,9 +62,9 @@
                         <span>)</span>
                       </span>
                     </div>
-                    <div v-if="item.remark" class="contacts-search-panel__sub truncate">
+                    <div v-if="item.remark || item.tag" class="contacts-search-panel__sub truncate">
                       <template
-                        v-for="(segment, index) in getHighlightSegments(item.remark, searchedKeyword)"
+                        v-for="(segment, index) in getHighlightSegments(item.remark || item.tag, searchedKeyword)"
                         :key="`friend-remark-${item.id}-${index}`">
                         <span :class="{ 'contacts-search-panel__highlight': segment.highlight }">
                           {{ segment.text }}

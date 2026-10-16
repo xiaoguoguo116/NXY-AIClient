@@ -1,144 +1,220 @@
 <template>
-  <n-spin :show="loading" class="contacts-profile-spin">
-    <n-scrollbar class="contacts-profile__scroll">
-      <div class="contacts-profile">
-        <div class="contacts-profile__content">
-          <div class="contacts-profile__head">
-            <Avatar class="size-72px rounded-10px bg-#FFF shrink-0" type="enterprise" :id="enterpriseId" />
-            <div class="min-w-0 flex-1">
-              <div class="contacts-profile__title-row">
-                <div class="contacts-profile__title">
-                  {{ enterpriseInfo?.name || '-' }}
-                  <n-tag size="small" round type="info">{{ enterpriseInfo?.enterpriseTag || '-' }}</n-tag>
-                </div>
-                <n-button size="tiny" round>{{ t('contacts.enterprise.actions.leave') }}</n-button>
-              </div>
-              <div class="contacts-profile__sub">
-                <span>
-                  [ {{ enterpriseInfo?.location || '-' }}
-                  <span class="contacts-profile__meta-sep">·</span>
-                  {{ enterpriseInfo?.memberNum ?? 0 }}人]
-                </span>
-              </div>
-              <div class="contacts-profile__sub contacts-profile__sub--member">
-                <span class="contacts-profile__member-title">{{ infoMemberName }}</span>
-                <span class="contacts-profile__meta-sep">|</span>
-                <span class="contacts-profile__muted">
-                  {{ infoJobTitles.length > 0 ? infoJobTitles.join(' / ') : '-' }}
-                </span>
-                <span class="contacts-profile__meta-sep">|</span>
-                <span class="contacts-profile__joined-days">
-                  {{ t('contacts.enterprise.labels.joinedDays', { days: joinedDaysText }) }}
-                </span>
-              </div>
-            </div>
+  <n-spin :show="loading" class="organization-spin">
+    <div class="organization-directory">
+      <header class="organization-header">
+        <Avatar class="organization-header__avatar" type="enterprise" :id="enterpriseId" />
+        <div class="organization-header__main">
+          <div class="organization-header__title-row">
+            <h1>{{ enterpriseInfo?.name || '-' }}</h1>
+            <span class="organization-header__tag">{{ enterpriseInfo?.enterpriseTag || '-' }}</span>
           </div>
-
-          <n-divider class="contacts-profile__divider" />
-
-          <div class="contacts-profile__path-row">
-            <n-breadcrumb class="contacts-profile__breadcrumb" separator=">">
-              <n-breadcrumb-item @click="onSelectDepartment('')">{{ enterpriseInfo?.name || '-' }}</n-breadcrumb-item>
-              <n-breadcrumb-item
-                v-for="department in departmentBreadcrumb"
-                :key="department.id"
-                @click="onSelectDepartment(department.id)">
-                {{ department.name }}
-              </n-breadcrumb-item>
-            </n-breadcrumb>
-
-            <div class="contacts-profile__toolbar">
-              <a href="javascript:void(0)" class="contacts-profile__invite-link">
-                {{ t('contacts.enterprise.actions.inviteMember') }}
-              </a>
-            </div>
-          </div>
-
-          <div class="contacts-profile__departments">
-            <div
-              v-for="department in visibleDepartments"
-              :key="department.id"
-              class="contacts-profile__department"
-              :class="{ active: currentDepartmentId === department.id }"
-              @click="onSelectDepartment(department.id)">
-              <div class="contacts-profile__department-icon">
-                <svg class="size-20px text-[var(--primary-color)] shrink-0">
-                  <use href="#group"></use>
-                </svg>
-              </div>
-              <div class="truncate">{{ department.name }}</div>
-              <span class="contacts-profile__muted">({{ department.memberNum }})</span>
-            </div>
-          </div>
-
-          <div class="contacts-profile__members">
-            <div v-for="member in visibleMembers" :key="member.id" class="contacts-profile__member">
-              <Avatar class="size-42px rounded-6px bg-#FFF shrink-0" :id="member.userId" />
-              <div class="min-w-0 flex-1 flex flex-col justify-center gap-4px">
-                <div class="contacts-profile__member-name">
-                  <span class="truncate">{{ member.memberName || member.username || '-' }}</span>
-                  <ColorTag
-                    v-if="getRoleTagLabel(member.roles)"
-                    :label="getRoleTagLabel(member.roles)"
-                    :color="getRoleTagColor(member.roles)" />
-                </div>
-                <div class="contacts-profile__muted">
-                  {{ member.jobTitle }}
-                </div>
-              </div>
-              <div class="contacts-profile__member-actions">
-                <n-button size="tiny" round>{{ t('contacts.actions.sendMessage') }}</n-button>
-                <n-button size="tiny" round type="error" ghost>
-                  {{ t('contacts.enterprise.actions.removeMember') }}
-                </n-button>
-              </div>
-            </div>
-          </div>
+          <p>
+            {{ enterpriseInfo?.location || '-' }}
+            <span>·</span>
+            {{ t('contacts.enterprise.labels.memberTotal', { count: enterpriseInfo?.memberNum ?? 0 }) }}
+          </p>
         </div>
+        <div v-if="isLocalEnterprise" class="organization-header__local-badge">
+          <span class="organization-header__local-dot" />
+          {{ t('contacts.enterprise.labels.localDirectory') }}
+        </div>
+      </header>
+
+      <div class="organization-body">
+        <aside class="organization-tree-pane">
+          <div class="organization-tree-pane__title">
+            <span>{{ t('contacts.enterprise.labels.organization') }}</span>
+            <span>{{ departments.length }}</span>
+          </div>
+          <label class="organization-search">
+            <svg><use href="#search" /></svg>
+            <input
+              v-model="departmentQuery"
+              type="search"
+              :placeholder="t('contacts.enterprise.placeholders.searchDepartment')" />
+          </label>
+
+          <div class="organization-tree-scroll">
+            <button class="organization-root" type="button" @click="rootExpanded = !rootExpanded">
+              <svg class="organization-arrow" :class="{ expanded: rootExpanded }">
+                <use href="#right-arrow" />
+              </svg>
+              <span class="organization-root__icon">
+                <svg><use href="#home" /></svg>
+              </span>
+              <span class="organization-tree__name">{{ enterpriseInfo?.name || '-' }}</span>
+              <span class="organization-tree__count">{{ enterpriseInfo?.memberNum ?? 0 }}</span>
+            </button>
+
+            <template v-if="rootExpanded">
+              <button
+                v-for="row in visibleDepartmentRows"
+                :key="row.department.id"
+                type="button"
+                class="organization-tree__row"
+                :class="{ active: currentDepartmentId === row.department.id }"
+                :style="{ paddingLeft: `${12 + row.depth * 22}px` }"
+                @click="onSelectDepartment(row.department.id)">
+                <span
+                  class="organization-tree__arrow-slot"
+                  @click.stop="row.hasChildren && toggleDepartment(row.department.id)">
+                  <svg
+                    v-if="row.hasChildren"
+                    class="organization-arrow"
+                    :class="{ expanded: isDepartmentExpanded(row.department.id) }">
+                    <use href="#right-arrow" />
+                  </svg>
+                </span>
+                <svg class="organization-tree__folder"><use href="#folder" /></svg>
+                <span class="organization-tree__name">{{ row.department.name }}</span>
+                <span class="organization-tree__count">{{ row.department.memberNum }}</span>
+              </button>
+              <div v-if="visibleDepartmentRows.length === 0" class="organization-tree__empty">
+                {{ t('contacts.enterprise.emptyDepartments') }}
+              </div>
+            </template>
+          </div>
+        </aside>
+
+        <main class="organization-members-pane">
+          <template v-if="currentDepartment">
+            <div class="organization-members-pane__head">
+              <div class="organization-members-pane__heading">
+                <div class="organization-members-pane__path">{{ currentDepartmentPath }}</div>
+                <div class="organization-members-pane__title-row">
+                  <h2>{{ currentDepartment.name }}</h2>
+                  <span>{{ t('contacts.enterprise.labels.memberTotal', { count: visibleMembers.length }) }}</span>
+                </div>
+              </div>
+              <label class="organization-search organization-member-search">
+                <svg><use href="#search" /></svg>
+                <input
+                  v-model="memberQuery"
+                  type="search"
+                  :placeholder="t('contacts.enterprise.placeholders.searchMember')" />
+              </label>
+            </div>
+
+            <n-scrollbar class="organization-members-scroll" :theme-overrides="{ width: '6px' }">
+              <div v-if="filteredMembers.length" class="organization-member-list">
+                <button
+                  v-for="member in filteredMembers"
+                  :key="member.id"
+                  type="button"
+                  class="organization-member"
+                  @click="onSelectMember(member.userId)">
+                  <Avatar class="organization-member__avatar" :id="member.userId" />
+                  <span class="organization-member__info">
+                    <span class="organization-member__name-row">
+                      <strong>{{ member.memberName || member.username || '-' }}</strong>
+                      <span v-if="getRoleTagLabel(member.roles)" class="organization-member__role">
+                        {{ getRoleTagLabel(member.roles) }}
+                      </span>
+                    </span>
+                    <span class="organization-member__meta">
+                      {{ member.jobTitle || '-' }}
+                      <span v-if="member.departmentName">· {{ member.departmentName }}</span>
+                    </span>
+                  </span>
+                  <span class="organization-member__contact">
+                    <span v-if="member.email">{{ member.email }}</span>
+                    <span v-if="member.phone">{{ member.phone }}</span>
+                  </span>
+                  <span class="organization-member__action">{{ t('contacts.actions.viewProfile') }}</span>
+                </button>
+              </div>
+              <div v-else class="organization-empty">
+                <svg><use href="#user" /></svg>
+                <p>{{ t('contacts.enterprise.emptyMembers') }}</p>
+              </div>
+            </n-scrollbar>
+          </template>
+
+          <div v-else class="organization-empty organization-empty--select">
+            <svg><use href="#group" /></svg>
+            <p>{{ t('contacts.enterprise.selectDepartment') }}</p>
+          </div>
+        </main>
       </div>
-    </n-scrollbar>
+    </div>
   </n-spin>
 </template>
 
 <script setup lang="ts">
-  import ColorTag from '@/components/ColorTag.vue'
   import { enterpriseApi } from '@/api'
-  import {
-    ENTERPRISE_MEMBER_ROLE_COLORS,
-    hasEnterpriseMemberRoleTag,
-    isEnterpriseMemberRole
-  } from '@/constants/enterprise'
+  import { hasEnterpriseMemberRoleTag } from '@/constants/enterprise'
+  import { getLocalEnterpriseDepartments, LOCAL_ENTERPRISE_ID } from '@/services/localContacts'
   import { usePeerInfoStore } from '@/stores/user/peerInfo'
   import type { EnterprisInfo } from '@/types/api/enterprise'
   import type { EnterpriseDepartment } from '@/types/api/enterpriseDepartment'
   import type { EnterpriseMember } from '@/types/api/enterpriseMember'
   import { useI18n } from 'vue-i18n'
 
+  type DepartmentRow = {
+    department: EnterpriseDepartment
+    depth: number
+    hasChildren: boolean
+  }
+
   const props = defineProps<{
     enterpriseId: string
   }>()
 
+  const emit = defineEmits<{
+    memberSelected: [userId: string]
+  }>()
+
   const { t } = useI18n()
   const peerInfoStore = usePeerInfoStore()
-
   const enterpriseInfo = computed(() => peerInfoStore.read(props.enterpriseId, 'enterprise') as EnterprisInfo | null)
   const departments = ref<EnterpriseDepartment[]>([])
   const currentDepartmentId = ref('')
   const departmentLoading = ref(false)
+  const rootExpanded = ref(true)
+  const expandedDepartmentIds = ref(new Set<string>())
+  const departmentQuery = ref('')
+  const memberQuery = ref('')
 
   const loading = computed(() => (!!props.enterpriseId && !enterpriseInfo.value) || departmentLoading.value)
+  const isLocalEnterprise = computed(() => props.enterpriseId === LOCAL_ENTERPRISE_ID)
+
+  const childDepartments = computed(() => {
+    const children = new Map<string, EnterpriseDepartment[]>()
+    for (const department of departments.value) {
+      const siblings = children.get(department.parentId || '') ?? []
+      siblings.push(department)
+      children.set(department.parentId || '', siblings)
+    }
+    for (const siblings of children.values()) siblings.sort((a, b) => a.sort - b.sort)
+    return children
+  })
+
+  const initializeDepartments = (list: EnterpriseDepartment[]) => {
+    departments.value = list
+    expandedDepartmentIds.value = new Set(
+      list.filter((item) => list.some((candidate) => candidate.parentId === item.id)).map((item) => item.id)
+    )
+    const firstRoot = [...list].sort((a, b) => a.sort - b.sort).find((item) => !item.parentId)
+    currentDepartmentId.value = firstRoot?.id || ''
+    memberQuery.value = ''
+  }
 
   const fetchDepartments = (enterpriseId: string) => {
+    const localDepartments = getLocalEnterpriseDepartments(enterpriseId)
+    if (localDepartments) {
+      initializeDepartments(localDepartments)
+      departmentLoading.value = false
+      return
+    }
+
     departmentLoading.value = true
     enterpriseApi
       .getEnterpriseDepartment({ enterpriseId })
       .then((res) => {
-        if (res.code === 0 && res.data) {
-          departments.value = res.data
-        } else {
-          window.$message.error(res.msg)
-        }
+        if (res.code === 0 && res.data) initializeDepartments(res.data)
+        else window.$message.error(res.msg)
       })
+      .catch(() => window.$message.error(t('http.networkError')))
       .finally(() => {
         departmentLoading.value = false
       })
@@ -146,98 +222,137 @@
 
   const fetchEnterpriseProfile = () => {
     if (!props.enterpriseId) return
-
     departments.value = []
     currentDepartmentId.value = ''
+    departmentQuery.value = ''
+    memberQuery.value = ''
     peerInfoStore.get(props.enterpriseId, 'enterprise')
     fetchDepartments(props.enterpriseId)
   }
 
   watch(
     () => props.enterpriseId,
-    () => {
-      fetchEnterpriseProfile()
-    },
+    () => fetchEnterpriseProfile(),
     { immediate: true }
   )
 
   const currentDepartment = computed(() => departments.value.find((item) => item.id === currentDepartmentId.value))
 
-  const departmentBreadcrumb = computed(() => {
-    const byId = new Map(departments.value.map((item) => [item.id, item] as const))
-    const chain: EnterpriseDepartment[] = []
-    const visited = new Set<string>()
-    let cursor: EnterpriseDepartment | undefined = currentDepartment.value
+  const matchingDepartmentIds = computed(() => {
+    const query = departmentQuery.value.trim().toLocaleLowerCase()
+    if (!query) return null
 
-    while (cursor && !visited.has(cursor.id)) {
-      chain.unshift(cursor)
-      visited.add(cursor.id)
-      if (!cursor.parentId) break
-      cursor = byId.get(cursor.parentId)
+    const byId = new Map(departments.value.map((item) => [item.id, item] as const))
+    const ids = new Set<string>()
+    for (const department of departments.value) {
+      if (!department.name.toLocaleLowerCase().includes(query)) continue
+      let cursor: EnterpriseDepartment | undefined = department
+      while (cursor && !ids.has(cursor.id)) {
+        ids.add(cursor.id)
+        cursor = cursor.parentId ? byId.get(cursor.parentId) : undefined
+      }
+    }
+    return ids
+  })
+
+  const visibleDepartmentRows = computed<DepartmentRow[]>(() => {
+    const rows: DepartmentRow[] = []
+    const matchingIds = matchingDepartmentIds.value
+
+    const append = (parentId: string, depth: number) => {
+      for (const department of childDepartments.value.get(parentId) ?? []) {
+        if (matchingIds && !matchingIds.has(department.id)) continue
+        const children = childDepartments.value.get(department.id) ?? []
+        rows.push({ department, depth, hasChildren: children.length > 0 })
+        if (children.length && (matchingIds || expandedDepartmentIds.value.has(department.id))) {
+          append(department.id, depth + 1)
+        }
+      }
     }
 
-    return chain
+    append('', 0)
+    return rows
   })
 
-  const infoMembers = computed(() => enterpriseInfo.value?.userEnterpriseMembers || [])
-
-  const infoMemberName = computed(() => infoMembers.value[0]?.memberName || infoMembers.value[0]?.username || '-')
-
-  const infoJobTitles = computed(() => {
-    const titles = infoMembers.value.map((item) => item.jobTitle?.trim()).filter((item): item is string => !!item)
-    return [...new Set(titles)]
+  const allMembers = computed(() => {
+    const byId = new Map<string, EnterpriseMember>()
+    for (const member of enterpriseInfo.value?.userEnterpriseMembers ?? []) byId.set(member.id, member)
+    for (const department of departments.value) {
+      for (const member of department.members ?? []) byId.set(member.id, member)
+    }
+    return [...byId.values()]
   })
 
-  const visibleDepartments = computed(() =>
-    departments.value.filter((item) => {
-      if (!currentDepartmentId.value) return !item.parentId
-      return item.parentId === currentDepartmentId.value
-    })
+  const branchDepartmentIds = computed(() => {
+    const ids = new Set<string>()
+    if (!currentDepartment.value) return ids
+    ids.add(currentDepartment.value.id)
+    let foundChild = true
+    while (foundChild) {
+      foundChild = false
+      for (const department of departments.value) {
+        if (ids.has(department.parentId) && !ids.has(department.id)) {
+          ids.add(department.id)
+          foundChild = true
+        }
+      }
+    }
+    return ids
+  })
+
+  const visibleMembers = computed(() =>
+    allMembers.value.filter((member) => branchDepartmentIds.value.has(member.departmentId))
   )
 
-  const visibleMembers = computed<EnterpriseMember[]>(() => {
-    const allMembers = enterpriseInfo.value?.userEnterpriseMembers || []
-    const department = currentDepartment.value
-    if (!department) {
-      return allMembers.filter((item) => !item.departmentId && !item.departmentName)
+  const filteredMembers = computed(() => {
+    const query = memberQuery.value.trim().toLocaleLowerCase()
+    if (!query) return visibleMembers.value
+    return visibleMembers.value.filter((member) =>
+      [member.memberName, member.username, member.jobTitle, member.departmentName, member.email, member.phone].some(
+        (value) => value?.toLocaleLowerCase().includes(query)
+      )
+    )
+  })
+
+  const currentDepartmentPath = computed(() => {
+    if (!currentDepartment.value) return ''
+    const byId = new Map(departments.value.map((item) => [item.id, item] as const))
+    const names: string[] = []
+    const visited = new Set<string>()
+    let cursor: EnterpriseDepartment | undefined = currentDepartment.value
+    while (cursor && !visited.has(cursor.id)) {
+      names.unshift(cursor.name)
+      visited.add(cursor.id)
+      cursor = cursor.parentId ? byId.get(cursor.parentId) : undefined
     }
-
-    if (department.members?.length) return department.members
-
-    return allMembers.filter((item) => item.departmentId === department.id || item.departmentName === department.name)
+    names.unshift(enterpriseInfo.value?.name || '-')
+    return names.join(' / ')
   })
 
-  const joinedDaysText = computed(() => {
-    const validTimes = infoMembers.value
-      .map((item) => item.joinedAt?.trim())
-      .filter((item): item is string => !!item)
-      .map((item) => new Date(item.replace(' ', 'T')).getTime())
-      .filter((time) => Number.isFinite(time))
+  const isDepartmentExpanded = (id: string) => !!matchingDepartmentIds.value || expandedDepartmentIds.value.has(id)
 
-    if (validTimes.length === 0) return '-'
-
-    const earliestTime = Math.min(...validTimes)
-    const diffMs = Date.now() - earliestTime
-    return Math.max(1, Math.floor(diffMs / (1000 * 60 * 60 * 24))).toString()
-  })
+  const toggleDepartment = (id: string) => {
+    const next = new Set(expandedDepartmentIds.value)
+    if (next.has(id)) next.delete(id)
+    else next.add(id)
+    expandedDepartmentIds.value = next
+  }
 
   const onSelectDepartment = (id: string) => {
     currentDepartmentId.value = id
+    memberQuery.value = ''
   }
+
+  const onSelectMember = (userId: string) => emit('memberSelected', userId)
 
   const getRoleTagLabel = (role?: string) => {
     if (!hasEnterpriseMemberRoleTag(role)) return ''
     return t(`contacts.enterprise.roles.${role}`)
   }
-
-  const getRoleTagColor = (role?: string) => {
-    if (!role || !isEnterpriseMemberRole(role)) return ''
-    return ENTERPRISE_MEMBER_ROLE_COLORS[role] || ''
-  }
 </script>
 
 <style scoped lang="scss">
-  .contacts-profile-spin {
+  .organization-spin {
     width: 100%;
     min-width: 0;
     height: 100%;
@@ -251,224 +366,483 @@
     }
   }
 
-  .contacts-profile__scroll {
-    height: 100%;
-
-    :deep(.n-scrollbar-container) {
-      height: 100%;
-    }
-  }
-
-  .contacts-profile {
-    --row-height: 62px;
-
+  .organization-directory {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     min-width: 0;
-    max-width: 860px;
-    margin: 0 auto;
-    box-sizing: border-box;
+    height: 100%;
+    background: #fff;
+    --bg-content-color: #fff;
+    --card-bg-color: #f3f7fd;
+    --text-color: #17243b;
+    --text-secondary-color: #69788f;
+    --text-muted-color: #8795a9;
+    --divider-color: #e5ecf5;
+    --primary-color: #347ad9;
+    --green: #29ae7b;
+  }
 
-    &__content {
-      padding: 22px 24px 20px;
-      box-sizing: border-box;
+  .organization-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 86px;
+    padding: 16px 22px;
+    box-sizing: border-box;
+    border-bottom: 1px solid var(--divider-color);
+    background: #f7faff;
+
+    &__avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 10px;
+      flex-shrink: 0;
     }
 
-    &__head {
-      display: flex;
-      gap: 16px;
-      align-items: flex-start;
+    &__tag {
+      padding: 4px 9px;
+      border-radius: 999px;
+      color: #3275cf;
+      background: #e6f1ff;
+      font-size: 12px;
+    }
+
+    &__main {
       min-width: 0;
+      flex: 1;
+
+      p {
+        display: flex;
+        gap: 7px;
+        align-items: center;
+        margin: 7px 0 0;
+        color: var(--text-secondary-color);
+        font-size: 12px;
+      }
     }
 
     &__title-row {
       display: flex;
-      gap: 12px;
       align-items: center;
-      justify-content: space-between;
-    }
-
-    &__title {
-      font-size: 22px;
-      font-weight: 600;
-      line-height: 1.15;
-      min-width: 0;
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
       gap: 8px;
-    }
 
-    &__count {
-      margin-left: 8px;
-      color: var(--text-secondary-color);
-      font-weight: 400;
-    }
-
-    &__sub {
-      margin-top: 8px;
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-      color: var(--text-secondary-color);
-      font-size: 12px;
-    }
-
-    &__sub--member {
-      margin-top: 10px;
-      gap: 8px;
-      color: var(--text-secondary-color);
-    }
-
-    &__member-title {
-      color: var(--text-secondary-color);
-      font-size: 12px;
-      line-height: 1.3;
-    }
-
-    &__meta-sep {
-      color: color-mix(in srgb, var(--text-secondary-color) 75%, transparent);
-      user-select: none;
-    }
-
-    &__muted {
-      color: var(--text-secondary-color);
-      font-size: 12px;
-    }
-
-    &__joined-days {
-      color: var(--primary-color);
-      font-size: 12px;
-      user-select: none;
-    }
-
-    &__divider {
-      margin: 14px 0 12px;
-    }
-
-    &__path-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      min-width: 0;
-      flex-wrap: wrap;
-    }
-
-    &__breadcrumb {
-      display: flex;
-      align-items: center;
-      min-width: 0;
-      flex: 1;
-
-      :deep(.n-breadcrumb-item:last-child .n-breadcrumb-item__link),
-      :deep(.n-breadcrumb-item:last-child .n-breadcrumb-item__link:hover) {
-        color: var(--text-muted-color);
+      h1 {
+        margin: 0;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: var(--text-color);
+        font-size: 19px;
+        font-weight: 650;
       }
     }
 
-    &__crumb-sep {
+    &__local-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
       color: var(--text-secondary-color);
-      font-size: 20px;
-      font-weight: 500;
+      background: #eaf5f2;
+      font-size: 12px;
+      white-space: nowrap;
     }
 
-    &__toolbar {
+    &__local-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--green) 18%, transparent);
+    }
+  }
+
+  .organization-body {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .organization-tree-pane {
+    display: flex;
+    flex-direction: column;
+    width: clamp(260px, 34%, 330px);
+    min-width: 240px;
+    min-height: 0;
+    padding: 16px 12px 12px;
+    box-sizing: border-box;
+    border-right: 1px solid var(--divider-color);
+    background: #fbfcff;
+
+    &__title {
       display: flex;
-      justify-content: flex-end;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5px 10px;
+      color: var(--text-muted-color);
+      font-size: 12px;
+
+      span:last-child {
+        color: var(--text-secondary-color);
+      }
+    }
+  }
+
+  .organization-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 36px;
+    margin-bottom: 12px;
+    padding: 0 10px;
+    border: 1px solid #dce5f1;
+    border-radius: 7px;
+    color: #8795a9;
+    background: #fff;
+
+    &:focus-within {
+      border-color: #6aa7e8;
+      box-shadow: 0 0 0 3px rgb(106 167 232 / 14%);
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
       flex-shrink: 0;
     }
 
-    &__invite-link {
-      color: var(--primary-color);
-      text-decoration: underline;
-      font-size: 12px;
-      cursor: pointer;
-    }
-
-    &__departments {
-      display: flex;
-      flex-direction: column;
-    }
-
-    &__department {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px;
-      min-height: var(--row-height);
-      box-sizing: border-box;
-      border-radius: 8px;
-      cursor: pointer;
-      border: 1px solid transparent;
-      user-select: none;
+    input {
+      width: 100%;
+      min-width: 0;
+      border: 0;
+      outline: 0;
+      color: #17243b;
       background: transparent;
-      font-size: 16px;
+      font: inherit;
+      font-size: 13px;
 
-      &:hover {
-        background: color-mix(in srgb, var(--card-bg-color) 60%, transparent);
+      &::placeholder {
+        color: #9aa7b8;
       }
     }
+  }
 
-    &__department-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 6px;
+  .organization-tree-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    scrollbar-width: thin;
+  }
+
+  .organization-root,
+  .organization-tree__row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 42px;
+    padding: 0 10px;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    outline: none;
+    color: var(--text-color);
+    background: transparent;
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+
+    &:hover {
+      background: color-mix(in srgb, var(--card-bg-color) 72%, transparent);
+    }
+  }
+
+  .organization-root {
+    font-weight: 600;
+
+    &__icon {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
-      background: color-mix(in srgb, var(--primary-color) 15%, transparent);
+      width: 25px;
+      height: 25px;
+      margin: 0 7px 0 3px;
+      border-radius: 6px;
+      color: var(--primary-color);
+      background: color-mix(in srgb, var(--primary-color) 13%, transparent);
+
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+
+  .organization-arrow {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+    color: var(--text-secondary-color);
+    transform: rotate(0deg);
+    transition: transform 0.16s ease;
+
+    &.expanded {
+      transform: rotate(90deg);
+    }
+  }
+
+  .organization-tree {
+    &__row {
+      &.active {
+        border-color: color-mix(in srgb, var(--primary-color) 35%, transparent);
+        color: var(--primary-color);
+        background: color-mix(in srgb, var(--primary-color) 10%, transparent);
+      }
     }
 
-    &__members {
-      display: flex;
-      flex-direction: column;
-    }
-
-    &__member {
-      display: flex;
+    &__arrow-slot {
+      display: inline-flex;
       align-items: center;
-      padding: 10px;
-      min-height: var(--row-height);
-      box-sizing: border-box;
-      border-radius: 8px;
-      border: 1px solid transparent;
-      background: transparent;
-      cursor: pointer;
-      gap: 10px;
+      justify-content: center;
+      width: 18px;
+      height: 24px;
+      flex-shrink: 0;
+    }
 
-      &:hover {
-        background: color-mix(in srgb, var(--card-bg-color) 60%, transparent);
+    &__folder {
+      width: 18px;
+      height: 18px;
+      margin: 0 8px 0 2px;
+      flex-shrink: 0;
+      color: currentColor;
+    }
+
+    &__name {
+      min-width: 0;
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 13px;
+    }
+
+    &__count {
+      margin-left: 7px;
+      flex-shrink: 0;
+      color: var(--text-secondary-color);
+      font-size: 11px;
+    }
+
+    &__empty {
+      padding: 30px 10px;
+      color: var(--text-secondary-color);
+      font-size: 12px;
+      text-align: center;
+    }
+  }
+
+  .organization-members-pane {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+
+    &__head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 20px 22px 14px;
+      border-bottom: 1px solid var(--divider-color);
+    }
+
+    &__heading {
+      min-width: 0;
+    }
+
+    &__path {
+      margin-bottom: 7px;
+      overflow: hidden;
+      color: var(--text-secondary-color);
+      font-size: 11px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &__title-row {
+      display: flex;
+      align-items: baseline;
+      gap: 9px;
+
+      h2 {
+        margin: 0;
+        color: var(--text-color);
+        font-size: 18px;
+        font-weight: 650;
       }
 
-      &:hover .contacts-profile__member-actions {
+      span {
+        color: var(--text-secondary-color);
+        font-size: 12px;
+      }
+    }
+  }
+
+  .organization-member-search {
+    width: min(220px, 42%);
+    flex-shrink: 0;
+    margin-bottom: 0;
+  }
+
+  .organization-members-scroll {
+    flex: 1;
+    min-height: 0;
+  }
+
+  .organization-member-list {
+    padding: 8px 12px 18px;
+  }
+
+  .organization-member {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 68px;
+    padding: 10px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    outline: none;
+    color: var(--text-color);
+    background: transparent;
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+
+    &:hover {
+      border-color: color-mix(in srgb, var(--primary-color) 22%, transparent);
+      background: color-mix(in srgb, var(--card-bg-color) 72%, transparent);
+
+      .organization-member__action {
         opacity: 1;
-        visibility: visible;
         transform: translateX(0);
       }
     }
 
-    &__member-name {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      min-width: 0;
-      font-size: 16px;
+    &__avatar {
+      width: 42px;
+      height: 42px;
+      margin-right: 11px;
+      border-radius: 8px;
+      flex-shrink: 0;
     }
 
-    &__member-actions {
+    &__info {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      min-width: 0;
+      gap: 6px;
+    }
+
+    &__name-row {
       display: flex;
       align-items: center;
-      gap: 8px;
-      flex-wrap: nowrap;
+      min-width: 0;
+      gap: 7px;
+
+      strong {
+        overflow: hidden;
+        font-size: 14px;
+        font-weight: 600;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+
+    &__meta {
+      overflow: hidden;
+      color: var(--text-secondary-color);
+      font-size: 12px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &__role {
+      padding: 3px 8px;
+      border-radius: 999px;
+      color: #17865d;
+      background: #e6f6ef;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    &__contact {
+      display: flex;
+      width: 170px;
+      min-width: 0;
+      flex-direction: column;
+      gap: 5px;
+      color: var(--text-secondary-color);
+      font-size: 11px;
+
+      span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+
+    &__action {
+      margin-left: 12px;
+      color: var(--primary-color);
+      font-size: 12px;
       opacity: 0;
-      visibility: hidden;
       transform: translateX(4px);
       transition:
         opacity 0.16s ease,
-        transform 0.16s ease,
-        visibility 0.16s ease;
+        transform 0.16s ease;
+      white-space: nowrap;
+    }
+  }
+
+  .organization-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 180px;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--text-secondary-color);
+
+    svg {
+      width: 44px;
+      height: 44px;
+      opacity: 0.22;
+    }
+
+    p {
+      margin: 0;
+      font-size: 13px;
+    }
+
+    &--select {
+      flex: 1;
+    }
+  }
+
+  @media (max-width: 980px) {
+    .organization-header__local-badge,
+    .organization-member__contact {
+      display: none;
+    }
+
+    .organization-tree-pane {
+      width: 260px;
+      min-width: 220px;
     }
   }
 </style>

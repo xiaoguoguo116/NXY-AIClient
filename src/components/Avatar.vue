@@ -51,13 +51,11 @@
   import { useEscapeOverlay } from '@/composables/useEscapeOverlayStack'
   import { useAvatarStore } from '@/stores/user/avatar'
   import { useChatStore } from '@/stores/chat/chat'
+  import { getLocalUser, LOCAL_ENTERPRISE_ID } from '@/services/localContacts'
   import type { FromType } from '@/types/common'
   import type { CSSProperties } from 'vue'
 
   defineOptions({ inheritAttrs: false })
-
-  const DEFAULT_USER_AVATAR = '/avatar.png'
-  const DEFAULT_GROUP_AVATAR = '/group-avatar.png'
 
   interface Props {
     id: string
@@ -84,11 +82,20 @@
   const avatarStore = useAvatarStore()
   const chatStore = useChatStore()
 
-  const defaultAvatar = computed(() => (props.type === 'group' ? DEFAULT_GROUP_AVATAR : DEFAULT_USER_AVATAR))
+  const isLocalAvatar = computed(() => props.id === LOCAL_ENTERPRISE_ID || !!getLocalUser(props.id))
+  const defaultAvatar = computed(() => {
+    const gender = getLocalUser(props.id)?.gender
+    const pink = gender === '女' || (props.type === 'user' && !!props.id && !gender && props.id.length % 2 === 0)
+    const color = pink ? '#e986b6' : '#6aa7e8'
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80"><rect width="80" height="80" fill="${color}"/></svg>`
+    return `data:image/svg+xml,${encodeURIComponent(svg)}`
+  })
 
   const getInitialAvatarSrc = () => {
-    const fallback = props.type === 'group' ? DEFAULT_GROUP_AVATAR : DEFAULT_USER_AVATAR
+    const fallback = defaultAvatar.value
     if (!props.id) return fallback
+
+    if (isLocalAvatar.value) return fallback
 
     if (!props.refresh) {
       const cached = avatarStore.getCachedSrc(props.type, props.id)
@@ -186,7 +193,7 @@
     const type = props.type
     const seq = ++loadSeq
 
-    if (!id) {
+    if (!id || isLocalAvatar.value) {
       applyAvatarSrc(defaultAvatar.value)
       return
     }

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict'
 import type { LocalMessage } from '../src/services/localChat.ts'
 import {
   buildContext,
+  ensureDirectConversation,
   loadChats,
   saveChats,
   mentionsAi,
@@ -10,6 +11,27 @@ import {
   requestAi,
   messageSender
 } from '../src/services/localChat.ts'
+
+test('a local contact opens one persistent two-person conversation', () => {
+  const values = new Map<string, string>()
+  const storage = {
+    getItem: (key: string) => values.get(key) ?? null,
+    setItem: (key: string, value: string) => {
+      values.set(key, value)
+    }
+  }
+  const data = loadChats(storage)
+  const first = ensureDirectConversation(data, 'local-colleague-su-qing', '苏晴')
+  const again = ensureDirectConversation(data, 'local-colleague-su-qing', '苏晴')
+  assert.equal(first.id, again.id)
+  assert.equal(first.members?.length, 2)
+  assert.equal(data.conversations.filter((chat) => chat.peerId === 'local-colleague-su-qing').length, 1)
+  data.selectedId = first.id
+  saveChats(storage, data)
+  const restored = loadChats(storage)
+  assert.equal(restored.selectedId, first.id)
+  assert.equal(restored.conversations.find((chat) => chat.peerId === 'local-colleague-su-qing')?.name, '苏晴')
+})
 
 test('demo migration keeps IDs and references, attributes authors and is idempotent', () => {
   const messages: LocalMessage[] = [
@@ -161,8 +183,13 @@ test('@AI detection, URL validation and context stay bounded to the original req
 })
 test('cancellation settles even when transport ignores abort', async () => {
   const controller = new AbortController()
-  const pending = requestAi({ baseUrl: 'https://models.example/v1', model: 'test', contextCount: 0 }, '', [], controller.signal,
-    async () => new Promise<Response>(() => {}))
+  const pending = requestAi(
+    { baseUrl: 'https://models.example/v1', model: 'test', contextCount: 0 },
+    '',
+    [],
+    controller.signal,
+    async () => new Promise<Response>(() => {})
+  )
   controller.abort()
   await assert.rejects(pending, /已取消/)
 })
@@ -170,12 +197,22 @@ test('cancellation settles even when transport ignores abort', async () => {
 test('DeepSeek connection test is short, non-thinking and reports busy separately', async () => {
   const config = { baseUrl: 'https://api.deepseek.com/v1', model: 'deepseek-flash', contextCount: 0 }
   await assert.rejects(requestAi(config, '', [], new AbortController().signal), /请输入 API 密钥/)
-  await assert.rejects(requestAi(config, 'test-key', [], new AbortController().signal, async (_, init) => {
-    const body = JSON.parse(init.body as string)
-    assert.equal(body.max_tokens, 64)
-    assert.deepEqual(body.thinking, { type: 'disabled' })
-    return new Response('', { status: 503 })
-  }, { connectionTest: true }), /服务繁忙/)
+  await assert.rejects(
+    requestAi(
+      config,
+      'test-key',
+      [],
+      new AbortController().signal,
+      async (_, init) => {
+        const body = JSON.parse(init.body as string)
+        assert.equal(body.max_tokens, 64)
+        assert.deepEqual(body.thinking, { type: 'disabled' })
+        return new Response('', { status: 503 })
+      },
+      { connectionTest: true }
+    ),
+    /服务繁忙/
+  )
 })
 
 test('compatible request uses only configured key and parses real response/error', async () => {

@@ -18,10 +18,20 @@
       <SettingRow label="携带最近消息条数" desc="0–30 条，每次提问时使用">
         <n-input-number v-model:value="config.contextCount" :min="0" :max="30" :precision="0" />
       </SettingRow>
+      <SettingRow label="RAGFlow 访问凭证" desc="制度问答助手使用；本机演示或免鉴权服务可留空">
+        <n-input
+          v-model:value="ragCredential"
+          type="password"
+          show-password-on="click"
+          placeholder="输入 RAGFlow 凭证" />
+      </SettingRow>
     </SettingCard>
 
     <div class="ai-model-settings__actions">
-      <span v-if="result" :class="{ success: result.startsWith('连接成功') || result === '全局模型设置已保存。' }" role="status">
+      <span
+        v-if="result"
+        :class="{ success: result.startsWith('连接成功') || result === '全局模型设置已保存。' }"
+        role="status">
         {{ result }}
       </span>
       <span v-else-if="testing" role="status">正在连接模型服务…（最多等待 30 秒）</span>
@@ -29,7 +39,9 @@
       <n-button :loading="testing" :disabled="testing" @click="testConnection">测试连接</n-button>
       <n-button type="primary" @click="save">保存全局设置</n-button>
     </div>
-    <p class="ai-model-settings__note">API 密钥存储在本机 EM 的 WebView 数据中，不会写入聊天记录或上传至 EM 服务端。</p>
+    <p class="ai-model-settings__note">
+      API 密钥和 RAGFlow 凭证存储在本机 EM 的 WebView 数据中，不会写入聊天记录或上传至 EM 服务端。
+    </p>
   </div>
 </template>
 
@@ -45,9 +57,11 @@
     validateConfig,
     type AiConfig
   } from '@/services/localChat'
+  import { RAG_CREDENTIAL_KEY, setRagCredential } from '@/services/ragChat'
 
   const config = reactive<AiConfig>({ ...DEFAULT_CONFIG })
   const apiKey = ref('')
+  const ragCredential = ref('')
   const result = ref('')
   const testing = ref(false)
   let testController: AbortController | undefined
@@ -57,6 +71,7 @@
     const rawConfig = localStorage.getItem(CONFIG_KEY)
     if (rawConfig) Object.assign(config, validateConfig(JSON.parse(rawConfig)))
     apiKey.value = localStorage.getItem(API_KEY_KEY) || ''
+    ragCredential.value = localStorage.getItem(RAG_CREDENTIAL_KEY) || ''
   } catch {
     result.value = '现有全局模型设置无法读取，请检查接口地址和配置格式。'
   }
@@ -68,6 +83,7 @@
       const key = apiKey.value.trim()
       if (key) localStorage.setItem(API_KEY_KEY, key)
       else localStorage.removeItem(API_KEY_KEY)
+      setRagCredential(ragCredential.value, localStorage)
       Object.assign(config, normalized)
       result.value = '全局模型设置已保存。'
     } catch (error) {
@@ -110,13 +126,15 @@
       ])
       result.value = `连接成功：${reply.slice(0, 100)}`
     } catch (error) {
-      result.value = error instanceof Error && error.message === 'EM_TEST_TIMEOUT'
-        ? '测试超时（30 秒），请检查接口地址、网络或代理设置。'
-        : error instanceof Error && error.message === 'EM_TEST_ABORTED'
-          ? '测试已取消。'
-        : error instanceof Error && /^(模型接口|接口路径|请求过于|接口没有|请输入|云端接口|请填写|上下文|接口地址)/.test(error.message)
-          ? error.message
-          : '连接失败，请检查网络、接口地址、模型名称和 API 密钥。'
+      result.value =
+        error instanceof Error && error.message === 'EM_TEST_TIMEOUT'
+          ? '测试超时（30 秒），请检查接口地址、网络或代理设置。'
+          : error instanceof Error && error.message === 'EM_TEST_ABORTED'
+            ? '测试已取消。'
+            : error instanceof Error &&
+                /^(模型接口|接口路径|请求过于|接口没有|请输入|云端接口|请填写|上下文|接口地址)/.test(error.message)
+              ? error.message
+              : '连接失败，请检查网络、接口地址、模型名称和 API 密钥。'
     } finally {
       if (timeoutId) clearTimeout(timeoutId)
       testController = undefined

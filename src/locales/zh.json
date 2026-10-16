@@ -480,6 +480,7 @@
       "unknown": "未知状态",
       "share": "分享",
       "sendMessage": "发消息",
+      "viewProfile": "查看资料",
       "audioCall": "音频通话"
     },
     "fields": {
@@ -509,8 +510,19 @@
         "removeMember": "移除组织"
       },
       "labels": {
-        "joinedDays": "已加入{days}天"
+        "joinedDays": "已加入{days}天",
+        "localDirectory": "本地组织架构",
+        "localSummary": "{members} 位同事 · {departments} 个部门",
+        "memberTotal": "{count} 人",
+        "organization": "组织架构"
       },
+      "placeholders": {
+        "searchDepartment": "搜索部门",
+        "searchMember": "搜索当前部门同事"
+      },
+      "emptyDepartments": "没有找到匹配的部门",
+      "emptyMembers": "当前部门没有匹配的同事",
+      "selectDepartment": "请选择部门查看同事",
       "roles": {
         "owner": "Boos",
         "admin": "管理员",

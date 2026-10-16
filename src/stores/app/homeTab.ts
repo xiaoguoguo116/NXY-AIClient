@@ -26,8 +26,12 @@ export interface HomeTabAiPayload {
   conversationId?: string
 }
 
+export interface HomeTabTodosPayload {
+  view?: 'todos' | 'meetings' | 'schedule'
+}
+
 type HomeTabPayloadMap = {
-  todos: Record<string, never>
+  todos: HomeTabTodosPayload
   message: HomeTabMessagePayload
   contacts: HomeTabContactsPayload
   moment: Record<string, never>
@@ -136,8 +140,11 @@ export const useHomeTabStore = defineStore('homeTab', {
         return emitTo(HOME_WINDOW_LABEL, HOME_TAB_NAVIGATE_EVENT, eventPayload).then(() => undefined)
       }
 
-      if (router.currentRoute.value.path !== TAB_PATHS[tabId]) {
-        return router.push(TAB_PATHS[tabId]).then(() => undefined)
+      const todoView = tabId === 'todos' ? (payload as HomeTabTodosPayload | undefined)?.view : undefined
+      const target = todoView ? { path: TAB_PATHS.todos, query: { view: todoView } } : TAB_PATHS[tabId]
+      const targetFullPath = todoView ? `${TAB_PATHS.todos}?view=${todoView}` : TAB_PATHS[tabId]
+      if (router.currentRoute.value.fullPath !== targetFullPath) {
+        return router.push(target).then(() => undefined)
       }
     },
 

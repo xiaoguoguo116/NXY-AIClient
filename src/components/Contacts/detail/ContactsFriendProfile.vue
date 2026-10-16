@@ -154,6 +154,7 @@
   import { avCallApi, contactsApi } from '@/api'
   import { SceneType } from '@/constants/common'
   import { useHomeTabStore } from '@/stores/app/homeTab'
+  import { localChatTarget } from '@/services/localChatNavigation'
   import { useForwardMessageModal } from '@/composables/useForwardMessageModal'
   import { useChatStore } from '@/stores/chat/chat'
   import { useNameStore } from '@/stores/user/name'
@@ -401,6 +402,15 @@
 
   const onSendMessage = () => {
     if (sendingMessage.value || !props.userId) return
+
+    if (!userStore.authInfo.token) {
+      localChatTarget.value = {
+        peerId: props.userId,
+        peerName: userInfo.value?.remark?.trim() || userInfo.value?.username?.trim() || props.userId
+      }
+      void homeTabStore.applyNavigate('message')
+      return
+    }
 
     sendingMessage.value = true
     homeTabStore.openMessageWithPeer(props.userId, SceneType.User).finally(() => {

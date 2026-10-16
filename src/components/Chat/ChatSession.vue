@@ -59,12 +59,7 @@
               <button type="button" @click="editorRef?.insertText('@AI RAG助手 ')">@AI RAG助手</button>
               <span>制度回答将由当前账号发送到聊天</span>
               <button v-if="ragBusy" type="button" @click="ragController?.abort()">停止 RAG</button>
-              <button type="button" @click="ragSettingsVisible = !ragSettingsVisible">RAG 设置</button>
             </div>
-            <form v-if="ragSettingsVisible" class="flex items-center gap-8px" @submit.prevent="setRagCredential(ragCredential); ragCredential = ''; ragSettingsVisible = false">
-              <input v-model="ragCredential" type="password" autocomplete="off" aria-label="RAGFlow 访问凭证" placeholder="RAGFlow 凭证，仅本次运行保存；本机演示可留空" />
-              <button type="submit">保存</button>
-            </form>
             <div v-if="ragStatus" role="status">{{ ragStatus }}</div>
             <div class="flex-1 flex w-full min-h-0">
               <MessageEditor
@@ -174,8 +169,9 @@
 </template>
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n'
-  import { RAG_MENTION_ID, ragQuestion, requestRag, formatRagReply, setRagCredential } from '@/services/ragChat'
-  const ragBusy = ref(false), ragStatus = ref(''), ragSettingsVisible = ref(false), ragCredential = ref('')
+  import { RAG_MENTION_ID, ragQuestion, requestRag, formatRagReply } from '@/services/ragChat'
+  const ragBusy = ref(false),
+    ragStatus = ref('')
   let ragController: AbortController | undefined
   onBeforeUnmount(() => ragController?.abort())
   import { avCallApi, groupApi, messageApi, robotApi } from '@/api'
@@ -245,7 +241,13 @@
   const props = defineProps<{
     chat: Chat
   }>()
-  watch(() => props.chat.sessionId, () => { ragController?.abort(); ragStatus.value = '' })
+  watch(
+    () => props.chat.sessionId,
+    () => {
+      ragController?.abort()
+      ragStatus.value = ''
+    }
+  )
 
   const { t } = useI18n()
   const userStore = useUserStore()
@@ -750,17 +752,21 @@
   const loadMentionableItems = () => {
     const ragMention: MentionItem = { id: RAG_MENTION_ID, name: 'AI RAG助手', type: 'robot', tag: '制度知识问答' }
     mentionableItems.value = [ragMention]
-    buildRobotMentions().then((robots) => {
-      robots = [ragMention, ...robots]
-      if (props.chat.sceneType !== SceneType.Group) {
-        mentionableItems.value = robots
-        return
-      }
+    buildRobotMentions()
+      .then((robots) => {
+        robots = [ragMention, ...robots]
+        if (props.chat.sceneType !== SceneType.Group) {
+          mentionableItems.value = robots
+          return
+        }
 
-      buildGroupMemberMentions(props.chat.peerId).then((members) => {
-        mentionableItems.value = [...robots, ...members]
+        buildGroupMemberMentions(props.chat.peerId).then((members) => {
+          mentionableItems.value = [...robots, ...members]
+        })
       })
-    }).catch(() => { mentionableItems.value = [ragMention] })
+      .catch(() => {
+        mentionableItems.value = [ragMention]
+      })
   }
 
   const onFetchMentions = (query: string) => {
@@ -1189,18 +1195,21 @@
 
     const units = buildSendUnitsFromSegments(payload.segments)
     if (!units.length) return
-    const ragUnit = units.find(unit => unit.msgType === 'text' && ragQuestion(unit.content.text) !== null)
+    const ragUnit = units.find((unit) => unit.msgType === 'text' && ragQuestion(unit.content.text) !== null)
     const question = ragUnit?.msgType === 'text' ? ragQuestion(ragUnit.content.text) : null
-    if (units.filter(unit => unit.msgType === 'text' && ragQuestion(unit.content.text) !== null).length > 1) {
+    if (units.filter((unit) => unit.msgType === 'text' && ragQuestion(unit.content.text) !== null).length > 1) {
       window.$message.warning('请每次发送一个制度问题。')
       return
     }
     if (question !== null && (!question || question.length > 12000 || ragBusy.value)) {
-      window.$message.warning(ragBusy.value ? '请等待当前 RAG 问答完成，或先停止。' : '请在 @AI RAG助手 后输入 1–12000 字的制度问题。')
+      window.$message.warning(
+        ragBusy.value ? '请等待当前 RAG 问答完成，或先停止。' : '请在 @AI RAG助手 后输入 1–12000 字的制度问题。'
+      )
       return
     }
     // This mention is handled by the local RAG bridge, not the IM robot registry.
-    for (const unit of units) if (unit.msgType === 'text') unit.mentions = unit.mentions.filter(m => m.id !== RAG_MENTION_ID)
+    for (const unit of units)
+      if (unit.msgType === 'text') unit.mentions = unit.mentions.filter((m) => m.id !== RAG_MENTION_ID)
 
     const localMessages: Message[] = []
     for (const unit of units) {
@@ -1215,7 +1224,11 @@
 
     const { toId: peerId, sessionId } = sendCtx
     const ragRequest = question !== null ? new AbortController() : undefined
-    if (ragRequest) { ragController = ragRequest; ragBusy.value = true; ragStatus.value = '正在发送制度问题…' }
+    if (ragRequest) {
+      ragController = ragRequest
+      ragBusy.value = true
+      ragStatus.value = '正在发送制度问题…'
+    }
     const sendTasks = units.flatMap((unit, index) => {
       const localId = localMessages[index].id
       if (unit.msgType === 'file') {
@@ -1226,7 +1239,11 @@
           if (unit !== ragUnit || question === null || !ragRequest) return
           const controller = ragRequest
           if (!sentId || controller.signal.aborted || props.chat.sessionId !== sessionId) {
-            if (ragController === controller) { ragController = undefined; ragBusy.value = false; ragStatus.value = sentId ? '' : '提问发送失败，未调用 RAGFlow。' }
+            if (ragController === controller) {
+              ragController = undefined
+              ragBusy.value = false
+              ragStatus.value = sentId ? '' : '提问发送失败，未调用 RAGFlow。'
+            }
             return
           }
           ragStatus.value = 'RAGFlow 正在检索制度…'
@@ -1235,15 +1252,32 @@
             if (controller.signal.aborted || props.chat.sessionId !== sessionId || props.chat.peerId !== peerId) return
             const reply = { msgType: 'text' as const, content: { text: formatRagReply(result) }, mentions: [] }
             const staged = stageLocalMessage({
-              ...createLocalMessageFromUnit(reply, sendCtx.fromId, peerId, sendCtx.sceneType, shouldShowMessageTime(messages.value[messages.value.length - 1]?.createdAt)),
+              ...createLocalMessageFromUnit(
+                reply,
+                sendCtx.fromId,
+                peerId,
+                sendCtx.sceneType,
+                shouldShowMessageTime(messages.value[messages.value.length - 1]?.createdAt)
+              ),
               sessionId,
               quoteMsgId: sentId
             })
             const replyId = await sendLocalMessage(staged.id, reply, peerId, sessionId)
-            if (props.chat.sessionId === sessionId) ragStatus.value = replyId ? 'RAG 回答已发送到当前聊天。' : 'RAG 回答发送失败，请在消息上重试发送。'
+            if (props.chat.sessionId === sessionId)
+              ragStatus.value = replyId ? 'RAG 回答已发送到当前聊天。' : 'RAG 回答发送失败，请在消息上重试发送。'
           } catch (error) {
-            if (props.chat.sessionId === sessionId) ragStatus.value = controller.signal.aborted ? 'RAG 问答已停止。' : error instanceof Error && error.message.startsWith('RAGFlow：') ? error.message : 'RAGFlow：连接失败，请检查应用中心的地址及服务状态。'
-          } finally { if (ragController === controller) { ragController = undefined; ragBusy.value = false } }
+            if (props.chat.sessionId === sessionId)
+              ragStatus.value = controller.signal.aborted
+                ? 'RAG 问答已停止。'
+                : error instanceof Error && error.message.startsWith('RAGFlow：')
+                  ? error.message
+                  : 'RAGFlow：连接失败，请检查应用中心的地址及服务状态。'
+          } finally {
+            if (ragController === controller) {
+              ragController = undefined
+              ragBusy.value = false
+            }
+          }
         })
       ]
       if (unit.msgType === 'text' && unit !== ragUnit) {

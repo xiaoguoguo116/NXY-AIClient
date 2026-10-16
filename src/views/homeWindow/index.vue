@@ -16,7 +16,20 @@
           搜索消息记录
         </button>
         <div class="home__topbar-right">
-          <button v-if="todoState.alert" style="color:#c13c4b;background:#fff3e5;border:0;border-radius:5px;padding:6px;cursor:pointer" :title="todoState.alert" @click="openTodoReminder">待办到期 · 查看</button>
+          <button
+            v-if="todoState.alert"
+            style="color: #c13c4b; background: #fff3e5; border: 0; border-radius: 5px; padding: 6px; cursor: pointer"
+            :title="todoState.alert"
+            @click="openTodoReminder">
+            待办到期 · 查看
+          </button>
+          <button
+            v-if="meetingState.alert"
+            style="color: #1769c6; background: #edf6ff; border: 0; border-radius: 5px; padding: 6px; cursor: pointer"
+            :title="meetingState.alert"
+            @click="openMeetingReminder">
+            会议提醒 · 查看
+          </button>
           <div class="home__user-summary" @click="onUserSummaryClick">
             <span>{{ userStore.userInfo.username || 'EM 本地聊天' }}</span>
             <EmotionIcon v-if="userStore.userInfo.emotionId" :url="userStore.userInfo.emotionUrl" :size="18" />
@@ -103,9 +116,21 @@
 
 <script setup lang="ts">
   import { todoState, startTodoReminders } from '@/stores/localTodos'
+  import { meetingState, startMeetingReminders } from '@/stores/localMeetings'
   const stopTodoReminders = startTodoReminders()
-  onBeforeUnmount(stopTodoReminders)
-  function openTodoReminder() { todoState.alert = ''; void router.push('/home/todos') }
+  const stopMeetingReminders = startMeetingReminders()
+  onBeforeUnmount(() => {
+    stopTodoReminders()
+    stopMeetingReminders()
+  })
+  function openTodoReminder() {
+    todoState.alert = ''
+    void router.push('/home/todos')
+  }
+  function openMeetingReminder() {
+    meetingState.alert = ''
+    void router.push({ path: '/home/todos', query: { view: 'meetings' } })
+  }
   import UpdateModal from '@/components/Modal/UpdateModal.vue'
   import LocalGlobalSearch from '@/components/Chat/LocalGlobalSearch.vue'
   import SessionLockOverlay from '@/components/SessionLockOverlay.vue'
@@ -353,8 +378,8 @@
   }
 
   const onClickMenu = (item: { id: HomeTabId; path: string }) => {
-    if (previewMode.value && !['message', 'application', 'ai', 'todos'].includes(item.id)) {
-      window.$message?.info('此功能需要连接聊天服务端；本地模式可使用消息、应用和 AI Work。')
+    if (previewMode.value && !['message', 'contacts', 'application', 'ai', 'todos'].includes(item.id)) {
+      window.$message?.info('此功能需要连接聊天服务端；本地模式可使用消息、联系人、应用和 AI Work。')
       return
     }
     if (homeTabStore.activeTabId === item.id && route.path === item.path) {

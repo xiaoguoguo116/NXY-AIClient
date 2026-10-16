@@ -5,6 +5,7 @@ import { fetch } from '@tauri-apps/plugin-http'
 import SparkMD5 from 'spark-md5'
 import { defineStore } from 'pinia'
 import { enterpriseApi, groupApi, robotApi, userApi } from '@/api'
+import { getLocalEnterprise, getLocalUser } from '@/services/localContacts'
 import type { FromType } from '@/types/common'
 
 export type { FromType } from '@/types/common'
@@ -135,6 +136,7 @@ export const useAvatarStore = defineStore('avatar', () => {
 
   const fetchRemoteAvatar = async (type: FromType, id: string): Promise<string> => {
     if (!id) return ''
+    if ((type === 'user' && getLocalUser(id)) || (type === 'enterprise' && getLocalEnterprise(id))) return ''
 
     let res
     switch (type) {

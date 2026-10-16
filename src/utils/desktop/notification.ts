@@ -64,7 +64,15 @@ export const showNotification = async (options: AppNotificationOptions): Promise
 
 const handleWorkNotificationAction = (extra: Record<string, unknown> | undefined) => {
   if (extra?.type === 'todo') {
-    void createHomeWinodw().then(() => useHomeTabStore().navigateTo('todos')).catch(() => undefined)
+    void createHomeWinodw()
+      .then(() => useHomeTabStore().navigateTo('todos'))
+      .catch(() => undefined)
+    return
+  }
+  if (extra?.type === 'meeting') {
+    void createHomeWinodw()
+      .then(() => useHomeTabStore().navigateTo('todos', { view: 'meetings' }))
+      .catch(() => undefined)
     return
   }
   if (!extra || extra.type !== 'work') return

@@ -11,12 +11,7 @@
       @focus="refresh"
       @input="refresh"
       @keydown.enter.prevent="choose(results[0])" />
-    <button
-      v-if="query"
-      aria-label="清空搜索"
-      @click="clearSearch">
-      ×
-    </button>
+    <button v-if="query" aria-label="清空搜索" @click="clearSearch">×</button>
     <div v-if="open && query.trim()" class="search-results">
       <p v-if="error" role="alert">{{ error }}</p>
       <button v-for="(item, index) in results" :key="index" @click="choose(item)">
@@ -34,15 +29,21 @@
   import { computed, ref } from 'vue'
   import { loadChats, messageSender, type LocalConversation } from '@/services/localChat'
   import { localChatTarget } from '@/services/localChatNavigation'
+  import { useHomeTabStore } from '@/stores/app/homeTab'
+  import { useContactsStore } from '@/stores/user/contacts'
   type Result = {
     kind: string
     title: string
     detail: string
-    tab: 'message' | 'application' | 'ai'
+    tab: 'message' | 'contacts' | 'application' | 'ai'
     chatId?: string
     messageId?: string
+    peerId?: string
   }
-  const emit = defineEmits<{ navigate: [tab: 'message' | 'application' | 'ai'] }>()
+  const emit = defineEmits<{ navigate: [tab: 'message' | 'contacts' | 'application' | 'ai'] }>()
+  const homeTabStore = useHomeTabStore()
+  const contactsStore = useContactsStore()
+  contactsStore.ensureLocalDirectory()
   const query = ref(''),
     open = ref(false),
     error = ref('')
@@ -66,6 +67,7 @@
     if (!q) return []
     const matches: Result[] = []
     for (const [title, tab, detail] of [
+      ['联系人', 'contacts', '本地通讯录与组织架构'],
       ['应用', 'application', '本地应用与插件管理'],
       ['AI Work', 'ai', 'AI 工作台']
     ] as const) {
@@ -78,6 +80,13 @@
         detail: '应用中心 · 升级版知识库与追问',
         tab: 'application'
       })
+    for (const contact of contactsStore.friendList) {
+      const name = contact.remark?.trim() || contact.username?.trim() || '未命名联系人'
+      const detail = contact.tag?.trim() || contact.account?.trim() || '本地联系人'
+      if (`${name} ${detail}`.toLowerCase().includes(q)) {
+        matches.push({ kind: '联系人', title: name, detail, tab: 'contacts', peerId: contact.peerId })
+      }
+    }
     for (const chat of chats.value) {
       if (chat.name.toLowerCase().includes(q))
         matches.push({
@@ -106,6 +115,7 @@
   function choose(item?: Result) {
     if (!item) return
     if (item.chatId) localChatTarget.value = { chatId: item.chatId, messageId: item.messageId }
+    if (item.peerId) homeTabStore.setTabPayload('contacts', { peerId: item.peerId })
     emit('navigate', item.tab)
     open.value = false
   }
