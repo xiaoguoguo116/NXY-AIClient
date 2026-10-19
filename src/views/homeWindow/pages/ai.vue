@@ -3,7 +3,13 @@
     <nav class="ai-sections" aria-label="AI Work 功能">
       <strong>AI Work</strong>
       <button :class="{ selected: knowledgeMode }" @click="selectSection('knowledge')">知识问答</button>
-      <button v-for="(label, view) in MODE_LABELS" :key="view" :class="{ selected: route.query.view === view }" @click="selectSection(view)">{{ label }}</button>
+      <button
+        v-for="(label, view) in complianceSections"
+        :key="view"
+        :class="{ selected: route.query.view === view }"
+        @click="selectSection(view)">
+        {{ label }}
+      </button>
       <button :class="{ selected: !knowledgeMode && !complianceMode }" @click="selectSection('tasks')">任务助手</button>
     </nav>
     <div v-show="knowledgeMode" class="knowledge-slot">
@@ -333,8 +339,13 @@
   import { useRoute, useRouter } from 'vue-router'
   const route = useRoute(),
     router = useRouter()
-  const knowledgeMode = computed(() => route.query.view === 'knowledge')
-  const complianceMode = computed(() => Object.prototype.hasOwnProperty.call(MODE_LABELS, String(route.query.view)) ? String(route.query.view) as ComplianceMode : undefined)
+  const complianceSections = { compare: MODE_LABELS.compare, review: MODE_LABELS.review, report: MODE_LABELS.report }
+  const knowledgeMode = computed(() => route.query.view === 'knowledge' || route.query.view === 'policy')
+  const complianceMode = computed(() =>
+    Object.keys(complianceSections).includes(String(route.query.view))
+      ? (String(route.query.view) as ComplianceMode)
+      : undefined
+  )
   const knowledgeUrl = ref(DEFAULT_RAGFLOW.url),
     knowledgeError = ref('')
   function selectSection(view: string) {
@@ -1059,7 +1070,10 @@
     flex: 1;
     min-height: 0;
   }
-  .compliance-slot { flex: 1; min-height: 0; }
+  .compliance-slot {
+    flex: 1;
+    min-height: 0;
+  }
   .ai-shell > .workbench {
     flex: 1;
     min-height: 0;

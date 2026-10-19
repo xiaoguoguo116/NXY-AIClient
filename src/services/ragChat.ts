@@ -3,7 +3,7 @@ import { loadRagflowLinks } from './localApplications.ts'
 export const RAG_MENTION_ID = 'local-ragflow-assistant'
 export const RAG_CREDENTIAL_KEY = 'em.ragflow-credential.v1'
 export const ragQuestion = (text: string): string | null => {
-  const match = /(?:^|\s)@AI\s+RAG(?:助手)?(?=$|\s|[，,：:？！?!。])/i.exec(text)
+  const match = /(?:^|\s)@(?:AI\s+)?RAG(?:助手)?(?=$|\s|[，,：:？！?!。])/i.exec(text)
   return match
     ? [
         text.slice(0, match.index).trim(),
@@ -25,6 +25,7 @@ export interface RagResult {
   options: { id: string; question: string }[]
   cacheId?: string
   mode?: string
+  needsInput?: boolean
 }
 type Fetcher = (url: string, init: RequestInit) => Promise<Response>
 // A runtime override supports tests; the global settings page may persist the credential locally.
@@ -184,7 +185,7 @@ export async function requestRag(
       if (!final) throw new Error('RAGFlow：连接提前结束，回答未完成。请核对后重试。')
     } else final = unwrap(await response.json())
     text = final?.diagnostics?.answer || final?.answer || text
-    const clarification = final?.clarification
+    const clarification = final?.clarification ?? final?.diagnostics?.clarification
     if (!text && typeof clarification?.question === 'string') text = clarification.question
     const choices = Array.isArray(clarification?.options) ? clarification.options : []
     if (!text && choices.length) text = '请补充问题或选择以下方向：'
@@ -203,7 +204,8 @@ export async function requestRag(
         .filter((o: any) => typeof o.question === 'string')
         .map((o: any) => ({ id: String(o.id), question: o.question })),
       cacheId: clarification?.cache_id,
-      mode: clarification?.mode
+      mode: clarification?.mode,
+      needsInput: clarification?.needs_input === true || choices.length > 0
     }
   }
 }

@@ -95,7 +95,8 @@
           <template v-else>
             <b>开始一段新的对话</b>
             <p>输入 @AI 和问题向模型提问，或 @AI RAG助手 查询相关制度，回答直接显示在聊天中。</p>
-            <button @click="openSettings">配置 AI 接口</button>
+            <p v-if="config.model">已使用全局模型：{{ config.model }}，所有会话共用，无需重复配置。</p>
+            <button v-else @click="openSettings">前往全局 AI 模型设置</button>
           </template>
         </div>
         <article
@@ -131,13 +132,27 @@
             </small>
             <p class="bubble">{{ msg.status === 'pending' ? 'AI 正在思考…' : msg.text }}</p>
             <template v-if="msg.status === 'done' && msg.rag">
-              <button
-                v-for="option in msg.rag.options"
-                :key="option.id"
-                :disabled="!!busy[activeChat.id]"
-                @click="ragFollowup(msg, option)">
-                {{ option.question }}
-              </button>
+              <section
+                v-if="msg.rag.options.length || msg.rag.needsInput"
+                class="rag-clarification"
+                aria-label="RAG 追问选项">
+                <strong>请补充或选择你想了解的方向</strong>
+                <button
+                  v-for="option in msg.rag.options"
+                  :key="option.id"
+                  :disabled="!!busy[activeChat.id]"
+                  @click="ragFollowup(msg, option)">
+                  {{ option.question }}
+                </button>
+                <form @submit.prevent="ragCustomFollowup(msg)">
+                  <input
+                    v-model="ragClarificationDrafts[msg.id]"
+                    aria-label="补充 RAG 问题"
+                    placeholder="也可以补充具体业务、对象或范围…"
+                    :disabled="!!busy[activeChat.id]" />
+                  <button :disabled="!!busy[activeChat.id] || !ragClarificationDrafts[msg.id]?.trim()">继续提问</button>
+                </form>
+              </section>
               <details v-if="msg.rag.references.length" class="source-records">
                 <summary>制度依据（{{ msg.rag.references.length }}）</summary>
                 <p v-for="(source, index) in msg.rag.references" :key="index">
@@ -155,7 +170,7 @@
                   <small>
                     {{
                       suggestion.dueAt
-                        ? `建议提醒：${new Date(suggestion.dueAt).toLocaleString()}`
+                        ? `建议结束时间：${new Date(suggestion.dueAt).toLocaleString()}`
                         : '未明确时间，添加后可在待办页设置提醒。'
                     }}
                   </small>
@@ -298,40 +313,6 @@
       :options="messageMenuOptions"
       @select="onMessageMenuSelect"
       @clickoutside="messageMenu.show = false" />
-    <div v-if="settingsOpen" class="modal-backdrop" @keydown.esc.stop="settingsOpen = false">
-      <form class="settings" @submit.prevent="saveSettings">
-        <h2>全局模型设置</h2>
-        <p>此配置由本机所有聊天和群共用。</p>
-        <label>
-          接口基础地址
-          <input v-model="settingsDraft.baseUrl" placeholder="https://你的服务域名/v1" required />
-        </label>
-        <label>
-          模型名称
-          <input v-model="settingsDraft.model" placeholder="填写服务商提供的模型 ID" required />
-        </label>
-        <label>
-          API 密钥
-          <input v-model="keyDraft" type="password" autocomplete="off" placeholder="保存到本机；本机免鉴权服务可留空" />
-        </label>
-        <label>
-          携带最近消息条数（0–30）
-          <input v-model.number="settingsDraft.contextCount" type="number" min="0" max="30" required />
-        </label>
-        <p class="settings-help">
-          设置在本机全局保存，重启后继续使用。仅在 @AI
-          时向此地址发送当前会话的上下文和提问；密钥保存在本机浏览器数据中，不写入聊天记录。
-        </p>
-        <p v-if="settingsResult" role="status">{{ settingsResult }}</p>
-        <div class="actions">
-          <button type="button" :disabled="testing" @click="testConnection">
-            {{ testing ? '测试中…' : '测试连接' }}
-          </button>
-          <button type="button" @click="settingsOpen = false">关闭</button>
-          <button type="submit" class="primary">保存设置</button>
-        </div>
-      </form>
-    </div>
     <WorkAssistantDialog
       v-if="meetingAssistantOpen && activeChat"
       :participants="todoMembers"
@@ -349,6 +330,19 @@
   import { meetingState } from '@/stores/localMeetings'
   import { ragQuestion, requestRag } from '@/services/ragChat'
   let pendingRagFollowup: LocalMessage['ragFollowup']
+  const ragClarificationDrafts = reactive<Record<string, string>>({})
+  async function ragCustomFollowup(msg: LocalMessage) {
+    const question = ragClarificationDrafts[msg.id]?.trim()
+    if (!question || !msg.rag || !activeChat.value || busy[activeChat.value.id]) return
+    pendingRagFollowup = { previous: msg.rag }
+    drafts[activeChat.value.id] = `@AI RAG助手 ${question}`
+    try {
+      await send()
+      ragClarificationDrafts[msg.id] = ''
+    } finally {
+      pendingRagFollowup = undefined
+    }
+  }
   function mentionRag() {
     if (!activeChat.value) return
     drafts[activeChat.value.id] = `@AI RAG助手 ${drafts[activeChat.value.id] || ''}`
@@ -649,12 +643,6 @@
   const config = reactive<AiConfig>({ ...DEFAULT_CONFIG })
   const apiKey = ref(localStorage.getItem(API_KEY_KEY) || '')
   const notice = ref('')
-  const settingsOpen = ref(false)
-  const settingsDraft = reactive<AiConfig>({ ...DEFAULT_CONFIG })
-  const keyDraft = ref('')
-  const settingsResult = ref('')
-  const testing = ref(false)
-  let testController: AbortController | undefined
   const messageArea = ref<HTMLElement>()
   const input = ref<HTMLTextAreaElement>()
   watch(
@@ -731,68 +719,28 @@
     void send()
   }
   function openSettings() {
-    Object.assign(settingsDraft, config)
-    keyDraft.value = apiKey.value
-    settingsResult.value = ''
-    settingsOpen.value = true
+    void import('@/utils/desktop/window')
+      .then(({ createSetWinodw }) => createSetWinodw('aiModel'))
+      .catch(() => {
+        notice.value = '无法打开设置窗口，请通过左下角总设置 → AI 模型打开。'
+      })
   }
-  function saveSettings() {
+  function refreshGlobalAiSettings() {
     try {
-      const normalized = validateConfig(settingsDraft)
-      localStorage.setItem(CONFIG_KEY, JSON.stringify(normalized))
-      const normalizedKey = keyDraft.value.trim()
-      if (normalizedKey) localStorage.setItem(API_KEY_KEY, normalizedKey)
-      else localStorage.removeItem(API_KEY_KEY)
-      Object.assign(config, normalized)
-      apiKey.value = normalizedKey
-      settingsOpen.value = false
-      notice.value = 'AI 设置已保存，可以输入 @AI 提问。'
-    } catch (error) {
-      settingsResult.value = error instanceof Error ? error.message : '设置保存失败。'
+      const saved = localStorage.getItem(CONFIG_KEY)
+      Object.assign(config, saved ? validateConfig(JSON.parse(saved)) : DEFAULT_CONFIG)
+      apiKey.value = localStorage.getItem(API_KEY_KEY) || ''
+    } catch {
+      Object.assign(config, DEFAULT_CONFIG)
+      apiKey.value = ''
+      notice.value = '全局 AI 设置无法读取，请到总设置 → AI 模型检查。'
     }
   }
   function onGlobalAiSettingsChanged(event: StorageEvent) {
-    if (event.key === CONFIG_KEY) {
-      try {
-        if (event.newValue) Object.assign(config, validateConfig(JSON.parse(event.newValue)))
-      } catch {
-        notice.value = '全局 AI 设置格式无效，请打开设置页检查。'
-      }
-    }
-    if (event.key === API_KEY_KEY) apiKey.value = event.newValue || ''
+    if (event.key === null || event.key === CONFIG_KEY || event.key === API_KEY_KEY) refreshGlobalAiSettings()
   }
   window.addEventListener('storage', onGlobalAiSettingsChanged)
-  async function testConnection() {
-    if (testing.value) return
-    try {
-      validateConfig(settingsDraft)
-    } catch (error) {
-      settingsResult.value = String(error)
-      return
-    }
-    testing.value = true
-    settingsResult.value = ''
-    const controller = new AbortController()
-    testController = controller
-    const timer = setTimeout(() => controller.abort(), 120000)
-    try {
-      const reply = await requestAi(
-        { ...settingsDraft },
-        keyDraft.value,
-        [{ role: 'user', content: '连接测试，请只回复“连接成功”。' }],
-        controller.signal,
-        undefined,
-        { connectionTest: true }
-      )
-      settingsResult.value = `连接成功，模型回复：${reply.slice(0, 160)}`
-    } catch (error) {
-      settingsResult.value = controller.signal.aborted ? '连接测试超时或已取消。' : friendlyError(error)
-    } finally {
-      clearTimeout(timer)
-      testing.value = false
-      testController = undefined
-    }
-  }
+  window.addEventListener('focus', refreshGlobalAiSettings)
   function friendlyError(error: unknown) {
     // Never expose raw transport errors: some providers echo request data or keys.
     if (
@@ -837,10 +785,13 @@
         return
       }
       try {
-        if (!todoCommand && rag === null) validateConfig(config)
+        if (!todoCommand && rag === null) {
+          refreshGlobalAiSettings()
+          validateConfig(config)
+        }
       } catch {
         openSettings()
-        settingsResult.value = '请先配置 AI 接口。你的提问仍保留在输入框中。'
+        notice.value = '请在总设置 → AI 模型中配置一次，所有会话共用。你的提问仍保留在输入框中。'
         return
       }
     }
@@ -891,7 +842,7 @@
         chat.messages.push({
           id: crypto.randomUUID(),
           role: 'assistant',
-          text: `已添加到待办：${todo.title}\n分配给：${todos.map((t) => t.assigneeName).join('、')}（仅本机演示，不向其他人发送）\n${todo.dueAt ? `提醒时间：${new Date(todo.dueAt).toLocaleString()}` : '未识别到明确的未来提醒时间，已保存为无提醒待办，请在左侧“待办事项”中设置。'}`,
+          text: `已添加到待办：${todo.title}\n分配给：${todos.map((t) => t.assigneeName).join('、')}（仅本机演示，不向其他人发送）\n${todo.dueAt ? `结束时间：${new Date(todo.dueAt).toLocaleString()}（默认届时提醒）` : '未识别到明确的未来结束时间，已保存为无时间待办，请在左侧“待办事项”中设置。'}`,
           createdAt: new Date().toISOString(),
           status: 'done',
           replyTo: msg.id
@@ -1008,15 +959,59 @@
   )
   onBeforeUnmount(() => {
     requests.forEach((controller) => controller.abort())
-    testController?.abort()
     apiKey.value = ''
-    keyDraft.value = ''
+    window.removeEventListener('focus', refreshGlobalAiSettings)
     window.removeEventListener('storage', onGlobalAiSettingsChanged)
   })
   if (!loadFailed.value) persist()
 </script>
 
 <style scoped>
+  .rag-clarification {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 12px 0;
+    padding: 14px;
+    border: 1px solid #cbdff8;
+    border-radius: 12px;
+    background: #f3f8ff;
+    color: #29496d;
+  }
+  .rag-clarification > button {
+    text-align: left;
+    padding: 10px 12px;
+    border: 1px solid #cbdff8;
+    border-radius: 8px;
+    background: white;
+    color: #226db9;
+    cursor: pointer;
+  }
+  .rag-clarification form {
+    display: flex;
+    gap: 8px;
+  }
+  .rag-clarification input {
+    flex: 1;
+    min-width: 0;
+    padding: 9px;
+    border: 1px solid #cbdff8;
+    border-radius: 8px;
+    background: white;
+    color: #29496d;
+  }
+  .rag-clarification form button {
+    border: 0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    background: #2784ed;
+    color: white;
+    cursor: pointer;
+  }
+  .rag-clarification button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
   .mention-composer {
     position: relative;
     flex: 1;

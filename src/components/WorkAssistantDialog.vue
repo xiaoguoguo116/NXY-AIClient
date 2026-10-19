@@ -116,24 +116,7 @@
           <small>会议保存在本机；联系人选择用于安排与反馈跟踪，当前不会发送真实邀请。</small>
         </form>
 
-        <form v-else class="work-card" @submit.prevent="saveTodo">
-          <h3>个人待办</h3>
-          <label>
-            事项
-            <input
-              v-model="todo.title"
-              maxlength="500"
-              required
-              placeholder="例如：准备评审会材料"
-              aria-label="助手待办事项" />
-          </label>
-          <label>
-            提醒时间
-            <input v-model="todo.dueAt" type="datetime-local" aria-label="助手待办提醒时间" />
-          </label>
-          <p v-if="error" class="error" role="alert">{{ error }}</p>
-          <button class="primary" type="submit">添加到我的待办</button>
-        </form>
+        <TodoEditor v-else source-name="AI 会议助手" @saved="onTodoSaved" />
 
         <div v-if="result" class="assistant-message result-message">
           <span class="mini-avatar">AI</span>
@@ -147,9 +130,9 @@
 <script setup lang="ts">
   import { computed, onMounted, reactive, ref } from 'vue'
   import { addMeeting } from '@/stores/localMeetings'
-  import { addTodo } from '@/stores/localTodos'
+  import TodoEditor from '@/components/TodoEditor.vue'
   import { useContactsStore } from '@/stores/user/contacts'
-  import type { TodoRecipient } from '@/services/localTodos'
+  import type { TodoRecipient, LocalTodo } from '@/services/localTodos'
   import type { MeetingRecipient } from '@/services/localMeetings'
 
   const props = withDefaults(
@@ -204,7 +187,6 @@
     endTime = ref('')
   const startConfirmed = ref(false),
     endConfirmed = ref(false)
-  const todo = reactive({ title: '', dueAt: '' })
 
   onMounted(() => {
     if (!contactsStore.friendList.length) contactsStore.fetchFriendList()
@@ -284,22 +266,9 @@
     }
   }
 
-  function saveTodo() {
-    try {
-      const created = addTodo(
-        {
-          title: todo.title,
-          ...(todo.dueAt ? { dueAt: new Date(todo.dueAt).toISOString() } : {})
-        },
-        undefined,
-        'AI 会议助手'
-      )
-      result.value = `已添加到你的待办：“${created.title}”${created.dueAt ? `，提醒时间为 ${new Date(created.dueAt).toLocaleString()}` : '。'}`
-      error.value = ''
-      Object.assign(todo, { title: '', dueAt: '' })
-    } catch (cause) {
-      error.value = cause instanceof Error ? cause.message : '待办添加失败，请重试。'
-    }
+  function onTodoSaved(created: LocalTodo) {
+    result.value = `已添加到你的待办：“${created.title}”${created.dueAt ? `，结束时间为 ${new Date(created.dueAt).toLocaleString()}` : '。'}`
+    error.value = ''
   }
 </script>
 

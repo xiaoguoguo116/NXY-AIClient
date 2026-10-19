@@ -1,5 +1,17 @@
 export const MEETINGS_KEY = 'em.local-meetings.v1'
 
+export function meetingCanChange(meeting: { startAt: string; cancelledAt?: string }, now = Date.now()) {
+  return !meeting.cancelledAt && Number.isFinite(Date.parse(meeting.startAt)) && Date.parse(meeting.startAt) > now
+}
+export function assertMeetingCanChange(
+  meeting: { startAt: string; cancelledAt?: string } | undefined,
+  now = Date.now()
+) {
+  if (!meeting) throw new Error('会议不存在，请刷新后重试。')
+  if (meeting.cancelledAt) throw new Error('会议已取消，只能查看历史记录。')
+  if (!meetingCanChange(meeting, now)) throw new Error('会议开始时间已到或已过去，不能再修改参会状态或取消会议。')
+}
+
 export type MeetingResponse = 'pending' | 'accepted' | 'tentative' | 'declined'
 
 export interface MeetingParticipant {

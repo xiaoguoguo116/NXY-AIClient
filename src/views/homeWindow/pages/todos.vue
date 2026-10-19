@@ -26,39 +26,52 @@
     </p>
 
     <template v-if="section === 'todos'">
-      <nav class="view-switch" aria-label="待办视图">
-        <button :class="{ selected: view === 'received' }" @click="setView('received')">接收的待办</button>
-        <button :class="{ selected: view === 'published' }" @click="setView('published')">我发布的</button>
-      </nav>
-      <p class="hint">
-        客户端运行时每 15 秒检查提醒；退出后不会后台提醒，下次启动补报。没有设置时间的事项仅保存，不提醒。
-      </p>
-      <label v-if="view === 'received'" class="viewer-label">
-        查看接收人
-        <select v-model="viewer" aria-label="查看待办接收人" @change="reset">
-          <option value="self">我（默认）</option>
-          <option value="all">所有接收人 · 本机演示</option>
-          <option v-for="person in recipients" :key="person.id" :value="person.id">{{ person.name }} · 模拟成员</option>
-        </select>
-      </label>
-      <p class="hint">模拟成员的状态仅供本机演示；系统提醒只提醒“我”。手动新增默认分配给自己。</p>
-      <form v-if="view === 'received'" class="todo-form" @submit.prevent="save">
-        <label>
-          事项
-          <input
-            v-model="title"
-            maxlength="500"
-            required
-            placeholder="例如：提交接口联调报告"
-            aria-label="待办事项内容" />
-        </label>
-        <label>
-          提醒时间（本机时区）
-          <input v-model="date" type="datetime-local" aria-label="待办提醒时间" />
-        </label>
-        <button class="primary" :disabled="!!todoState.error">{{ editing ? '保存修改' : '添加待办' }}</button>
-        <button v-if="editing" type="button" @click="reset">取消</button>
-      </form>
+      <div class="todo-list-toolbar">
+        <nav class="view-switch" aria-label="待办视图">
+          <button :class="{ selected: view === 'received' }" @click="setView('received')">接收的待办</button>
+          <button :class="{ selected: view === 'published' }" @click="setView('published')">我发布的</button>
+        </nav>
+        <button class="primary" aria-label="新建待办" @click="openCreate">＋ 添加待办</button>
+      </div>
+      <div v-if="view === 'received'" class="todo-workspace">
+        <div class="viewer-label">
+          <div class="viewer-heading">
+            <label id="todo-viewer-label">
+              查看接收人
+              <span>筛选待办列表</span>
+            </label>
+            <div class="header-actions">
+              <button @click="setViewers(['self'])">只看我</button>
+              <button @click="setViewers(['all'])">查看所有</button>
+              <button @click="setViewers([])">清空选择</button>
+            </div>
+          </div>
+          <NConfigProvider abstract :theme="lightTheme" :theme-overrides="null">
+            <NConfigProvider abstract :theme-overrides="{ common: recipientColors }">
+              <NSelect
+                :value="viewers"
+                multiple
+                clearable
+                filterable
+                :options="recipientOptions"
+                :filter="filterRecipient"
+                :menu-props="{
+                  style: { '--bg-muted-color': '#ffffff', '--border-color': '#dce6f2', 'color-scheme': 'light' }
+                }"
+                :input-props="{ 'aria-label': '搜索待办接收人' }"
+                :loading="contactsStore.friendListLoading"
+                aria-labelledby="todo-viewer-label"
+                placeholder="搜索姓名、备注、账号、部门或拼音"
+                @update:value="setViewers">
+                <template #empty>没有找到匹配的联系人或历史接收人</template>
+              </NSelect>
+            </NConfigProvider>
+          </NConfigProvider>
+          <small>
+            可选 {{ contactCount }} 位联系人，支持多选；可按姓名、备注、账号、部门或拼音搜索，也可查找历史接收人。
+          </small>
+        </div>
+      </div>
       <nav class="filter-nav">
         <button
           v-for="item in filters"
@@ -90,7 +103,7 @@
           </small>
           <progress :value="group.completed" :max="group.total" :aria-label="`${group.title}完成进度`" />
           <div v-for="recipient in group.items" :key="recipient.id" class="recipient-progress">
-            <span>{{ recipient.assigneeName || '我' }}{{ recipient.assigneeId !== 'self' ? ' · 模拟成员' : '' }}</span>
+            <span>{{ recipient.assigneeName || '我' }}{{ assigneeKindLabel(recipient.assigneeId) }}</span>
             <span
               :class="{
                 finished: recipient.completed,
@@ -107,31 +120,54 @@
             <small v-if="recipient.completed && recipient.completedAt">
               完成于 {{ new Date(recipient.completedAt).toLocaleString() }}
             </small>
-            <small v-else-if="recipient.dueAt">提醒：{{ new Date(recipient.dueAt).toLocaleString() }}</small>
+            <small v-if="recipient.dueAt">结束时间：{{ new Date(recipient.dueAt).toLocaleString() }}</small>
+            <small v-if="todoReminderAt(recipient)">
+              提醒：{{ new Date(todoReminderAt(recipient)!).toLocaleString() }}
+            </small>
+            <button v-for="file in recipient.attachments || []" :key="file.id" @click="downloadAttachment(file)">
+              下载附件：{{ file.name }}
+            </button>
           </div>
         </article>
       </template>
       <template v-else>
         <p v-if="!visible.length" class="empty">
-          暂无{{ filter === 'done' ? '已完成' : '' }}事项。也可以在聊天中输入“@AI 把明天下午3点提交报告加入待办”。
+          <template v-if="!selectedRecipients.length">请选择一个或多个接收人。</template>
+          <template v-else>
+            {{ selectedRecipientLabel }}暂无{{
+              filter === 'done' ? '已完成' : filter === 'pending' ? '未完成' : ''
+            }}待办记录。这里查看本机保存的待办。
+          </template>
         </p>
         <article v-for="item in visible" :key="item.id" :class="{ done: item.completed }">
           <input type="checkbox" :checked="item.completed" :aria-label="`完成：${item.title}`" @change="toggle(item)" />
           <div class="content">
             <strong>{{ item.title }}</strong>
-            <small>
-              接收人：{{ item.assigneeName || '我'
-              }}{{ item.assigneeId && item.assigneeId !== 'self' ? '（本机模拟）' : '' }}
-            </small>
+            <small>接收人：{{ item.assigneeName || '我' }}{{ assigneeKindLabel(item.assigneeId) }}</small>
             <small :class="{ overdue: !item.completed && !!item.dueAt && Date.parse(item.dueAt) <= now }">
-              {{ item.dueAt ? `提醒：${new Date(item.dueAt).toLocaleString()}` : '未设置提醒时间' }}
+              {{ item.dueAt ? `结束时间：${new Date(item.dueAt).toLocaleString()}` : '未设置结束时间' }}
             </small>
+            <small>
+              {{ todoReminderAt(item) ? `提醒：${new Date(todoReminderAt(item)!).toLocaleString()}` : '未设置提醒' }}
+            </small>
+            <div v-if="item.attachments?.length" class="todo-attachments">
+              <button v-for="file in item.attachments" :key="file.id" @click="downloadAttachment(file)">
+                下载附件：{{ file.name }}
+              </button>
+            </div>
             <small v-if="item.sourceName">来源：{{ item.sourceName }}</small>
           </div>
-          <button v-if="!item.completed" @click="snooze(item)">10 分钟后提醒</button>
+          <button v-if="!item.completed" @click="snooze(item)">15 分钟后提醒</button>
           <button @click="edit(item)">编辑</button>
         </article>
       </template>
+      <details class="reminder-help">
+        <summary>提醒说明</summary>
+        <p>
+          客户端运行时每 15
+          秒检查提醒；退出后不会后台提醒，下次启动补报。没有设置时间的事项仅保存，不提醒。系统提醒只提醒“我”，模拟成员状态仅供本机演示。
+        </p>
+      </details>
     </template>
 
     <template v-else-if="section === 'meetings'">
@@ -187,20 +223,20 @@
                 }}{{ person.kind === 'simulated' ? ' · 模拟成员' : person.kind === 'contact' ? ' · 联系人' : '' }}
               </span>
               <strong :class="`response-${person.response}`">{{ responseLabel(person.response) }}</strong>
-              <div v-if="!meeting.cancelledAt" class="response-actions">
+              <div v-if="meetingCanChange(meeting, now)" class="response-actions">
                 <button
                   :aria-label="`设为参加：${person.name}`"
-                  @click="respondToMeeting(meeting.id, person.id, 'accepted')">
+                  @click="attempt(() => respondToMeeting(meeting.id, person.id, 'accepted'))">
                   参加
                 </button>
                 <button
                   :aria-label="`设为待定：${person.name}`"
-                  @click="respondToMeeting(meeting.id, person.id, 'tentative')">
+                  @click="attempt(() => respondToMeeting(meeting.id, person.id, 'tentative'))">
                   待定
                 </button>
                 <button
                   :aria-label="`设为不参加：${person.name}`"
-                  @click="respondToMeeting(meeting.id, person.id, 'declined')">
+                  @click="attempt(() => respondToMeeting(meeting.id, person.id, 'declined'))">
                   不参加
                 </button>
               </div>
@@ -210,8 +246,10 @@
         <button
           v-if="!meeting.cancelledAt && meeting.creatorId === 'self'"
           class="cancel-button"
-          @click="cancelMeeting(meeting.id)">
-          取消会议
+          :disabled="!meetingCanChange(meeting, now)"
+          :title="meetingCanChange(meeting, now) ? '取消会议' : '时间已到，只能查看历史记录'"
+          @click="attempt(() => cancelMeeting(meeting.id))">
+          {{ meetingCanChange(meeting, now) ? '取消会议' : '已开始或已结束 · 不可修改' }}
         </button>
       </article>
     </template>
@@ -220,12 +258,12 @@
       <div class="schedule-heading">
         <div>
           <h2>我的日程</h2>
-          <p>会议和设置了提醒时间的待办会自动汇总到这里。</p>
+          <p>会议和设置了结束时间的待办会自动汇总到这里。</p>
         </div>
         <strong>{{ scheduleMonth }}</strong>
       </div>
       <p v-if="!scheduleGroups.length" class="empty">
-        暂无有时间的日程。发布会议或为待办设置提醒时间后，会显示在这里。
+        暂无有时间的日程。发布会议或为待办设置结束时间后，会显示在这里。
       </p>
       <section v-for="group in scheduleGroups" :key="group.date" class="schedule-day">
         <header class="schedule-date-row">
@@ -241,13 +279,30 @@
             <time>{{ timeLabel(item.at) }}</time>
             <div>
               <strong>{{ item.title }}</strong>
-              <small>{{ item.kind === 'meeting' ? `会议${item.meta ? ` · ${item.meta}` : ''}` : '待办提醒' }}</small>
+              <small>{{ item.kind === 'meeting' ? `会议${item.meta ? ` · ${item.meta}` : ''}` : '待办截止' }}</small>
             </div>
             <button @click="openScheduleItem(item)">查看</button>
           </article>
         </div>
       </section>
     </template>
+    <NModal v-if="editorOpen" :show="true" :mask-closable="false" @update:show="reset">
+      <section class="todo-editor-dialog" role="dialog" aria-modal="true" aria-labelledby="todo-editor-title">
+        <header class="editor-heading">
+          <div>
+            <h2 id="todo-editor-title">{{ editingTodo ? '编辑待办' : '添加待办' }}</h2>
+            <p>{{ editingTodo ? `接收人：${editingTodo.assigneeName || '我'}` : '添加给自己的待办' }}</p>
+          </div>
+          <button aria-label="关闭待办编辑" @click="reset">关闭</button>
+        </header>
+        <TodoEditor
+          :key="editing"
+          :todo="editingTodo"
+          :disabled="!!todoState.error"
+          @saved="onTodoSaved"
+          @cancel="reset" />
+      </section>
+    </NModal>
     <WorkAssistantDialog
       v-if="assistantOpen"
       :participants="assistantParticipants"
@@ -257,17 +312,47 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, onBeforeUnmount, ref, watch } from 'vue'
+  import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+  import { NConfigProvider, NModal, NSelect, lightTheme, type SelectOption } from 'naive-ui'
   import { useRoute } from 'vue-router'
   import WorkAssistantDialog from '@/components/WorkAssistantDialog.vue'
-  import { todoState, initTodos, addTodo, updateTodo } from '@/stores/localTodos'
-  import { publishedTodos, type LocalTodo, type TodoRecipient } from '@/services/localTodos'
+  import TodoEditor from '@/components/TodoEditor.vue'
+  import { todoState, initTodos, updateTodo } from '@/stores/localTodos'
+  import {
+    publishedTodos,
+    todoReminderAt,
+    type LocalTodo,
+    type TodoRecipient,
+    type TodoAttachment
+  } from '@/services/localTodos'
+  import { downloadTodoAttachment } from '@/services/todoAttachments'
+  import {
+    buildTodoViewerOptions,
+    matchesTodoViewer,
+    normalizeTodoViewers,
+    todoMatchesViewers
+  } from '@/services/todoRecipients'
+  import { useContactsStore } from '@/stores/user/contacts'
+  import { useUserStore } from '@/stores/user/user'
   import { cancelMeeting, initMeetings, meetingState, respondToMeeting } from '@/stores/localMeetings'
-  import { meetingResponseCounts, responseLabel, type LocalMeeting } from '@/services/localMeetings'
+  import { meetingCanChange, meetingResponseCounts, responseLabel, type LocalMeeting } from '@/services/localMeetings'
   import { ensureNotificationPermission } from '@/utils/desktop/notification'
   defineOptions({ name: 'todos' })
+  // Keep the selection and its teleported menu bright even under a dark global theme.
+  const recipientColors = {
+    primaryColor: '#2685ed',
+    primaryColorHover: '#479af3',
+    primaryColorPressed: '#176ac4',
+    primaryColorSuppl: '#2685ed'
+  }
   initTodos()
   initMeetings()
+  const contactsStore = useContactsStore()
+  const userStore = useUserStore()
+  contactsStore.ensureLocalDirectory()
+  onMounted(() => {
+    if (userStore.authInfo.token) contactsStore.fetchFriendList()
+  })
   const route = useRoute()
   const section = ref<'todos' | 'meetings' | 'schedule'>(
     route.query.view === 'meetings' ? 'meetings' : route.query.view === 'schedule' ? 'schedule' : 'todos'
@@ -278,13 +363,12 @@
       if (value === 'meetings' || value === 'schedule' || value === 'todos') section.value = value
     }
   )
-  const title = ref(''),
-    date = ref(''),
-    editing = ref(''),
+  const editorOpen = ref(false)
+  const editing = ref(''),
     error = ref(''),
     filter = ref('pending'),
     now = ref(Date.now())
-  const viewer = ref('self'),
+  const viewers = ref<string[]>(['self']),
     view = ref<'received' | 'published'>('received'),
     assistantOpen = ref(false),
     meetingFilter = ref<'upcoming' | 'past' | 'all'>('upcoming')
@@ -293,20 +377,46 @@
   }, 15000)
   onBeforeUnmount(() => clearInterval(timer))
   const published = computed(() => publishedTodos(todoState.items))
+  const editingTodo = computed(() => todoState.items.find((item) => item.id === editing.value))
   const visiblePublished = computed(() =>
     published.value.filter(
       (group) => filter.value === 'all' || (group.completed === group.total) === (filter.value === 'done')
     )
   )
-  const recipients = computed(() => [
-    ...new Map(
-      todoState.items
-        .filter((item) => item.assigneeId && item.assigneeId !== 'self')
-        .map((item) => [item.assigneeId!, { id: item.assigneeId!, name: item.assigneeName || item.assigneeId! }])
-    ).values()
-  ])
+  const recipientOptions = computed(() => buildTodoViewerOptions(contactsStore.friendList, todoState.items))
+  const contactCount = computed(() => recipientOptions.value.filter((option) => option.kind === 'contact').length)
+  const selectedRecipients = computed(() =>
+    recipientOptions.value.filter((option) => viewers.value.includes(option.value))
+  )
+  const selectedRecipientLabel = computed(() =>
+    selectedRecipients.value.length === 1
+      ? selectedRecipients.value[0].name
+      : `已选 ${selectedRecipients.value.length} 位接收人`
+  )
+  function setViewers(values: string[] | null) {
+    viewers.value = normalizeTodoViewers(values || [], viewers.value)
+    reset()
+  }
+  watch(recipientOptions, (next, previous) => {
+    const retained = viewers.value.flatMap((value) => {
+      if (next.some((option) => option.value === value)) return [value]
+      const former = previous?.find((option) => option.value === value)
+      const replacement = next.find((option) => former?.assigneeIds.some((id) => option.assigneeIds.includes(id)))
+      return replacement ? [replacement.value] : []
+    })
+    if (retained.join('\n') !== viewers.value.join('\n')) setViewers(retained)
+  })
+  function assigneeKindLabel(id?: string) {
+    if (!id || id === 'self') return ''
+    return recipientOptions.value.some((option) => option.kind === 'contact' && option.assigneeIds.includes(id))
+      ? ' · 联系人'
+      : ' · 本机记录'
+  }
+  function filterRecipient(query: string, option: SelectOption) {
+    return matchesTodoViewer(query, { searchText: String(option.searchText || '') })
+  }
   const scopedItems = computed(() =>
-    todoState.items.filter((item) => viewer.value === 'all' || (item.assigneeId || 'self') === viewer.value)
+    todoState.items.filter((item) => todoMatchesViewers(item, selectedRecipients.value))
   )
   const filters = [
     { value: 'pending', label: '未完成' },
@@ -417,25 +527,33 @@
     }
   }
   function reset() {
-    title.value = ''
-    date.value = ''
+    editorOpen.value = false
     editing.value = ''
   }
-  function save() {
-    attempt(() => {
-      const draft = { title: title.value, dueAt: date.value ? new Date(date.value).toISOString() : undefined }
-      if (editing.value) updateTodo(editing.value, { ...draft, remindedAt: undefined })
-      else addTodo(draft)
-      reset()
-    })
+  function openCreate() {
+    editing.value = ''
+    editorOpen.value = true
+  }
+  function onTodoSaved() {
+    if (!editing.value) {
+      section.value = 'todos'
+      view.value = 'received'
+      viewers.value = ['self']
+      filter.value = 'pending'
+    }
+    reset()
   }
   function edit(item: LocalTodo) {
-    title.value = item.title
     editing.value = item.id
-    if (item.dueAt) {
-      const value = new Date(item.dueAt)
-      date.value = new Date(value.getTime() - value.getTimezoneOffset() * 60000).toISOString().slice(0, 16)
-    } else date.value = ''
+    editorOpen.value = true
+  }
+  async function downloadAttachment(file: TodoAttachment) {
+    try {
+      await downloadTodoAttachment(file)
+      error.value = ''
+    } catch (cause) {
+      error.value = cause instanceof Error ? cause.message : '附件下载失败。'
+    }
   }
   function toggle(item: LocalTodo) {
     attempt(() =>
@@ -443,7 +561,9 @@
     )
   }
   function snooze(item: LocalTodo) {
-    attempt(() => updateTodo(item.id, { dueAt: new Date(Date.now() + 600000).toISOString(), remindedAt: undefined }))
+    attempt(() =>
+      updateTodo(item.id, { reminderAt: new Date(Date.now() + 900000).toISOString(), remindedAt: undefined })
+    )
   }
   function monthDayLabel(value: string) {
     return new Date(value).toLocaleDateString('zh-CN', { month: 'long', day: 'numeric' })
@@ -470,7 +590,7 @@
       section.value = 'todos'
       view.value = 'received'
       filter.value = 'all'
-      viewer.value = 'self'
+      viewers.value = ['self']
     }
   }
   async function enableNotifications() {
@@ -551,8 +671,105 @@
     margin-bottom: 16px;
   }
   .viewer-label {
-    max-width: 260px;
-    margin-bottom: 10px;
+    color-scheme: light;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .viewer-label small {
+    color: #64758b;
+    line-height: 1.6;
+  }
+  .todo-workspace {
+    margin-bottom: 20px;
+    padding: 20px;
+    border: 1px solid #dce6f2;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 3px 14px rgba(38, 85, 145, 0.04);
+  }
+  .todo-list-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .todo-list-toolbar .view-switch {
+    margin-bottom: 0;
+  }
+  .todo-editor-dialog {
+    width: min(760px, calc(100vw - 40px));
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: 24px;
+    border: 1px solid #dce6f2;
+    border-radius: 14px;
+    background: #fff;
+    color: #24354b;
+    color-scheme: light;
+  }
+  .viewer-heading,
+  .editor-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .viewer-heading label,
+  .editor-heading h2 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .viewer-heading label span {
+    margin-left: 8px;
+    font-weight: 400;
+  }
+  .viewer-heading label span,
+  .editor-heading span,
+  .reminder-help {
+    color: #64758b;
+    font-size: 12px;
+  }
+  .viewer-heading .header-actions {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .viewer-heading button {
+    padding: 5px 9px;
+    font-size: 12px;
+  }
+  .editor-heading {
+    border-bottom: 1px solid #e8eef6;
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+  }
+  .editor-heading p {
+    margin: 6px 0 0;
+    color: #64758b;
+    font-size: 12px;
+  }
+  .todo-editor-dialog :deep(.todo-editor) {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+  }
+  .reminder-help {
+    margin-top: 16px;
+    line-height: 1.7;
+  }
+  .reminder-help summary {
+    cursor: pointer;
+    width: fit-content;
+  }
+  .reminder-help p {
+    margin: 6px 0 0;
   }
   .todo-form {
     display: flex;
@@ -613,6 +830,16 @@
     display: flex;
     flex-direction: column;
     gap: 5px;
+    overflow-wrap: anywhere;
+  }
+  .todo-attachments {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .todo-attachments button {
+    max-width: 100%;
+    text-align: left;
     overflow-wrap: anywhere;
   }
   .done strong {

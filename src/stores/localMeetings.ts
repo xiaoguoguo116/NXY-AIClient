@@ -1,6 +1,7 @@
 import { reactive } from 'vue'
 import {
   MEETINGS_KEY,
+  assertMeetingCanChange,
   loadMeetings,
   meetingIsDue,
   validMeetingDraft,
@@ -61,6 +62,8 @@ export function addMeeting(draft: MeetingDraft, sourceId?: string, sourceName?: 
 }
 
 export function respondToMeeting(meetingId: string, participantId: string, response: MeetingResponse) {
+  initMeetings()
+  assertMeetingCanChange(meetingState.items.find((meeting) => meeting.id === meetingId))
   commit(
     meetingState.items.map((meeting) =>
       meeting.id !== meetingId
@@ -76,6 +79,8 @@ export function respondToMeeting(meetingId: string, participantId: string, respo
 }
 
 export function cancelMeeting(meetingId: string) {
+  initMeetings()
+  assertMeetingCanChange(meetingState.items.find((meeting) => meeting.id === meetingId))
   commit(
     meetingState.items.map((meeting) =>
       meeting.id === meetingId ? { ...meeting, cancelledAt: new Date().toISOString() } : meeting

@@ -2,6 +2,8 @@ import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import {
   loadMeetings,
+  meetingCanChange,
+  assertMeetingCanChange,
   meetingIsDue,
   meetingResponseCounts,
   responseLabel,
@@ -9,6 +11,18 @@ import {
   MEETINGS_KEY,
   type LocalMeeting
 } from '../src/services/localMeetings.ts'
+
+test('meeting changes lock exactly at start time, including cancelled and invalid records', () => {
+  const meeting = { startAt: '2026-10-19T10:00:00+08:00' }
+  const start = Date.parse(meeting.startAt)
+  assert.equal(meetingCanChange(meeting, start - 1), true)
+  assert.equal(meetingCanChange(meeting, start), false)
+  assert.equal(meetingCanChange(meeting, start + 1), false)
+  assert.throws(() => assertMeetingCanChange(meeting, start), /不能再修改/)
+  assert.throws(() => assertMeetingCanChange({ ...meeting, cancelledAt: 'cancelled' }, start - 1), /已取消/)
+  assert.throws(() => assertMeetingCanChange(undefined, start), /不存在/)
+  assert.equal(meetingCanChange({ startAt: 'invalid' }, start), false)
+})
 
 const participants = [
   { id: 'self', name: '我', kind: 'self' as const },

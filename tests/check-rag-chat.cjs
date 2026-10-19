@@ -13,7 +13,7 @@ const assert = require('node:assert/strict');
   try {
     await page.route('**/@vite/client', route => route.fulfill({ contentType: 'text/javascript', body: 'export function createHotContext(){return {data:{},on(){},accept(){},prune(){},dispose(){},invalidate(){}}};export function injectQuery(url){return url};export function updateStyle(id,css){let el=document.getElementById(id);if(!el){el=document.createElement("style");el.id=id;document.head.append(el)}el.textContent=css};export function removeStyle(id){document.getElementById(id)?.remove()}' }));
     await page.route('**/src/utils/desktop/notification.ts', route => route.fulfill({ contentType: 'text/javascript', body: 'export async function showNotification(){return true}' }));
-    await page.route('**/__rag-test.html', route => route.fulfill({ contentType: 'text/html', body: '<html><body style="margin:0"><div id="app" style="height:100vh"></div><script type="module">import {createApp} from "/node_modules/.vite/deps/vue.js";import Chat from "/src/components/Chat/LocalChat.vue";createApp(Chat).mount("#app")</script></body></html>' }));
+    await page.route('**/__rag-test.html', route => route.fulfill({ contentType: 'text/html', body: '<html><body style="margin:0"><div id="app" style="height:100vh"></div><script type="module" src="/tests/rag-preview.ts"></script></body></html>' }));
     await page.route('**/@tauri-apps_plugin-http.js*', route => route.fulfill({ contentType: 'text/javascript', body: 'export const fetch = globalThis.fetch.bind(globalThis)' }));
     await page.route('http://127.0.0.1:8090/**', async route => {
       const req = route.request(), path = new URL(req.url()).pathname;
@@ -26,6 +26,7 @@ const assert = require('node:assert/strict');
       assert.equal(path, '/ragflow-api/chat/completions');
       const question = body.messages[0].content;
       const data = { final: true, answer: `制度回答：${question}`, reference: { chunks: [{ docnm_kwd: '员工请假管理制度', content: '第三条：提前提交申请。' }] }, clarification: { cache_id: 'cache', mode: 'knowledge', options: question === '请假要求' ? [{ id: 'annual', question: '年假申请' }] : [] } };
+      if (question === '模糊问题') data.clarification = { needs_input: true, options: [] };
       return route.fulfill({ headers: { ...headers, 'Content-Type': 'text/event-stream' }, body: `data: ${JSON.stringify({ code: 0, data })}\n\n` });
     });
     await page.addInitScript(() => {
@@ -50,17 +51,28 @@ const assert = require('node:assert/strict');
     assert.equal(completion.length, 2);
     assert.equal(completion[0].body.session_id, completion[1].body.session_id);
     assert.deepEqual(completion[1].body.clarification_selection, { cache_id: 'cache', option_id: 'annual' });
+    await input.fill('@rag助手 模糊问题');
+    await page.getByRole('button',{name:'发送',exact:true}).click();
+    await page.locator('.bubble').filter({hasText:'制度回答：模糊问题'}).waitFor();
+    await page.reload();
+    const clarification = page.locator('.rag-clarification').last();
+    await clarification.getByLabel('补充 RAG 问题').fill('具体申请流程');
+    await clarification.getByRole('button',{name:'继续提问',exact:true}).click();
+    await page.locator('.bubble').filter({hasText:'制度回答：具体申请流程'}).waitFor();
+    const clarifiedCalls = calls.filter(c=>c.path.endsWith('/completions'));
+    assert.equal(clarifiedCalls[2].body.session_id,clarifiedCalls[3].body.session_id);
+    assert.equal(clarifiedCalls[3].body.clarification_selection,undefined);
     await page.getByRole('button', { name: /制度讨论群/ }).click();
     await input.fill('@AI RAG助手 报销要求');
     await page.getByRole('button', { name: '发送', exact: true }).click();
     await page.locator('.bubble').filter({ hasText: '制度回答：报销要求' }).waitFor();
-    assert.equal(sessionCount, 2, 'a different conversation creates an isolated RAG session');
+    assert.equal(sessionCount, 3, 'a different conversation creates an isolated RAG session');
     await page.reload();
     await page.locator('.bubble').filter({ hasText: '制度回答：报销要求' }).waitFor();
     await page.getByRole('button', { name: /同事单聊/ }).click();
     await page.locator('.bubble').filter({ hasText: '制度回答：年假申请' }).waitFor();
     const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('em.local-chat.v1')));
-    assert.equal(saved.conversations[0].messages.filter(m => m.assistant === 'ragflow').length, 2);
+    assert.equal(saved.conversations[0].messages.filter(m => m.assistant === 'ragflow').length, 4);
     console.log('PASS: direct and group RAG mentions, no model setup, evidence, clarification session, isolation and reload');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });
