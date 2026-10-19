@@ -1,0 +1,52 @@
+{
+  "kind": "mock-interface-ui-test",
+  "realBackend": false,
+  "results": [
+    {
+      "case": "无合格选项",
+      "buttons": 0,
+      "manualFollowup": true,
+      "sameSession": true
+    },
+    {
+      "case": "加值班制度",
+      "buttons": 3,
+      "options": [
+        "值班管理制度适用于哪些人员？",
+        "加班与调休制度适用于哪些人员？",
+        "加班费计算基数如何确定？"
+      ],
+      "click": true,
+      "sameSession": true,
+      "selectionPassed": true
+    },
+    {
+      "case": "报销标准",
+      "buttons": 2,
+      "options": [
+        "差旅住宿报销标准是多少？",
+        "业务招待费报销标准是多少？"
+      ],
+      "click": true,
+      "sameSession": true,
+      "selectionPassed": true
+    },
+    {
+      "case": "请假制度",
+      "buttons": 3,
+      "options": [
+        "年假申请需要哪些材料？",
+        "病假常规审批额度是多少？",
+        "事假应如何办理？"
+      ],
+      "click": true,
+      "sameSession": true,
+      "selectionPassed": true
+    },
+    {
+      "case": "群聊及刷新",
+      "groupIsolated": true,
+      "persisted": true
+    }
+  ]
+}
