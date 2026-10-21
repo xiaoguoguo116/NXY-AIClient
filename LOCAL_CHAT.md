@@ -53,6 +53,24 @@ Enter 发送，Ctrl/Shift + Enter 换行；中文输入法选词不触发发送�
 
 接收人支持多选，列表按已选人员汇总且不重复显示待办；选中“所有接收人”会替换个别选择，从“所有接收人”再选某个人则切换到个别选择。可逐个取消，也可用“只看我”“查看所有”“清空选择”快捷切换。清空后提示选择接收人，不隐式显示全部。
 
+## 用户客户端统一入口
+
+用户只使用正式版：桌面 `EM.lnk` 指向 `src-tauri/target/release/em.exe`。不要再以 `tauri dev` 窗口交付功能或替代用户正在使用的客户端。开发服务器仅可用于隔离测试；正式验收必须用正式版、用户原有全局设置和原生 HTTP 通道，并说明是否实际验证。
+
+正式版的 WebView 来源为 `http://tauri.localhost`，开发来源 `http://localhost:1420` 的 localStorage/IndexedDB 与其隔离。不要因开发窗口显示空配置就覆盖正式版配置或要求重新输入密钥。2026-10-20 已备份并将开发期间新增聊天合并到正式版，保留正式版模型、密钥、待办和会议；备份保存在用户本机应用目录 `chat.linyu/backups/formal-consolidation-20261020-162239`，不得提交仓库或打印其中凭证。
+
+## 本地示例群聊
+
+进入本地会话时，一次性追加项目协作、研发讨论、值班协调、日常交流 4 个“本地示例”群，每群 8 条记录。成员采用本地模拟联系人，消息时间按首次添加时刻向前生成；不发送消息、不调用模型，也不自动生成会议、待办或提醒。
+
+第 2 批补充客户工单平台一期、企业知识库检索优化、移动审批改版 3 个“模拟项目”群，每群 18 条项目讨论，包括范围取舍、需求变化、缺陷编号、负责人和截止时间、外部依赖以及未定事项。新安装共 7 群、86 条记录；已有第 1 批数据时仅追加 3 群、54 条，不恢复已删除的旧示例。
+
+示例与 `exampleGroupsVersion` 标记一并保存到原聊天快照中，保留已有会话、消息及当前选择。刷新不会重复添加，也不会恢复已删除的示例群或覆盖用户编辑。读取失败不追加，写入失败保留原始快照。
+
+验证：`node --test tests/localChat.test.ts tests/localChatExamples.test.ts`；Vite 在 1420 端口运行时，`node tests/check-local-examples.cjs` 使用隔离浏览器检查群聊显示、刷新持久化及损坏数据保护。
+
+真实模型验证（本机已有 RAG 服务时）：先运行 `docker cp tests/fixtures/live-summary-model.py ragflow-ragflow-cpu-1:/tmp/em-live-summary-model.py`，再运行 `node tests/check-project-ai-live.cjs`。使用隔离浏览器，三组项目各选 18 条记录调用服务已配置的真实聊天模型，不走检索；制度问答直接连接 8090 端口知识库。凭证留在服务内部，不修改用户全局 AI 配置，未选中记录不得进入请求。此测试验证界面到模型的内容流程，使用浏览器 HTTP 适配器，不代表已验证当前桌面用户配置和原生 HTTP 通道。截图保存在 `.preview/project-summary-*.png` 和 `.preview/project-rag-policy.png`。
+
 ## 验证
 
 `pnpm type-check`

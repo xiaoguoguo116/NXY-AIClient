@@ -11,6 +11,7 @@ import {
   MEETINGS_KEY,
   type LocalMeeting
 } from '../src/services/localMeetings.ts'
+import { buildMeetingCalendarEvent } from '../src/services/meetingCalendar.ts'
 
 test('meeting changes lock exactly at start time, including cancelled and invalid records', () => {
   const meeting = { startAt: '2026-10-19T10:00:00+08:00' }
@@ -125,4 +126,26 @@ test('feedback summaries and storage validation preserve participant responses',
         })
     })
   )
+})
+
+test('calendar event preserves meeting times and a ten-minute alarm in valid folded ICS', () => {
+  const meeting: LocalMeeting = {
+    id: 'meeting-1',
+    title: '方案评审,确认;材料',
+    startAt: '2026-10-21T10:00:00+08:00',
+    location: 'A301,三楼',
+    description: '第一项;方案\n第二项：'.repeat(12),
+    createdAt: '2026-10-20T01:00:00Z',
+    creatorId: 'self',
+    participants: [{ id: 'self', name: '我', kind: 'self', response: 'accepted' }]
+  }
+  const ics = buildMeetingCalendarEvent(meeting, new Date('2026-10-20T02:00:00Z'))
+  assert.match(ics, /^BEGIN:VCALENDAR\r\nVERSION:2\.0\r\n/)
+  assert.match(ics, /UID:em-meeting-1@local\r\n/)
+  assert.match(ics, /DTSTART:20261021T020000Z\r\nDTEND:20261021T030000Z\r\n/)
+  assert.match(ics, /SUMMARY:方案评审\\,确认\\;材料/)
+  assert.match(ics, /TRIGGER:-PT10M\r\n/)
+  assert(ics.split('\r\n').every((line) => Buffer.byteLength(line, 'utf8') <= 75))
+  assert(ics.endsWith('END:VCALENDAR\r\n'))
+  assert.throws(() => buildMeetingCalendarEvent({ ...meeting, cancelledAt: '2026-10-20T03:00:00Z' }), /已取消/)
 })

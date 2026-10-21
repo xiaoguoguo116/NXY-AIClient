@@ -15,7 +15,7 @@ export interface LocalMessage {
   quoteId?: string
   senderId?: string
   todoRecipients?: { id: string; name: string; kind: 'self' | 'simulated' | 'ai' }[]
-  todoSuggestions?: { title: string; dueAt?: string; dismissed?: boolean }[]
+  todoSuggestions?: import('./localTodos').TodoSuggestion[]
 }
 export interface LocalMember {
   id: string
@@ -68,6 +68,7 @@ export interface LocalChatData {
   version: 1
   selectedId: string
   conversations: LocalConversation[]
+  exampleGroupsVersion?: number
 }
 export interface AiConfig {
   baseUrl: string

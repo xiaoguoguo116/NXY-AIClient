@@ -100,7 +100,15 @@ impl WorkManager {
     }
 
     pub async fn runtimes(&self) -> Vec<RuntimeManifest> {
-        vec![self.detect_reasonix()]
+        vec![super::office::manifest(&self.root), self.detect_reasonix()]
+    }
+
+    pub async fn active_runtime(&self) -> RuntimeManifest {
+        if self.settings.lock().await.active_runtime_id == super::office::ID {
+            super::office::manifest(&self.root)
+        } else {
+            self.detect_reasonix()
+        }
     }
 
     pub fn detect_reasonix(&self) -> RuntimeManifest {
@@ -177,7 +185,7 @@ impl WorkManager {
         &self,
         input: PreferencesInput,
     ) -> Result<WorkSettings, String> {
-        if input.active_runtime_id != "reasonix"
+        if !["reasonix", super::office::ID].contains(&input.active_runtime_id.as_str())
             || !["ask", "auto", "yolo"].contains(&input.approval_mode.as_str())
             || !["economy", "balanced", "delivery"].contains(&input.work_mode.as_str())
         {
@@ -459,7 +467,43 @@ impl WorkManager {
         app: AppHandle,
         runtime_id: &str,
     ) -> Result<Arc<AcpConnection>, String> {
-        if let Some(connection) = self.connections.lock().await.get(runtime_id).cloned() {
+        let existing = self.connections.lock().await.get(runtime_id).cloned();
+        if let Some(connection) = existing {
+            if connection.is_running().await {
+                return Ok(connection);
+            }
+            self.connections.lock().await.remove(runtime_id);
+        }
+        if runtime_id == super::office::ID {
+            if !super::office::manifest(&self.root).installed {
+                return Err("WORK_RUNTIME_NOT_INSTALLED".into());
+            }
+            let settings = self.settings().await;
+            let provider = settings
+                .providers
+                .iter()
+                .find(|p| p.enabled && Some(&p.id) == settings.active_provider_id.as_ref())
+                .ok_or("WORK_PROVIDER_NOT_CONFIGURED")?;
+            let key = read_provider_key(&provider.id).ok_or("WORK_PROVIDER_KEY_REQUIRED")?;
+            let model = settings.active_model.as_ref().unwrap_or(&provider.default_model);
+            let script = super::office::materialize(&self.root)?;
+            let config = serde_json::json!({
+                "baseUrl": provider.base_url, "kind": provider.kind,
+                "model": model, "apiKeyEnv": "EM_OFFICE_API_KEY"
+            });
+            let connection = AcpConnection::spawn(
+                app,
+                runtime_id.into(),
+                &super::office::python_path(&self.root).to_string_lossy(),
+                &["-I".into(), "-u".into(), script.to_string_lossy().into_owned()],
+                &[
+                    ("EM_OFFICE_CONFIG".into(), config.to_string()),
+                    ("EM_OFFICE_API_KEY".into(), key),
+                ],
+                script.parent().ok_or("WORK_RUNTIME_START_FAILED")?,
+            )
+            .await?;
+            self.connections.lock().await.insert(runtime_id.into(), connection.clone());
             return Ok(connection);
         }
         if runtime_id != "reasonix" {

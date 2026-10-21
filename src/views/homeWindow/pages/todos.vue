@@ -31,9 +31,21 @@
           <button :class="{ selected: view === 'received' }" @click="setView('received')">接收的待办</button>
           <button :class="{ selected: view === 'published' }" @click="setView('published')">我发布的</button>
         </nav>
-        <button class="primary" aria-label="新建待办" @click="openCreate">＋ 添加待办</button>
+        <div class="header-actions">
+          <button
+            v-if="view === 'received'"
+            :aria-expanded="recipientFilterOpen"
+            aria-controls="todo-recipient-filter"
+            @click="recipientFilterOpen = !recipientFilterOpen">
+            {{ recipientFilterOpen ? '收起接收人筛选' : '筛选接收联系人' }}
+          </button>
+          <button class="primary" aria-label="新建待办" @click="openCreate">＋ 添加待办</button>
+        </div>
       </div>
-      <div v-if="view === 'received'" class="todo-workspace">
+      <p v-if="view === 'received'" class="recipient-scope">
+        当前查看：{{ viewers.length === 1 && viewers[0] === 'self' ? '我的待办' : selectedRecipientLabel }}
+      </p>
+      <div v-if="view === 'received' && recipientFilterOpen" id="todo-recipient-filter" class="todo-workspace">
         <div class="viewer-label">
           <div class="viewer-heading">
             <label id="todo-viewer-label">
@@ -178,6 +190,7 @@
         </div>
         <button class="primary" @click="assistantOpen = true">＋ 发布会议</button>
       </div>
+      <p v-if="calendarNotice" class="calendar-notice" role="status">{{ calendarNotice }}</p>
       <div class="meeting-filters">
         <button
           v-for="item in meetingFilters"
@@ -243,14 +256,24 @@
             </div>
           </div>
         </div>
-        <button
-          v-if="!meeting.cancelledAt && meeting.creatorId === 'self'"
-          class="cancel-button"
-          :disabled="!meetingCanChange(meeting, now)"
-          :title="meetingCanChange(meeting, now) ? '取消会议' : '时间已到，只能查看历史记录'"
-          @click="attempt(() => cancelMeeting(meeting.id))">
-          {{ meetingCanChange(meeting, now) ? '取消会议' : '已开始或已结束 · 不可修改' }}
-        </button>
+        <div class="meeting-actions">
+          <button
+            v-if="meetingCanChange(meeting, now)"
+            class="calendar-button"
+            :disabled="calendarOpeningId === meeting.id"
+            title="在日历中确认导入；若取消会议，请在日历中手动删除"
+            @click="addMeetingToCalendar(meeting)">
+            {{ calendarOpeningId === meeting.id ? '正在打开…' : '添加到本地日历' }}
+          </button>
+          <button
+            v-if="!meeting.cancelledAt && meeting.creatorId === 'self'"
+            class="cancel-button"
+            :disabled="!meetingCanChange(meeting, now)"
+            :title="meetingCanChange(meeting, now) ? '取消会议' : '时间已到，只能查看历史记录'"
+            @click="attempt(() => cancelMeeting(meeting.id))">
+            {{ meetingCanChange(meeting, now) ? '取消会议' : '已开始或已结束 · 不可修改' }}
+          </button>
+        </div>
       </article>
     </template>
 
@@ -287,7 +310,8 @@
       </section>
     </template>
     <NModal v-if="editorOpen" :show="true" :mask-closable="false" @update:show="reset">
-      <section class="todo-editor-dialog" role="dialog" aria-modal="true" aria-labelledby="todo-editor-title">
+      <!-- vueuc's focus trap locates a DIV root; a SECTION redirects input focus to its hidden sentinel. -->
+      <div class="todo-editor-dialog" role="dialog" aria-modal="true" aria-labelledby="todo-editor-title">
         <header class="editor-heading">
           <div>
             <h2 id="todo-editor-title">{{ editingTodo ? '编辑待办' : '添加待办' }}</h2>
@@ -301,7 +325,7 @@
           :disabled="!!todoState.error"
           @saved="onTodoSaved"
           @cancel="reset" />
-      </section>
+      </div>
     </NModal>
     <WorkAssistantDialog
       v-if="assistantOpen"
@@ -335,6 +359,7 @@
   import { useContactsStore } from '@/stores/user/contacts'
   import { useUserStore } from '@/stores/user/user'
   import { cancelMeeting, initMeetings, meetingState, respondToMeeting } from '@/stores/localMeetings'
+  import { openMeetingInCalendar } from '@/services/meetingCalendar'
   import { meetingCanChange, meetingResponseCounts, responseLabel, type LocalMeeting } from '@/services/localMeetings'
   import { ensureNotificationPermission } from '@/utils/desktop/notification'
   defineOptions({ name: 'todos' })
@@ -364,10 +389,13 @@
     }
   )
   const editorOpen = ref(false)
+  const recipientFilterOpen = ref(false)
   const editing = ref(''),
     error = ref(''),
     filter = ref('pending'),
     now = ref(Date.now())
+  const calendarOpeningId = ref(''),
+    calendarNotice = ref('')
   const viewers = ref<string[]>(['self']),
     view = ref<'received' | 'published'>('received'),
     assistantOpen = ref(false),
@@ -582,6 +610,22 @@
     section.value = 'meetings'
     meetingFilter.value = 'upcoming'
   }
+  async function addMeetingToCalendar(meeting: LocalMeeting) {
+    if (calendarOpeningId.value) return
+    calendarOpeningId.value = meeting.id
+    calendarNotice.value = ''
+    try {
+      const outcome = await openMeetingInCalendar(meeting)
+      calendarNotice.value =
+        outcome.status === 'opened'
+          ? `已打开“${meeting.title}”的本地日历导入界面。请确认导入，日历会在会前10分钟提醒。`
+          : `日历文件已保存到 ${outcome.path}，请在日历应用中导入后启用提醒。`
+    } catch (cause) {
+      calendarNotice.value = cause instanceof Error ? cause.message : '无法打开本地日历。'
+    } finally {
+      calendarOpeningId.value = ''
+    }
+  }
   function openScheduleItem(item: ScheduleItem) {
     if (item.kind === 'meeting') {
       section.value = 'meetings'
@@ -699,6 +743,14 @@
   }
   .todo-list-toolbar .view-switch {
     margin-bottom: 0;
+  }
+  .todo-list-toolbar .header-actions {
+    flex-wrap: wrap;
+  }
+  .recipient-scope {
+    margin: 0 0 14px;
+    color: #64758b;
+    font-size: 13px;
   }
   .todo-editor-dialog {
     width: min(760px, calc(100vw - 40px));
@@ -899,6 +951,23 @@
   .meeting-card {
     align-items: flex-start !important;
     position: relative;
+  }
+  .meeting-actions {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .calendar-button {
+    border-color: #b8d5f2;
+    color: #1769c6;
+  }
+  .calendar-notice {
+    padding: 10px 12px;
+    border: 1px solid #d4e5f7;
+    border-radius: 8px;
+    background: #edf6ff;
+    color: #275982;
   }
   .meeting-time {
     box-sizing: border-box;

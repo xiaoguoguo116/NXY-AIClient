@@ -152,27 +152,15 @@
                   </div>
                   <h1>{{ t('ai.work.welcome.title') }}</h1>
                   <p>{{ t('ai.work.welcome.subtitle') }}</p>
-
-                  <div v-if="store.initialized && !isReady" class="workbench__setup-card">
-                    <div>
-                      <strong>{{ setupTitle }}</strong>
-                      <span>{{ setupDescription }}</span>
-                    </div>
-                    <n-button
-                      v-if="!runtime?.installed"
-                      size="small"
-                      type="primary"
-                      :loading="installing"
-                      @click="installRuntime">
-                      {{ t('ai.work.setup.install') }}
-                    </n-button>
-                    <n-button v-else-if="needsProviderSetup" size="small" type="primary" @click="openSettings">
-                      {{ t('ai.work.setup.configure') }}
-                    </n-button>
-                    <n-button v-else size="small" type="primary" @click="chooseWorkspace">
-                      {{ t('ai.work.workspace.choose') }}
-                    </n-button>
-                  </div>
+                  <n-select
+                    v-if="!conversationId"
+                    style="width: 260px; margin-bottom: 16px"
+                    :value="store.activeRuntimeId"
+                    :options="store.runtimes.map((item) => ({ label: item.name, value: item.id }))"
+                    :disabled="busy || installing"
+                    :aria-label="t('settings.work.runtime.select')"
+                    @update:value="selectRuntime" />
+                  <p v-if="store.activeRuntimeId === 'office'">{{ t('settings.work.runtime.officeDesc') }}</p>
 
                   <div class="workbench__quick-grid">
                     <button
@@ -436,14 +424,6 @@
   const displayPlanEntries = computed(() => (isViewingLive.value ? sessionStore.livePlanEntries : []))
 
   const runtime = computed(() => store.runtimes.find((item) => item.id === store.activeRuntimeId))
-  const isReady = computed(() =>
-    Boolean(
-      runtime.value?.installed &&
-      activeProvider.value?.hasApiKey &&
-      modelLabel.value &&
-      (store.scopeMode === 'chat' || store.workspacePath)
-    )
-  )
   const canSend = computed(() => Boolean((inputText.value.trim() || attachments.value.length) && !busy.value))
   const stepsByRun = computed(() =>
     displaySteps.value.reduce<Record<string, WorkStepRecord[]>>((result, step) => {
@@ -455,12 +435,6 @@
   const currentConversation = computed(() => conversations.value.find((item) => item.id === conversationId.value))
   const currentTitle = computed(() => currentConversation.value?.title || t('ai.work.welcome.newTask'))
   const activeProvider = computed(() => store.providers.find((item) => item.id === store.activeProviderId))
-  const needsProviderSetup = computed(() =>
-    Boolean(!activeProvider.value?.hasApiKey || !(store.activeModel || activeProvider.value?.defaultModel))
-  )
-  const modelLabel = computed(
-    () => store.activeModel || activeProvider.value?.defaultModel || t('ai.work.status.noModel')
-  )
   const workspaceName = computed(() =>
     store.scopeMode === 'chat'
       ? t('ai.work.scope.chatDescription')
@@ -474,20 +448,6 @@
     store.scopeMode === 'chat' ? t('ai.work.scope.chat') : t('ai.work.scope.workspace')
   )
   const sessionScopeIcon = computed(() => (store.scopeMode === 'chat' ? '#message' : '#folder'))
-  const setupTitle = computed(() =>
-    !runtime.value?.installed
-      ? t('ai.work.setup.runtimeTitle')
-      : needsProviderSetup.value
-        ? t('ai.work.setup.providerTitle')
-        : t('ai.work.setup.workspaceTitle')
-  )
-  const setupDescription = computed(() =>
-    !runtime.value?.installed
-      ? t('ai.work.setup.runtimeDesc')
-      : needsProviderSetup.value
-        ? t('ai.work.setup.providerDesc')
-        : t('ai.work.setup.workspaceDesc')
-  )
   const workErrorMessage = computed(() => (workError.value ? t(workError.value.key) : ''))
   const workErrorActionLabel = computed(() => t(`ai.work.errors.actions.${workError.value?.action || 'retry'}`))
   const quickActions = computed(() =>
@@ -743,15 +703,42 @@
     }
   }
 
-  const ensureSession = async () => {
+  const selectRuntime = async (activeRuntimeId: string) => {
+    try {
+      await sessionStore.closeBoundSession(store.activeRuntimeId)
+      await store.savePreferences({ activeRuntimeId })
+      await store.refreshStatus()
+    } catch (error) {
+      showFriendlyError(error)
+    }
+  }
+  const ensureSession = async (
+    runtimeId: string,
+    scopeMode: WorkScopeMode,
+    targetConversationId: string,
+    cwd: string,
+    runId: string
+  ) => {
+    if (sessionStore.currentRunId !== runId) throw new Error('WORK_CANCELLED')
+    if (
+      sessionStore.sessionId &&
+      (sessionStore.boundConversationId !== targetConversationId || sessionStore.sessionRuntimeId !== runtimeId)
+    ) {
+      await sessionStore.closeBoundSession(runtimeId)
+    }
+    if (sessionStore.currentRunId !== runId) throw new Error('WORK_CANCELLED')
     if (!sessionStore.sessionId) {
       const session = await workService.createSession(
-        store.activeRuntimeId,
-        store.scopeMode,
-        conversationId.value,
-        store.scopeMode === 'workspace' ? store.workspacePath : undefined
+        runtimeId,
+        scopeMode,
+        targetConversationId,
+        scopeMode === 'workspace' ? cwd : undefined
       )
-      sessionStore.setSessionId(session.sessionId)
+      if (sessionStore.currentRunId !== runId) {
+        await workService.closeSession(runtimeId, session.sessionId).catch(() => undefined)
+        throw new Error('WORK_CANCELLED')
+      }
+      sessionStore.setSessionId(session.sessionId, runtimeId, targetConversationId)
     }
   }
   const createConversationLocally = (text: string) => {
@@ -813,6 +800,9 @@
     const conversationRecord = createConversationLocally(displayText)
     const targetConversationId = conversationId.value
     const runId = crypto.randomUUID()
+    const runtimeId = store.activeRuntimeId
+    const scopeMode = store.scopeMode
+    const workspacePath = store.workspacePath
     const now = new Date().toISOString()
     const userMessageId = crypto.randomUUID()
     const sendingAttachments = attachments.value.map((attachment) => ({
@@ -874,16 +864,21 @@
     Promise.resolve(
       conversationRecord ? upsertWorkConversation(conversationRecord) : touchConversation(targetConversationId)
     )
-      .then(() => ensureSession())
+      .then(() => ensureSession(runtimeId, scopeMode, targetConversationId, workspacePath, runId))
       .then(() => Promise.all([persistChatMessage(userMessage, targetConversationId), saveWorkStep(startingStep)]))
-      .then(() => workService.promptSession(store.activeRuntimeId, sessionStore.sessionId, text, sendingAttachments))
+      .then(() => {
+        if (sessionStore.currentRunId !== runId) throw new Error('WORK_CANCELLED')
+        return workService.promptSession(runtimeId, sessionStore.sessionId, text, sendingAttachments)
+      })
       .then(async () => {
+        if (sessionStore.currentRunId !== runId) return
         await sessionStore.completeRun({ title: runTitle(targetConversationId) })
         await touchConversation(targetConversationId)
         await store.refreshStatus().catch(() => undefined)
         await loadHistory()
       })
       .catch(async (error) => {
+        if (sessionStore.currentRunId !== runId) return
         const parsed = parseWorkError(error)
         await sessionStore.failRun({
           title: runTitle(targetConversationId),
@@ -1473,31 +1468,6 @@
       margin: 7px 0 20px;
       color: var(--text-secondary-color);
       font-size: 12px;
-    }
-    &__setup-card {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      width: 100%;
-      margin-bottom: 14px;
-      padding: 14px 16px;
-      border: 1px solid color-mix(in srgb, var(--yellow) 18%, var(--border-color));
-      border-radius: 10px;
-      background: color-mix(in srgb, var(--yellow) 9%, var(--bg-primary-color));
-      box-sizing: border-box;
-    }
-    &__setup-card > div {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-    &__setup-card strong {
-      font-size: 12px;
-    }
-    &__setup-card span {
-      color: var(--text-secondary-color);
-      font-size: 10px;
     }
     &__quick-grid {
       display: grid;

@@ -981,14 +981,14 @@
       },
       "setup": {
         "runtimeTitle": "Install an Agent runtime",
-        "runtimeDesc": "The AI assistant runs on Reasonix. Please install Reasonix before you get started",
+        "runtimeDesc": "Install the selected agent environment. The built-in office agent needs Python 3.10+; installation creates a separate office tool environment",
         "providerTitle": "No model is configured",
         "providerDesc": "Configure Base API, API Key, and models in EM without editing Reasonix files",
         "workspaceTitle": "Choose a work folder",
         "workspaceDesc": "The Agent uses this folder as the work scope for the current task",
-        "install": "Download and install Reasonix",
+        "install": "Install agent environment",
         "configure": "Configure model",
-        "installerOpened": "The installer is open. Refresh after installation finishes"
+        "installerOpened": "Installation action finished. Check the runtime status"
       },
       "quick": {
         "sheet": {
@@ -1003,12 +1003,12 @@
         },
         "image": {
           "title": "Process an image",
-          "desc": "Crop, compress, remove backgrounds, or convert",
+          "desc": "Crop, resize, compress, or convert",
           "prompt": "Help me process an image: "
         },
         "files": {
           "title": "Find and organize files",
-          "desc": "Search, classify, rename, and safely delete",
+          "desc": "Find, copy, and save files under new names",
           "prompt": "Help me find or organize files: "
         }
       },
@@ -1022,6 +1022,8 @@
         "backToBottom": "Jump to latest"
       },
       "attachments": {
+        "open": "Open file",
+        "openFailed": "Cannot open this file. Check that it exists and a compatible application is installed",
         "remove": "Remove attachment",
         "localFile": "Local file",
         "attachmentOnlyPrompt": "Please review and process the attached files.",
@@ -1147,7 +1149,11 @@
         "timeout": "The model service connection timed out",
         "modelNotConfigured": "The active model is not configured correctly",
         "modelUnavailable": "The default model is not available from this provider",
-        "runtimeMissing": "Reasonix is not installed yet",
+        "runtimeMissing": "The selected agent environment is not installed yet",
+        "officePythonRequired": "Python 3.10+ was not found. Install it, add it to PATH, restart EM, and retry",
+        "officeInstallFailed": "Office environment installation failed. Check Python, the network and PyPI access",
+        "agentStepLimit": "This run reached its step limit. Generated files remain available; continue with a smaller task",
+        "sessionBusy": "The previous request is still running. Stop it or retry later",
         "runtimeStartFailed": "The Agent could not start. Detect the runtime again in settings",
         "runtimeDisconnected": "The Agent connection was interrupted. This task has stopped; try again",
         "workspaceRequired": "Folder workspace mode requires a selected folder",
@@ -1418,6 +1424,8 @@
       "description": "Manage Agent runtimes, model providers, approval policies, and Skills",
       "tabs": { "runtime": "Agent", "providers": "Providers", "model": "Model & Permissions", "skills": "Skills" },
       "runtime": {
+        "select": "Select agent",
+        "officeDesc": "EM Office Agent: Excel/CSV cleanup, summaries, formulas and charts, Word editing, PDF text reading and image conversion. Saves new files. Requires Python 3.10+ and a model supporting tool calls. Marketplace Skills are for Reasonix.",
         "ready": "Runtime ready",
         "missing": "Installation needed",
         "missingDesc": "EM detects default system locations. You never need to enter a CLI path manually",
@@ -1425,14 +1433,15 @@
         "detect": "Detect again",
         "protocol": "Runtime protocol",
         "protocolDesc": "EM connects through a generic ACP layer so more CLIs can be added later",
-        "installerOpened": "The installer is open",
+        "installerOpened": "Installation action finished. Check the runtime status",
         "updateTitle": "Update available",
         "updateConfirm": "A newer Reasonix version is available.\nCurrent: {current}\nLatest: {latest}\nInstall the latest version?",
         "upToDate": "You already have the latest version",
         "updateCheckFailed": "Failed to check for updates",
         "stage": {
           "checking": "Checking the latest release",
-          "downloading": "Downloading and installing the CLI",
+          "downloading": "Downloading and installing agent dependencies",
+          "failed": "Installation failed",
           "waiting_user": "Waiting for installation",
           "completed": "Installation complete"
         }

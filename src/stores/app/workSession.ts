@@ -32,6 +32,8 @@ export interface WorkLivePlanEntry {
 
 type WorkSessionState = {
   sessionId: string
+  sessionRuntimeId: string
+  boundConversationId: string
   conversationId: string
   conversationTitle: string
   busy: boolean
@@ -80,6 +82,8 @@ export const useWorkSessionStore = defineStore('workSession', {
   },
   state: (): WorkSessionState => ({
     sessionId: '',
+    sessionRuntimeId: '',
+    boundConversationId: '',
     conversationId: '',
     conversationTitle: '',
     busy: false,
@@ -101,8 +105,8 @@ export const useWorkSessionStore = defineStore('workSession', {
         this.handleEvent(event)
       })
     },
-    setSessionId(sessionId: string) {
-      this.$patch({ sessionId })
+    setSessionId(sessionId: string, runtimeId = '', conversationId = '') {
+      this.$patch({ sessionId, sessionRuntimeId: runtimeId, boundConversationId: conversationId })
     },
     isViewingLive(conversationId: string) {
       return Boolean(conversationId && conversationId === this.conversationId && this.liveMessages.length)
@@ -146,19 +150,40 @@ export const useWorkSessionStore = defineStore('workSession', {
       this.$patch({ stalled })
     },
     handleEvent(event: WorkEvent) {
-      if (event.sessionId && this.sessionId && event.sessionId !== this.sessionId) return
+      if (this.sessionRuntimeId && event.runtimeId !== this.sessionRuntimeId) return
+      if (event.sessionId && event.sessionId !== this.sessionId) return
       if (['prompt_started', 'prompt_completed', 'prompt_failed', 'session_update'].includes(event.kind)) {
         this.touchActivity()
       }
       if (event.kind === 'session_update') this.handleSessionUpdate(event.payload)
       if (event.kind === 'permission_request' && event.requestId) this.handlePermissionRequest(event)
       if (event.kind === 'runtime_stopped') {
-        this.failRunLocal(i18n.global.t('ai.work.errors.runtimeDisconnected')).catch(() => undefined)
+        this.$patch({ sessionId: '', boundConversationId: '', sessionRuntimeId: '' })
+        if (this.busy) this.failRunLocal(i18n.global.t('ai.work.errors.runtimeDisconnected')).catch(() => undefined)
       }
     },
     handleSessionUpdate(payload: Record<string, unknown>) {
       if (!this.busy || !this.conversationId || !this.currentRunId) return
       const updateType = String(payload.sessionUpdate || '')
+      if (updateType === 'artifact') {
+        const assistant = [...this.liveMessages].reverse().find((item) => item.role === 'assistant' && item.streaming)
+        if (!assistant || typeof payload.path !== 'string' || typeof payload.name !== 'string') return
+        if (assistant.attachments.some((item) => item.path === payload.path)) return
+        assistant.attachments.push({
+          id: crypto.randomUUID(),
+          userId: resolveUserId(),
+          messageId: assistant.id,
+          conversationId: this.conversationId,
+          name: payload.name,
+          path: payload.path,
+          mimeType: String(payload.mimeType || 'application/octet-stream'),
+          size: Number(payload.size || 0),
+          category: (payload.category || 'other') as WorkAttachmentRecord['category'],
+          createdAt: new Date().toISOString()
+        })
+        this.$patch({ liveMessages: [...this.liveMessages] })
+        return
+      }
       if (updateType === 'agent_message_chunk') {
         const content = payload.content as { text?: string } | undefined
         const assistant = [...this.liveMessages].reverse().find((item) => item.role === 'assistant' && item.streaming)
@@ -236,7 +261,7 @@ export const useWorkSessionStore = defineStore('workSession', {
       }
     },
     handlePermissionRequest(event: WorkEvent) {
-      if (!event.requestId) return
+      if (!event.requestId || !this.busy || !this.currentRunId) return
       const toolCall = (event.payload.toolCall || {}) as Record<string, unknown>
       const request: WorkPermissionRequest = {
         requestId: event.requestId,
@@ -287,10 +312,11 @@ export const useWorkSessionStore = defineStore('workSession', {
     async resolvePermission(runtimeId: string, optionId?: string) {
       const current = this.permissionRequest
       if (!current) return
-      await workService.resolvePermission(runtimeId, current.requestId, optionId)
+      await workService.resolvePermission(this.sessionRuntimeId || runtimeId, current.requestId, optionId)
       const step = this.liveSteps.find((item) => item.id === `permission:${current.requestId}`)
       if (step) {
-        step.status = optionId ? 'completed' : 'cancelled'
+        const choice = current.options.find((option) => option.optionId === optionId)
+        step.status = choice?.kind.startsWith('allow') ? 'completed' : 'cancelled'
         step.completedAt = new Date().toISOString()
         await saveWorkStep(step)
         this.$patch({ liveSteps: [...this.liveSteps] })
@@ -318,7 +344,7 @@ export const useWorkSessionStore = defineStore('workSession', {
       assistant.streaming = false
       if (!assistant.content && fallbackContent) assistant.content = fallbackContent
       this.$patch({ liveMessages: [...this.liveMessages] })
-      if (assistant.content) {
+      if (assistant.content || assistant.attachments.length) {
         const userId = resolveUserId()
         await saveWorkMessage({
           id: assistant.id,
@@ -341,6 +367,8 @@ export const useWorkSessionStore = defineStore('workSession', {
         busy: false,
         stalled: false,
         currentRunId: '',
+        permissionQueue: [],
+        permissionRequest: null,
         runStartedAt: 0,
         runningConversationIds: conversationId
           ? this.runningConversationIds.filter((id) => id !== conversationId)
@@ -393,9 +421,12 @@ export const useWorkSessionStore = defineStore('workSession', {
     },
     async cancelRun(runtimeId: string) {
       const runId = this.currentRunId
+      // Invalidate completion callbacks before awaiting the runtime's cancellation response.
+      this.$patch({ currentRunId: '', permissionQueue: [], permissionRequest: null })
       try {
-        if (this.sessionId) await workService.cancelSession(runtimeId, this.sessionId)
+        if (this.sessionId) await workService.cancelSession(this.sessionRuntimeId || runtimeId, this.sessionId)
       } finally {
+        await this.closeBoundSession(runtimeId)
         await this.persistAssistant()
         if (runId) await this.finishStepState(runId, 'cancelled')
         this.clearRunFlags({ keepSession: true, clearLive: false })
@@ -412,8 +443,9 @@ export const useWorkSessionStore = defineStore('workSession', {
     async closeBoundSession(runtimeId: string) {
       const sessionId = this.sessionId
       if (!sessionId) return
-      await workService.closeSession(runtimeId, sessionId).catch(() => undefined)
-      this.$patch({ sessionId: '' })
+      const boundRuntimeId = this.sessionRuntimeId || runtimeId
+      this.$patch({ sessionId: '', sessionRuntimeId: '', boundConversationId: '' })
+      await workService.closeSession(boundRuntimeId, sessionId).catch(() => undefined)
     },
     async stopListening() {
       unlisten?.()

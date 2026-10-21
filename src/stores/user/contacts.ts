@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { contactsApi } from '@/api'
 import { getLocalEnterpriseList, getLocalFriendList } from '@/services/localContacts'
 import { usePeerInfoStore } from '@/stores/user/peerInfo'
+import { useUserStore } from '@/stores/user/user'
 import type { Contact, ContactsSearchResult } from '@/types/api/contacts'
 import type { GroupInfoResult } from '@/types/api/group'
 import type { User } from '@/types/api/user'
@@ -81,8 +82,14 @@ export const useContactsStore = defineStore('contacts', {
     },
     ensureLocalDirectory() {
       this.$patch((state) => {
-        if (state.enterpriseList.length === 0) state.enterpriseList = getLocalEnterpriseList()
-        if (state.friendList.length === 0) state.friendList = getLocalFriendList()
+        const localEnterprise = getLocalEnterpriseList()[0]
+        if (!state.enterpriseList.some((entry) => entry.peerId === localEnterprise.peerId)) {
+          state.enterpriseList.push(localEnterprise)
+        }
+        const knownFriends = new Set(state.friendList.map((entry) => entry.peerId))
+        for (const colleague of getLocalFriendList()) {
+          if (!knownFriends.has(colleague.peerId)) state.friendList.push(colleague)
+        }
       })
     },
     removeFriendLocal(peerId: string) {
@@ -133,6 +140,7 @@ export const useContactsStore = defineStore('contacts', {
     fetchEnterpriseList() {
       if (this.enterpriseListLoading) return
       this.ensureLocalDirectory()
+      if (!useUserStore().authInfo.token) return
       if (this.enterpriseList.length === 0) this.setEnterpriseListLoading(true)
       contactsApi
         .enterpriseList()
@@ -150,6 +158,7 @@ export const useContactsStore = defineStore('contacts', {
     },
     fetchGroupList() {
       if (this.groupListLoading) return
+      if (!useUserStore().authInfo.token) return
       if (this.groupList.length === 0) this.setGroupListLoading(true)
       contactsApi
         .groupList()
@@ -167,6 +176,7 @@ export const useContactsStore = defineStore('contacts', {
     fetchFriendList() {
       if (this.friendListLoading) return
       this.ensureLocalDirectory()
+      if (!useUserStore().authInfo.token) return
       if (this.friendList.length === 0) this.setFriendListLoading(true)
       contactsApi
         .friendList()

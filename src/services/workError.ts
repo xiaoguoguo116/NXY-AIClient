@@ -7,6 +7,11 @@ export interface ParsedWorkError {
 }
 
 const errorMap: Record<string, Omit<ParsedWorkError, 'code'>> = {
+  WORK_OFFICE_PYTHON_REQUIRED: { key: 'ai.work.errors.officePythonRequired', action: 'settings' },
+  WORK_OFFICE_INSTALL_FAILED: { key: 'ai.work.errors.officeInstallFailed', action: 'install' },
+  WORK_OFFICE_INSTALL_TIMEOUT: { key: 'ai.work.errors.officeInstallFailed', action: 'install' },
+  WORK_AGENT_STEP_LIMIT: { key: 'ai.work.errors.agentStepLimit', action: 'retry' },
+  WORK_SESSION_BUSY: { key: 'ai.work.errors.sessionBusy', action: 'retry' },
   WORK_PROVIDER_NOT_CONFIGURED: { key: 'ai.work.errors.providerNotConfigured', action: 'settings' },
   WORK_PROVIDER_NOT_FOUND: { key: 'ai.work.errors.providerNotConfigured', action: 'settings' },
   WORK_PROVIDER_KEY_REQUIRED: { key: 'ai.work.errors.keyRequired', action: 'settings' },

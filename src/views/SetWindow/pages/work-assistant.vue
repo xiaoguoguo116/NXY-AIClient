@@ -13,6 +13,14 @@
     <n-tabs v-model:value="activeTab" type="line" animated>
       <n-tab-pane name="runtime" :tab="t('settings.work.tabs.runtime')">
         <SettingCard>
+          <SettingRow :label="t('settings.work.runtime.select')" :desc="t('settings.work.runtime.officeDesc')">
+            <n-select
+              class="work-settings__select"
+              :value="store.activeRuntimeId"
+              :options="store.runtimes.map((item) => ({ label: item.name, value: item.id }))"
+              :disabled="installing || sessionStore.busy"
+              @update:value="onRuntimeSelect" />
+          </SettingRow>
           <SettingRow :label="runtime?.name || 'Reasonix'" :desc="runtimeDescription">
             <n-button v-if="!runtime?.installed" type="primary" size="small" :loading="installing" @click="onInstall">
               {{ t('settings.work.runtime.install') }}
@@ -220,12 +228,23 @@
   import * as workService from '@/services/workService'
   import { parseWorkError } from '@/services/workError'
   import { useWorkAssistantStore } from '@/stores/app/workAssistant'
+  import { useWorkSessionStore } from '@/stores/app/workSession'
   import type { WorkApprovalMode, WorkMode, WorkProvider, WorkProviderInput } from '@/types/cmd/work'
   import { useI18n } from 'vue-i18n'
 
   const { t } = useI18n()
   const dialog = useDialog()
   const store = useWorkAssistantStore()
+  const sessionStore = useWorkSessionStore()
+  const onRuntimeSelect = async (activeRuntimeId: string) => {
+    try {
+      await sessionStore.closeBoundSession(store.activeRuntimeId)
+      await store.savePreferences({ activeRuntimeId })
+      await store.refreshStatus()
+    } catch (error) {
+      showFriendlyError(error)
+    }
+  }
   const activeTab = ref('runtime')
   const installing = ref(false)
   const loading = ref(false)

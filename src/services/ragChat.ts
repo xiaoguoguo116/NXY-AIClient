@@ -18,6 +18,7 @@ export const ragQuestion = (text: string): string | null => {
 }
 export interface RagResult {
   text: string
+  contacts?: { userId: string; name: string; department: string; responsibility: string }[]
   baseUrl: string
   chatId: string
   sessionId: string

@@ -1,6 +1,6 @@
 <template>
   <n-spin :show="loading" class="organization-spin">
-    <div class="organization-directory">
+    <div class="organization-directory" :class="{ 'organization-directory--profile': !!$slots.profile }">
       <header class="organization-header">
         <Avatar class="organization-header__avatar" type="enterprise" :id="enterpriseId" />
         <div class="organization-header__main">
@@ -18,6 +18,13 @@
           <span class="organization-header__local-dot" />
           {{ t('contacts.enterprise.labels.localDirectory') }}
         </div>
+        <button
+          v-if="isLocalEnterprise"
+          type="button"
+          class="organization-header__my-profile"
+          @click="emit('selfSelected')">
+          我的主页
+        </button>
       </header>
 
       <div class="organization-body">
@@ -102,6 +109,7 @@
                   :key="member.id"
                   type="button"
                   class="organization-member"
+                  :class="{ active: selectedMemberId === member.userId }"
                   @click="onSelectMember(member.userId)">
                   <Avatar class="organization-member__avatar" :id="member.userId" />
                   <span class="organization-member__info">
@@ -135,6 +143,7 @@
             <p>{{ t('contacts.enterprise.selectDepartment') }}</p>
           </div>
         </main>
+        <slot name="profile" />
       </div>
     </div>
   </n-spin>
@@ -158,10 +167,13 @@
 
   const props = defineProps<{
     enterpriseId: string
+    selectedMemberId?: string
   }>()
 
   const emit = defineEmits<{
     memberSelected: [userId: string]
+    selfSelected: []
+    departmentSelected: []
   }>()
 
   const { t } = useI18n()
@@ -237,6 +249,16 @@
   )
 
   const currentDepartment = computed(() => departments.value.find((item) => item.id === currentDepartmentId.value))
+
+  watch(
+    () => [props.selectedMemberId, departments.value] as const,
+    ([userId, list]) => {
+      if (!userId) return
+      const department = list.find((item) => item.members?.some((member) => member.userId === userId))
+      if (department) currentDepartmentId.value = department.id
+    },
+    { immediate: true }
+  )
 
   const matchingDepartmentIds = computed(() => {
     const query = departmentQuery.value.trim().toLocaleLowerCase()
@@ -341,6 +363,7 @@
   const onSelectDepartment = (id: string) => {
     currentDepartmentId.value = id
     memberQuery.value = ''
+    emit('departmentSelected')
   }
 
   const onSelectMember = (userId: string) => emit('memberSelected', userId)
@@ -465,6 +488,27 @@
     flex: 1;
     min-width: 0;
     min-height: 0;
+  }
+
+  .organization-directory--profile {
+    .organization-tree-pane {
+      width: 250px;
+      min-width: 220px;
+    }
+    .organization-member__contact {
+      display: none;
+    }
+  }
+
+  .organization-header__my-profile {
+    flex-shrink: 0;
+    padding: 8px 13px;
+    border: 1px solid #c8dcf7;
+    border-radius: 7px;
+    background: #fff;
+    color: #3275cf;
+    cursor: pointer;
+    font-size: 12px;
   }
 
   .organization-tree-pane {
@@ -729,6 +773,11 @@
         opacity: 1;
         transform: translateX(0);
       }
+    }
+
+    &.active {
+      border-color: #c8dcf7;
+      background: #eef5ff;
     }
 
     &__avatar {

@@ -9,6 +9,15 @@
         <small>{{ attachmentMeta(attachment) }}</small>
       </span>
       <button
+        v-if="!removable"
+        type="button"
+        class="work-attachments__remove"
+        :title="t('ai.work.attachments.open')"
+        :aria-label="t('ai.work.attachments.open')"
+        @click="openAttachment(attachment.path)">
+        ↗
+      </button>
+      <button
         v-if="removable"
         type="button"
         class="work-attachments__remove"
@@ -23,6 +32,7 @@
 <script setup lang="ts">
   import type { WorkAttachmentRecord } from '@/db/workAssistant'
   import { useI18n } from 'vue-i18n'
+  import { openLocalFile } from '@/utils/file/openLocalFile'
 
   withDefaults(
     defineProps<{
@@ -38,6 +48,13 @@
 
   const emit = defineEmits<{ remove: [id: string] }>()
   const { t } = useI18n()
+  const openAttachment = async (path: string) => {
+    try {
+      await openLocalFile(path)
+    } catch {
+      window.$message?.error(t('ai.work.attachments.openFailed'))
+    }
+  }
 
   const attachmentIcon = (category: WorkAttachmentRecord['category']) => {
     if (category === 'image') return '#image'

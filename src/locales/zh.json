@@ -983,20 +983,20 @@
       },
       "setup": {
         "runtimeTitle": "需要安装 Agent 运行时",
-        "runtimeDesc": "AI 助手基于 Reasonix 运行，请先安装 Reasonix 后再开始使用",
+        "runtimeDesc": "请安装所选智能体的运行环境。内置办公智能体需要 Python 3.10+，安装按钮会配置独立的办公工具环境",
         "providerTitle": "还没有可用的模型",
         "providerDesc": "在 EM 中配置 Base API、API Key 和模型，无需修改 Reasonix 文件",
         "workspaceTitle": "请选择工作文件夹",
         "workspaceDesc": "Agent 只会把此文件夹作为当前任务的工作范围",
-        "install": "下载并安装 Reasonix",
+        "install": "安装智能体环境",
         "configure": "配置模型",
-        "installerOpened": "安装程序已打开，安装完成后点击刷新"
+        "installerOpened": "安装操作已完成，请查看运行时状态"
       },
       "quick": {
         "sheet": { "title": "处理电子表格", "desc": "清洗、统计、公式与格式调整", "prompt": "帮我处理一份电子表格：" },
         "document": { "title": "修改文档", "desc": "润色、排版与内容整理", "prompt": "帮我修改一份文档：" },
-        "image": { "title": "处理图片", "desc": "裁剪、压缩、抠图与格式转换", "prompt": "帮我处理一张图片：" },
-        "files": { "title": "查找整理文件", "desc": "搜索、归类、重命名与安全删除", "prompt": "帮我查找或整理文件：" }
+        "image": { "title": "处理图片", "desc": "裁剪、缩放、压缩与格式转换", "prompt": "帮我处理一张图片：" },
+        "files": { "title": "查找整理文件", "desc": "查找文件、复制整理与另存为", "prompt": "帮我查找或整理文件：" }
       },
       "input": {
         "placeholder": "描述你希望完成的工作，可以拖入或添加文件…",
@@ -1008,6 +1008,8 @@
         "backToBottom": "回到最新消息"
       },
       "attachments": {
+        "open": "打开文件",
+        "openFailed": "无法打开文件，请检查文件是否存在或是否安装了对应程序",
         "remove": "移除附件",
         "localFile": "本地文件",
         "attachmentOnlyPrompt": "请查看并处理我添加的附件。",
@@ -1130,7 +1132,11 @@
         "timeout": "连接模型服务超时，请检查网络后重试",
         "modelNotConfigured": "当前模型没有正确配置，请重新选择供应商和模型",
         "modelUnavailable": "模型服务中没有找到默认模型，请选择服务实际支持的模型",
-        "runtimeMissing": "Reasonix 尚未安装，请先下载并安装 Agent",
+        "runtimeMissing": "所选智能体环境尚未安装，请先安装",
+        "officePythonRequired": "未找到 Python 3.10+。请安装 Python 并加入 PATH，重启 EM 后重试",
+        "officeInstallFailed": "办公环境安装失败，请检查 Python、网络及 PyPI 访问后重试",
+        "agentStepLimit": "已达到本轮执行步数上限。已生成文件仍可打开，请缩小任务范围后继续",
+        "sessionBusy": "上一次请求尚未结束，请停止任务或稍后重试",
         "runtimeStartFailed": "Agent 启动失败，请在设置中重新检测运行时",
         "runtimeDisconnected": "Agent 连接已中断，本次任务已停止，请重试",
         "workspaceRequired": "文件夹工作区模式需要先选择一个文件夹",
@@ -1396,6 +1402,8 @@
       "description": "管理 Agent 运行时、模型供应商、权限策略与 Skills",
       "tabs": { "runtime": "Agent", "providers": "供应商", "model": "模型与权限", "skills": "Skills" },
       "runtime": {
+        "select": "选择智能体",
+        "officeDesc": "EM Office Agent：Excel / CSV 清洗统计、公式图表、Word 修改、PDF 文本读取和图片转换。结果另存新文件；需要 Python 3.10+ 和支持工具调用的模型。Skills 市场用于 Reasonix。",
         "ready": "运行时就绪",
         "missing": "需要安装",
         "missingDesc": "EM 会自动检测系统默认安装位置，无需手动填写 CLI 路径",
@@ -1403,14 +1411,15 @@
         "detect": "重新检测",
         "protocol": "运行时协议",
         "protocolDesc": "EM 通过通用 ACP 层连接 Agent，后续可扩展其他 CLI",
-        "installerOpened": "安装程序已打开",
+        "installerOpened": "安装操作已完成，请查看运行时状态",
         "updateTitle": "发现新版本",
         "updateConfirm": "检测到 Reasonix 有新版本可用。\n当前版本：{current}\n最新版本：{latest}\n是否安装最新版本？",
         "upToDate": "当前已是最新版本",
         "updateCheckFailed": "检查更新失败",
         "stage": {
           "checking": "正在检查最新版本",
-          "downloading": "正在下载并安装 CLI",
+          "downloading": "正在下载并安装智能体依赖",
+          "failed": "安装失败",
           "waiting_user": "等待完成安装",
           "completed": "安装完成"
         }

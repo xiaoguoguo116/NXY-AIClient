@@ -28,6 +28,7 @@ fn emit_event(
 
 fn emit_session_event(
     app: &AppHandle,
+    runtime_id: &str,
     session_id: &str,
     kind: &str,
     payload: Value,
@@ -35,7 +36,7 @@ fn emit_session_event(
     let _ = app.emit(
         "work://event",
         WorkEvent {
-            runtime_id: "reasonix".into(),
+            runtime_id: runtime_id.into(),
             kind: kind.into(),
             session_id: Some(session_id.into()),
             request_id: None,
@@ -55,7 +56,7 @@ pub async fn work_runtime_list(
 pub async fn work_runtime_detect(
     manager: State<'_, WorkManager>
 ) -> Result<RuntimeManifest, String> {
-    Ok(manager.detect_reasonix())
+    Ok(manager.active_runtime().await)
 }
 
 fn normalize_version(raw: &str) -> String {
@@ -141,7 +142,14 @@ async fn fetch_latest_reasonix_version() -> Result<String, String> {
 pub async fn work_runtime_check_update(
     manager: State<'_, WorkManager>
 ) -> Result<RuntimeUpdateInfo, String> {
-    let runtime = manager.detect_reasonix();
+    let runtime = manager.active_runtime().await;
+    if runtime.id == super::office::ID {
+        return Ok(RuntimeUpdateInfo {
+            current_version: runtime.version.clone(),
+            latest_version: runtime.version,
+            update_available: false,
+        });
+    }
     if !runtime.installed {
         return Ok(RuntimeUpdateInfo {
             current_version: runtime.version,
@@ -178,6 +186,27 @@ pub async fn work_runtime_install(
     app: AppHandle,
     manager: State<'_, WorkManager>,
 ) -> Result<String, String> {
+    if manager.settings().await.active_runtime_id == super::office::ID {
+        let emit = |stage: &str, progress: f64| {
+            let _ = app.emit(
+                "work://event",
+                WorkEvent {
+                    runtime_id: super::office::ID.into(),
+                    kind: "install_progress".into(),
+                    session_id: None,
+                    request_id: None,
+                    payload: json!({ "stage": stage, "progress": progress }),
+                },
+            );
+        };
+        emit("downloading", 0.1);
+        let result = super::office::install(manager.root()).await;
+        emit(
+            if result.is_ok() { "completed" } else { "failed" },
+            if result.is_ok() { 1.0 } else { 0.0 },
+        );
+        return result;
+    }
     emit_event(&app, "install_progress", json!({ "stage": "checking", "progress": 0 }));
     let npm = if cfg!(windows) { "npm.cmd" } else { "npm" };
     let mut npm_version = Command::new(npm);
@@ -303,7 +332,14 @@ pub async fn work_preferences_save(
     manager: State<'_, WorkManager>,
     input: PreferencesInput,
 ) -> Result<WorkSettings, String> {
-    manager.save_preferences(input).await
+    let previous = manager.settings().await;
+    let settings = manager.save_preferences(input).await?;
+    if previous.active_provider_id != settings.active_provider_id
+        || previous.active_model != settings.active_model
+    {
+        manager.restart_runtime(super::office::ID).await;
+    }
+    Ok(settings)
 }
 
 #[tauri::command]
@@ -313,6 +349,7 @@ pub async fn work_provider_save(
 ) -> Result<ProviderProfile, String> {
     let provider = manager.save_provider(input).await?;
     manager.restart_runtime("reasonix").await;
+    manager.restart_runtime(super::office::ID).await;
     Ok(provider)
 }
 
@@ -331,6 +368,7 @@ pub async fn work_provider_delete(
 ) -> Result<(), String> {
     manager.delete_provider(&id).await?;
     manager.restart_runtime("reasonix").await;
+    manager.restart_runtime(super::office::ID).await;
     Ok(())
 }
 
@@ -428,6 +466,7 @@ pub async fn work_session_prompt(
 ) -> Result<Value, String> {
     let connection = manager.connection(app.clone(), &input.runtime_id).await?;
     let mut text = input.text;
+    let mut attachment_paths = Vec::new();
     let mut prompt = vec![];
     if !input.attachments.is_empty() {
         text.push_str(
@@ -439,6 +478,7 @@ pub async fn work_session_prompt(
             if !canonical.is_file() {
                 return Err(format!("WORK_ATTACHMENT_NOT_FOUND: {}", attachment.name));
             }
+            attachment_paths.push(canonical.to_string_lossy().to_string());
             text.push_str(&format!(
                 "- {} ({}, {}): {}\n",
                 attachment.name,
@@ -447,7 +487,7 @@ pub async fn work_session_prompt(
                 canonical.to_string_lossy()
             ));
 
-            if attachment.category == "image" {
+            if attachment.category == "image" && input.runtime_id != super::office::ID {
                 let bytes = tokio::fs::read(&canonical)
                     .await
                     .map_err(|error| format!("WORK_ATTACHMENT_READ_FAILED: {error}"))?;
@@ -474,14 +514,27 @@ pub async fn work_session_prompt(
         }
     }
     prompt.insert(0, json!({ "type": "text", "text": text }));
-    emit_session_event(&app, &input.session_id, "prompt_started", json!({}));
+    emit_session_event(&app, &input.runtime_id, &input.session_id, "prompt_started", json!({}));
     let result = connection
-        .rpc("session/prompt", json!({ "sessionId": &input.session_id, "prompt": prompt }))
+        .rpc(
+            "session/prompt",
+            json!({
+                "sessionId": &input.session_id, "prompt": prompt,
+                "_meta": { "emAttachments": attachment_paths }
+            }),
+        )
         .await;
     match &result {
-        Ok(value) => emit_session_event(&app, &input.session_id, "prompt_completed", value.clone()),
+        Ok(value) => emit_session_event(
+            &app,
+            &input.runtime_id,
+            &input.session_id,
+            "prompt_completed",
+            value.clone(),
+        ),
         Err(error) => emit_session_event(
             &app,
+            &input.runtime_id,
             &input.session_id,
             "prompt_failed",
             json!({ "message": error }),
@@ -560,7 +613,7 @@ pub async fn work_session_resolve_permission(
 #[tauri::command]
 pub async fn work_status(manager: State<'_, WorkManager>) -> Result<WorkStatus, String> {
     let settings = manager.settings().await;
-    let runtime = manager.detect_reasonix();
+    let runtime = manager.active_runtime().await;
     let provider = settings
         .active_provider_id
         .as_ref()

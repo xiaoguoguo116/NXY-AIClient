@@ -240,6 +240,10 @@ impl AcpConnection {
         self.child.lock().await.kill().await.map_err(|error| error.to_string())
     }
 
+    pub async fn is_running(&self) -> bool {
+        matches!(self.child.lock().await.try_wait(), Ok(None))
+    }
+
     async fn write(
         &self,
         value: &Value,

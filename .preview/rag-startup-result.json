@@ -1,0 +1,70 @@
+{
+  "checks": [
+    {
+      "label": "clarification",
+      "sessionId": "fb8ec802ccea11f1a462233b4e87dd50",
+      "complete": true,
+      "answer": "这个问题可能涉及不同的业务场景。请选择你想了解的方向，或在输入框补充说明。",
+      "options": [
+        {
+          "id": "6fc71a9e046c4ccd838127efb99866e9",
+          "question": "加班与调休管理制度的适用范围是什么？",
+          "sources": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ]
+        },
+        {
+          "id": "4fb6d1be399248ee83d858f488bb7ece",
+          "question": "加班与调休管理制度由哪个部门负责解释和归口管理？",
+          "sources": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ]
+        },
+        {
+          "id": "c63ea3607a874f3dbe274b7a83a240e3",
+          "question": "值班管理制度的适用范围是什么？",
+          "sources": [
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md"
+          ]
+        },
+        {
+          "id": "898867f57177431a80c4232b7f7409ac",
+          "question": "值班管理制度由哪个部门负责解释和归口管理？",
+          "sources": [
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md"
+          ]
+        }
+      ],
+      "recordId": "fb491fa6528d49fb976585d1b0d60080",
+      "cacheStatus": "not_requested",
+      "error": "",
+      "visibleOptions": 4
+    },
+    {
+      "label": "selection",
+      "sessionId": "fb8ec802ccea11f1a462233b4e87dd50",
+      "complete": true,
+      "answer": "加班与调休管理制度的适用范围是：因业务需要在适用工作时间之外工作的员工，以及安排、审批、核算加班的管理人员[ID:0]。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确[ID:0]。",
+      "options": [],
+      "recordId": "c5a311ae68874227891e5cf08214acdc",
+      "decision": {},
+      "candidateCount": 1,
+      "contextCount": 1,
+      "cacheStatus": "hit",
+      "timings": {
+        "query_preparation_ms": 198.31990199998017,
+        "retrieval_ms": 35.30641400004697,
+        "answer_validation_ms": 1801.581175000024,
+        "answer_generation_ms": 4796.854241999995,
+        "first_output_ms": 5121.253978000027,
+        "total_ms": 5121.490296999923
+      },
+      "error": "",
+      "visibleOptions": 0
+    }
+  ],
+  "nativeClient": true,
+  "evidencePanelVisible": true,
+  "historicalOptionsDisabled": true,
+  "result": "passed"
+}

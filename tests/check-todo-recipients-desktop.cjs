@@ -8,9 +8,26 @@ const fs = require('node:fs');
   const page = browser.contexts().flatMap(context => context.pages()).find(page => page.url().includes('/home'));
   assert(page, 'EM home window is available');
   const saved = await page.evaluate(() => localStorage.getItem('em.local-todos.v1'));
+  const protectedData = await page.evaluate(() => Object.fromEntries(
+    ['em.local-ai.v1', 'em.local-ai-key.v1', 'em.local-chat.v1', 'em.local-meetings.v1']
+      .map(key => [key, localStorage.getItem(key)])
+  ));
   let search;
   try {
+    await page.evaluate(async () => {
+      for (const command of ['plugin:window|unminimize', 'plugin:window|show'])
+        await window.__TAURI_INTERNALS__.invoke(command, { label: 'home' });
+    });
     if (!page.url().endsWith('/home/todos')) await page.goto('http://tauri.localhost/home/todos');
+    else await page.reload();
+    const toggle = page.getByRole('button', { name: '筛选接收联系人', exact: true });
+    await toggle.waitFor();
+    assert.equal(await toggle.getAttribute('aria-expanded'), 'false');
+    assert.equal(await page.locator('#todo-recipient-filter').count(), 0);
+    await page.getByText('当前查看：我的待办').waitFor();
+    const ownPending = JSON.parse(saved || '{"items":[]}').items.filter(item => (!item.assigneeId || item.assigneeId === 'self') && !item.completed);
+    assert.equal(await page.locator('.todos-page > article').count(), ownPending.length, 'formal client defaults to own pending tasks');
+    await toggle.click();
     search = page.getByLabel('搜索待办接收人', { exact: true });
     await search.waitFor({ state: 'attached' });
     await page.getByText(/可选 \d+ 位联系人/).waitFor();
@@ -53,11 +70,16 @@ const fs = require('node:fs');
     assert.equal(await page.locator('.viewer-label .n-tag').count(), 1);
     await page.getByRole('button', { name: '清空选择', exact: true }).click();
     await page.getByText('请选择一个或多个接收人。').waitFor();
-    console.log('PASS: packaged client supports multiple contacts, search, deselection, view all, clear and empty feedback; saved tasks unchanged. No native file dialogs.');
+    const preserved = await page.evaluate(expected => Object.entries(expected)
+      .every(([key, value]) => localStorage.getItem(key) === value), protectedData);
+    assert.equal(preserved, true, 'chat records, global AI configuration and meetings are unchanged');
+    console.log('PASS: formal client defaults to self-only with recipient filter collapsed; click expands; multiple contacts, search, deselection, view all, clear and empty feedback; saved tasks unchanged. No native file dialogs.');
   } finally {
     if (search && await search.count()) {
       await search.press('Escape');
       await page.getByRole('button', { name: '只看我', exact: true }).click();
+      await page.getByRole('button', { name: '收起接收人筛选', exact: true }).click();
+      assert.equal(await page.locator('#todo-recipient-filter').count(), 0);
       await page.screenshot({ path: path.resolve('.preview/todo-recipient-tests/desktop-todo-list.png'), fullPage: true });
     }
     await page.evaluate(async () => {

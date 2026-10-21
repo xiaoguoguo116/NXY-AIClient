@@ -95,8 +95,6 @@
           <template v-else>
             <b>开始一段新的对话</b>
             <p>输入 @AI 和问题向模型提问，或 @AI RAG助手 查询相关制度，回答直接显示在聊天中。</p>
-            <p v-if="config.model">已使用全局模型：{{ config.model }}，所有会话共用，无需重复配置。</p>
-            <button v-else @click="openSettings">前往全局 AI 模型设置</button>
           </template>
         </div>
         <article
@@ -153,8 +151,24 @@
                   <button :disabled="!!busy[activeChat.id] || !ragClarificationDrafts[msg.id]?.trim()">继续提问</button>
                 </form>
               </section>
+              <div v-if="msg.rag.contacts?.length" class="rag-contact-cards">
+                <article v-for="contact in msg.rag.contacts" :key="contact.userId" class="rag-contact-card">
+                  <span class="rag-contact-card__avatar" />
+                  <div class="rag-contact-card__body">
+                    <strong>{{ contact.name }}</strong>
+                    <small>{{ contact.department }}</small>
+                    <p>{{ contact.responsibility }}</p>
+                    <div class="rag-contact-card__actions">
+                      <button type="button" @click="openContactCard(contact.userId)">查看名片</button>
+                      <button type="button" @click="messageContact(contact.userId, contact.name)">发送消息</button>
+                    </div>
+                  </div>
+                </article>
+              </div>
               <details v-if="msg.rag.references.length" class="source-records">
-                <summary>制度依据（{{ msg.rag.references.length }}）</summary>
+                <summary>
+                  {{ msg.rag.contacts?.length ? '职责依据' : '制度依据' }}（{{ msg.rag.references.length }}）
+                </summary>
                 <p v-for="(source, index) in msg.rag.references" :key="index">
                   {{ index + 1 }}. {{ source.name }}
                   <br />
@@ -164,7 +178,7 @@
             </template>
             <div v-if="msg.status === 'done' && msg.todoSuggestions?.length" class="todo-followups">
               <strong>是否将以下事项添加到待办？</strong>
-              <div v-for="(suggestion, index) in msg.todoSuggestions" :key="index">
+              <div v-for="suggestion in groupedSuggestions(msg)" :key="suggestion.indexes[0]">
                 <template v-if="!suggestion.dismissed">
                   <p>{{ suggestion.title }}</p>
                   <small>
@@ -174,19 +188,27 @@
                         : '未明确时间，添加后可在待办页设置提醒。'
                     }}
                   </small>
-                  <span
-                    v-if="
-                      todoState.items.some(
-                        (t) => t.sourceKey === `${msg.id}:${index}` || t.assignmentKey === `${msg.id}:${index}`
-                      )
-                    ">
-                    已添加到待办 ✓（分配范围已保存）
-                  </span>
+                  <span v-if="suggestion.added">已添加为一项待办 ✓</span>
+                  <small>参与人：{{ suggestion.recipients.map((person) => person.name).join('、') || '待确认' }}</small>
+                  <template v-if="suggestion.added">
+                    <small>
+                      已完成 {{ suggestionProgress(msg, suggestion).filter((item) => item.completed).length }}/{{
+                        suggestionProgress(msg, suggestion).length
+                      }}
+                      人 · 可在“待办事项 → 我发布的”查看进度
+                    </small>
+                    <small v-for="item in suggestionProgress(msg, suggestion)" :key="item.id">
+                      {{ item.assigneeName || '我' }}：{{ item.completed ? '已完成' : '未完成' }}
+                    </small>
+                  </template>
                   <template v-else>
-                    <small>接收人：{{ suggestionRecipientLabel(msg) }}（沿用提问中的 @ 成员）</small>
+                    <small v-if="suggestion.recipientError" role="alert">{{ suggestion.recipientError }}</small>
+                    <small v-else-if="suggestion.recipients.length > 1">一项任务，分别记录每个人的完成进度。</small>
                     <small>仅本机演示，不会通知其他人。</small>
-                    <button @click="acceptTodo(msg, index)">添加到待办</button>
-                    <button @click="dismissTodo(msg, index)">暂不添加</button>
+                    <button :disabled="!!suggestion.recipientError" @click="acceptTodo(msg, suggestion)">
+                      添加到待办
+                    </button>
+                    <button @click="dismissTodo(msg, suggestion)">暂不添加</button>
                   </template>
                 </template>
                 <small v-else>已忽略：{{ suggestion.title }}</small>
@@ -222,7 +244,7 @@
           </button>
           <button
             class="assistant-shortcut rag-shortcut"
-            title="查询制度知识库，使用独立的 RAGFlow 服务"
+            title="查询制度知识库，使用总设置中的 RAGFlow 配置"
             @click="mentionRag">
             @AI RAG助手
             <small>制度问答</small>
@@ -297,7 +319,6 @@
         :mode="panel"
         @close="panel = null"
         @save="persist"
-        @ai="openSettings"
         @export="exportChats"
         @locate="locateMessage" />
     </section>
@@ -326,9 +347,19 @@
 <script setup lang="ts">
   import { computed, nextTick, onBeforeUnmount, reactive, ref, watch } from 'vue'
   import LocalChatDrawer from './LocalChatDrawer.vue'
+  import { withExampleConversations } from '@/services/localChatExamples'
   import WorkAssistantDialog from '@/components/WorkAssistantDialog.vue'
   import { meetingState } from '@/stores/localMeetings'
   import { ragQuestion, requestRag } from '@/services/ragChat'
+  import { answerFromContactKnowledge } from '@/services/contactKnowledge'
+  import { useHomeTabStore } from '@/stores/app/homeTab'
+  const homeTabStore = useHomeTabStore()
+  function openContactCard(userId: string) {
+    void homeTabStore.navigateTo('contacts', { peerId: userId })
+  }
+  function messageContact(userId: string, name: string) {
+    localChatTarget.value = { peerId: userId, peerName: name }
+  }
   let pendingRagFollowup: LocalMessage['ragFollowup']
   const ragClarificationDrafts = reactive<Record<string, string>>({})
   async function ragCustomFollowup(msg: LocalMessage) {
@@ -386,6 +417,7 @@
     )
   }
   import { addAssignedTodos, initTodos, todoState } from '@/stores/localTodos'
+  import { groupChatTodoSuggestions, type GroupedTodoSuggestion } from '@/services/chatTodoSuggestions'
   initTodos()
   const groupCreating = ref(false),
     groupName = ref(''),
@@ -508,36 +540,64 @@
     groupNames.value = ''
     notice.value = '本地演示群已创建，可在设置 → 群管理中添加或移除模拟成员。'
   }
-  function suggestionRecipients(msg: LocalMessage) {
+  function groupedSuggestions(msg: LocalMessage) {
     const request = activeChat.value?.messages.find((m) => m.id === msg.replyTo)
-    return msg.todoRecipients || request?.todoRecipients || mentionedRecipients(request?.text || '', todoMembers.value)
-  }
-  function suggestionRecipientLabel(msg: LocalMessage) {
+    const source = activeChat.value?.messages.find((m) => m.id === request?.quoteId)
+    // Older requests stored ['self'] even when no person was mentioned. Do not let that override named owners.
+    const hasExplicitMention = [...(request?.text || '').matchAll(/(?:^|\s)@([^\s@，,。！？?!；;：:]+)/g)].some(
+      (match) => !/^ai(?:助手)?$/i.test(match[1])
+    )
+    let explicitIds: string[] | undefined
     try {
-      return suggestionRecipients(msg)
-        .map((m) => m.name)
-        .join('、')
+      if (hasExplicitMention)
+        explicitIds = mentionedRecipients(request!.text, todoMembers.value).map((person) => person.id)
     } catch {
-      return '原提问中的成员已不可用，请重新提问'
+      explicitIds = ['unresolved-recipient']
     }
+    return groupChatTodoSuggestions(msg.todoSuggestions || [], todoMembers.value, {
+      explicitIds,
+      fallbackIds: (msg.todoRecipients || request?.todoRecipients)?.map((person) => person.id),
+      quoteAuthorId: source && activeChat.value ? messageSender(activeChat.value, source).id : undefined,
+      addedIndexes: (msg.todoSuggestions || []).flatMap((_, index) =>
+        todoState.items.some((t) => t.sourceKey === `${msg.id}:${index}` || t.assignmentKey === `${msg.id}:${index}`)
+          ? [index]
+          : []
+      )
+    })
   }
-  function acceptTodo(msg: LocalMessage, index: number) {
-    const suggestion = msg.todoSuggestions?.[index]
-    if (!suggestion) return
+  function suggestionProgress(msg: LocalMessage, suggestion: GroupedTodoSuggestion) {
+    return todoState.items.filter((item) =>
+      suggestion.indexes.some(
+        (index) => item.assignmentKey === `${msg.id}:${index}` || item.sourceKey === `${msg.id}:${index}`
+      )
+    )
+  }
+  function acceptTodo(msg: LocalMessage, suggestion: GroupedTodoSuggestion) {
     try {
-      const recipients = suggestionRecipients(msg)
-      addAssignedTodos(suggestion, recipients, `${msg.id}:${index}`, activeChat.value!.id, activeChat.value!.name)
-      notice.value = `已在本机分配给：${recipients.map((m) => m.name).join('、')}。其他人不会实际收到。`
+      if (suggestion.recipientError) throw new Error(suggestion.recipientError)
+      const recipients = suggestion.recipients
+      addAssignedTodos(
+        suggestion,
+        recipients,
+        `${msg.id}:${suggestion.indexes[0]}`,
+        activeChat.value!.id,
+        activeChat.value!.name
+      )
+      // Keep the accepted candidate at its original index; suppress its merged duplicates without shifting storage keys.
+      Object.assign(msg.todoSuggestions![suggestion.indexes[0]], {
+        title: suggestion.title,
+        assigneeIds: recipients.map((person) => person.id)
+      })
+      for (const index of suggestion.indexes.slice(1)) msg.todoSuggestions![index].mergedInto = suggestion.indexes[0]
+      persist()
+      notice.value = `已添加 1 项待办，参与人：${recipients.map((m) => m.name).join('、')}；可在“我发布的”分别查看完成进度。`
     } catch (error) {
       notice.value = error instanceof Error ? error.message : '待办保存失败。'
     }
   }
-  function dismissTodo(msg: LocalMessage, index: number) {
-    const suggestion = msg.todoSuggestions?.[index]
-    if (suggestion) {
-      suggestion.dismissed = true
-      persist()
-    }
+  function dismissTodo(msg: LocalMessage, suggestion: GroupedTodoSuggestion) {
+    for (const index of suggestion.indexes) msg.todoSuggestions![index].dismissed = true
+    persist()
   }
   import { localChatTarget } from '@/services/localChatNavigation'
   import {
@@ -568,6 +628,19 @@
     storageError.value = '无法读取本地聊天记录。原始数据已保留，请导出备份。'
     loadFailed.value = true
   }
+  if (!loadFailed.value) {
+    const supplemented = withExampleConversations(initial)
+    if (supplemented !== initial) {
+      try {
+        // Save the addition and its version together. A failed write leaves
+        // the original snapshot and selected conversation untouched.
+        saveChats(localStorage, supplemented)
+        initial = supplemented
+      } catch {
+        storageError.value = '示例群聊未能保存，原有聊天记录未改动。请检查存储空间后重新打开。'
+      }
+    }
+  }
   const data = reactive(initial)
   const activeChat = computed(() => data.conversations.find((chat) => chat.id === data.selectedId))
   const sortedChats = computed(() => [...data.conversations].sort((a, b) => Number(!!b.pinned) - Number(!!a.pinned)))
@@ -593,8 +666,11 @@
   const messageMenuOptions = [
     { label: '回复', key: 'reply' },
     { label: '回复并 @AI', key: 'ai' },
-    { label: '多选', key: 'select' }
+    { label: '多选', key: 'select' },
+    { type: 'divider', key: 'delete-divider' },
+    { label: '删除', key: 'delete', props: { class: 'menu-item--danger' } }
   ]
+  const dialog = useDialog()
   function openMessageMenu(event: MouseEvent, msg: LocalMessage) {
     if (msg.status !== 'done') return
     Object.assign(messageMenu, { show: true, x: event.clientX, y: event.clientY, id: msg.id })
@@ -602,7 +678,31 @@
   function onMessageMenuSelect(key: string) {
     messageMenu.show = false
     const chat = activeChat.value
-    if (!chat || !chat.messages.some((msg) => msg.id === messageMenu.id && msg.status === 'done')) return
+    const message = chat?.messages.find((msg) => msg.id === messageMenu.id && msg.status === 'done')
+    if (!chat || !message) return
+    if (key === 'delete') {
+      dialog.warning({
+        title: '删除聊天记录',
+        content: '确定删除这条记录吗？此操作无法撤销。',
+        positiveText: '删除',
+        negativeText: '取消',
+        showIcon: false,
+        positiveButtonProps: { type: 'error' },
+        onPositiveClick: () => {
+          const index = chat.messages.findIndex((msg) => msg.id === message.id)
+          if (index < 0) return
+          const [deleted] = chat.messages.splice(index, 1)
+          if (quoteId.value === deleted.id) quoteId.value = ''
+          selectedIds.value = selectedIds.value.filter((id) => id !== deleted.id)
+          if (!persist()) {
+            chat.messages.splice(index, 0, deleted)
+            return
+          }
+          notice.value = '聊天记录已删除。'
+        }
+      })
+      return
+    }
     if (key === 'select') {
       quoteId.value = ''
       selecting.value = true
@@ -718,13 +818,6 @@
     event.preventDefault()
     void send()
   }
-  function openSettings() {
-    void import('@/utils/desktop/window')
-      .then(({ createSetWinodw }) => createSetWinodw('aiModel'))
-      .catch(() => {
-        notice.value = '无法打开设置窗口，请通过左下角总设置 → AI 模型打开。'
-      })
-  }
   function refreshGlobalAiSettings() {
     try {
       const saved = localStorage.getItem(CONFIG_KEY)
@@ -790,8 +883,7 @@
           validateConfig(config)
         }
       } catch {
-        openSettings()
-        notice.value = '请在总设置 → AI 模型中配置一次，所有会话共用。你的提问仍保留在输入框中。'
+        notice.value = '请先在总设置 → AI 模型中配置一次；所有会话共用。你的提问仍保留在输入框中。'
         return
       }
     }
@@ -888,18 +980,22 @@
     }, 120000)
     try {
       if (question !== null) {
-        const result = await requestRag(question, controller.signal, request?.ragFollowup)
+        const result =
+          answerFromContactKnowledge(question) ?? (await requestRag(question, controller.signal, request?.ragFollowup))
         if (controller.signal.aborted) throw new Error('cancelled')
         target.text = result.text
         target.rag = result
         target.status = 'done'
-        if (chat.notifications !== false) notice.value = `「${chat.name}」RAGFlow 回复已完成。`
+        if (chat.notifications !== false) notice.value = `「${chat.name}」知识助手回复已完成。`
         return
       }
       target.text = await requestAi(
         { ...config },
         apiKey.value,
-        [...buildContext(chat, requestId, config.contextCount), todoPrompt()],
+        [
+          ...buildContext(chat, requestId, config.contextCount),
+          todoPrompt(new Date(), chat.members || [{ id: 'self', name: '我', kind: 'self' }])
+        ],
         controller.signal
       )
       if (controller.signal.aborted) throw new Error('cancelled')
@@ -967,6 +1063,65 @@
 </script>
 
 <style scoped>
+  .rag-contact-cards {
+    display: grid;
+    gap: 10px;
+    margin: 13px 0;
+    max-width: 550px;
+  }
+  .rag-contact-card {
+    display: flex;
+    gap: 12px;
+    padding: 15px;
+    border: 1px solid #d7e6f7;
+    border-radius: 12px;
+    background: #f8fbff;
+  }
+  .rag-contact-card__avatar {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    border-radius: 9px;
+    background: #6aa7e8;
+  }
+  .rag-contact-card__body {
+    flex: 1;
+    min-width: 0;
+  }
+  .rag-contact-card__body strong {
+    display: block;
+    color: #243b5a;
+    font-size: 15px;
+  }
+  .rag-contact-card__body small {
+    display: block;
+    margin-top: 3px;
+    color: #7889a0;
+  }
+  .rag-contact-card__body p {
+    margin: 9px 0;
+    color: #50637c;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .rag-contact-card__actions {
+    display: flex;
+    gap: 8px;
+  }
+  .rag-contact-card__actions button {
+    padding: 7px 10px;
+    border: 1px solid #b8d5f5;
+    border-radius: 6px;
+    color: #276fbf;
+    background: white;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  .rag-contact-card__actions button:last-child {
+    border-color: #347ad9;
+    color: white;
+    background: #347ad9;
+  }
   .rag-clarification {
     display: flex;
     flex-direction: column;

@@ -120,7 +120,19 @@
 
         <div v-if="result" class="assistant-message result-message">
           <span class="mini-avatar">AI</span>
-          <p>{{ result }}</p>
+          <div>
+            <p>{{ result }}</p>
+            <button
+              v-if="publishedMeeting"
+              type="button"
+              class="calendar-button"
+              :disabled="calendarOpening"
+              title="在日历中确认导入；若取消会议，请在日历中手动删除"
+              @click="addPublishedMeetingToCalendar">
+              {{ calendarOpening ? '正在打开日历…' : '添加到本地日历 · 提前10分钟提醒' }}
+            </button>
+            <small v-if="calendarNotice" role="status">{{ calendarNotice }}</small>
+          </div>
         </div>
       </main>
     </section>
@@ -130,10 +142,11 @@
 <script setup lang="ts">
   import { computed, onMounted, reactive, ref } from 'vue'
   import { addMeeting } from '@/stores/localMeetings'
+  import { openMeetingInCalendar } from '@/services/meetingCalendar'
   import TodoEditor from '@/components/TodoEditor.vue'
   import { useContactsStore } from '@/stores/user/contacts'
   import type { TodoRecipient, LocalTodo } from '@/services/localTodos'
-  import type { MeetingRecipient } from '@/services/localMeetings'
+  import type { LocalMeeting, MeetingRecipient } from '@/services/localMeetings'
 
   const props = withDefaults(
     defineProps<{ participants?: TodoRecipient[]; sourceId?: string; sourceName?: string }>(),
@@ -176,6 +189,9 @@
   })
   const error = ref('')
   const result = ref('')
+  const publishedMeeting = ref<LocalMeeting | null>(null)
+  const calendarOpening = ref(false)
+  const calendarNotice = ref('')
   const meeting = reactive({ title: '', startAt: '', endAt: '', location: '', description: '' })
   const timeOptions = Array.from(
     { length: 96 },
@@ -252,6 +268,8 @@
         props.sourceName || 'AI 会议助手'
       )
       result.value = `会议“${created.title}”已发布，已加入会议提醒与日程。参会人：${created.participants.map((person) => person.name).join('、')}。`
+      publishedMeeting.value = created
+      calendarNotice.value = ''
       error.value = ''
       emit('published', created.id)
       Object.assign(meeting, { title: '', startAt: '', endAt: '', location: '', description: '' })
@@ -266,8 +284,27 @@
     }
   }
 
+  async function addPublishedMeetingToCalendar() {
+    if (!publishedMeeting.value || calendarOpening.value) return
+    calendarOpening.value = true
+    calendarNotice.value = ''
+    try {
+      const outcome = await openMeetingInCalendar(publishedMeeting.value)
+      calendarNotice.value =
+        outcome.status === 'opened'
+          ? '已打开本地日历，请确认导入；日历将在会前10分钟提醒。'
+          : `日历文件已保存到 ${outcome.path}，请在日历应用中导入后启用提醒。`
+    } catch (cause) {
+      calendarNotice.value = cause instanceof Error ? cause.message : '无法打开本地日历。'
+    } finally {
+      calendarOpening.value = false
+    }
+  }
+
   function onTodoSaved(created: LocalTodo) {
     result.value = `已添加到你的待办：“${created.title}”${created.dueAt ? `，结束时间为 ${new Date(created.dueAt).toLocaleString()}` : '。'}`
+    publishedMeeting.value = null
+    calendarNotice.value = ''
     error.value = ''
   }
 </script>
@@ -542,8 +579,26 @@
   .result-message {
     margin-top: 12px;
   }
-  .result-message > p {
+  .result-message > div p {
     white-space: pre-wrap;
+  }
+  .result-message .calendar-button {
+    margin-top: 10px;
+    padding: 8px 11px;
+    border: 1px solid #b8d5f2;
+    border-radius: 7px;
+    background: #f0f7ff;
+    color: #1769c6;
+    cursor: pointer;
+  }
+  .result-message .calendar-button:disabled {
+    cursor: wait;
+    opacity: 0.65;
+  }
+  .result-message small {
+    display: block;
+    margin-top: 8px;
+    color: #60748b;
   }
   @media (max-width: 640px) {
     .field-grid,

@@ -29,12 +29,21 @@
               <i v-if="member.kind === 'self'">群主</i>
             </span>
             <span :title="member.name">{{ member.name }}</span>
-            <button v-if="manage && member.kind === 'simulated'" :aria-label="`移除成员 ${member.name}`" @click="removeId = member.id">移除</button>
+            <button
+              v-if="manage && member.kind === 'simulated'"
+              :aria-label="`移除成员 ${member.name}`"
+              @click="removeId = member.id">
+              移除
+            </button>
           </div>
         </div>
         <div v-if="removeId" class="edit-block" role="alert">
-          <p>确认移除 {{ members.find(m => m.id === removeId)?.name }}？历史消息和已分配待办保留，今后不再参与全体分配。</p>
-          <button @click="removeMember">确认移除</button><button @click="removeId = ''">取消</button>
+          <p>
+            确认移除
+            {{ members.find((m) => m.id === removeId)?.name }}？历史消息和已分配待办保留，今后不再参与全体分配。
+          </p>
+          <button @click="removeMember">确认移除</button>
+          <button @click="removeId = ''">取消</button>
         </div>
         <button v-if="filteredMembers.length > 10" class="load-more" @click="expanded = !expanded">
           {{ expanded ? '收起' : '加载更多' }}
@@ -73,10 +82,6 @@
             :checked="!!chat.pinned"
             @change="setPreference('pinned', $event)" />
         </label>
-        <button class="setting-row" @click="$emit('ai')">
-          AI 设置
-          <span>›</span>
-        </button>
         <button class="setting-row" @click="$emit('export')">
           导出聊天记录
           <span>›</span>
@@ -88,9 +93,7 @@
       <template v-else-if="mode === 'announcement'">
         <p class="hint">群通知保存在此电脑，不会推送给其他真人。</p>
         <p class="announcement">{{ chat.announcement || '暂无群通知' }}</p>
-        <form
-          class="edit-block"
-          @submit.prevent="saveAnnouncement">
+        <form class="edit-block" @submit.prevent="saveAnnouncement">
           <label>
             编辑群通知
             <textarea v-model="announcementDraft" maxlength="5000" placeholder="填写群通知内容" />
@@ -119,7 +122,7 @@
   import { computed, ref } from 'vue'
   import { messageSender, type LocalConversation } from '@/services/localChat'
   const props = defineProps<{ chat: LocalConversation; mode: 'settings' | 'announcement' | 'history' }>()
-  const emit = defineEmits<{ close: []; save: []; ai: []; export: []; locate: [id: string] }>()
+  const emit = defineEmits<{ close: []; save: []; export: []; locate: [id: string] }>()
   function setPreference(key: 'notifications' | 'pinned', event: Event) {
     const checked = (event.target as HTMLInputElement).checked
     if (key === 'notifications') props.chat.notifications = checked
@@ -150,10 +153,10 @@
     feedback = ref('')
   const removeId = ref('')
   function removeMember() {
-    const member = members.value.find(m => m.id === removeId.value && m.kind === 'simulated')
+    const member = members.value.find((m) => m.id === removeId.value && m.kind === 'simulated')
     if (!member) return
     props.chat.archivedMembers = [...(props.chat.archivedMembers || []), member]
-    props.chat.members = members.value.filter(m => m.id !== member.id)
+    props.chat.members = members.value.filter((m) => m.id !== member.id)
     removeId.value = ''
     emit('save')
     feedback.value = '已移除本地模拟成员；历史消息和待办保留。'

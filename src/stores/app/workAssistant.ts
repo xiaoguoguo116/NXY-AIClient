@@ -49,7 +49,7 @@ export const useWorkAssistantStore = defineStore('workAssistant', {
     providers: [],
     skills: [],
     status: null,
-    activeRuntimeId: 'reasonix',
+    activeRuntimeId: 'office',
     activeProviderId: undefined,
     activeModel: undefined,
     approvalMode: 'ask',

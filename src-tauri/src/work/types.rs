@@ -75,7 +75,7 @@ pub struct WorkSettings {
 impl Default for WorkSettings {
     fn default() -> Self {
         Self {
-            active_runtime_id: "reasonix".into(),
+            active_runtime_id: "office".into(),
             active_provider_id: None,
             active_model: None,
             approval_mode: "ask".into(),

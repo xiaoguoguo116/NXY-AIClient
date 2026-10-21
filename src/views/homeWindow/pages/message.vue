@@ -1,6 +1,15 @@
 <template>
   <div class="message">
-    <LocalChat v-if="previewMode" />
+    <template v-if="previewMode">
+      <LocalChat />
+      <button
+        v-if="localChatMode && userStore.authInfo.token"
+        type="button"
+        class="message__online-switch"
+        @click="localChatMode = false">
+        返回在线消息
+      </button>
+    </template>
     <template v-else>
       <Split :min-size="220" :max-size="320" :default-size="270">
         <template #first>
@@ -103,11 +112,16 @@
   import { createAddContactsWindow, createChatSessionWindow, hasChatSessionWindow } from '@/utils/desktop/window'
   import { useI18n } from 'vue-i18n'
   import { useUserStore } from '@/stores/user/user'
+  import { localChatTarget } from '@/services/localChatNavigation'
 
   const { t } = useI18n()
   const chatStore = useChatStore()
   const userStore = useUserStore()
-  const previewMode = computed(() => !userStore.authInfo.token)
+  const localChatMode = ref(Boolean(localChatTarget.value))
+  watch(localChatTarget, (target) => {
+    if (target) localChatMode.value = true
+  })
+  const previewMode = computed(() => localChatMode.value || !userStore.authInfo.token)
   const chatDetachedStore = useChatDetachedStore()
   const messageDbStore = useMessageDbStore()
   const messageRemindStore = useMessageRemindStore()
@@ -380,8 +394,23 @@
 </script>
 <style scoped lang="scss">
   .message {
+    position: relative;
     display: flex;
     height: 100%;
+
+    &__online-switch {
+      position: absolute;
+      z-index: 2;
+      top: 12px;
+      right: 18px;
+      padding: 6px 10px;
+      border: 1px solid #b8d5f5;
+      border-radius: 6px;
+      color: #276fbf;
+      background: #fff;
+      cursor: pointer;
+      font-size: 12px;
+    }
 
     .message__empty {
       display: flex;

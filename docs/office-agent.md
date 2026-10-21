@@ -1,0 +1,52 @@
+# 内置办公智能体
+
+AI Work → 任务助手新增 **EM Office Agent**。这是随客户端提供的 ACP 智能体实现，通过模型工具调用执行文件操作；原有 Reasonix 仍可在下拉框选择。已有用户的运行时选择保持不变，新安装默认选择办公智能体。
+
+## 使用
+
+1. 安装 Python 3.10 或更新版本并加入 PATH，重新启动 EM。
+2. 在任务助手或设置 → AI Work → Agent 中选择 **EM Office Agent**，点击安装。客户端创建独立 venv，安装 openpyxl、python-docx、Pillow、pypdf，不修改系统 Python 的包。
+3. 配置支持工具调用的 OpenAI Compatible 或 Anthropic 模型及 API Key。OpenAI Compatible 的 Base API 应填到接口版本路径（例如 `https://服务地址/v1`）；也支持直接填写 `/chat/completions` 端点。
+4. 添加文件或选择工作文件夹，描述任务。例如：“清理附件中的首尾空格，按部门和金额去重，按部门汇总金额，并另存为销售统计.xlsx。”
+5. 默认会在生成文件前展示操作参数，确认后执行。执行过程显示在对话中，成功输出出现在回复附件，点击箭头用系统程序打开。
+
+普通对话会自动分配独立的工作目录，不必先选文件夹。已有对话继续使用当前选择的模型和智能体；智能体的会话上下文保存在运行进程中，重启后如需继续处理，应重新附上输入文件并说明要求。
+
+如 Python 不在标准位置，可在启动 EM 前设置 `EM_WORK_PYTHON` 为 Python 可执行文件的绝对路径。安装失败时检查 Python 是否可运行，以及网络能否访问 PyPI。API Key 沿用系统凭据库，通过子进程环境传入，不写入办公智能体配置文件。
+
+## 已实现范围
+
+| 类型 | 工具能力 |
+| --- | --- |
+| Excel `.xlsx` | 读取工作表和分页数据；写单元格；追加行；去空格；去重；排序；分组求和、平均值和计数；公式；数字格式、加粗和列宽；柱状图 |
+| CSV / TSV | UTF-8 读取、分页、清洗、转为 xlsx；单工作表另存 CSV / TSV |
+| Word `.docx` | 读取正文及表格；替换文字；追加带样式的段落；另存新文档 |
+| PDF | 提取文本（最多 200 页，不含扫描件 OCR） |
+| 图片 | PNG / JPEG / WebP 裁剪、缩放、压缩、转换 |
+| 文件 | 列出工作目录文件、读取文本、写入文本、复制支持的文件类型到新文件 |
+
+不执行模型生成的 Python 或 shell 命令。办公智能体不加载 Skills 市场内容；市场技能仍由 Reasonix 使用。
+
+## 文件与执行约束
+
+- 只读取当前工作目录和用户明确添加的附件；目录穿越和符号链接越界会被拒绝。
+- 只向工作目录已有文件夹创建新文件，不覆盖、不删除原件。先生成临时文件并重新读取验证，再原子发布；取消时不发布尚未完成的文件。
+- `ask` 模式逐次确认写文件；`auto` / `yolo` 可直接生成新文件，但不会解除路径边界或允许覆盖。拒绝一次写入后，本轮后续写入都停止，等待新的用户指令。
+- 输入文件上限 30 MB，Office ZIP 解压大小上限 100 MB，工作簿上限 300,000 单元格。预览最多 100 行、60 列；模型需根据分页信息继续读取。
+- 单轮模型循环上限：省资源 8 次、均衡 16 次、交付优先 24 次。失败和步数耗尽会报错，已生成附件仍保留。
+- 不支持旧版 `.xls` / `.doc`、宏工作簿、Excel 自动化及图片抠图。写公式后由 Excel/WPS 打开时重新计算，工具不提供公式计算引擎。
+- 排序和去重针对简单表格：含公式、合并单元格或 Excel Table 的情况会拒绝重排行，以避免损坏引用。复杂工作簿的扩展特性不保证完整保留。
+- Word 跨多个文字格式片段的替换保留起始片段格式；暂不处理页眉、页脚、文本框及修订记录。
+
+公式和样式限制依据 [openpyxl 文档](https://openpyxl.readthedocs.io/en/3.1/tutorial.html) 与 [python-docx 文档](https://python-docx.readthedocs.io/en/latest/api/text.html)。
+
+## 验证
+
+```powershell
+python -m unittest discover -s tests -p test_office_agent.py -v
+node --test tests/office-session.test.cjs
+pnpm type-check
+cargo check --offline --lib --manifest-path src-tauri/Cargo.toml
+```
+
+Python 测试需要安装上述四个包。测试创建临时 Office 文件验证实际结果，通过本机 HTTP 模拟模型验证 ACP、两种模型协议、权限确认、取消、工具错误和文件交付。测试不调用付费模型；真实供应商的工具调用兼容性需使用其 API 验证。

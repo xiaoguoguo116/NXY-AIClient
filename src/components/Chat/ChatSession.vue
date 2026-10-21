@@ -58,7 +58,9 @@
             <div class="flex items-center gap-8px text-12px">
               <button type="button" @click="editorRef?.insertText('@AI RAG助手 ')">@AI RAG助手</button>
               <span>制度回答将由当前账号发送到聊天</span>
-              <button v-if="ragBusy" type="button" @click="ragController?.abort()">停止 RAG</button>
+            </div>
+            <div v-if="ragBusy" class="flex items-center gap-8px text-12px">
+              <button type="button" @click="ragController?.abort()">停止 RAG</button>
             </div>
             <div v-if="ragStatus" role="status">{{ ragStatus }}</div>
             <div class="flex-1 flex w-full min-h-0">
