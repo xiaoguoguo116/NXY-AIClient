@@ -14,13 +14,7 @@
       <div class="time-fields">
         <div>
           <span class="field-label">结束时间（截止时间，本机时区）</span>
-          <TodoDateTimePicker
-            v-model="deadline"
-            label="待办结束时间"
-            @update:model-value="
-              deadlineTouched = true
-              timeNotice = ''
-            " />
+          <TodoDateTimePicker v-model="deadline" label="待办结束时间" @update:model-value="onDeadlineChange" />
           <button type="button" class="infer-button" @click="inferDate(true)">从事项识别时间</button>
         </div>
         <div>
@@ -107,6 +101,11 @@
     },
     { immediate: true }
   )
+  function onDeadlineChange() {
+    deadlineTouched.value = true
+    timeNotice.value = ''
+  }
+
   function inferDate(force = false) {
     if ((deadline.value || deadlineTouched.value) && !force) return
     const inferred = inferTodoDeadline(title.value)

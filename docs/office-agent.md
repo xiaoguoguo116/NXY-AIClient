@@ -1,18 +1,18 @@
 # 内置办公智能体
 
-AI Work → 任务助手新增 **EM Office Agent**。这是随客户端提供的 ACP 智能体实现，通过模型工具调用执行文件操作；原有 Reasonix 仍可在下拉框选择。已有用户的运行时选择保持不变，新安装默认选择办公智能体。
+AI Work → 任务助手使用随客户端提供的 **EM Office Agent**，通过模型工具调用执行文件操作。任务界面不显示 Reasonix、运行时选择或尚未支持的 Skills 市场。
 
 ## 使用
 
 1. 安装 Python 3.10 或更新版本并加入 PATH，重新启动 EM。
-2. 在任务助手或设置 → AI Work → Agent 中选择 **EM Office Agent**，点击安装。客户端创建独立 venv，安装 openpyxl、python-docx、Pillow、pypdf，不修改系统 Python 的包。
-3. 配置支持工具调用的 OpenAI Compatible 或 Anthropic 模型及 API Key。OpenAI Compatible 的 Base API 应填到接口版本路径（例如 `https://服务地址/v1`）；也支持直接填写 `/chat/completions` 端点。
+2. 在设置 → AI Work 的办公文件处理项安装依赖。客户端创建独立 venv，安装 openpyxl、python-docx、Pillow、pypdf，不修改系统 Python 的包。
+3. 在**全局模型设置**填写支持工具调用的 OpenAI Compatible 接口地址、模型和 API Key。任务助手与聊天、合规助手自动共用这些设置，无需导入或同步。修改地址、模型或密钥后，下一次任务自动创建新模型会话；正在执行的任务保留启动时的配置。本机免鉴权接口支持密钥留空；缺失或无效的全局设置不会回退到旧供应商。
 4. 添加文件或选择工作文件夹，描述任务。例如：“清理附件中的首尾空格，按部门和金额去重，按部门汇总金额，并另存为销售统计.xlsx。”
 5. 默认会在生成文件前展示操作参数，确认后执行。执行过程显示在对话中，成功输出出现在回复附件，点击箭头用系统程序打开。
 
 普通对话会自动分配独立的工作目录，不必先选文件夹。已有对话继续使用当前选择的模型和智能体；智能体的会话上下文保存在运行进程中，重启后如需继续处理，应重新附上输入文件并说明要求。
 
-如 Python 不在标准位置，可在启动 EM 前设置 `EM_WORK_PYTHON` 为 Python 可执行文件的绝对路径。安装失败时检查 Python 是否可运行，以及网络能否访问 PyPI。API Key 沿用系统凭据库，通过子进程环境传入，不写入办公智能体配置文件。
+如 Python 不在标准位置，可在启动 EM 前设置 `EM_WORK_PYTHON` 为 Python 可执行文件的绝对路径。安装失败时检查 Python 是否可运行，以及网络能否访问 PyPI。API Key 读取现有全局设置，仅在创建会话时通过本机 IPC/stdin 传入，不额外复制到任务配置、凭据库、子进程环境或对话记录。
 
 ## 已实现范围
 
@@ -25,7 +25,7 @@ AI Work → 任务助手新增 **EM Office Agent**。这是随客户端提供的
 | 图片 | PNG / JPEG / WebP 裁剪、缩放、压缩、转换 |
 | 文件 | 列出工作目录文件、读取文本、写入文本、复制支持的文件类型到新文件 |
 
-不执行模型生成的 Python 或 shell 命令。办公智能体不加载 Skills 市场内容；市场技能仍由 Reasonix 使用。
+不执行模型生成的 Python 或 shell 命令。办公智能体不加载 Skills 市场内容。
 
 ## 文件与执行约束
 
@@ -50,3 +50,14 @@ cargo check --offline --lib --manifest-path src-tauri/Cargo.toml
 ```
 
 Python 测试需要安装上述四个包。测试创建临时 Office 文件验证实际结果，通过本机 HTTP 模拟模型验证 ACP、两种模型协议、权限确认、取消、工具错误和文件交付。测试不调用付费模型；真实供应商的工具调用兼容性需使用其 API 验证。
+
+实际桌面应用的两种验证入口（需使用带本机 CDP 端口 `19224` 的测试客户端，且没有正在运行的任务或未提交草稿）：
+
+```powershell
+node tests/check-office-desktop.cjs # 本机模拟模型，真实 UI / IPC / ACP / 文件处理
+node tests/check-office-live.cjs    # 已配置的真实模型，会产生模型调用费用
+```
+
+两者均只创建并处理合成测试文件，不打开文件选择或另存为对话框。检查 Excel 去空格、整行去重及部门汇总，Word 跨格式正文与表格替换、原件哈希不变、生成附件和重新加载后的附件记录。报告、截图和结果文件保存在 `.preview/office-verification/`。真实模型验证不会将 API Key 读入测试进程或写入报告。
+
+2026-10-21 本机验证：Python 21 项通过、1 项因 Windows 符号链接权限跳过；会话状态 3 项通过；Office 配置不依赖 Reasonix 的 Rust 回归 1 项通过。桌面模拟模型集成验证通过，随后复用 `@AI` 的 `deepseek-flash` 完成真实模型验证：两次生成确认，Excel 汇总 301 / 50、Word 正文与表格替换及加粗保留、原件哈希不变、重载后附件可见均通过。该记录仅证明本组样本和当时接口可用，不代表所有文档或所有供应商模型均已验证。

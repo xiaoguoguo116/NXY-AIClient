@@ -195,11 +195,13 @@ class ProtocolTests(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
         self.requests = []
+        self.auth_headers = []
         self.responses = queue.Queue()
         case = self
 
         class Handler(BaseHTTPRequestHandler):
             def do_POST(self):
+                case.auth_headers.append(self.headers.get('Authorization'))
                 case.requests.append(json.loads(self.rfile.read(int(self.headers["Content-Length"]))))
                 response = case.responses.get(timeout=10)
                 if callable(response):
@@ -245,7 +247,9 @@ class ProtocolTests(unittest.TestCase):
         threading.Thread(target=reader, daemon=True).start()
         self.send(1, "initialize", {})
         self.assertEqual(self.until(lambda m: m.get("id") == 1)["result"]["protocolVersion"], 1)
-        self.send(2, "session/new", {"cwd": str(self.root)})
+        self.send(2, "session/new", {"cwd": str(self.root), "modelConfig": {
+            "baseUrl": f"http://127.0.0.1:{self.server.server_port}/v1",
+            "kind": kind, "apiKey": "session-key", "model": "session-model"}})
         self.sid = self.until(lambda m: m.get("id") == 2)["result"]["sessionId"]
 
     def stop(self):
@@ -296,6 +300,37 @@ class ProtocolTests(unittest.TestCase):
         self.assertEqual(self.until(lambda m: m.get("id") == 3)["result"]["stopReason"], "end_turn")
         self.assertEqual(self.requests[1]["messages"][-1]["role"], "tool")
         self.assertIn("artifact", self.requests[1]["messages"][-1]["content"])
+
+    def test_global_model_is_per_session_and_supports_keyless_local_api(self):
+        # Deliberately conflicting legacy environment config must never win.
+        self.start()
+        self.responses.put(self.final_response())
+        self.prompt()
+        self.until(lambda m: m.get("id") == 3)
+        self.assertEqual(self.requests[-1]["model"], "session-model")
+        self.assertEqual(self.auth_headers[-1], "Bearer session-key")
+        first_sid = self.sid
+        self.send(10, "session/new", {"cwd": str(self.root), "modelConfig": {
+            "baseUrl": f"http://127.0.0.1:{self.server.server_port}/v1",
+            "model": "updated-global-model", "apiKey": ""}})
+        self.sid = self.until(lambda m: m.get("id") == 10)["result"]["sessionId"]
+        self.responses.put(self.final_response())
+        self.prompt()
+        self.until(lambda m: m.get("id") == 3)
+        self.assertEqual(self.requests[-1]["model"], "updated-global-model")
+        self.assertIsNone(self.auth_headers[-1])
+        self.sid = first_sid
+        self.responses.put(self.final_response())
+        self.prompt()
+        self.until(lambda m: m.get("id") == 3)
+        self.assertEqual(self.requests[-1]["model"], "session-model")
+        self.assertEqual(self.auth_headers[-1], "Bearer session-key")
+        self.assertNotIn("session-key", json.dumps(self.seen))
+
+    def test_missing_global_model_never_uses_legacy_environment(self):
+        self.start()
+        self.send(10, "session/new", {"cwd": str(self.root)})
+        self.assertIn("WORK_PROVIDER_NOT_CONFIGURED", self.until(lambda m: m.get("id") == 10)["error"]["message"])
 
     def test_permission_denial_writes_nothing(self):
         self.start()

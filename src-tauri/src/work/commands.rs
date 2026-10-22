@@ -411,6 +411,26 @@ pub async fn work_session_new(
     manager: State<'_, WorkManager>,
     input: SessionNewInput,
 ) -> Result<Value, String> {
+    if input.runtime_id != super::office::ID {
+        return Err("WORK_RUNTIME_UNSUPPORTED".into());
+    }
+    let config = input.global_model.as_ref().ok_or("WORK_PROVIDER_NOT_CONFIGURED")?;
+    let url = reqwest::Url::parse(&config.base_url).map_err(|_| "WORK_PROVIDER_URL_INVALID")?;
+    let local = matches!(url.host_str(), Some("localhost" | "127.0.0.1" | "[::1]"));
+    if !(url.scheme() == "https" || (url.scheme() == "http" && local))
+        || !url.username().is_empty()
+        || url.password().is_some()
+        || url.query().is_some()
+        || url.fragment().is_some()
+    {
+        return Err("WORK_PROVIDER_URL_INVALID".into());
+    }
+    if config.model.trim().is_empty() {
+        return Err("WORK_MODEL_NOT_FOUND".into());
+    }
+    if url.host_str() == Some("api.deepseek.com") && config.api_key.trim().is_empty() {
+        return Err("WORK_PROVIDER_KEY_REQUIRED".into());
+    }
     let cwd = match input.scope_mode.as_str() {
         "workspace" => {
             let path = input
@@ -439,7 +459,9 @@ pub async fn work_session_new(
         _ => return Err("WORK_SCOPE_INVALID".into()),
     };
     let connection = manager.connection(app.clone(), &input.runtime_id).await?;
-    let result = connection.rpc("session/new", json!({ "cwd": cwd, "mcpServers": [] })).await?;
+    let result = connection
+        .rpc("session/new", json!({ "cwd": cwd, "mcpServers": [], "modelConfig": config }))
+        .await?;
     if let Some(session_id) = result.get("sessionId").and_then(Value::as_str) {
         let settings = manager.settings().await;
         let _ = connection

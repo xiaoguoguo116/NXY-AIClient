@@ -1,0 +1,87 @@
+{
+  "date": "2026-10-22",
+  "image": "ragflow-custom:v0.27.1-followup-14",
+  "automatedTests": {
+    "backend": 47,
+    "client": 7,
+    "adapter": 5,
+    "gateway": 5,
+    "total": 64
+  },
+  "live": {
+    "initialQuestions": 16,
+    "expectedResponses": 16,
+    "selectedOptions": 38,
+    "cacheHits": 38,
+    "textFollowups": 3,
+    "auditChecks": 57,
+    "auditErrors": [],
+    "citationRepairs": [
+      {
+        "question": "休息日加班如何安排补休,不能补休时如何支付?",
+        "record": "cd0e1d8be5764aeebbcd46f7d04bdbbd"
+      }
+    ],
+    "selectionLatencyMs": {
+      "min": 2454,
+      "median": 3020,
+      "max": 6496
+    }
+  },
+  "desktop": {
+    "formalNative": true,
+    "evidencePanel": true,
+    "checks": [
+      {
+        "label": "clarification",
+        "options": 5,
+        "rendered": 5,
+        "cache": "not_requested",
+        "record": "f24035d36f24426a8a354c787ef3b1dd"
+      },
+      {
+        "label": "history-restored",
+        "options": 5,
+        "rendered": 5,
+        "cache": "not_requested",
+        "record": "f24035d36f24426a8a354c787ef3b1dd"
+      },
+      {
+        "label": "selection",
+        "options": 0,
+        "rendered": 0,
+        "cache": "hit",
+        "record": "d2db7400288d4f18ae1d6af187f196a9"
+      },
+      {
+        "label": "broad-question",
+        "options": 5,
+        "rendered": 5,
+        "cache": "not_requested",
+        "record": "a52d42d9cbf743f98f107700bbdd97da"
+      }
+    ]
+  },
+  "changes": [
+    "Recover omitted block IDs only from uniquely matched verbatim quotes; retain independent answer verification",
+    "Deduplicate normalized questions instead of rejecting different questions that share a source block",
+    "Validate bounded extra candidates before applying the valid-option count cap; allow one block to support multiple directions",
+    "Respect explicit requests for choices in long questions and add evidence-pool diagnostics",
+    "Use accurate fallback text instead of asserting the knowledge base lacks evidence after a generation failure",
+    "Deterministically reject out-of-range citations and regenerate once with independent review"
+  ],
+  "sourceHashes": {
+    "clarification_service.py": {
+      "before": "1aa9b23df028806cd718d5349176ce8dd50696a85b44a6c7c240c904e82cd601",
+      "after": "48c1f359e324762eb783714249da8cf261e228c777eb07c4d52c0d7d9245cae2"
+    },
+    "dialog_service.py": {
+      "before": "451fee16439d12eb5568283c69ee3419353ebb8b24e51e5a5b04d1a5d2634a3a",
+      "after": "af79b4b328cc515c9a81919c84d9e34892bbf3c7f6852237ac315cb549be5797"
+    },
+    "answer_guard.py": {
+      "before": "ccbe88c870e9ed607ab74e106b237e3db2cc54d161218052d18e73f4d6ca79bc",
+      "after": "bc1a15bee788c99a954da3434283bead5a5af4e6978960da0eecfc99453e1fdd"
+    }
+  }
+}

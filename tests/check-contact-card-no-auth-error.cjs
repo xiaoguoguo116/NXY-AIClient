@@ -5,6 +5,7 @@ const { chromium } = require('C:/Users/94719/.cache/codex-runtimes/codex-primary
   const browser = await chromium.connectOverCDP('http://127.0.0.1:19224')
   const page = browser.contexts().flatMap((context) => context.pages()).find((candidate) => candidate.url().includes('/home'))
   if (!page) throw new Error('EM 主窗口未打开')
+  await page.setViewportSize({ width: 1100, height: 720 })
   const chats = await page.evaluate(() => localStorage.getItem('em.local-chat.v1'))
   const contactListRequests = []
   page.on('request', (request) => {

@@ -37,7 +37,7 @@ test('all and individual selections are exclusive; removing or clearing selectio
 
 test('the full contact directory is available without any task history', () => {
   const options = buildTodoViewerOptions(contacts, [])
-  assert.equal(options.filter((option) => option.kind === 'contact').length, 13)
+  assert.equal(options.filter((option) => option.kind === 'contact').length, contacts.length)
   assert(options.every((option) => option.count === 0))
   assert.deepEqual(
     options.slice(0, 2).map((option) => option.value),

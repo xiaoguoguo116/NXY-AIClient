@@ -1,0 +1,262 @@
+{
+  "checks": [
+    {
+      "label": "clarification",
+      "sessionId": "adc83924cdc511f18ea79b058c7cbc81",
+      "complete": true,
+      "answer": "这个问题可能涉及不同的业务场景。请选择你想了解的方向，或在输入框补充说明。",
+      "options": [
+        {
+          "id": "a73ce5e6fe994dbbbaee95905cba2769",
+          "question": "加班与调休管理制度的适用范围是什么?",
+          "sources": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ]
+        },
+        {
+          "id": "c5ab2c53015a42e7ac673fa78b61c55b",
+          "question": "加班与调休管理制度由哪个部门归口负责?",
+          "sources": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ]
+        },
+        {
+          "id": "c3edb08f432e4ffcb28fc477f749d536",
+          "question": "值班管理制度的适用范围是什么?",
+          "sources": [
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md"
+          ]
+        },
+        {
+          "id": "501b2b1315924bcfbbbfe927d2fb629b",
+          "question": "值班管理制度由哪个部门归口负责?",
+          "sources": [
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md"
+          ]
+        },
+        {
+          "id": "6acc9c305a21451fabf2a15bbcf552f2",
+          "question": "加班费的计算基数如何确定?",
+          "sources": [
+            "09_薪酬与奖金管理制度.ef6e55b2087e.a8cffde97a4947170d3c.md"
+          ]
+        }
+      ],
+      "recordId": "cb9e7827a4834546b3fd2fe1f863d445",
+      "decision": {
+        "candidate_pool_count": 24,
+        "shown_evidence_count": 24,
+        "shown_evidence_chars": 3548,
+        "evidence_valid_option_count": 5,
+        "answer_coverage": [
+          {
+            "question": "加班与调休管理制度的适用范围是什么?",
+            "supported": true,
+            "reason": "选项直接询问加班与调休管理制度的适用范围，原文第二条完整给出适用对象及例外说明，可完整回答。"
+          },
+          {
+            "question": "加班与调休管理制度由哪个部门归口负责?",
+            "supported": true,
+            "reason": "选项询问加班与调休管理制度的归口部门，原文第四条明确人力资源部为归口部门，可完整回答。"
+          },
+          {
+            "question": "值班管理制度的适用范围是什么?",
+            "supported": true,
+            "reason": "选项直接询问值班管理制度的适用范围，原文第二条完整给出适用对象及例外说明，可完整回答。"
+          },
+          {
+            "question": "值班管理制度由哪个部门归口负责?",
+            "supported": true,
+            "reason": "选项询问值班管理制度的归口部门，原文第四条明确行政管理部为归口部门，可完整回答。"
+          },
+          {
+            "question": "加班费的计算基数如何确定?",
+            "supported": true,
+            "reason": "选项询问加班费计算基数，原文第十一条明确给出基数确定规则，可完整回答。"
+          }
+        ],
+        "missing_intents": [],
+        "model_action": "clarify",
+        "valid_option_count": 5,
+        "reason": "grounded_options"
+      },
+      "candidateCount": 36,
+      "contextCount": 0,
+      "cacheStatus": "not_requested",
+      "timings": {
+        "preprocessing_ms": 5909.99637799996,
+        "query_preparation_ms": 5924.30106799975,
+        "retrieval_ms": 1428.8446900000054,
+        "clarification_ms": 6003.141859000152,
+        "first_output_ms": 13391.60566999999,
+        "total_ms": 13391.609014000096
+      },
+      "error": "",
+      "visibleOptions": 5
+    },
+    {
+      "label": "history-restored",
+      "sessionId": "adc83924cdc511f18ea79b058c7cbc81",
+      "complete": true,
+      "answer": "这个问题可能涉及不同的业务场景。请选择你想了解的方向，或在输入框补充说明。",
+      "options": [
+        {
+          "id": "a73ce5e6fe994dbbbaee95905cba2769",
+          "question": "加班与调休管理制度的适用范围是什么?",
+          "sources": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ]
+        },
+        {
+          "id": "c5ab2c53015a42e7ac673fa78b61c55b",
+          "question": "加班与调休管理制度由哪个部门归口负责?",
+          "sources": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ]
+        },
+        {
+          "id": "c3edb08f432e4ffcb28fc477f749d536",
+          "question": "值班管理制度的适用范围是什么?",
+          "sources": [
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md"
+          ]
+        },
+        {
+          "id": "501b2b1315924bcfbbbfe927d2fb629b",
+          "question": "值班管理制度由哪个部门归口负责?",
+          "sources": [
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md"
+          ]
+        },
+        {
+          "id": "6acc9c305a21451fabf2a15bbcf552f2",
+          "question": "加班费的计算基数如何确定?",
+          "sources": [
+            "09_薪酬与奖金管理制度.ef6e55b2087e.a8cffde97a4947170d3c.md"
+          ]
+        }
+      ],
+      "recordId": "cb9e7827a4834546b3fd2fe1f863d445",
+      "cacheStatus": "not_requested",
+      "error": "",
+      "visibleOptions": 5
+    },
+    {
+      "label": "selection",
+      "sessionId": "adc83924cdc511f18ea79b058c7cbc81",
+      "complete": true,
+      "answer": "加班与调休管理制度的适用范围是：因业务需要在适用工作时间之外工作的员工，以及安排、审批、核算加班的管理人员[ID:0]。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确[ID:0]。",
+      "options": [],
+      "recordId": "1a04f92c6bae4577a47a6eb9b0d318c0",
+      "decision": {},
+      "candidateCount": 1,
+      "contextCount": 1,
+      "cacheStatus": "hit",
+      "timings": {
+        "query_preparation_ms": 28.876846999992267,
+        "retrieval_ms": 0.2973119999296614,
+        "answer_validation_ms": 1929.824140999699,
+        "answer_generation_ms": 3198.963077999906,
+        "first_output_ms": 3258.620347000033,
+        "total_ms": 3258.862221000072
+      },
+      "error": "",
+      "visibleOptions": 0
+    },
+    {
+      "label": "broad-question",
+      "sessionId": "b95af272cdc511f18ea79b058c7cbc81",
+      "complete": true,
+      "answer": "这个问题可能涉及不同的业务场景。请选择你想了解的方向，或在输入框补充说明。",
+      "options": [
+        {
+          "id": "f52bc784fb7d4758a48087c195e18208",
+          "question": "加班申请需要说明哪些事项、由谁审批?",
+          "sources": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ]
+        },
+        {
+          "id": "7aa8a5ac09bf4830b90122ee1b215b84",
+          "question": "加班费的计算基数和不同加班类型的支付标准是什么?",
+          "sources": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ]
+        },
+        {
+          "id": "1a41857e2b7842a5b6db704f26dfba9c",
+          "question": "休息日加班如何安排补休?",
+          "sources": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ]
+        },
+        {
+          "id": "a901c84c448746af946cf138912831f1",
+          "question": "实际加班未被记录或审批与事实不符时怎么处理?",
+          "sources": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ]
+        },
+        {
+          "id": "039e6a8bbc174902889cf58800126338",
+          "question": "哪些情形通常不直接认定为加班?",
+          "sources": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ]
+        }
+      ],
+      "recordId": "a16d44ac2107499aa7dc9f5b3b720ad1",
+      "decision": {
+        "candidate_pool_count": 24,
+        "shown_evidence_count": 24,
+        "shown_evidence_chars": 3890,
+        "evidence_valid_option_count": 5,
+        "answer_coverage": [
+          {
+            "question": "加班申请需要说明哪些事项、由谁审批?",
+            "supported": true,
+            "reason": "选项问加班申请需说明事项及审批人，原文完整给出说明事项、审批人及特殊情形评估要求。"
+          },
+          {
+            "question": "加班费的计算基数和不同加班类型的支付标准是什么?",
+            "supported": true,
+            "reason": "选项问计算基数及不同加班类型支付标准，两段原文分别覆盖基数与工作日、休息日、法定节假日标准。"
+          },
+          {
+            "question": "休息日加班如何安排补休?",
+            "supported": true,
+            "reason": "选项问休息日加班补休安排，原文明确补休期限、等时补休及不能补休的支付标准。"
+          },
+          {
+            "question": "实际加班未被记录或审批与事实不符时怎么处理?",
+            "supported": true,
+            "reason": "选项问实际加班未被记录或审批不符的处理，原文完整给出补充说明期限及超期核查规则。"
+          },
+          {
+            "question": "哪些情形通常不直接认定为加班?",
+            "supported": true,
+            "reason": "选项问哪些情形通常不直接认定为加班，原文明确列举并说明需结合真实工作事实判断。"
+          }
+        ],
+        "model_action": "clarify",
+        "valid_option_count": 5,
+        "reason": "grounded_options"
+      },
+      "candidateCount": 24,
+      "contextCount": 0,
+      "cacheStatus": "not_requested",
+      "timings": {
+        "preprocessing_ms": 1615.7905250001932,
+        "query_preparation_ms": 1628.8687460000801,
+        "retrieval_ms": 564.9301329999616,
+        "clarification_ms": 6650.311454000075,
+        "first_output_ms": 8876.793379999981,
+        "total_ms": 8876.79627999978
+      },
+      "error": "",
+      "visibleOptions": 5
+    }
+  ],
+  "nativeClient": true,
+  "evidencePanelVisible": true
+}

@@ -1,0 +1,3302 @@
+{
+  "phase": "final",
+  "started": "2026-10-22T03:14:19.067Z",
+  "cases": [
+    {
+      "id": "compressed",
+      "question": "加值班制度",
+      "expected": "clarify",
+      "session": "ab99a3d0cdc611f1ac78e3540a1bce4c",
+      "elapsed": 17199,
+      "answer": "这个问题可能涉及不同的业务场景。请选择你想了解的方向，或在输入框补充说明。",
+      "options": [
+        {
+          "id": "fedb6488d411464cb9e3d62e1e185148",
+          "question": "加班与调休管理制度的适用范围是什么?",
+          "sources": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ]
+        },
+        {
+          "id": "b865743e230b4e24b5425f87f97f37cc",
+          "question": "加班与调休管理制度由哪个部门归口负责?",
+          "sources": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ]
+        },
+        {
+          "id": "97be74c826414534ab9dc06697835e92",
+          "question": "值班管理制度的适用范围是什么?",
+          "sources": [
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md"
+          ]
+        },
+        {
+          "id": "997f5b077eae4705b95d75932f9381ec",
+          "question": "值班管理制度由哪个部门归口负责?",
+          "sources": [
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md"
+          ]
+        },
+        {
+          "id": "eeaa7bb053e842f4b81b72c53088550a",
+          "question": "加班费的计算基数如何确定?",
+          "sources": [
+            "09_薪酬与奖金管理制度.ef6e55b2087e.a8cffde97a4947170d3c.md"
+          ]
+        }
+      ],
+      "needsInput": false,
+      "cacheId": "2711e25c3db049389d945511655d07c3",
+      "cacheStatus": "not_requested",
+      "preprocessing": {
+        "ambiguity_reasons": [
+          "问题仅给出制度主题,未说明具体想了解的内容(如适用范围、审批流程、待遇标准等)"
+        ],
+        "ambiguity_score": 0.6,
+        "ambiguity_signals": [
+          "short_question",
+          "generic_expression",
+          "missing_specific_focus"
+        ],
+        "confidence": 0.9,
+        "context_used": false,
+        "corrections": [
+          "将“加值班”展开为“加班和值班”"
+        ],
+        "intent_parts": [
+          "加班制度",
+          "值班制度"
+        ],
+        "missing_topic": false,
+        "model_called": true,
+        "normalized_question": "加班和值班制度",
+        "original_question": "加值班制度",
+        "retrieval_queries": [
+          "加值班制度",
+          "加班制度",
+          "值班制度",
+          "加班和值班制度"
+        ],
+        "status": "success"
+      },
+      "decision": {
+        "answer_coverage": [
+          {
+            "question": "加班与调休管理制度的适用范围是什么?",
+            "reason": "选项直接询问加班与调休管理制度的适用范围，原文第二条完整给出适用对象及例外说明，可完整回答。",
+            "supported": true
+          },
+          {
+            "question": "加班与调休管理制度由哪个部门归口负责?",
+            "reason": "选项询问加班与调休管理制度的归口部门，原文第四条明确为人力资源部，证据充分。",
+            "supported": true
+          },
+          {
+            "question": "值班管理制度的适用范围是什么?",
+            "reason": "选项直接询问值班管理制度的适用范围，原文第二条完整给出适用对象及例外说明，可完整回答。",
+            "supported": true
+          },
+          {
+            "question": "值班管理制度由哪个部门归口负责?",
+            "reason": "选项询问值班管理制度的归口部门，原文第四条明确为行政管理部，证据充分。",
+            "supported": true
+          },
+          {
+            "question": "加班费的计算基数如何确定?",
+            "reason": "选项询问加班费计算基数，原文第十一条完整给出确定规则，属于加班制度合理业务方向，证据充分。",
+            "supported": true
+          }
+        ],
+        "candidate_pool_count": 24,
+        "evidence_valid_option_count": 5,
+        "missing_intents": [],
+        "model_action": "clarify",
+        "reason": "grounded_options",
+        "shown_evidence_chars": 3548,
+        "shown_evidence_count": 24,
+        "valid_option_count": 5
+      },
+      "timings": {
+        "clarification_ms": 5646.177439999519,
+        "first_output_ms": 17158.152328999677,
+        "preprocessing_ms": 3030.9066519994303,
+        "query_preparation_ms": 3060.4656389996308,
+        "retrieval_ms": 8422.049006000634,
+        "total_ms": 17158.156579000206
+      },
+      "record": "32fa2ffa4bcd4b6b934d885e0f2484ba",
+      "candidateCount": 36,
+      "contextCount": 0,
+      "documents": [
+        "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+        "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+        "09_薪酬与奖金管理制度.ef6e55b2087e.a8cffde97a4947170d3c.md",
+        "M12_2026-08-26_财务岗位资格与轮岗会.e4b08b2afa2b.b8117ec60c319e14b648.md",
+        "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md",
+        "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md",
+        "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md"
+      ],
+      "context": [],
+      "contractPassed": true,
+      "expectedShape": true,
+      "clicks": [
+        {
+          "question": "加班与调休管理制度的适用范围是什么?",
+          "session": "ab99a3d0cdc611f1ac78e3540a1bce4c",
+          "elapsed": 3072,
+          "answer": "加班与调休管理制度的适用范围是：因业务需要在适用工作时间之外工作的员工，以及安排、审批、核算加班的管理人员[ID:0]。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 2970.8199910000985,
+            "answer_validation_ms": 1754.6273340003609,
+            "first_output_ms": 3030.3144950003116,
+            "query_preparation_ms": 25.496306000604818,
+            "retrieval_ms": 0.7422279995807912,
+            "total_ms": 3030.3175270000793
+          },
+          "record": "78e74c46393341c7ab788ed7a2a2ac8e",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ],
+          "context": [
+            {
+              "id": "d7d799a4d56a66b8",
+              "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+              "text": "来源：05_加班与调休管理制度.md\n分块：3/23\n上下文：加班与调休管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于因业务需要在适用工作时间之外工作的员工和安排、审批、核算加班的管理人员。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+            }
+          ]
+        },
+        {
+          "question": "加班与调休管理制度由哪个部门归口负责?",
+          "session": "ab99a3d0cdc611f1ac78e3540a1bce4c",
+          "elapsed": 2714,
+          "answer": "人力资源部是本制度的归口部门，负责解释、培训、记录检查和版本维护；各部门负责人负责组织实施，员工应如实提交信息并配合合理核验[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 2611.9524639998417,
+            "answer_validation_ms": 1368.230838999807,
+            "first_output_ms": 2672.716738999952,
+            "query_preparation_ms": 24.30846199968073,
+            "retrieval_ms": 0.310577000163903,
+            "total_ms": 2672.7200349996565
+          },
+          "record": "8d0aae0e39824cd6a08d0e7f0ccb37d1",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ],
+          "context": [
+            {
+              "id": "b4c5fd3b2781eec7",
+              "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+              "text": "来源：05_加班与调休管理制度.md\n分块：5/23\n上下文：加班与调休管理制度 > 第一章 总则 > 第四条\n\n**第四条**\n人力资源部是本制度的归口部门，负责解释、培训、记录检查和版本维护；各部门负责人负责组织实施，员工应如实提交信息并配合合理核验。审批人对其权限范围内决定负责。\n\n"
+            }
+          ]
+        },
+        {
+          "question": "值班管理制度的适用范围是什么?",
+          "session": "ab99a3d0cdc611f1ac78e3540a1bce4c",
+          "elapsed": 2893,
+          "answer": "值班管理制度适用于参加现场值班、电话值守、技术保障和应急备勤的部门及人员[ID:0]。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 2794.354726000165,
+            "answer_validation_ms": 1642.0086719999745,
+            "first_output_ms": 2853.1137460004174,
+            "query_preparation_ms": 24.121464000018022,
+            "retrieval_ms": 0.2553269996496965,
+            "total_ms": 2853.1166190005024
+          },
+          "record": "8655b4d28ec44bcba5887b0b6b8c6e5d",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md"
+          ],
+          "context": [
+            {
+              "id": "238c5d8ef7cc029e",
+              "document": "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+              "text": "来源：01_值班管理制度.md\n分块：3/23\n上下文：值班管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于参加现场值班、电话值守、技术保障和应急备勤的部门及人员。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+            }
+          ]
+        },
+        {
+          "question": "值班管理制度由哪个部门归口负责?",
+          "session": "ab99a3d0cdc611f1ac78e3540a1bce4c",
+          "elapsed": 2454,
+          "answer": "行政管理部是本制度的归口部门，负责解释、培训、记录检查和版本维护；各部门负责人负责组织实施，员工应如实提交信息并配合合理核验[ID:0]。审批人对其权限范围内决定负责[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 2347.366029999648,
+            "answer_validation_ms": 1305.503819000478,
+            "first_output_ms": 2407.508611000594,
+            "query_preparation_ms": 25.800746999266266,
+            "retrieval_ms": 0.2205480004704441,
+            "total_ms": 2407.5122040003407
+          },
+          "record": "e1c0cd9ef05c45a18ebc49112766e665",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md"
+          ],
+          "context": [
+            {
+              "id": "a6566415167342ee",
+              "document": "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+              "text": "来源：01_值班管理制度.md\n分块：5/23\n上下文：值班管理制度 > 第一章 总则 > 第四条\n\n**第四条**\n行政管理部是本制度的归口部门，负责解释、培训、记录检查和版本维护；各部门负责人负责组织实施，员工应如实提交信息并配合合理核验。审批人对其权限范围内决定负责。\n\n"
+            }
+          ]
+        },
+        {
+          "question": "加班费的计算基数如何确定?",
+          "session": "ab99a3d0cdc611f1ac78e3540a1bce4c",
+          "elapsed": 3498,
+          "answer": "加班费计算基数原则上采用正常出勤对应的基本工资与按月固定、正常出勤即可取得的工资项目之和；双方已有合法有效且不低于当地最低工资标准的书面约定时按约定执行[ID:0]。日工资＝计算基数÷21.75，小时工资＝计算基数÷21.75÷8，具体倍数按加班与调休制度执行[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 3365.6411940000908,
+            "answer_validation_ms": 1910.571076999986,
+            "first_output_ms": 3432.3256429997855,
+            "query_preparation_ms": 36.461852999309485,
+            "retrieval_ms": 0.3521190001265495,
+            "total_ms": 3432.3284330002934
+          },
+          "record": "8ed1f45e5b764fd0870e94f0f38a8fbc",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "09_薪酬与奖金管理制度.ef6e55b2087e.a8cffde97a4947170d3c.md"
+          ],
+          "context": [
+            {
+              "id": "e35e74185a794b77",
+              "document": "09_薪酬与奖金管理制度.ef6e55b2087e.a8cffde97a4947170d3c.md",
+              "text": "来源：09_薪酬与奖金管理制度.md\n分块：12/23\n上下文：薪酬与奖金管理制度 > 第二章 管理规则 > 第十一条\n\n**第十一条**\n加班费计算基数原则上采用正常出勤对应的基本工资与按月固定、正常出勤即可取得的工资项目之和；双方已有合法有效且不低于当地最低工资标准的书面约定时按约定执行。日工资＝计算基数÷21.75，小时工资＝计算基数÷21.75÷8，具体倍数按加班与调休制度执行。\n\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "overtime",
+      "question": "加班",
+      "expected": "clarify",
+      "session": "ab9aad84cdc611f1ac78e3540a1bce4c",
+      "elapsed": 18045,
+      "answer": "这个问题可能涉及不同的业务场景。请选择你想了解的方向，或在输入框补充说明。",
+      "options": [
+        {
+          "id": "46997b7e971e43fa91fdc90e8f36841a",
+          "question": "加班申请需要说明哪些事项、由谁批准?",
+          "sources": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ]
+        },
+        {
+          "id": "f96cb27e88ca45e892a6bd474cd803b1",
+          "question": "加班费如何计算,工作日、休息日和法定节假日分别是什么标准?",
+          "sources": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ]
+        },
+        {
+          "id": "a8255751207c49ceab2f8385c94946d4",
+          "question": "休息日加班如何安排补休,不能补休时如何支付?",
+          "sources": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ]
+        },
+        {
+          "id": "61aa7f81f67a4630be274000d06db6b1",
+          "question": "实际加班未被记录或审批与事实不符时,员工应如何处理?",
+          "sources": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ]
+        },
+        {
+          "id": "940630df273b40e799a407282b66da32",
+          "question": "远程加班应如何记录和核验?",
+          "sources": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ]
+        }
+      ],
+      "needsInput": false,
+      "cacheId": "502dc65b4e9f49bdbd025f20f35a2139",
+      "cacheStatus": "not_requested",
+      "preprocessing": {
+        "ambiguity_reasons": [
+          "仅给出主题名词“加班”,未说明具体所问事项(如加班申请、加班费、调休等)"
+        ],
+        "ambiguity_score": 0.7,
+        "ambiguity_signals": [
+          "short_question",
+          "missing_specific_focus"
+        ],
+        "confidence": 0.95,
+        "context_used": false,
+        "corrections": [],
+        "intent_parts": [
+          "加班"
+        ],
+        "missing_topic": false,
+        "model_called": true,
+        "normalized_question": "加班",
+        "original_question": "加班",
+        "retrieval_queries": [
+          "加班"
+        ],
+        "status": "success"
+      },
+      "decision": {
+        "answer_coverage": [
+          {
+            "question": "加班申请需要说明哪些事项、由谁批准?",
+            "reason": "选项问加班申请需说明事项及批准人，原文完整给出说明事项、批准主体及特殊情形评估要求。",
+            "supported": true
+          },
+          {
+            "question": "加班费如何计算,工作日、休息日和法定节假日分别是什么标准?",
+            "reason": "选项问加班费计算及三类标准，原文表格和第十一条完整覆盖计算基数、公式及工作日/休息日/法定节假日标准。",
+            "supported": true
+          },
+          {
+            "question": "休息日加班如何安排补休,不能补休时如何支付?",
+            "reason": "选项问休息日补休安排及不能补休的支付，原文直接给出六个月等时补休和200%支付标准。",
+            "supported": true
+          },
+          {
+            "question": "实际加班未被记录或审批与事实不符时,员工应如何处理?",
+            "reason": "选项问实际加班未被记录或审批不符时如何处理，原文完整给出补充说明期限及超期核查规则。",
+            "supported": true
+          },
+          {
+            "question": "远程加班应如何记录和核验?",
+            "reason": "选项问远程加班记录和核验，原文直接规定记录内容及核验禁止事项。",
+            "supported": true
+          }
+        ],
+        "candidate_pool_count": 24,
+        "evidence_valid_option_count": 5,
+        "model_action": "clarify",
+        "reason": "grounded_options",
+        "shown_evidence_chars": 3890,
+        "shown_evidence_count": 24,
+        "valid_option_count": 5
+      },
+      "timings": {
+        "clarification_ms": 6497.385633000704,
+        "first_output_ms": 17990.48888500056,
+        "preprocessing_ms": 3006.1164269991423,
+        "query_preparation_ms": 3035.7016000007206,
+        "retrieval_ms": 8427.689933999318,
+        "total_ms": 17990.493412000433
+      },
+      "record": "0a6c438312134f099c5d8531794d463b",
+      "candidateCount": 24,
+      "contextCount": 0,
+      "documents": [
+        "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+        "08_培训与发展管理制度.c9263654ab42.cd1b7f6bd7cad80133aa.md"
+      ],
+      "context": [],
+      "contractPassed": true,
+      "expectedShape": true,
+      "clicks": [
+        {
+          "question": "加班申请需要说明哪些事项、由谁批准?",
+          "session": "ab9aad84cdc611f1ac78e3540a1bce4c",
+          "elapsed": 2877,
+          "answer": "计划加班应由任务负责人说明事项、人员、日期、预计时长和不能在正常时间完成的原因，经直属负责人按权限批准[ID:0]。涉及大范围或连续加班的，还应由人力资源部评估工时和健康风险[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 2745.7441429996834,
+            "answer_validation_ms": 1693.1992539994098,
+            "first_output_ms": 2796.9359320004514,
+            "query_preparation_ms": 24.695576999874902,
+            "retrieval_ms": 0.400181000259181,
+            "total_ms": 2796.9388270003037
+          },
+          "record": "7a0cacd0f59b42b8b210a921081d9f44",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ],
+          "context": [
+            {
+              "id": "9e7825ddbb75ea87",
+              "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+              "text": "来源：05_加班与调休管理制度.md\n分块：7/23\n上下文：加班与调休管理制度 > 第二章 管理规则 > 第六条\n\n**第六条**\n计划加班应由任务负责人说明事项、人员、日期、预计时长和不能在正常时间完成的原因，经直属负责人按权限批准。涉及大范围或连续加班的，还应由人力资源部评估工时和健康风险。\n\n"
+            }
+          ]
+        },
+        {
+          "question": "加班费如何计算,工作日、休息日和法定节假日分别是什么标准?",
+          "session": "ab9aad84cdc611f1ac78e3540a1bce4c",
+          "elapsed": 3655,
+          "answer": "加班费按小时工资乘以实际加班小时数计算，工作日延时按150%支付[ID:1]。休息日加班优先在六个月内安排等时补休，不能补休的按200%支付[ID:2]。法定节假日加班按300%另行支付，且不得以补休替代[ID:2]。以小时工资50元为例，工作日加班2小时为150元，休息日8小时且未补休为800元，法定节假日8小时为1,200元[ID:2]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 3551.2708320002275,
+            "answer_validation_ms": 2011.3247299996146,
+            "first_output_ms": 3611.8784659993253,
+            "query_preparation_ms": 31.053040000188048,
+            "retrieval_ms": 0.6691119997412898,
+            "total_ms": 3611.881428999368
+          },
+          "record": "8388738bbae548eda05d0dcf189e1a62",
+          "candidateCount": 3,
+          "contextCount": 3,
+          "documents": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ],
+          "context": [
+            {
+              "id": "8ff277a0fdd2ad1b",
+              "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+              "text": "来源：05_加班与调休管理制度.md\n分块：11/23\n上下文：加班与调休管理制度 > 第二章 管理规则 > 第十条\n\n**第十条**\n部门安排加班应遵守适用的时长限制和休息要求，连续高强度工作后应安排必要间隔。涉及夜间驾驶、高空、设备操作等安全敏感岗位时，应优先更换人员，不得让明显疲劳人员继续作业。\n\n| 加班类型 | 支付或补休标准 | 计算示例（小时工资50元） |\n| --- | --- | --- |\n| 工作日延时 | 小时工资×时数×150% | 2小时＝150元 |\n| 休息日工作 | 优先等时补休；不能补休按200% | 8小时＝800元 |\n| 法定节假日工作 | 按300%支付，不以补休替代 | 8小时＝1,200元 |\n\n"
+            },
+            {
+              "id": "252173b8f2f49fb9",
+              "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+              "text": "来源：05_加班与调休管理制度.md\n分块：12/23\n上下文：加班与调休管理制度 > 第二章 管理规则 > 第十一条\n\n**第十一条**\n标准工时员工的加班费计算基数为劳动合同约定的正常出勤月工资；约定不明时，按公司工资支付制度及适用法律确定，且不得低于工作所在地最低工资标准。日工资＝加班费计算基数÷21.75，小时工资＝加班费计算基数÷21.75÷8。工作日延时按小时工资×实际加班小时×150%计算。\n\n"
+            },
+            {
+              "id": "1c202427a4b6d8ba",
+              "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+              "text": "来源：05_加班与调休管理制度.md\n分块：13/23\n上下文：加班与调休管理制度 > 第二章 管理规则 > 第十二条\n\n**第十二条**\n休息日加班应优先在六个月内安排等时补休；不能安排补休的，按日或小时工资×实际加班时间×200%支付。法定节假日加班按日或小时工资×实际加班时间×300%另行支付，不得以补休替代。例：计算基数为8,700元，小时工资为50元；工作日加班2小时为150元，休息日8小时且未补休为800元，法定节假日8小时为1,200元。\n\n"
+            }
+          ]
+        },
+        {
+          "question": "休息日加班如何安排补休,不能补休时如何支付?",
+          "session": "ab9aad84cdc611f1ac78e3540a1bce4c",
+          "elapsed": 6496,
+          "answer": "休息日加班应优先安排补休，补休应在六个月内安排，且补休时间应与加班时间等时。不能安排补休的，按“日或小时工资 × 实际加班时间 × 200%”支付加班工资。[ID:0]\n\n需要注意：上述补休期限为六个月，补休应与加班时长等时；200%的支付标准适用于休息日加班且不能安排补休的情形。法定节假日加班不适用补休替代，应按“日或小时工资 × 实际加班时间 × 300%”另行支付。[ID:0]",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 6381.8520000004355,
+            "answer_validation_ms": 5011.631182000201,
+            "first_output_ms": 6432.684510999934,
+            "query_preparation_ms": 24.378069999329455,
+            "retrieval_ms": 0.2697990003071027,
+            "total_ms": 6432.687884999723
+          },
+          "record": "cd0e1d8be5764aeebbcd46f7d04bdbbd",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ],
+          "context": [
+            {
+              "id": "1c202427a4b6d8ba",
+              "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+              "text": "来源：05_加班与调休管理制度.md\n分块：13/23\n上下文：加班与调休管理制度 > 第二章 管理规则 > 第十二条\n\n**第十二条**\n休息日加班应优先在六个月内安排等时补休；不能安排补休的，按日或小时工资×实际加班时间×200%支付。法定节假日加班按日或小时工资×实际加班时间×300%另行支付，不得以补休替代。例：计算基数为8,700元，小时工资为50元；工作日加班2小时为150元，休息日8小时且未补休为800元，法定节假日8小时为1,200元。\n\n"
+            }
+          ]
+        },
+        {
+          "question": "实际加班未被记录或审批与事实不符时,员工应如何处理?",
+          "session": "ab9aad84cdc611f1ac78e3540a1bce4c",
+          "elapsed": 3738,
+          "answer": "员工发现实际加班未被记录，或审批与事实不符时，可在十个工作日内补充说明[ID:0]。超过期限但有客观证据的，仍应核查事实，不得仅以未走流程否定由公司安排的劳动[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 3625.5268810000416,
+            "answer_validation_ms": 2227.977949999513,
+            "first_output_ms": 3688.2565380001324,
+            "query_preparation_ms": 27.053095000155736,
+            "retrieval_ms": 0.3009749998454936,
+            "total_ms": 3688.258981999752
+          },
+          "record": "5097890193024197afede4e31bd5ae97",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ],
+          "context": [
+            {
+              "id": "c7f955d548db1006",
+              "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+              "text": "来源：05_加班与调休管理制度.md\n分块：14/23\n上下文：加班与调休管理制度 > 第二章 管理规则 > 第十三条\n\n**第十三条**\n员工发现实际加班未被记录或审批与事实不符时，可在十个工作日内补充说明。超过期限但有客观证据的，仍应核查事实，不得仅以未走流程否定由公司安排的劳动。\n\n"
+            }
+          ]
+        },
+        {
+          "question": "远程加班应如何记录和核验?",
+          "session": "ab9aad84cdc611f1ac78e3540a1bce4c",
+          "elapsed": 2515,
+          "answer": "远程加班应记录任务内容、开始和结束时间及可核验成果[ID:0]。管理人员不得要求员工持续开启摄像头或提交与工作无关的个人环境信息作为唯一证明[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 2396.122271999957,
+            "answer_validation_ms": 1226.5251339995302,
+            "first_output_ms": 2469.44292399985,
+            "query_preparation_ms": 33.78432800036535,
+            "retrieval_ms": 0.24276899966935162,
+            "total_ms": 2469.4463929999984
+          },
+          "record": "97b9889a357244648cb4ad7c3d95201a",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ],
+          "context": [
+            {
+              "id": "fcbe4a2841f0e548",
+              "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+              "text": "来源：05_加班与调休管理制度.md\n分块：10/23\n上下文：加班与调休管理制度 > 第二章 管理规则 > 第九条\n\n**第九条**\n远程加班应记录任务内容、开始和结束时间及可核验成果。管理人员不得要求员工持续开启摄像头或提交与工作无关的个人环境信息作为唯一证明。\n\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "duty",
+      "question": "值班制度",
+      "expected": "clarify",
+      "session": "be997d0ccdc611f1ac78e3540a1bce4c",
+      "elapsed": 9170,
+      "answer": "这个问题可能涉及不同的业务场景。请选择你想了解的方向，或在输入框补充说明。",
+      "options": [
+        {
+          "id": "98e9f7036cf94939bbd263045486f14c",
+          "question": "值班制度适用于哪些部门和人员?",
+          "sources": [
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md"
+          ]
+        },
+        {
+          "id": "7dbee30a6f604a798cacd555b242f100",
+          "question": "值班制度由哪个部门归口管理,职责是什么?",
+          "sources": [
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md"
+          ]
+        },
+        {
+          "id": "b24ee8ac661a49bf8f1c3e56b9e3b156",
+          "question": "值班制度的制定目的是什么?",
+          "sources": [
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md"
+          ]
+        },
+        {
+          "id": "16562e7ad5204331b099f697d156fde8",
+          "question": "值班制度由谁负责解释和定期评估,何时施行?",
+          "sources": [
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md"
+          ]
+        },
+        {
+          "id": "13ae1e553c6643d7993c721aa67d274f",
+          "question": "违反值班制度会如何处理?",
+          "sources": [
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md"
+          ]
+        }
+      ],
+      "needsInput": false,
+      "cacheId": "edb0933c0c8f4abf98ceb42b7257fd3a",
+      "cacheStatus": "not_requested",
+      "preprocessing": {
+        "ambiguity_reasons": [
+          "仅给出主题名词,未说明具体所问事项(如适用范围、具体要求、申请流程等)"
+        ],
+        "ambiguity_score": 0.6,
+        "ambiguity_signals": [
+          "short_question",
+          "generic_expression",
+          "missing_specific_focus"
+        ],
+        "confidence": 0.95,
+        "context_used": false,
+        "corrections": [],
+        "intent_parts": [
+          "值班制度"
+        ],
+        "missing_topic": false,
+        "model_called": true,
+        "normalized_question": "值班制度",
+        "original_question": "值班制度",
+        "retrieval_queries": [
+          "值班制度"
+        ],
+        "status": "success"
+      },
+      "decision": {
+        "answer_coverage": [
+          {
+            "question": "值班制度适用于哪些部门和人员?",
+            "reason": "选项直接询问适用范围，原文明确列出适用部门及人员，并说明特殊人员另行明确，可完整回答。",
+            "supported": true
+          },
+          {
+            "question": "值班制度由哪个部门归口管理,职责是什么?",
+            "reason": "选项询问归口管理部门及职责，原文明确指定行政管理部并列出其职责，可完整回答。",
+            "supported": true
+          },
+          {
+            "question": "值班制度的制定目的是什么?",
+            "reason": "选项询问制定目的，原文第一条明确说明目的，可完整回答。",
+            "supported": true
+          },
+          {
+            "question": "值班制度由谁负责解释和定期评估,何时施行?",
+            "reason": "选项询问解释评估主体及施行时间，原文第二十二条明确回答，可完整回答。",
+            "supported": true
+          },
+          {
+            "question": "违反值班制度会如何处理?",
+            "reason": "选项询问违反制度的处理方式，原文第二十一条给出处理原则和移交规定，可完整回答。",
+            "supported": true
+          }
+        ],
+        "candidate_pool_count": 24,
+        "evidence_valid_option_count": 5,
+        "model_action": "clarify",
+        "reason": "grounded_options",
+        "shown_evidence_chars": 3630,
+        "shown_evidence_count": 24,
+        "valid_option_count": 5
+      },
+      "timings": {
+        "clarification_ms": 5655.577585999708,
+        "first_output_ms": 9118.223932000546,
+        "preprocessing_ms": 2853.8268120000794,
+        "query_preparation_ms": 2870.340347999445,
+        "retrieval_ms": 565.7464559999426,
+        "total_ms": 9118.22724600006
+      },
+      "record": "5fdd1593edea4853a15afab974bf3123",
+      "candidateCount": 24,
+      "contextCount": 0,
+      "documents": [
+        "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+        "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+        "09_薪酬与奖金管理制度.ef6e55b2087e.a8cffde97a4947170d3c.md",
+        "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md",
+        "M12_2026-08-26_财务岗位资格与轮岗会.e4b08b2afa2b.b8117ec60c319e14b648.md"
+      ],
+      "context": [],
+      "contractPassed": true,
+      "expectedShape": true,
+      "clicks": [
+        {
+          "question": "值班制度适用于哪些部门和人员?",
+          "session": "be997d0ccdc611f1ac78e3540a1bce4c",
+          "elapsed": 3384,
+          "answer": "值班制度适用于参加现场值班、电话值守、技术保障和应急备勤的部门及人员[ID:0]。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 3266.5835620000507,
+            "answer_validation_ms": 1912.1802720001142,
+            "first_output_ms": 3325.8942279999246,
+            "query_preparation_ms": 28.558752000208187,
+            "retrieval_ms": 0.3132189995085355,
+            "total_ms": 3325.897533999523
+          },
+          "record": "c343a8a03d8440e79cd1b9835b66bac9",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md"
+          ],
+          "context": [
+            {
+              "id": "238c5d8ef7cc029e",
+              "document": "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+              "text": "来源：01_值班管理制度.md\n分块：3/23\n上下文：值班管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于参加现场值班、电话值守、技术保障和应急备勤的部门及人员。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+            }
+          ]
+        },
+        {
+          "question": "值班制度由哪个部门归口管理,职责是什么?",
+          "session": "be997d0ccdc611f1ac78e3540a1bce4c",
+          "elapsed": 3007,
+          "answer": "行政管理部是值班制度的归口部门，负责解释、培训、记录检查和版本维护[ID:0]。各部门负责人负责组织实施，员工应如实提交信息并配合合理核验[ID:0]。审批人对其权限范围内决定负责[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 2887.893090000034,
+            "answer_validation_ms": 1587.081691000094,
+            "first_output_ms": 2938.09451099969,
+            "query_preparation_ms": 24.410496999735187,
+            "retrieval_ms": 0.215947000469896,
+            "total_ms": 2938.0973540000923
+          },
+          "record": "c23b50bc57ab4beb8f04b2671fb80d58",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md"
+          ],
+          "context": [
+            {
+              "id": "a6566415167342ee",
+              "document": "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+              "text": "来源：01_值班管理制度.md\n分块：5/23\n上下文：值班管理制度 > 第一章 总则 > 第四条\n\n**第四条**\n行政管理部是本制度的归口部门，负责解释、培训、记录检查和版本维护；各部门负责人负责组织实施，员工应如实提交信息并配合合理核验。审批人对其权限范围内决定负责。\n\n"
+            }
+          ]
+        },
+        {
+          "question": "值班制度的制定目的是什么?",
+          "session": "be997d0ccdc611f1ac78e3540a1bce4c",
+          "elapsed": 2991,
+          "answer": "值班制度的制定目的是规范工作日夜间、周末、法定节假日及重要保障期的值班安排，确保信息传递、突发事件处置和业务连续性[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 2863.2668099999137,
+            "answer_validation_ms": 1631.816560000516,
+            "first_output_ms": 2918.8924820000466,
+            "query_preparation_ms": 26.468534999366966,
+            "retrieval_ms": 0.3171150001435308,
+            "total_ms": 2918.8959849998355
+          },
+          "record": "11f0763b1fc1449ca8256db8d1d8f390",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md"
+          ],
+          "context": [
+            {
+              "id": "5d6a377c46a60952",
+              "document": "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+              "text": "来源：01_值班管理制度.md\n分块：2/23\n上下文：值班管理制度 > 第一章 总则 > 第一条\n\n## 第一章 总则\n\n**第一条**\n为规范工作日夜间、周末、法定节假日及重要保障期的值班安排，确保信息传递、突发事件处置和业务连续性，结合公司实际，制定本制度。本制度为知识库验证样例，正式发布前应由人力资源、财务、法务等责任部门结合所在地法律和公司授权完成审核。\n\n"
+            }
+          ]
+        },
+        {
+          "question": "值班制度由谁负责解释和定期评估,何时施行?",
+          "session": "be997d0ccdc611f1ac78e3540a1bce4c",
+          "elapsed": 2726,
+          "answer": "本制度由行政管理部负责解释和定期评估，自批准发布之日起施行[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 2599.3475249997573,
+            "answer_validation_ms": 1227.0125850000113,
+            "first_output_ms": 2660.6264559995907,
+            "query_preparation_ms": 29.155383000215807,
+            "retrieval_ms": 0.24429999939457048,
+            "total_ms": 2660.629409999274
+          },
+          "record": "768444886e7c43afb9a8916486837a02",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md"
+          ],
+          "context": [
+            {
+              "id": "c463a11ab4c7cb4b",
+              "document": "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+              "text": "来源：01_值班管理制度.md\n分块：23/23\n上下文：值班管理制度 > 第四章 异议、责任与附则 > 第二十二条\n\n**第二十二条**\n本制度由行政管理部负责解释和定期评估，自批准发布之日起施行。法律法规、组织结构或业务流程发生重大变化时，应及时修订；新旧规定衔接不清的，由归口部门提出处理意见并留档。\n"
+            }
+          ]
+        },
+        {
+          "question": "违反值班制度会如何处理?",
+          "session": "be997d0ccdc611f1ac78e3540a1bce4c",
+          "elapsed": 3304,
+          "answer": "违反本制度的，应先调查事实、听取说明并区分故意、过失、客观障碍和管理责任[ID:0]。处理措施应与行为性质和影响相称；涉嫌违法或重大风险的，按授权移交相应部门[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 3204.033949999939,
+            "answer_validation_ms": 1475.5374100004701,
+            "first_output_ms": 3261.844311999994,
+            "query_preparation_ms": 27.612730999862833,
+            "retrieval_ms": 0.23149299977376359,
+            "total_ms": 3261.8474370001422
+          },
+          "record": "3af898a82d8e426d87f04de69fea3ebc",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md"
+          ],
+          "context": [
+            {
+              "id": "b70fcd86f36f04ce",
+              "document": "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+              "text": "来源：01_值班管理制度.md\n分块：22/23\n上下文：值班管理制度 > 第四章 异议、责任与附则 > 第二十一条\n\n## 第四章 异议、责任与附则\n\n**第二十一条**\n违反本制度的，应先调查事实、听取说明并区分故意、过失、客观障碍和管理责任。处理措施应与行为性质和影响相称；涉嫌违法或重大风险的，按授权移交相应部门。\n\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "expense",
+      "question": "报销制度",
+      "expected": "clarify",
+      "session": "c1dd5560cdc611f1ac78e3540a1bce4c",
+      "elapsed": 8841,
+      "answer": "这个问题可能涉及不同的业务场景。请选择你想了解的方向，或在输入框补充说明。",
+      "options": [
+        {
+          "id": "878a1b88583f4c5580c36cdff46e75cb",
+          "question": "差旅费用报销的提交时限和具体流程是什么?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "a9040f1a85da489d9390ab07daccb6c6",
+          "question": "出差伙食补助和市内交通补助的标准及扣减规则是什么?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "c69b07c739f241c294894a75cd7ff5c9",
+          "question": "不同职级乘坐飞机、高铁等交通工具的标准是什么?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "cbf3fc58e41c449e9a594024ca58d337",
+          "question": "对报销退回、扣减或逾期处理有异议时如何申请复核?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        }
+      ],
+      "needsInput": false,
+      "cacheId": "1011e809bbdd48b99cf8a77f305355bb",
+      "cacheStatus": "not_requested",
+      "preprocessing": {
+        "ambiguity_reasons": [
+          "仅给出主题名词,未说明具体所问事项(如流程、标准、材料、时限等)"
+        ],
+        "ambiguity_score": 0.6,
+        "ambiguity_signals": [
+          "short_question",
+          "generic_expression",
+          "missing_specific_focus"
+        ],
+        "confidence": 0.95,
+        "context_used": false,
+        "corrections": [],
+        "intent_parts": [
+          "报销制度"
+        ],
+        "missing_topic": false,
+        "model_called": true,
+        "normalized_question": "报销制度",
+        "original_question": "报销制度",
+        "retrieval_queries": [
+          "报销制度"
+        ],
+        "status": "success"
+      },
+      "decision": {
+        "answer_coverage": [
+          {
+            "question": "差旅费用报销的提交时限和具体流程是什么?",
+            "reason": "选项直接询问差旅报销提交时限和流程，原文完整给出十五个工作日时限及七步流程，可完整回答。",
+            "supported": true
+          },
+          {
+            "question": "不同城市类别和职级的住宿报销限额分别是多少?",
+            "reason": "missing_or_invalid_verification",
+            "supported": false
+          },
+          {
+            "question": "出差伙食补助和市内交通补助的标准及扣减规则是什么?",
+            "reason": "选项询问伙食和市内交通补助标准及扣减规则，原文完整给出标准、计算方式和扣减规则。",
+            "supported": true
+          },
+          {
+            "question": "不同职级乘坐飞机、高铁等交通工具的标准是什么?",
+            "reason": "选项询问不同职级交通工具标准，原文按职级完整列出飞机、高铁、列车标准及公务舱条件。",
+            "supported": true
+          },
+          {
+            "question": "对报销退回、扣减或逾期处理有异议时如何申请复核?",
+            "reason": "选项询问对退回、扣减或逾期处理的复核申请，原文明确可提交复核并说明处理依据，可完整回答。",
+            "supported": true
+          }
+        ],
+        "candidate_pool_count": 24,
+        "evidence_valid_option_count": 5,
+        "model_action": "clarify",
+        "reason": "grounded_options",
+        "shown_evidence_chars": 4184,
+        "shown_evidence_count": 24,
+        "valid_option_count": 4
+      },
+      "timings": {
+        "clarification_ms": 7129.639130000214,
+        "first_output_ms": 8782.91435400024,
+        "preprocessing_ms": 1221.6129610005737,
+        "query_preparation_ms": 1234.7801890000483,
+        "retrieval_ms": 390.7972189999782,
+        "total_ms": 8782.918447999691
+      },
+      "record": "3d63bbc16aea40719fde5c5ee1039e15",
+      "candidateCount": 24,
+      "contextCount": 0,
+      "documents": [
+        "10_远程办公管理制度.0661197500c3.109a94309f7e0772dce0.md",
+        "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+        "15_档案管理制度.575753e1f623.daa9c89e4da4d6c5e449.md"
+      ],
+      "context": [],
+      "contractPassed": true,
+      "expectedShape": true,
+      "clicks": [
+        {
+          "question": "差旅费用报销的提交时限和具体流程是什么?",
+          "session": "c1dd5560cdc611f1ac78e3540a1bce4c",
+          "elapsed": 3742,
+          "answer": "差旅费用报销需在返程后十五个工作日内提交[ID:0]。具体流程为：员工应按\"填写报销单—关联出差申请—上传交通、住宿及支付凭证—直属负责人确认业务—成本中心复核预算—财务审核票据—出纳付款\"的顺序提交[ID:0]。其中，电子发票应验真查重，纸质票据按档案要求移交[ID:0]。材料齐全后，财务原则上在五个工作日内完成审核，并在下一付款批次支付[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 3624.807647000125,
+            "answer_validation_ms": 1714.73125600005,
+            "first_output_ms": 3682.345353000528,
+            "query_preparation_ms": 27.758508999795595,
+            "retrieval_ms": 0.33895599972311174,
+            "total_ms": 3682.3488469999575
+          },
+          "record": "6b8bb90b53ab48018720242b1cd8e963",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ],
+          "context": [
+            {
+              "id": "9cf74693d51d51ef",
+              "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+              "text": "来源：06_差旅与费用报销制度.md\n分块：14/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十三条\n\n**第十三条**\n返程后十五个工作日内，员工应按“填写报销单—关联出差申请—上传交通、住宿及支付凭证—直属负责人确认业务—成本中心复核预算—财务审核票据—出纳付款”的顺序提交。电子发票应验真查重；纸质票据按档案要求移交。材料齐全后财务原则上在五个工作日内完成审核，并在下一付款批次支付。\n\n"
+            }
+          ]
+        },
+        {
+          "question": "出差伙食补助和市内交通补助的标准及扣减规则是什么?",
+          "session": "c1dd5560cdc611f1ac78e3540a1bce4c",
+          "elapsed": 3270,
+          "answer": "出差伙食补助按自然日计算：A类城市120元/人/天、B类城市100元/人/天、C类城市80元/人/天；市内交通补助分别为80元、60元和50元/人/天[ID:0]。出发日和返程日均按全天计算[ID:0]。主办方每提供一顿正餐，伙食补助扣减30元；统一提供市内交通的，当日不再发放交通补助[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 3147.164017999785,
+            "answer_validation_ms": 1776.0802509992573,
+            "first_output_ms": 3201.3737939996645,
+            "query_preparation_ms": 24.516288000086206,
+            "retrieval_ms": 0.3221790002498892,
+            "total_ms": 3201.3768239994533
+          },
+          "record": "295c9db6e2d44fdaa7d14434cea1f6af",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ],
+          "context": [
+            {
+              "id": "ffdb8a429109d21b",
+              "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+              "text": "来源：06_差旅与费用报销制度.md\n分块：12/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十一条\n\n**第十一条**\n出差伙食补助按自然日计算：A类城市120元/人/天、B类城市100元/人/天、C类城市80元/人/天；市内交通补助分别为80元、60元和50元/人/天。出发日和返程日均按全天计算。主办方每提供一顿正餐，伙食补助扣减30元；统一提供市内交通的，当日不再发放交通补助。\n\n"
+            }
+          ]
+        },
+        {
+          "question": "不同职级乘坐飞机、高铁等交通工具的标准是什么?",
+          "session": "c1dd5560cdc611f1ac78e3540a1bce4c",
+          "elapsed": 3273,
+          "answer": "职级P1—P3乘坐飞机经济舱、高铁或动车二等座、普通列车硬卧；P4—P5及M1—M2可乘飞机经济舱、高铁或动车一等座、普通列车软卧；M3及以上可乘前述标准，单程飞行超过6小时可事前申请公务舱[ID:0]。超标准部分未经批准由个人承担，低于标准按实际金额报销，不发放差额[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 3151.544274999651,
+            "answer_validation_ms": 1649.4698449996577,
+            "first_output_ms": 3205.501954999818,
+            "query_preparation_ms": 26.02346799994848,
+            "retrieval_ms": 0.2708909996727016,
+            "total_ms": 3205.5056700000932
+          },
+          "record": "8a3cc73f987042ad8b3555ca63bfc3c7",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ],
+          "context": [
+            {
+              "id": "45b931f9d15e08c8",
+              "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+              "text": "来源：06_差旅与费用报销制度.md\n分块：8/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第七条\n\n**第七条**\n职级P1—P3乘坐飞机经济舱、高铁或动车二等座、普通列车硬卧；P4—P5及M1—M2可乘飞机经济舱、高铁或动车一等座、普通列车软卧；M3及以上可乘前述标准，单程飞行超过6小时可事前申请公务舱。超标准部分未经批准由个人承担，低于标准按实际金额报销，不发放差额。\n\n"
+            }
+          ]
+        },
+        {
+          "question": "对报销退回、扣减或逾期处理有异议时如何申请复核?",
+          "session": "c1dd5560cdc611f1ac78e3540a1bce4c",
+          "elapsed": 3684,
+          "answer": "员工对退回、扣减或逾期处理有异议的，可提交复核，财务部应说明依据；制度标准变化影响已批准行程时，原则上按批准时或对员工更合理的有效规则衔接处理[ID:0]。此外，员工对处理结果有异议的，可先向归口部门申请复核；涉及本人直接利益的，复核人员应保持相对独立，任何人不得因员工咨询、提出异议或依法反映问题而实施不利对待[ID:1]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 3533.992942000623,
+            "answer_validation_ms": 2048.2613799995306,
+            "first_output_ms": 3593.6739069993564,
+            "query_preparation_ms": 32.92296500058001,
+            "retrieval_ms": 0.33001299925672356,
+            "total_ms": 3593.6782489998222
+          },
+          "record": "aae49285062a49ad9204b9e40ee8b281",
+          "candidateCount": 2,
+          "contextCount": 2,
+          "documents": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ],
+          "context": [
+            {
+              "id": "e37f95ee71a6732f",
+              "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+              "text": "来源：06_差旅与费用报销制度.md\n分块：17/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十六条\n\n**第十六条**\n员工对退回、扣减或逾期处理有异议的，可提交复核。财务部应说明依据；制度标准变化影响已批准行程时，原则上按批准时或对员工更合理的有效规则衔接处理。\n\n"
+            },
+            {
+              "id": "b266882eeef9c2df",
+              "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+              "text": "来源：06_差旅与费用报销制度.md\n分块：21/23\n上下文：差旅与费用报销管理制度 > 第三章 申请、记录与监督 > 第二十条\n\n**第二十条**\n员工对处理结果有异议的，可先向归口部门申请复核；涉及本人直接利益的，复核人员应保持相对独立。任何人不得因员工咨询、提出异议或依法反映问题而实施不利对待。\n\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "leave",
+      "question": "请假制度",
+      "expected": "clarify",
+      "session": "cd44df2ccdc611f1ac78e3540a1bce4c",
+      "elapsed": 7223,
+      "answer": "这个问题可能涉及不同的业务场景。请选择你想了解的方向，或在输入框补充说明。",
+      "options": [
+        {
+          "id": "a9151ffaf9344fb7a69dd8c45eda7601",
+          "question": "请假制度适用于哪些假期类型和人员范围?",
+          "sources": [
+            "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md"
+          ]
+        },
+        {
+          "id": "ed0b32c07b274748b73c827928b8b87b",
+          "question": "请假制度由哪个部门负责解释和管理?",
+          "sources": [
+            "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md"
+          ]
+        },
+        {
+          "id": "f164af9bc5484586ae2464bb09d4e09a",
+          "question": "请假制度中各类假期的天数按照国家规定还是公司标准执行?",
+          "sources": [
+            "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md"
+          ]
+        },
+        {
+          "id": "af101451c1dd4c2795c6d99677530508",
+          "question": "违反请假制度会如何处理?",
+          "sources": [
+            "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md"
+          ]
+        }
+      ],
+      "needsInput": false,
+      "cacheId": "ea47778a48cc4e3d8d59c1ef4ac913ee",
+      "cacheStatus": "not_requested",
+      "preprocessing": {
+        "ambiguity_reasons": [
+          "仅给出主题名词,未说明具体所问事项(如申请流程、审批权限、假期类型、天数规定等)"
+        ],
+        "ambiguity_score": 0.6,
+        "ambiguity_signals": [
+          "short_question",
+          "generic_expression",
+          "missing_specific_focus"
+        ],
+        "confidence": 0.95,
+        "context_used": false,
+        "corrections": [],
+        "intent_parts": [
+          "请假制度"
+        ],
+        "missing_topic": false,
+        "model_called": true,
+        "normalized_question": "请假制度",
+        "original_question": "请假制度",
+        "retrieval_queries": [
+          "请假制度"
+        ],
+        "status": "success"
+      },
+      "decision": {
+        "answer_coverage": [
+          {
+            "question": "请假制度适用于哪些假期类型和人员范围?",
+            "reason": "原文完整覆盖假期类型和人员范围两个部分。",
+            "supported": true
+          },
+          {
+            "question": "请假制度由哪个部门负责解释和管理?",
+            "reason": "原文明确解释了负责解释和管理的部门。",
+            "supported": true
+          },
+          {
+            "question": "请假制度中各类假期的天数按照国家规定还是公司标准执行?",
+            "reason": "原文完整回答了假期天数执行国家规定还是公司标准的问题。",
+            "supported": true
+          },
+          {
+            "question": "违反请假制度会如何处理?",
+            "reason": "原文完整说明了违反制度的处理原则和措施。",
+            "supported": true
+          }
+        ],
+        "candidate_pool_count": 24,
+        "evidence_valid_option_count": 4,
+        "model_action": "clarify",
+        "reason": "grounded_options",
+        "shown_evidence_chars": 3754,
+        "shown_evidence_count": 24,
+        "valid_option_count": 4
+      },
+      "timings": {
+        "clarification_ms": 4873.802817000069,
+        "first_output_ms": 7152.323821000209,
+        "preprocessing_ms": 1515.022740999484,
+        "query_preparation_ms": 1526.4030120006282,
+        "retrieval_ms": 713.4584729992639,
+        "total_ms": 7152.327216000231
+      },
+      "record": "7f115924ba1a4fcd8d28200a486c7f4e",
+      "candidateCount": 24,
+      "contextCount": 0,
+      "documents": [
+        "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md",
+        "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+        "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+        "18_客户投诉管理制度.7c085d65153f.48a26ffcbbf571750e11.md",
+        "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+        "20_会议管理制度.967c3b529dde.9e079c1e3dbbe3e61ce7.md"
+      ],
+      "context": [],
+      "contractPassed": true,
+      "expectedShape": true,
+      "clicks": [
+        {
+          "question": "请假制度适用于哪些假期类型和人员范围?",
+          "session": "cd44df2ccdc611f1ac78e3540a1bce4c",
+          "elapsed": 2799,
+          "answer": "本制度适用于公司员工的年休假、事假、病假、婚假、产假、陪产假、丧假及依法适用的其他假期[ID:0]。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 2692.4038090000977,
+            "answer_validation_ms": 1607.6377749996027,
+            "first_output_ms": 2756.316063000668,
+            "query_preparation_ms": 25.98294800009171,
+            "retrieval_ms": 0.2316979998795432,
+            "total_ms": 2756.318902000203
+          },
+          "record": "0f421920194f46518d000b10901dc503",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md"
+          ],
+          "context": [
+            {
+              "id": "bfe4c45aef641be9",
+              "document": "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md",
+              "text": "来源：04_请假休假管理制度.md\n分块：3/23\n上下文：请假与休假管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于公司员工的年休假、事假、病假、婚假、产假、陪产假、丧假及依法适用的其他假期。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+            }
+          ]
+        },
+        {
+          "question": "请假制度由哪个部门负责解释和管理?",
+          "session": "cd44df2ccdc611f1ac78e3540a1bce4c",
+          "elapsed": 3203,
+          "answer": "人力资源部是本制度的归口部门，负责解释、培训、记录检查和版本维护[ID:0]。各部门负责人负责组织实施，员工应如实提交信息并配合合理核验[ID:0]。审批人对其权限范围内决定负责[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 3097.573840000223,
+            "answer_validation_ms": 1772.6386519998414,
+            "first_output_ms": 3148.937448000652,
+            "query_preparation_ms": 24.848410000231524,
+            "retrieval_ms": 0.22795499990024837,
+            "total_ms": 3148.9402289998907
+          },
+          "record": "c5f2634b3e864946a90f876b551aef8c",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md"
+          ],
+          "context": [
+            {
+              "id": "714651927920962f",
+              "document": "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md",
+              "text": "来源：04_请假休假管理制度.md\n分块：5/23\n上下文：请假与休假管理制度 > 第一章 总则 > 第四条\n\n**第四条**\n人力资源部是本制度的归口部门，负责解释、培训、记录检查和版本维护；各部门负责人负责组织实施，员工应如实提交信息并配合合理核验。审批人对其权限范围内决定负责。\n\n"
+            }
+          ]
+        },
+        {
+          "question": "请假制度中各类假期的天数按照国家规定还是公司标准执行?",
+          "session": "cd44df2ccdc611f1ac78e3540a1bce4c",
+          "elapsed": 2819,
+          "answer": "员工依法享有的假期按照国家及工作所在地有效规定执行；公司标准高于法定标准的，按公司公布标准执行[ID:0]。制度与新生效规定不一致时，应及时更新并按对员工适用的规则处理[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 2712.577608000174,
+            "answer_validation_ms": 1458.7487150001834,
+            "first_output_ms": 2774.4452389997605,
+            "query_preparation_ms": 27.384390999941388,
+            "retrieval_ms": 0.23754799985908903,
+            "total_ms": 2774.447929999951
+          },
+          "record": "86a1cd7a0a1b46528b40ecf3e1a7bf21",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md"
+          ],
+          "context": [
+            {
+              "id": "f454acb1dd4b2932",
+              "document": "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md",
+              "text": "来源：04_请假休假管理制度.md\n分块：6/23\n上下文：请假与休假管理制度 > 第二章 管理规则 > 第五条\n\n## 第二章 管理规则\n\n**第五条**\n员工依法享有的假期按照国家及工作所在地有效规定执行；公司标准高于法定标准的，按公司公布标准执行。制度与新生效规定不一致时，应及时更新并按对员工适用的规则处理。\n\n"
+            }
+          ]
+        },
+        {
+          "question": "违反请假制度会如何处理?",
+          "session": "cd44df2ccdc611f1ac78e3540a1bce4c",
+          "elapsed": 2849,
+          "answer": "违反本制度的，应先调查事实、听取说明并区分故意、过失、客观障碍和管理责任[ID:0]。处理措施应与行为性质和影响相称；涉嫌违法或重大风险的，按授权移交相应部门[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 2742.634580000413,
+            "answer_validation_ms": 1501.5029679998406,
+            "first_output_ms": 2804.612313000689,
+            "query_preparation_ms": 25.872626999444037,
+            "retrieval_ms": 0.22551999973075,
+            "total_ms": 2804.6152289998645
+          },
+          "record": "4ba3753d425f46438a9f48458deffc86",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md"
+          ],
+          "context": [
+            {
+              "id": "036979790bf8ebcc",
+              "document": "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md",
+              "text": "来源：04_请假休假管理制度.md\n分块：22/23\n上下文：请假与休假管理制度 > 第四章 异议、责任与附则 > 第二十一条\n\n## 第四章 异议、责任与附则\n\n**第二十一条**\n违反本制度的，应先调查事实、听取说明并区分故意、过失、客观障碍和管理责任。处理措施应与行为性质和影响相称；涉嫌违法或重大风险的，按授权移交相应部门。\n\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "account",
+      "question": "账号怎么处理？",
+      "expected": "clarify",
+      "session": "cf7a4c78cdc611f1ac78e3540a1bce4c",
+      "elapsed": 8395,
+      "answer": "这个问题可能涉及不同的业务场景。请选择你想了解的方向，或在输入框补充说明。",
+      "options": [
+        {
+          "id": "29260c3bec4c4678ae46a3c4cdae10da",
+          "question": "离职人员的账号应如何处理?",
+          "sources": [
+            "信息安全管理制度.bdb9da804ed7cc43.be58e8cb3fe6a574.md",
+            "M13_2026-09-04_登录安全与账号治理例会.c8ea48e6709d.ab1d3d2c6f23c48fb684.md"
+          ]
+        },
+        {
+          "id": "ab41bb3e395144408cef2fa135d461d1",
+          "question": "申请账号权限需要满足哪些要求?",
+          "sources": [
+            "信息安全管理制度.212718b4bfd3.30010621ed37840e95b1.md"
+          ]
+        },
+        {
+          "id": "d322ce6b617b425692f9151870bd80f3",
+          "question": "账号复核的频率和责任部门是什么?",
+          "sources": [
+            "信息安全管理制度.bdb9da804ed7cc43.be58e8cb3fe6a574.md"
+          ]
+        },
+        {
+          "id": "e7668344551c4ece9bbd095ecda3e4e3",
+          "question": "远程办公时发生账号异常应如何处理?",
+          "sources": [
+            "10_远程办公管理制度.0661197500c3.109a94309f7e0772dce0.md"
+          ]
+        },
+        {
+          "id": "128f42d36cef4f1b999bd8b8bbcd73a0",
+          "question": "员工离职、转岗或项目结束时,账号权限应如何处理?",
+          "sources": [
+            "21_保密与信息分级制度.42981f3ff733.5d6c85f8a321c584e828.md"
+          ]
+        }
+      ],
+      "needsInput": false,
+      "cacheId": "7b1b97c5f47e4f2eae6a7b48a2a7d30d",
+      "cacheStatus": "not_requested",
+      "preprocessing": {
+        "ambiguity_reasons": [
+          "未说明账号类型(如系统账号、业务账号、离职账号等)",
+          "未说明处理场景或所问事项(如开通、变更、注销、权限回收等)"
+        ],
+        "ambiguity_score": 0.8,
+        "ambiguity_signals": [
+          "short_question",
+          "underspecified_action"
+        ],
+        "confidence": 0.9,
+        "context_used": false,
+        "corrections": [],
+        "intent_parts": [
+          "账号处理"
+        ],
+        "missing_topic": false,
+        "model_called": true,
+        "normalized_question": "账号怎么处理?",
+        "original_question": "账号怎么处理？",
+        "retrieval_queries": [
+          "账号怎么处理?",
+          "账号怎么处理"
+        ],
+        "status": "success"
+      },
+      "decision": {
+        "answer_coverage": [
+          {
+            "question": "离职人员的账号应如何处理?",
+            "reason": "选项问离职人员账号处理，原文明确要求停用离职人员账号，并有具体禁用安排，可直接回答。",
+            "supported": true
+          },
+          {
+            "question": "申请账号权限需要满足哪些要求?",
+            "reason": "选项问申请账号权限的要求，原文完整列出原则和三项具体要求，可直接回答。",
+            "supported": true
+          },
+          {
+            "question": "账号复核的频率和责任部门是什么?",
+            "reason": "选项问账号复核频率和责任部门，原文表格明确列出两类账号的频率和责任部门，可直接回答。",
+            "supported": true
+          },
+          {
+            "question": "远程办公时发生账号异常应如何处理?",
+            "reason": "选项问远程办公账号异常处理，原文给出时限、联系部门和处置措施，可直接回答。",
+            "supported": true
+          },
+          {
+            "question": "员工离职、转岗或项目结束时,账号权限应如何处理?",
+            "reason": "选项问离职、转岗或项目结束时账号权限处理，原文明确当日收回不再需要的权限及机密项目额外要求，可直接回答。",
+            "supported": true
+          }
+        ],
+        "candidate_pool_count": 24,
+        "evidence_valid_option_count": 5,
+        "model_action": "clarify",
+        "reason": "grounded_options",
+        "shown_evidence_chars": 4715,
+        "shown_evidence_count": 24,
+        "valid_option_count": 5
+      },
+      "timings": {
+        "clarification_ms": 6335.902509000334,
+        "first_output_ms": 8356.228337000175,
+        "preprocessing_ms": 1258.80758600033,
+        "query_preparation_ms": 1273.1422670003667,
+        "retrieval_ms": 719.5255469996482,
+        "total_ms": 8356.231763999858
+      },
+      "record": "6d68493976514fd48864b2714a48a14d",
+      "candidateCount": 27,
+      "contextCount": 0,
+      "documents": [
+        "M13_2026-09-04_登录安全与账号治理例会.c8ea48e6709d.ab1d3d2c6f23c48fb684.md",
+        "信息安全管理制度.bdb9da804ed7cc43.be58e8cb3fe6a574.md",
+        "信息安全管理制度.212718b4bfd3.30010621ed37840e95b1.md",
+        "业务分析报告.552dd4b0c7e12482.4805f21e667c4f6f.md",
+        "业务分析报告.0a7048181247.2608606a1da78ca9fed1.md",
+        "05-人民币银行结算账户管理办法实施细则.8c9f48871ceb.10377732b1a6bd9a9064.md",
+        "10_远程办公管理制度.0661197500c3.109a94309f7e0772dce0.md",
+        "18_客户投诉管理制度.7c085d65153f.48a26ffcbbf571750e11.md",
+        "14_印章与证照管理制度.421af9b9a594.a78457db4f16340f1523.md",
+        "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md",
+        "21_保密与信息分级制度.42981f3ff733.5d6c85f8a321c584e828.md",
+        "06-银行卡收单业务管理办法.0ac61aa51c7b.c4468f5ebb870041891b.md",
+        "04-人民币银行结算账户管理办法.37173235b564.885e0e015181e1fbc1df.md",
+        "17_预算管理制度.b67a60a8e087.ce2e31f9c14a86e510b0.md",
+        "16_固定资产管理制度.68a6d31149c7.483203e35ee7f4be2959.md"
+      ],
+      "context": [],
+      "contractPassed": true,
+      "expectedShape": true,
+      "clicks": [
+        {
+          "question": "离职人员的账号应如何处理?",
+          "session": "cf7a4c78cdc611f1ac78e3540a1bce4c",
+          "elapsed": 3295,
+          "answer": "离职人员账号的处理要求如下：\n\n- 系统负责人每季度组织账号复核，停用离职人员账号和无业务用途的账号[ID:1]。\n- 在2026-09-04的登录安全与账号治理例会上，安全组检查内部知识平台账号时发现17个离职人员账号尚未禁用[ID:0]。\n- 会议决定由魏然在9月6日前禁用这17个离职账号[ID:0]。\n- 审计要求恢复便利性不能削弱离职账号禁用措施[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 3176.7510030003905,
+            "answer_validation_ms": 1857.2798450004484,
+            "first_output_ms": 3250.0571579994357,
+            "query_preparation_ms": 37.24299800069275,
+            "retrieval_ms": 0.6123879993538139,
+            "total_ms": 3250.0602909994996
+          },
+          "record": "050c261733b74e24821efd9727319e80",
+          "candidateCount": 2,
+          "contextCount": 2,
+          "documents": [
+            "M13_2026-09-04_登录安全与账号治理例会.c8ea48e6709d.ab1d3d2c6f23c48fb684.md",
+            "信息安全管理制度.bdb9da804ed7cc43.be58e8cb3fe6a574.md"
+          ],
+          "context": [
+            {
+              "id": "360451b72659db23",
+              "document": "M13_2026-09-04_登录安全与账号治理例会.c8ea48e6709d.ab1d3d2c6f23c48fb684.md",
+              "text": "来源：M13_2026-09-04_登录安全与账号治理例会.md\n分块：2/4\n上下文：2026-09-04 登录安全与账号治理例会\n\n安全组检查了内部知识平台账号，发现17个离职人员账号尚未禁用，另有6个共享账号无法确定具体使用人。运维建议启用口令复杂度校验和短信二次验证，业务负责人希望保留部门共用账号以降低培训成本，审计明确要求操作行为能够追溯到自然人。\n\n会议决定由魏然在9月6日前禁用17个离职账号，由各部门在9月8日前拆分6个共享账号。短信验证先覆盖管理员，连续5次输错口令锁定15分钟。此次改造只涉及账号、口令和短信验证码，没有采购、签发或续费机构身份凭证的安排。\n\n客服另提出老员工忘记密码后恢复流程过长的问题，服务台将重置响应目标设为2小时，重置前必须核验工号和直属主管确认。齐悦在9月10日前更新操作手册，并抽查10张重置工单。审计要求恢复便利性不能削弱离职账号禁用措施。\n\n"
+            },
+            {
+              "id": "83adbaba20ce3e6e",
+              "document": "信息安全管理制度.bdb9da804ed7cc43.be58e8cb3fe6a574.md",
+              "text": "来源：信息安全管理制度.md\n分块：3/4\n标题：信息安全管理制度 > 第二章 账号与访问管理 > 第二节 定期复核\n\n### 第二节 定期复核\n\n第五条 系统负责人每季度组织账号复核，停用离职人员账号和无业务用途的账号。\n\n| 复核对象 | 频率 | 责任部门 |\n| --- | --- | --- |\n| 特权账号 | 每月 | 技术部 |\n| 普通账号 | 每季度 | 各使用部门 |\n\n"
+            }
+          ]
+        },
+        {
+          "question": "申请账号权限需要满足哪些要求?",
+          "session": "cf7a4c78cdc611f1ac78e3540a1bce4c",
+          "elapsed": 3008,
+          "answer": "申请账号权限需要满足以下要求：\n\n- 权限申请应遵循最小必要原则[ID:0]。\n- 申请人应说明业务用途、访问范围和使用期限[ID:0]。\n- 部门负责人核实业务需要，系统负责人审核权限范围[ID:0]。\n- 临时权限到期后自动回收；确需延期的，应重新履行审批手续[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 2903.70326700031,
+            "answer_validation_ms": 1549.8894069996823,
+            "first_output_ms": 2956.771518000096,
+            "query_preparation_ms": 26.02318400022341,
+            "retrieval_ms": 0.24962400038930355,
+            "total_ms": 2956.7744810001386
+          },
+          "record": "18516669ca9542febb9aebf66973ce33",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "信息安全管理制度.212718b4bfd3.30010621ed37840e95b1.md"
+          ],
+          "context": [
+            {
+              "id": "7d8b1caa2b1ef5b7",
+              "document": "信息安全管理制度.212718b4bfd3.30010621ed37840e95b1.md",
+              "text": "来源：信息安全管理制度.md\n分块：3/6\n上下文：信息安全管理制度 > 第二章 账号与访问管理 > 第一节 权限申请 > 第三条\n\n## 第二章 账号与访问管理\n\n### 第一节 权限申请\n\n第三条 权限申请应遵循最小必要原则，并满足以下要求：\n（一）申请人应说明业务用途、访问范围和使用期限。\n（二）部门负责人核实业务需要，系统负责人审核权限范围。\n（三）临时权限到期后自动回收；确需延期的，应重新履行审批手续。\n\n"
+            }
+          ]
+        },
+        {
+          "question": "账号复核的频率和责任部门是什么?",
+          "session": "cf7a4c78cdc611f1ac78e3540a1bce4c",
+          "elapsed": 2794,
+          "answer": "账号复核的频率和责任部门如下：\n\n- 系统负责人每季度组织账号复核，停用离职人员账号和无业务用途的账号[ID:0]。\n- 特权账号每月复核，责任部门为技术部[ID:0]。\n- 普通账号每季度复核，责任部门为各使用部门[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 2689.2443830001866,
+            "answer_validation_ms": 1501.5232879995892,
+            "first_output_ms": 2740.255055000489,
+            "query_preparation_ms": 23.882052999397274,
+            "retrieval_ms": 0.22807200002716854,
+            "total_ms": 2740.262375000384
+          },
+          "record": "93252d37a64a4eaeb096519a60ebdb30",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "信息安全管理制度.bdb9da804ed7cc43.be58e8cb3fe6a574.md"
+          ],
+          "context": [
+            {
+              "id": "83adbaba20ce3e6e",
+              "document": "信息安全管理制度.bdb9da804ed7cc43.be58e8cb3fe6a574.md",
+              "text": "来源：信息安全管理制度.md\n分块：3/4\n标题：信息安全管理制度 > 第二章 账号与访问管理 > 第二节 定期复核\n\n### 第二节 定期复核\n\n第五条 系统负责人每季度组织账号复核，停用离职人员账号和无业务用途的账号。\n\n| 复核对象 | 频率 | 责任部门 |\n| --- | --- | --- |\n| 特权账号 | 每月 | 技术部 |\n| 普通账号 | 每季度 | 各使用部门 |\n\n"
+            }
+          ]
+        },
+        {
+          "question": "远程办公时发生账号异常应如何处理?",
+          "session": "cf7a4c78cdc611f1ac78e3540a1bce4c",
+          "elapsed": 4518,
+          "answer": "远程办公时发生账号异常，应在十五分钟内联系信息技术部，并采取改密、断网等措施[ID:0]。如果涉及人身安全，应先联系紧急服务，再按突发事件制度报告[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 4407.005181999921,
+            "answer_validation_ms": 1677.99314199965,
+            "first_output_ms": 4457.165059000545,
+            "query_preparation_ms": 24.07242299977952,
+            "retrieval_ms": 0.25970400020014495,
+            "total_ms": 4457.168408999678
+          },
+          "record": "73f3f851156d4e8199047505675a44b2",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "10_远程办公管理制度.0661197500c3.109a94309f7e0772dce0.md"
+          ],
+          "context": [
+            {
+              "id": "1b10ac62479742d4",
+              "document": "10_远程办公管理制度.0661197500c3.109a94309f7e0772dce0.md",
+              "text": "来源：10_远程办公管理制度.md\n分块：14/23\n上下文：远程办公管理制度 > 第二章 管理规则 > 第十三条\n\n**第十三条**\n员工在远程地点发生设备遗失、账号异常或疑似数据泄露，应在十五分钟内联系信息技术部并采取改密、断网等措施；涉及人身安全时先联系紧急服务，再按突发事件制度报告。\n\n"
+            }
+          ]
+        },
+        {
+          "question": "员工离职、转岗或项目结束时,账号权限应如何处理?",
+          "session": "cf7a4c78cdc611f1ac78e3540a1bce4c",
+          "elapsed": 3020,
+          "answer": "员工离职、转岗或项目结束时，负责人应在当日收回不再需要的权限[ID:0]。机密项目成员离开前应完成资料清点，不得将工作文件发送至个人账号作为作品集[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 2896.4730779998717,
+            "answer_validation_ms": 1661.993433999669,
+            "first_output_ms": 2951.767708999796,
+            "query_preparation_ms": 27.026449000004504,
+            "retrieval_ms": 0.23909699939395068,
+            "total_ms": 2951.770504999331
+          },
+          "record": "0520713747ef4e0aaedc3863748d6445",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "21_保密与信息分级制度.42981f3ff733.5d6c85f8a321c584e828.md"
+          ],
+          "context": [
+            {
+              "id": "b502a996325b9d88",
+              "document": "21_保密与信息分级制度.42981f3ff733.5d6c85f8a321c584e828.md",
+              "text": "来源：21_保密与信息分级制度.md\n分块：14/23\n上下文：保密与信息分级管理制度 > 第二章 管理规则 > 第十三条\n\n**第十三条**\n离职、转岗或项目结束时，负责人应在当日收回不再需要的权限。机密项目成员离开前应完成资料清点，不得将工作文件发送至个人账号作为作品集。\n\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "missing-reference",
+      "question": "这个呢？",
+      "expected": "needs_input",
+      "session": "de6b50e2cdc611f1ac78e3540a1bce4c",
+      "elapsed": 1642,
+      "answer": "请补充您要咨询的具体事项，以及想了解的问题。例如：要申请什么、报销哪类费用，或遇到了什么情况。",
+      "options": [],
+      "needsInput": true,
+      "cacheStatus": "not_requested",
+      "preprocessing": {
+        "ambiguity_reasons": [
+          "指代对象“这个”无法确定",
+          "无历史用户消息可补全指代",
+          "缺少查询主题和所问事项"
+        ],
+        "ambiguity_score": 1,
+        "ambiguity_signals": [
+          "short_question",
+          "missing_specific_focus"
+        ],
+        "confidence": 0.95,
+        "context_used": false,
+        "corrections": [],
+        "intent_parts": [],
+        "missing_topic": true,
+        "model_called": true,
+        "normalized_question": "这个呢?",
+        "original_question": "这个呢？",
+        "retrieval_queries": [
+          "这个呢?"
+        ],
+        "status": "success"
+      },
+      "decision": {},
+      "timings": {
+        "first_output_ms": 1569.0017990000342,
+        "preprocessing_ms": 1532.768359000329,
+        "total_ms": 1569.004493000648
+      },
+      "record": "b9a33cfa98d8495a85e76814222c6e5b",
+      "candidateCount": 0,
+      "contextCount": 0,
+      "documents": [],
+      "context": [],
+      "contractPassed": true,
+      "expectedShape": true
+    },
+    {
+      "id": "missing-topic",
+      "question": "怎么申请？",
+      "expected": "needs_input",
+      "session": "d88ad24ccdc611f1ac78e3540a1bce4c",
+      "elapsed": 1633,
+      "answer": "请补充您要咨询的具体事项，以及想了解的问题。例如：要申请什么、报销哪类费用，或遇到了什么情况。",
+      "options": [],
+      "needsInput": true,
+      "cacheStatus": "not_requested",
+      "preprocessing": {
+        "ambiguity_reasons": [
+          "缺少申请对象,无法确定要查询的事项",
+          "无历史上下文可补全指代"
+        ],
+        "ambiguity_score": 0.95,
+        "ambiguity_signals": [
+          "short_question"
+        ],
+        "confidence": 0.95,
+        "context_used": false,
+        "corrections": [],
+        "intent_parts": [],
+        "missing_topic": true,
+        "model_called": true,
+        "normalized_question": "怎么申请?",
+        "original_question": "怎么申请？",
+        "retrieval_queries": [
+          "怎么申请?"
+        ],
+        "status": "success"
+      },
+      "decision": {},
+      "timings": {
+        "first_output_ms": 1590.186640999491,
+        "preprocessing_ms": 1554.5656000003873,
+        "total_ms": 1590.1896949999355
+      },
+      "record": "fa9249667df54f7bae4fa5f17b758534",
+      "candidateCount": 0,
+      "contextCount": 0,
+      "documents": [],
+      "context": [],
+      "contractPassed": true,
+      "expectedShape": true,
+      "followups": [
+        {
+          "question": "我是想申请加班，需要哪些步骤？",
+          "session": "d88ad24ccdc611f1ac78e3540a1bce4c",
+          "elapsed": 10252,
+          "answer": "根据制度，申请加班主要涉及以下步骤：\n\n**1. 如实填写申请信息**\n申请人应如实填写事项、时间、原因和必要附件[ID:1]。审批人应核对事实、规则、权限和业务影响；系统自动通过或退回不能替代应有的人工判断，重大例外应说明依据[ID:1]。\n\n**2. 紧急情形可先处置、后补办**\n突发故障、安全事件或客户重大事故需要立即处置的，可以先开展工作并在次一工作日补办审批[ID:4]。补办材料应记录触发时间、处置过程和实际结束时间，不得以紧急名义覆盖可预见任务[ID:4]。\n\n**3. 事项变化时及时更新**\n事项发生变化、取消或延期时，申请人应及时更新，审批人重新确认影响[ID:0]。紧急情形允许先采取保护人员、资产或业务连续性的必要措施，事后按规定补充记录[ID:0]。\n\n**4. 记录留存与追溯**\n归口部门应保存申请、审批、变更、执行和复核记录，确保能够追溯谁在何时基于何种材料作出决定[ID:2]。\n\n**5. 对结果有异议可申请复核**\n员工对处理结果有异议的，可先向归口部门申请复核；涉及本人直接利益的，复核人员应保持相对独立[ID:5]。任何人不得因员工咨询、提出异议或依法反映问题而实施不利对待[ID:5]。\n\n另外，该制度适用于因业务需要在适用工作时间之外工作的员工和安排、审批、核算加班的管理人员[ID:3]。如需了解具体的申请入口或表单，建议向归口部门确认。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "not_requested",
+          "preprocessing": {
+            "ambiguity_reasons": [
+              "主题明确为加班申请,所问事项为步骤,基本无歧义"
+            ],
+            "ambiguity_score": 0.1,
+            "ambiguity_signals": [],
+            "confidence": 0.95,
+            "context_used": false,
+            "corrections": [
+              "我是想申请加班 → 我想申请加班"
+            ],
+            "intent_parts": [
+              "加班申请步骤"
+            ],
+            "missing_topic": false,
+            "model_called": true,
+            "normalized_question": "我想申请加班,需要哪些步骤?",
+            "original_question": "我是想申请加班，需要哪些步骤？",
+            "retrieval_queries": [
+              "我是想申请加班,需要哪些步骤?",
+              "加班申请需要哪些步骤",
+              "我想申请加班,需要哪些步骤?"
+            ],
+            "status": "success"
+          },
+          "decision": {
+            "candidate_pool_count": 24,
+            "evidence_valid_option_count": 0,
+            "model_action": "answer",
+            "reason": "model_chose_answer",
+            "shown_evidence_chars": 3885,
+            "shown_evidence_count": 24,
+            "valid_option_count": 0
+          },
+          "timings": {
+            "answer_generation_ms": 5241.260545999467,
+            "answer_validation_ms": 2672.589902999789,
+            "clarification_ms": 1522.2112950004885,
+            "first_output_ms": 10171.311616999446,
+            "preprocessing_ms": 1576.8015719995674,
+            "query_preparation_ms": 1589.0512340001806,
+            "retrieval_ms": 1791.059185999984,
+            "total_ms": 10171.314977999828
+          },
+          "record": "227e6037d9724214acd0d616ad24bd98",
+          "candidateCount": 25,
+          "contextCount": 6,
+          "documents": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+            "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md",
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+            "M12_2026-08-26_财务岗位资格与轮岗会.e4b08b2afa2b.b8117ec60c319e14b648.md"
+          ],
+          "context": [
+            {
+              "id": "543d4da42e18c287",
+              "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+              "text": "来源：05_加班与调休管理制度.md\n分块：19/23\n上下文：加班与调休管理制度 > 第三章 申请、记录与监督 > 第十八条\n\n**第十八条**\n事项发生变化、取消或延期时，申请人应及时更新，审批人重新确认影响。紧急情形允许先采取保护人员、资产或业务连续性的必要措施，事后按规定补充记录。\n\n"
+            },
+            {
+              "id": "bb24c6e7da0a79fc",
+              "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+              "text": "来源：05_加班与调休管理制度.md\n分块：18/23\n上下文：加班与调休管理制度 > 第三章 申请、记录与监督 > 第十七条\n\n## 第三章 申请、记录与监督\n\n**第十七条**\n申请人应如实填写事项、时间、原因和必要附件。审批人应核对事实、规则、权限和业务影响；系统自动通过或退回不能替代应有的人工判断，重大例外应说明依据。\n\n"
+            },
+            {
+              "id": "c7eea831af4859f9",
+              "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+              "text": "来源：05_加班与调休管理制度.md\n分块：20/23\n上下文：加班与调休管理制度 > 第三章 申请、记录与监督 > 第十九条\n\n**第十九条**\n归口部门应保存申请、审批、变更、执行和复核记录，确保能够追溯谁在何时基于何种材料作出决定。超过保存期限的资料应按档案和个人信息规则处置。\n\n"
+            },
+            {
+              "id": "d7d799a4d56a66b8",
+              "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+              "text": "来源：05_加班与调休管理制度.md\n分块：3/23\n上下文：加班与调休管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于因业务需要在适用工作时间之外工作的员工和安排、审批、核算加班的管理人员。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+            },
+            {
+              "id": "9f7b5e965aefde20",
+              "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+              "text": "来源：05_加班与调休管理制度.md\n分块：8/23\n上下文：加班与调休管理制度 > 第二章 管理规则 > 第七条\n\n**第七条**\n突发故障、安全事件或客户重大事故需要立即处置的，可以先开展工作并在次一工作日补办审批。补办材料应记录触发时间、处置过程和实际结束时间，不得以紧急名义覆盖可预见任务。\n\n"
+            },
+            {
+              "id": "355bf9adaf202088",
+              "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+              "text": "来源：05_加班与调休管理制度.md\n分块：21/23\n上下文：加班与调休管理制度 > 第三章 申请、记录与监督 > 第二十条\n\n**第二十条**\n员工对处理结果有异议的，可先向归口部门申请复核；涉及本人直接利益的，复核人员应保持相对独立。任何人不得因员工咨询、提出异议或依法反映问题而实施不利对待。\n\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "explicit-document",
+      "question": "《值班管理制度》由哪个部门负责解释？",
+      "expected": "answer",
+      "session": "dfa34bf4cdc611f1ac78e3540a1bce4c",
+      "elapsed": 6237,
+      "answer": "《值班管理制度》由行政管理部负责解释和定期评估[ID:0]。行政管理部是本制度的归口部门，负责解释、培训、记录检查和版本维护[ID:1]。",
+      "options": [],
+      "needsInput": false,
+      "cacheStatus": "not_requested",
+      "preprocessing": {
+        "ambiguity_reasons": [
+          "问题明确询问制度解释部门,仅需检索制度文本中的解释权条款"
+        ],
+        "ambiguity_score": 0.05,
+        "ambiguity_signals": [],
+        "confidence": 0.99,
+        "context_used": false,
+        "corrections": [],
+        "intent_parts": [
+          "《值班管理制度》解释部门"
+        ],
+        "missing_topic": false,
+        "model_called": true,
+        "normalized_question": "《值班管理制度》由哪个部门负责解释?",
+        "original_question": "《值班管理制度》由哪个部门负责解释？",
+        "retrieval_queries": [
+          "《值班管理制度》由哪个部门负责解释?",
+          "《值班管理制度》由哪个部门负责解释"
+        ],
+        "status": "success"
+      },
+      "decision": {},
+      "timings": {
+        "answer_generation_ms": 2589.805348000482,
+        "answer_validation_ms": 1358.1554419997701,
+        "first_output_ms": 6184.813851999934,
+        "preprocessing_ms": 2752.2656290002487,
+        "query_preparation_ms": 2762.687657999777,
+        "retrieval_ms": 804.2897109999103,
+        "total_ms": 6184.81725699985
+      },
+      "record": "0d039fc0cc5b416284be369791519c8e",
+      "candidateCount": 6,
+      "contextCount": 6,
+      "documents": [
+        "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md"
+      ],
+      "context": [
+        {
+          "id": "c463a11ab4c7cb4b",
+          "document": "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+          "text": "来源：01_值班管理制度.md\n分块：23/23\n上下文：值班管理制度 > 第四章 异议、责任与附则 > 第二十二条\n\n**第二十二条**\n本制度由行政管理部负责解释和定期评估，自批准发布之日起施行。法律法规、组织结构或业务流程发生重大变化时，应及时修订；新旧规定衔接不清的，由归口部门提出处理意见并留档。\n"
+        },
+        {
+          "id": "a6566415167342ee",
+          "document": "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+          "text": "来源：01_值班管理制度.md\n分块：5/23\n上下文：值班管理制度 > 第一章 总则 > 第四条\n\n**第四条**\n行政管理部是本制度的归口部门，负责解释、培训、记录检查和版本维护；各部门负责人负责组织实施，员工应如实提交信息并配合合理核验。审批人对其权限范围内决定负责。\n\n"
+        },
+        {
+          "id": "238c5d8ef7cc029e",
+          "document": "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+          "text": "来源：01_值班管理制度.md\n分块：3/23\n上下文：值班管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于参加现场值班、电话值守、技术保障和应急备勤的部门及人员。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+        },
+        {
+          "id": "b70fcd86f36f04ce",
+          "document": "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+          "text": "来源：01_值班管理制度.md\n分块：22/23\n上下文：值班管理制度 > 第四章 异议、责任与附则 > 第二十一条\n\n## 第四章 异议、责任与附则\n\n**第二十一条**\n违反本制度的，应先调查事实、听取说明并区分故意、过失、客观障碍和管理责任。处理措施应与行为性质和影响相称；涉嫌违法或重大风险的，按授权移交相应部门。\n\n"
+        },
+        {
+          "id": "04acc766f3daf102",
+          "document": "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+          "text": "来源：01_值班管理制度.md\n分块：15/23\n上下文：值班管理制度 > 第二章 管理规则 > 第十四条\n\n**第十四条**\n值班补贴、餐费和交通安排按公司薪酬与费用规定执行。因值班形成延长工作时间的，由部门结合业务需要安排调休或依法处理，不得用固定补贴替代依法应履行的工时管理义务。\n\n"
+        },
+        {
+          "id": "5d6a377c46a60952",
+          "document": "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+          "text": "来源：01_值班管理制度.md\n分块：2/23\n上下文：值班管理制度 > 第一章 总则 > 第一条\n\n## 第一章 总则\n\n**第一条**\n为规范工作日夜间、周末、法定节假日及重要保障期的值班安排，确保信息传递、突发事件处置和业务连续性，结合公司实际，制定本制度。本制度为知识库验证样例，正式发布前应由人力资源、财务、法务等责任部门结合所在地法律和公司授权完成审核。\n\n"
+        }
+      ],
+      "contractPassed": true,
+      "expectedShape": true
+    },
+    {
+      "id": "parallel-specific",
+      "question": "加班和值班制度分别适用于哪些人？",
+      "expected": "answer",
+      "session": "e35e27f0cdc611f1ac78e3540a1bce4c",
+      "elapsed": 6927,
+      "answer": "根据知识库内容，加班与值班制度的适用范围如下：\n\n**值班管理制度**适用于参加现场值班、电话值守、技术保障和应急备勤的部门及人员[ID:0]。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确[ID:0]。\n\n**加班与调休管理制度**适用于因业务需要在适用工作时间之外工作的员工和安排、审批、核算加班的管理人员[ID:1]。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确[ID:1]。\n\n此外，两项制度的归口部门不同：值班管理制度由行政管理部归口负责解释、培训、记录检查和版本维护[ID:3]；加班与调休管理制度由人力资源部归口负责[ID:4]。",
+      "options": [],
+      "needsInput": false,
+      "cacheStatus": "not_requested",
+      "preprocessing": {
+        "ambiguity_reasons": [
+          "问题已明确区分加班与值班两个主题及所问事项(适用范围),仅缺少具体制度名称或文件范围"
+        ],
+        "ambiguity_score": 0.1,
+        "ambiguity_signals": [
+          "missing_specific_focus"
+        ],
+        "confidence": 0.98,
+        "context_used": false,
+        "corrections": [],
+        "intent_parts": [
+          "加班制度适用范围",
+          "值班制度适用范围"
+        ],
+        "missing_topic": false,
+        "model_called": true,
+        "normalized_question": "加班和值班制度分别适用于哪些人?",
+        "original_question": "加班和值班制度分别适用于哪些人？",
+        "retrieval_queries": [
+          "加班和值班制度分别适用于哪些人?",
+          "加班制度适用于哪些人员",
+          "值班制度适用于哪些人员"
+        ],
+        "status": "success"
+      },
+      "decision": {},
+      "timings": {
+        "answer_generation_ms": 3975.40680199927,
+        "answer_validation_ms": 2047.3353489996953,
+        "first_output_ms": 6852.0551530000375,
+        "preprocessing_ms": 1535.5752709992885,
+        "query_preparation_ms": 1545.3337010003452,
+        "retrieval_ms": 1301.5270870000677,
+        "total_ms": 6852.058581000165
+      },
+      "record": "d28cbdb9f9fc419bbf149946b5b24981",
+      "candidateCount": 13,
+      "contextCount": 6,
+      "documents": [
+        "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+        "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+        "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md",
+        "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+        "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md",
+        "09_薪酬与奖金管理制度.ef6e55b2087e.a8cffde97a4947170d3c.md",
+        "08_培训与发展管理制度.c9263654ab42.cd1b7f6bd7cad80133aa.md",
+        "12_采购管理制度.94ac86c2be83.59c1a87576a1fbb5dbc6.md"
+      ],
+      "context": [
+        {
+          "id": "238c5d8ef7cc029e",
+          "document": "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+          "text": "来源：01_值班管理制度.md\n分块：3/23\n上下文：值班管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于参加现场值班、电话值守、技术保障和应急备勤的部门及人员。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+        },
+        {
+          "id": "d7d799a4d56a66b8",
+          "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+          "text": "来源：05_加班与调休管理制度.md\n分块：3/23\n上下文：加班与调休管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于因业务需要在适用工作时间之外工作的员工和安排、审批、核算加班的管理人员。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+        },
+        {
+          "id": "82b9d8a622aa4026",
+          "document": "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md",
+          "text": "来源：02_考勤管理制度.md\n分块：3/23\n上下文：考勤管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于与公司建立劳动关系并纳入工时和出勤管理的员工；特殊工时岗位按批准的方案执行。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+        },
+        {
+          "id": "a6566415167342ee",
+          "document": "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+          "text": "来源：01_值班管理制度.md\n分块：5/23\n上下文：值班管理制度 > 第一章 总则 > 第四条\n\n**第四条**\n行政管理部是本制度的归口部门，负责解释、培训、记录检查和版本维护；各部门负责人负责组织实施，员工应如实提交信息并配合合理核验。审批人对其权限范围内决定负责。\n\n"
+        },
+        {
+          "id": "b4c5fd3b2781eec7",
+          "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+          "text": "来源：05_加班与调休管理制度.md\n分块：5/23\n上下文：加班与调休管理制度 > 第一章 总则 > 第四条\n\n**第四条**\n人力资源部是本制度的归口部门，负责解释、培训、记录检查和版本维护；各部门负责人负责组织实施，员工应如实提交信息并配合合理核验。审批人对其权限范围内决定负责。\n\n"
+        },
+        {
+          "id": "eed98e8e7acafb46",
+          "document": "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+          "text": "来源：04_请假休假管理制度.md\n分块：3/23\n上下文：请假与休假管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于公司员工的年休假、事假、病假、婚假、产假、陪产假、丧假及依法适用的其他假期。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+        }
+      ],
+      "contractPassed": true,
+      "expectedShape": true
+    },
+    {
+      "id": "comparison",
+      "question": "加班与值班制度有什么区别？",
+      "expected": "answer",
+      "session": "e781e3b2cdc611f1ac78e3540a1bce4c",
+      "elapsed": 8799,
+      "answer": "根据知识库内容，加班与值班制度在以下方面存在区别：\n\n**1. 制度目的不同**\n加班与调休管理制度旨在规范延长工作时间的必要性评估、审批、记录、补偿和健康保护，减少无效加班并维护员工权益[ID:5]。值班管理制度则未在提供的内容中明确其目的条款。\n\n**2. 归口解释部门不同**\n值班管理制度由行政管理部负责解释和定期评估[ID:0]；加班与调休管理制度由人力资源部负责解释和定期评估[ID:1]。\n\n**3. 值班的特殊补偿规定**\n值班补贴、餐费和交通安排按公司薪酬与费用规定执行；因值班形成延长工作时间的，由部门结合业务需要安排调休或依法处理，不得用固定补贴替代依法应履行的工时管理义务[ID:3]。\n\n**4. 共同点**\n两项制度均遵循合法合规、事实可核验、权责一致、信息最小必要和持续改进原则，处理个别事项时应同时考虑员工权益、业务连续性和风险程度[ID:2][ID:4]；且均规定自批准发布之日起施行，法律法规、组织结构或业务流程发生重大变化时应及时修订[ID:0][ID:1]。\n\n需要说明的是，知识库中未提供两项制度在适用范围、审批流程等方面的具体条款，因此无法就这些方面进行对比。",
+      "options": [],
+      "needsInput": false,
+      "cacheStatus": "not_requested",
+      "preprocessing": {
+        "ambiguity_reasons": [
+          "未限定比较维度(如适用情形、报酬、认定标准),但主题明确"
+        ],
+        "ambiguity_score": 0.2,
+        "ambiguity_signals": [
+          "short_question",
+          "missing_specific_focus"
+        ],
+        "confidence": 0.98,
+        "context_used": false,
+        "corrections": [],
+        "intent_parts": [
+          "加班制度",
+          "值班制度"
+        ],
+        "missing_topic": false,
+        "model_called": true,
+        "normalized_question": "加班与值班制度有什么区别?",
+        "original_question": "加班与值班制度有什么区别？",
+        "retrieval_queries": [
+          "加班与值班制度有什么区别?",
+          "加班制度 规定",
+          "值班制度 规定",
+          "加班与值班制度 区别"
+        ],
+        "status": "success"
+      },
+      "decision": {},
+      "timings": {
+        "answer_generation_ms": 5692.2175500003505,
+        "answer_validation_ms": 3489.1328390003764,
+        "first_output_ms": 8720.958144999713,
+        "preprocessing_ms": 1677.6605499999278,
+        "query_preparation_ms": 1688.3610889999545,
+        "retrieval_ms": 1309.8328400001265,
+        "total_ms": 8720.960978000221
+      },
+      "record": "89556c1f076f42a4b6bbcfc6d8173922",
+      "candidateCount": 11,
+      "contextCount": 6,
+      "documents": [
+        "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+        "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+        "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md",
+        "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md"
+      ],
+      "context": [
+        {
+          "id": "c463a11ab4c7cb4b",
+          "document": "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+          "text": "来源：01_值班管理制度.md\n分块：23/23\n上下文：值班管理制度 > 第四章 异议、责任与附则 > 第二十二条\n\n**第二十二条**\n本制度由行政管理部负责解释和定期评估，自批准发布之日起施行。法律法规、组织结构或业务流程发生重大变化时，应及时修订；新旧规定衔接不清的，由归口部门提出处理意见并留档。\n"
+        },
+        {
+          "id": "542d789a3b480d4c",
+          "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+          "text": "来源：05_加班与调休管理制度.md\n分块：23/23\n上下文：加班与调休管理制度 > 第四章 异议、责任与附则 > 第二十二条\n\n**第二十二条**\n本制度由人力资源部负责解释和定期评估，自批准发布之日起施行。法律法规、组织结构或业务流程发生重大变化时，应及时修订；新旧规定衔接不清的，由归口部门提出处理意见并留档。\n"
+        },
+        {
+          "id": "6f5e91e77d4b04a1",
+          "document": "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+          "text": "来源：01_值班管理制度.md\n分块：4/23\n上下文：值班管理制度 > 第一章 总则 > 第三条\n\n**第三条**\n制度执行遵循合法合规、事实可核验、权责一致、信息最小必要和持续改进原则。处理个别事项时，应同时考虑员工权益、业务连续性和风险程度。\n\n"
+        },
+        {
+          "id": "04acc766f3daf102",
+          "document": "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+          "text": "来源：01_值班管理制度.md\n分块：15/23\n上下文：值班管理制度 > 第二章 管理规则 > 第十四条\n\n**第十四条**\n值班补贴、餐费和交通安排按公司薪酬与费用规定执行。因值班形成延长工作时间的，由部门结合业务需要安排调休或依法处理，不得用固定补贴替代依法应履行的工时管理义务。\n\n"
+        },
+        {
+          "id": "ddf95d6cbda773a7",
+          "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+          "text": "来源：05_加班与调休管理制度.md\n分块：4/23\n上下文：加班与调休管理制度 > 第一章 总则 > 第三条\n\n**第三条**\n制度执行遵循合法合规、事实可核验、权责一致、信息最小必要和持续改进原则。处理个别事项时，应同时考虑员工权益、业务连续性和风险程度。\n\n"
+        },
+        {
+          "id": "a49d4e24cac5622a",
+          "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+          "text": "来源：05_加班与调休管理制度.md\n分块：2/23\n上下文：加班与调休管理制度 > 第一章 总则 > 第一条\n\n## 第一章 总则\n\n**第一条**\n为规范延长工作时间的必要性评估、审批、记录、补偿和健康保护，减少无效加班并维护员工权益，结合公司实际，制定本制度。本制度为知识库验证样例，正式发布前应由人力资源、财务、法务等责任部门结合所在地法律和公司授权完成审核。\n\n"
+        }
+      ],
+      "contractPassed": true,
+      "expectedShape": true
+    },
+    {
+      "id": "specific",
+      "question": "加班与调休管理制度的适用范围是什么？",
+      "expected": "answer",
+      "session": "df689860cdc611f1ac78e3540a1bce4c",
+      "elapsed": 7301,
+      "answer": "加班与调休管理制度适用于因业务需要在适用工作时间之外工作的员工和安排、审批、核算加班的管理人员[ID:0]。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确[ID:0]。",
+      "options": [],
+      "needsInput": false,
+      "cacheStatus": "not_requested",
+      "preprocessing": {
+        "ambiguity_reasons": [
+          "问题明确询问适用范围,仅需确认加班与调休是同一制度还是两个独立制度"
+        ],
+        "ambiguity_score": 0.1,
+        "ambiguity_signals": [],
+        "confidence": 0.95,
+        "context_used": false,
+        "corrections": [],
+        "intent_parts": [
+          "加班管理制度的适用范围",
+          "调休管理制度的适用范围"
+        ],
+        "missing_topic": false,
+        "model_called": true,
+        "normalized_question": "加班与调休管理制度的适用范围是什么?",
+        "original_question": "加班与调休管理制度的适用范围是什么？",
+        "retrieval_queries": [
+          "加班与调休管理制度的适用范围是什么?",
+          "加班管理制度的适用范围",
+          "调休管理制度的适用范围"
+        ],
+        "status": "success"
+      },
+      "decision": {
+        "candidate_pool_count": 24,
+        "evidence_valid_option_count": 0,
+        "model_action": "answer",
+        "reason": "model_chose_answer",
+        "shown_evidence_chars": 4112,
+        "shown_evidence_count": 24,
+        "valid_option_count": 0
+      },
+      "timings": {
+        "answer_generation_ms": 2777.627313999801,
+        "answer_validation_ms": 1507.1336279997922,
+        "clarification_ms": 1295.8402489994114,
+        "first_output_ms": 7239.027689999602,
+        "preprocessing_ms": 1616.5577809997558,
+        "query_preparation_ms": 1629.6110220000628,
+        "retrieval_ms": 1506.5876239996214,
+        "total_ms": 7239.031176000026
+      },
+      "record": "ba8383631c3d4afab8c64a919e02436f",
+      "candidateCount": 36,
+      "contextCount": 6,
+      "documents": [
+        "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+        "09_薪酬与奖金管理制度.ef6e55b2087e.a8cffde97a4947170d3c.md",
+        "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+        "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md",
+        "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+        "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md",
+        "07_绩效管理制度.ee2e6305fca2.fdddebbe822fe130b825.md",
+        "08_培训与发展管理制度.c9263654ab42.cd1b7f6bd7cad80133aa.md",
+        "17_预算管理制度.b67a60a8e087.ce2e31f9c14a86e510b0.md"
+      ],
+      "context": [
+        {
+          "id": "d7d799a4d56a66b8",
+          "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+          "text": "来源：05_加班与调休管理制度.md\n分块：3/23\n上下文：加班与调休管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于因业务需要在适用工作时间之外工作的员工和安排、审批、核算加班的管理人员。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+        },
+        {
+          "id": "7a4a63046325d1fe",
+          "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+          "text": "来源：05_加班与调休管理制度.md\n分块：22/23\n上下文：加班与调休管理制度 > 第四章 异议、责任与附则 > 第二十一条\n\n## 第四章 异议、责任与附则\n\n**第二十一条**\n违反本制度的，应先调查事实、听取说明并区分故意、过失、客观障碍和管理责任。处理措施应与行为性质和影响相称；涉嫌违法或重大风险的，按授权移交相应部门。\n\n"
+        },
+        {
+          "id": "502524ecffc0cb0e",
+          "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+          "text": "来源：05_加班与调休管理制度.md\n分块：15/23\n上下文：加班与调休管理制度 > 第二章 管理规则 > 第十四条\n\n**第十四条**\n管理人员应每月分析本部门加班总量、连续加班人员和主要原因。连续两个月显著超出正常水平的，应提出人员补充、范围削减、系统优化或排期调整措施。\n\n"
+        },
+        {
+          "id": "238c5d8ef7cc029e",
+          "document": "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+          "text": "来源：01_值班管理制度.md\n分块：3/23\n上下文：值班管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于参加现场值班、电话值守、技术保障和应急备勤的部门及人员。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+        },
+        {
+          "id": "bfe4c45aef641be9",
+          "document": "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md",
+          "text": "来源：04_请假休假管理制度.md\n分块：3/23\n上下文：请假与休假管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于公司员工的年休假、事假、病假、婚假、产假、陪产假、丧假及依法适用的其他假期。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+        },
+        {
+          "id": "eed98e8e7acafb46",
+          "document": "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+          "text": "来源：04_请假休假管理制度.md\n分块：3/23\n上下文：请假与休假管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于公司员工的年休假、事假、病假、婚假、产假、陪产假、丧假及依法适用的其他假期。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+        }
+      ],
+      "contractPassed": true,
+      "expectedShape": true,
+      "followups": [
+        {
+          "question": "那外包人员呢？",
+          "session": "df689860cdc611f1ac78e3540a1bce4c",
+          "elapsed": 8019,
+          "answer": "关于外包人员是否适用加班与调休管理制度，需依据合同、管理边界和实际工作场景另行明确[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "not_requested",
+          "preprocessing": {
+            "ambiguity_reasons": [
+              "当前问题省略了所问制度,已依据历史补全为加班与调休管理制度",
+              "未明确询问适用、例外还是具体条款,但主题明确"
+            ],
+            "ambiguity_score": 0.2,
+            "ambiguity_signals": [
+              "short_question",
+              "missing_specific_focus"
+            ],
+            "confidence": 0.9,
+            "context_used": true,
+            "corrections": [],
+            "intent_parts": [
+              "外包人员适用范围"
+            ],
+            "missing_topic": false,
+            "model_called": true,
+            "normalized_question": "外包人员是否适用加班与调休管理制度?",
+            "original_question": "那外包人员呢？",
+            "retrieval_queries": [
+              "那外包人员呢?",
+              "外包人员 加班与调休管理制度 适用范围",
+              "外包人员是否适用加班与调休管理制度?"
+            ],
+            "status": "success"
+          },
+          "decision": {
+            "candidate_pool_count": 24,
+            "evidence_valid_option_count": 0,
+            "model_action": "answer",
+            "reason": "model_chose_answer",
+            "shown_evidence_chars": 3732,
+            "shown_evidence_count": 24,
+            "valid_option_count": 0
+          },
+          "timings": {
+            "answer_generation_ms": 2863.8502570001947,
+            "answer_validation_ms": 1473.6576830000558,
+            "clarification_ms": 1458.6420730001919,
+            "first_output_ms": 7952.0489859996815,
+            "preprocessing_ms": 2190.1300559993615,
+            "query_preparation_ms": 2206.0104500005764,
+            "retrieval_ms": 1384.5628859999124,
+            "total_ms": 7952.051777999259
+          },
+          "record": "21a2d5415eff4801bfbc9d0e30f16b19",
+          "candidateCount": 45,
+          "contextCount": 6,
+          "documents": [
+            "18_客户投诉管理制度.7c085d65153f.48a26ffcbbf571750e11.md",
+            "08_培训与发展管理制度.c9263654ab42.cd1b7f6bd7cad80133aa.md",
+            "12_采购管理制度.94ac86c2be83.59c1a87576a1fbb5dbc6.md",
+            "13_合同管理制度.8bb5da8cf5f5.fabca1435d2edc7e8f46.md",
+            "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+            "19_项目管理制度.7fcdc1cdc88a.03ff71614215e9e8e22d.md",
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+            "20_会议管理制度.967c3b529dde.9e079c1e3dbbe3e61ce7.md",
+            "10_远程办公管理制度.0661197500c3.109a94309f7e0772dce0.md",
+            "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md",
+            "09_薪酬与奖金管理制度.ef6e55b2087e.a8cffde97a4947170d3c.md",
+            "03_招聘录用管理制度.cd8dcd1b7571.7ebe560274bf921e8f0d.md",
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+            "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+            "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md",
+            "07_绩效管理制度.ee2e6305fca2.fdddebbe822fe130b825.md"
+          ],
+          "context": [
+            {
+              "id": "d7d799a4d56a66b8",
+              "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+              "text": "来源：05_加班与调休管理制度.md\n分块：3/23\n上下文：加班与调休管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于因业务需要在适用工作时间之外工作的员工和安排、审批、核算加班的管理人员。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+            },
+            {
+              "id": "238c5d8ef7cc029e",
+              "document": "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+              "text": "来源：01_值班管理制度.md\n分块：3/23\n上下文：值班管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于参加现场值班、电话值守、技术保障和应急备勤的部门及人员。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+            },
+            {
+              "id": "48f7abb5f3463e85",
+              "document": "08_培训与发展管理制度.c9263654ab42.cd1b7f6bd7cad80133aa.md",
+              "text": "来源：08_培训与发展管理制度.md\n分块：3/23\n上下文：员工培训与发展管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于公司组织或资助的入职培训、岗位培训、专业认证、管理培训、外部课程和内部知识分享。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+            },
+            {
+              "id": "eed98e8e7acafb46",
+              "document": "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+              "text": "来源：04_请假休假管理制度.md\n分块：3/23\n上下文：请假与休假管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于公司员工的年休假、事假、病假、婚假、产假、陪产假、丧假及依法适用的其他假期。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+            },
+            {
+              "id": "82b9d8a622aa4026",
+              "document": "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md",
+              "text": "来源：02_考勤管理制度.md\n分块：3/23\n上下文：考勤管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于与公司建立劳动关系并纳入工时和出勤管理的员工；特殊工时岗位按批准的方案执行。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+            },
+            {
+              "id": "02952a543889df67",
+              "document": "18_客户投诉管理制度.7c085d65153f.48a26ffcbbf571750e11.md",
+              "text": "来源：18_客户投诉管理制度.md\n分块：3/23\n上下文：客户投诉与服务补偿管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于客户通过电话、工单、邮件、社交平台或监管渠道提出的不满、争议和服务请求。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+            }
+          ]
+        },
+        {
+          "question": "由哪个部门负责解释？",
+          "session": "df689860cdc611f1ac78e3540a1bce4c",
+          "elapsed": 8579,
+          "answer": "加班与调休管理制度由人力资源部负责解释和定期评估[ID:1]。人力资源部同时是该制度的归口部门，负责解释、培训、记录检查和版本维护[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "not_requested",
+          "preprocessing": {
+            "ambiguity_reasons": [
+              "当前问题省略了制度名称,已依据历史消息补全为“加班与调休管理制度”"
+            ],
+            "ambiguity_score": 0.2,
+            "ambiguity_signals": [
+              "short_question"
+            ],
+            "confidence": 0.9,
+            "context_used": true,
+            "corrections": [],
+            "intent_parts": [
+              "加班与调休管理制度的解释部门"
+            ],
+            "missing_topic": false,
+            "model_called": true,
+            "normalized_question": "加班与调休管理制度由哪个部门负责解释?",
+            "original_question": "由哪个部门负责解释？",
+            "retrieval_queries": [
+              "由哪个部门负责解释?",
+              "加班与调休管理制度 由哪个部门负责解释",
+              "加班与调休管理制度由哪个部门负责解释?"
+            ],
+            "status": "success"
+          },
+          "decision": {
+            "candidate_pool_count": 24,
+            "evidence_valid_option_count": 0,
+            "model_action": "answer",
+            "reason": "model_chose_answer",
+            "shown_evidence_chars": 3521,
+            "shown_evidence_count": 24,
+            "valid_option_count": 0
+          },
+          "timings": {
+            "answer_generation_ms": 3827.75041900004,
+            "answer_validation_ms": 2589.633225000398,
+            "clarification_ms": 1306.729887000074,
+            "first_output_ms": 8504.967238999598,
+            "preprocessing_ms": 1962.2848259996317,
+            "query_preparation_ms": 1997.9520139995657,
+            "retrieval_ms": 1329.5764590002364,
+            "total_ms": 8504.970216999936
+          },
+          "record": "c8fe642af01e476595b1409f3b0abaa3",
+          "candidateCount": 51,
+          "contextCount": 6,
+          "documents": [
+            "14_印章与证照管理制度.421af9b9a594.a78457db4f16340f1523.md",
+            "15_档案管理制度.575753e1f623.daa9c89e4da4d6c5e449.md",
+            "20_会议管理制度.967c3b529dde.9e079c1e3dbbe3e61ce7.md",
+            "21_保密与信息分级制度.42981f3ff733.5d6c85f8a321c584e828.md",
+            "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+            "08_培训与发展管理制度.c9263654ab42.cd1b7f6bd7cad80133aa.md",
+            "13_合同管理制度.8bb5da8cf5f5.fabca1435d2edc7e8f46.md",
+            "18_客户投诉管理制度.7c085d65153f.48a26ffcbbf571750e11.md",
+            "17_预算管理制度.b67a60a8e087.ce2e31f9c14a86e510b0.md",
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+            "09_薪酬与奖金管理制度.ef6e55b2087e.a8cffde97a4947170d3c.md",
+            "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md",
+            "19_项目管理制度.7fcdc1cdc88a.03ff71614215e9e8e22d.md",
+            "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+            "12_采购管理制度.94ac86c2be83.59c1a87576a1fbb5dbc6.md",
+            "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md",
+            "03_招聘录用管理制度.cd8dcd1b7571.7ebe560274bf921e8f0d.md",
+            "10_远程办公管理制度.0661197500c3.109a94309f7e0772dce0.md",
+            "16_固定资产管理制度.68a6d31149c7.483203e35ee7f4be2959.md",
+            "07_绩效管理制度.ee2e6305fca2.fdddebbe822fe130b825.md",
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ],
+          "context": [
+            {
+              "id": "b4c5fd3b2781eec7",
+              "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+              "text": "来源：05_加班与调休管理制度.md\n分块：5/23\n上下文：加班与调休管理制度 > 第一章 总则 > 第四条\n\n**第四条**\n人力资源部是本制度的归口部门，负责解释、培训、记录检查和版本维护；各部门负责人负责组织实施，员工应如实提交信息并配合合理核验。审批人对其权限范围内决定负责。\n\n"
+            },
+            {
+              "id": "542d789a3b480d4c",
+              "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+              "text": "来源：05_加班与调休管理制度.md\n分块：23/23\n上下文：加班与调休管理制度 > 第四章 异议、责任与附则 > 第二十二条\n\n**第二十二条**\n本制度由人力资源部负责解释和定期评估，自批准发布之日起施行。法律法规、组织结构或业务流程发生重大变化时，应及时修订；新旧规定衔接不清的，由归口部门提出处理意见并留档。\n"
+            },
+            {
+              "id": "7a4a63046325d1fe",
+              "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+              "text": "来源：05_加班与调休管理制度.md\n分块：22/23\n上下文：加班与调休管理制度 > 第四章 异议、责任与附则 > 第二十一条\n\n## 第四章 异议、责任与附则\n\n**第二十一条**\n违反本制度的，应先调查事实、听取说明并区分故意、过失、客观障碍和管理责任。处理措施应与行为性质和影响相称；涉嫌违法或重大风险的，按授权移交相应部门。\n\n"
+            },
+            {
+              "id": "5d2f92721fa19b5b",
+              "document": "14_印章与证照管理制度.421af9b9a594.a78457db4f16340f1523.md",
+              "text": "来源：14_印章与证照管理制度.md\n分块：5/23\n上下文：印章与证照管理制度 > 第一章 总则 > 第四条\n\n**第四条**\n行政管理部是本制度的归口部门，负责解释、培训、记录检查和版本维护；各部门负责人负责组织实施，员工应如实提交信息并配合合理核验。审批人对其权限范围内决定负责。\n\n"
+            },
+            {
+              "id": "02eaaa1154d8403b",
+              "document": "15_档案管理制度.575753e1f623.daa9c89e4da4d6c5e449.md",
+              "text": "来源：15_档案管理制度.md\n分块：5/23\n上下文：档案管理制度 > 第一章 总则 > 第四条\n\n**第四条**\n行政管理部是本制度的归口部门，负责解释、培训、记录检查和版本维护；各部门负责人负责组织实施，员工应如实提交信息并配合合理核验。审批人对其权限范围内决定负责。\n\n"
+            },
+            {
+              "id": "55895265d32f1f45",
+              "document": "20_会议管理制度.967c3b529dde.9e079c1e3dbbe3e61ce7.md",
+              "text": "来源：20_会议管理制度.md\n分块：5/23\n上下文：会议组织与决议跟踪制度 > 第一章 总则 > 第四条\n\n**第四条**\n行政管理部是本制度的归口部门，负责解释、培训、记录检查和版本维护；各部门负责人负责组织实施，员工应如实提交信息并配合合理核验。审批人对其权限范围内决定负责。\n\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "typo",
+      "question": "住宿报消标准是多少？",
+      "expected": "answer",
+      "session": "edb07596cdc611f1ac78e3540a1bce4c",
+      "elapsed": 9903,
+      "answer": "现行住宿报销标准按城市类别和职级执行，以每间夜含税价控制：A类城市（北京、上海、广州、深圳）P1—P3为500元、P4—P5及M1—M2为650元、M3及以上为850元；B类城市（天津、重庆、杭州、南京、苏州、成都、武汉、西安及其他省会城市）分别为400元、520元、700元；C类城市（其他境内城市）分别为320元、420元、560元[ID:2]。制度附表中同样列明A类城市P1—P3住宿上限500元/间夜、P4—P5及M1—M2为650元/间夜、M3及以上为850元/间夜，B类为400元、520元、700元，C类为320元、420元、560元[ID:0]。此外，2026年8月24日财务共享中心月度例会明确没有提高住宿报销标准，现行城市与职级限额继续执行，不能把凭证续期预算理解为差旅额度的调整[ID:1]。",
+      "options": [],
+      "needsInput": false,
+      "cacheStatus": "not_requested",
+      "preprocessing": {
+        "ambiguity_reasons": [
+          "未说明住宿报销的适用场景或人员范围"
+        ],
+        "ambiguity_score": 0.2,
+        "ambiguity_signals": [
+          "short_question"
+        ],
+        "confidence": 0.98,
+        "context_used": false,
+        "corrections": [
+          "报消→报销"
+        ],
+        "intent_parts": [
+          "住宿报销标准"
+        ],
+        "missing_topic": false,
+        "model_called": true,
+        "normalized_question": "住宿报销标准是多少?",
+        "original_question": "住宿报消标准是多少？",
+        "retrieval_queries": [
+          "住宿报消标准是多少?",
+          "住宿报销标准是多少",
+          "住宿报销标准是多少?"
+        ],
+        "status": "success"
+      },
+      "decision": {
+        "candidate_pool_count": 24,
+        "evidence_valid_option_count": 0,
+        "model_action": "answer",
+        "reason": "model_chose_answer",
+        "shown_evidence_chars": 4830,
+        "shown_evidence_count": 24,
+        "valid_option_count": 0
+      },
+      "timings": {
+        "answer_generation_ms": 4107.060676000401,
+        "answer_validation_ms": 2086.9847550002305,
+        "clarification_ms": 1287.8328999995574,
+        "first_output_ms": 9835.892646000502,
+        "preprocessing_ms": 2151.7902650002725,
+        "query_preparation_ms": 3491.3239110001086,
+        "retrieval_ms": 914.928031999807,
+        "total_ms": 9835.89554900027
+      },
+      "record": "f11c218993994d289208a693e84e7520",
+      "candidateCount": 33,
+      "contextCount": 6,
+      "documents": [
+        "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+        "M05_2026-08-24_财务共享中心月度例会.e0a29c2c4ea5.549d81db773b1098c319.md",
+        "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+        "07_绩效管理制度.ee2e6305fca2.fdddebbe822fe130b825.md",
+        "M10_2026-08-05_人才培养与培训验收会.6ac21e859c23.5259624367420f1059cf.md",
+        "09_薪酬与奖金管理制度.ef6e55b2087e.a8cffde97a4947170d3c.md",
+        "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+        "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+        "18_客户投诉管理制度.7c085d65153f.48a26ffcbbf571750e11.md",
+        "16_固定资产管理制度.68a6d31149c7.483203e35ee7f4be2959.md"
+      ],
+      "context": [
+        {
+          "id": "0cb236e7f19b0bc9",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：11/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十条\n\n**第十条**\n业务招待应事前说明对象、目的、人数和预算，接待标准应适度。报销时列明实际参与人员及业务事项；涉及客户个人信息的，仅保留财务审核所需信息并限制访问。\n\n| 城市类别 | P1—P3住宿上限 | P4—P5、M1—M2 | M3及以上 | 伙食/交通补助 |\n| --- | ---: | ---: | ---: | ---: |\n| A类：北上广深 | 500元/间夜 | 650元/间夜 | 850元/间夜 | 120元/80元每天 |\n| B类：省会及重点城市 | 400元/间夜 | 520元/间夜 | 700元/间夜 | 100元/60元每天 |\n| C类：其他境内城市 | 320元/间夜 | 420元/间夜 | 560元/间夜 | 80元/50元每天 |\n\n"
+        },
+        {
+          "id": "0a4105abf96d3b15",
+          "document": "M05_2026-08-24_财务共享中心月度例会.e0a29c2c4ea5.549d81db773b1098c319.md",
+          "text": "来源：M05_2026-08-24_财务共享中心月度例会.md\n分块：3/4\n上下文：2026-08-24 财务共享中心月度例会\n\n费用审核组同时提出差旅发票积压问题，上月仍有42单因缺少行程证明退回。各部门应在8月28日前补齐材料，超过期限的单据转入待补件队列。会议没有提高住宿报销标准，现行城市与职级限额继续执行，不能把凭证续期预算理解为差旅额度的调整。\n\n"
+        },
+        {
+          "id": "05ea79f2c3a53519",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：9/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第八条\n\n**第八条**\n住宿限额按每间夜、含税价控制：A类城市P1—P3为500元、P4—P5及M1—M2为650元、M3及以上为850元；B类城市分别为400元、520元、700元；C类城市分别为320元、420元、560元。A类包括北京、上海、广州、深圳；B类包括天津、重庆、杭州、南京、苏州、成都、武汉、西安及其他省会城市；其他境内城市为C类。\n\n"
+        },
+        {
+          "id": "9cf74693d51d51ef",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：14/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十三条\n\n**第十三条**\n返程后十五个工作日内，员工应按“填写报销单—关联出差申请—上传交通、住宿及支付凭证—直属负责人确认业务—成本中心复核预算—财务审核票据—出纳付款”的顺序提交。电子发票应验真查重；纸质票据按档案要求移交。材料齐全后财务原则上在五个工作日内完成审核，并在下一付款批次支付。\n\n"
+        },
+        {
+          "id": "0a7991e7393fab47",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：3/23\n上下文：差旅与费用报销管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于员工因公发生的交通、住宿、餐费、招待、采购及其他经批准可报销费用。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+        },
+        {
+          "id": "01c82cc48347291e",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：6/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第五条\n\n## 第二章 管理规则\n\n**第五条**\n费用应遵循真实发生、业务相关、标准适当和凭证完整原则。任何人不得拆分报销规避审批，不得报销个人消费、虚假交易或已由第三方承担的费用。\n\n"
+        }
+      ],
+      "contractPassed": true,
+      "expectedShape": true
+    },
+    {
+      "id": "out-of-scope",
+      "question": "火星驻外津贴制度的领取标准是多少？",
+      "expected": "no_evidence",
+      "session": "f39beb02cdc611f1ac78e3540a1bce4c",
+      "elapsed": 6239,
+      "answer": "The answer you are looking for is not found in the dataset!",
+      "options": [],
+      "needsInput": false,
+      "cacheStatus": "not_requested",
+      "preprocessing": {
+        "ambiguity_reasons": [
+          "主题与所问事项明确,仅需知识库确认该制度是否存在"
+        ],
+        "ambiguity_score": 0.1,
+        "ambiguity_signals": [],
+        "confidence": 0.95,
+        "context_used": false,
+        "corrections": [],
+        "intent_parts": [
+          "火星驻外津贴制度领取标准"
+        ],
+        "missing_topic": false,
+        "model_called": true,
+        "normalized_question": "火星驻外津贴制度的领取标准是多少?",
+        "original_question": "火星驻外津贴制度的领取标准是多少？",
+        "retrieval_queries": [
+          "火星驻外津贴制度的领取标准是多少?"
+        ],
+        "status": "success"
+      },
+      "decision": {
+        "candidate_pool_count": 24,
+        "evidence_valid_option_count": 0,
+        "model_action": "answer",
+        "reason": "model_chose_answer",
+        "shown_evidence_chars": 3828,
+        "shown_evidence_count": 24,
+        "valid_option_count": 0
+      },
+      "timings": {
+        "answer_generation_ms": 2948.652566000419,
+        "answer_validation_ms": 1494.8029070001212,
+        "clarification_ms": 1294.137451000097,
+        "first_output_ms": 6192.334845000005,
+        "preprocessing_ms": 1388.1231289997231,
+        "query_preparation_ms": 1400.8729119996133,
+        "retrieval_ms": 521.0959129999537,
+        "total_ms": 6192.337373000555
+      },
+      "record": "998464b493b74203bee5f8b373639fac",
+      "candidateCount": 24,
+      "contextCount": 6,
+      "documents": [
+        "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+        "09_薪酬与奖金管理制度.ef6e55b2087e.a8cffde97a4947170d3c.md",
+        "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+        "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md",
+        "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+        "17_预算管理制度.b67a60a8e087.ce2e31f9c14a86e510b0.md",
+        "M05_2026-08-24_财务共享中心月度例会.e0a29c2c4ea5.549d81db773b1098c319.md",
+        "14_印章与证照管理制度.421af9b9a594.a78457db4f16340f1523.md",
+        "07_绩效管理制度.ee2e6305fca2.fdddebbe822fe130b825.md",
+        "13_合同管理制度.8bb5da8cf5f5.fabca1435d2edc7e8f46.md",
+        "21_保密与信息分级制度.42981f3ff733.5d6c85f8a321c584e828.md"
+      ],
+      "context": [
+        {
+          "id": "70e9d6048ea6760e",
+          "document": "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+          "text": "来源：11_业务招待管理制度.md\n分块：2/23\n上下文：业务招待管理制度 > 第一章 总则 > 第一条\n\n## 第一章 总则\n\n**第一条**\n为规范客户、合作方和外部专家接待中的申请、标准、礼品、用车和报销，结合公司实际，制定本制度。本制度为知识库验证样例，正式发布前应由人力资源、财务、法务等责任部门结合所在地法律和公司授权完成审核。\n\n"
+        },
+        {
+          "id": "e35e74185a794b77",
+          "document": "09_薪酬与奖金管理制度.ef6e55b2087e.a8cffde97a4947170d3c.md",
+          "text": "来源：09_薪酬与奖金管理制度.md\n分块：12/23\n上下文：薪酬与奖金管理制度 > 第二章 管理规则 > 第十一条\n\n**第十一条**\n加班费计算基数原则上采用正常出勤对应的基本工资与按月固定、正常出勤即可取得的工资项目之和；双方已有合法有效且不低于当地最低工资标准的书面约定时按约定执行。日工资＝计算基数÷21.75，小时工资＝计算基数÷21.75÷8，具体倍数按加班与调休制度执行。\n\n"
+        },
+        {
+          "id": "e37f95ee71a6732f",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：17/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十六条\n\n**第十六条**\n员工对退回、扣减或逾期处理有异议的，可提交复核。财务部应说明依据；制度标准变化影响已批准行程时，原则上按批准时或对员工更合理的有效规则衔接处理。\n\n"
+        },
+        {
+          "id": "4ca1026c0e5867c4",
+          "document": "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+          "text": "来源：11_业务招待管理制度.md\n分块：7/23\n上下文：业务招待管理制度 > 第二章 管理规则 > 第六条\n\n**第六条**\n餐饮标准按公司参加人员和外部人员总数计算：普通接待每人不超过200元，重要客户或专家每人不超过350元，董事长或总经理批准的重大活动每人不超过500元。酒水计入标准，香烟不予报销。\n\n"
+        },
+        {
+          "id": "b40328b3a40671f2",
+          "document": "09_薪酬与奖金管理制度.ef6e55b2087e.a8cffde97a4947170d3c.md",
+          "text": "来源：09_薪酬与奖金管理制度.md\n分块：16/23\n上下文：薪酬与奖金管理制度 > 第二章 管理规则 > 第十五条\n\n**第十五条**\n月度工资原则上于次月10日支付，遇法定节假日或休息日提前至最近工作日。工资单应列明基本工资、绩效工资、加班费、津贴补贴、奖金、缺勤扣款、社会保险、公积金、个人所得税及实发金额，员工可在收到后五个工作日内提出核对。\n\n"
+        },
+        {
+          "id": "712b1660cd21d6f4",
+          "document": "09_薪酬与奖金管理制度.ef6e55b2087e.a8cffde97a4947170d3c.md",
+          "text": "来源：09_薪酬与奖金管理制度.md\n分块：3/23\n上下文：薪酬与奖金管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于采用月薪制的正式员工和试用期员工；销售提成、计件工资及高管专项方案另按书面方案执行。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+        }
+      ],
+      "contractPassed": true,
+      "expectedShape": true
+    },
+    {
+      "id": "three-topics",
+      "question": "加班、值班和请假制度",
+      "expected": "clarify",
+      "session": "ecc5e0eecdc611f1ac78e3540a1bce4c",
+      "elapsed": 9406,
+      "answer": "这个问题可能涉及不同的业务场景。请选择你想了解的方向，或在输入框补充说明。",
+      "options": [
+        {
+          "id": "53285198b664459abe5f23ffb83378de",
+          "question": "加班与调休制度适用于哪些员工?",
+          "sources": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ]
+        },
+        {
+          "id": "65a5a7ff68144c1c8d63ec64b8397363",
+          "question": "值班管理制度适用于哪些部门和人员?",
+          "sources": [
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md"
+          ]
+        },
+        {
+          "id": "f86838520fd4487daf769124436cb8a5",
+          "question": "请假休假管理制度涵盖哪些假期类型?",
+          "sources": [
+            "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md"
+          ]
+        },
+        {
+          "id": "6fa02d3fe3ec46ef8cbed018a37500b6",
+          "question": "加班费的计算基数如何确定?",
+          "sources": [
+            "09_薪酬与奖金管理制度.ef6e55b2087e.a8cffde97a4947170d3c.md"
+          ]
+        },
+        {
+          "id": "1267f566901447bd89911120eb049c08",
+          "question": "请假休假制度中,公司标准与法定标准不一致时如何处理?",
+          "sources": [
+            "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md"
+          ]
+        }
+      ],
+      "needsInput": false,
+      "cacheId": "5ab6a1069a0f4e82aecb4e65a4b951da",
+      "cacheStatus": "not_requested",
+      "preprocessing": {
+        "ambiguity_reasons": [
+          "仅列出制度主题,未说明具体所问事项(如申请流程、审批权限、待遇标准等)"
+        ],
+        "ambiguity_score": 0.6,
+        "ambiguity_signals": [
+          "short_question",
+          "generic_expression",
+          "missing_specific_focus"
+        ],
+        "confidence": 0.95,
+        "context_used": false,
+        "corrections": [],
+        "intent_parts": [
+          "加班制度",
+          "值班制度",
+          "请假制度"
+        ],
+        "missing_topic": false,
+        "model_called": true,
+        "normalized_question": "加班、值班和请假制度",
+        "original_question": "加班、值班和请假制度",
+        "retrieval_queries": [
+          "加班、值班和请假制度",
+          "加班制度",
+          "值班制度",
+          "请假制度"
+        ],
+        "status": "success"
+      },
+      "decision": {
+        "answer_coverage": [
+          {
+            "question": "加班与调休制度适用于哪些员工?",
+            "reason": "选项直接对应加班制度，原文完整回答了适用员工范围。",
+            "supported": true
+          },
+          {
+            "question": "值班管理制度适用于哪些部门和人员?",
+            "reason": "选项直接对应值班制度，原文完整回答了适用部门和人员。",
+            "supported": true
+          },
+          {
+            "question": "请假休假管理制度涵盖哪些假期类型?",
+            "reason": "选项直接对应请假制度，原文完整列举了假期类型。",
+            "supported": true
+          },
+          {
+            "question": "加班费的计算基数如何确定?",
+            "reason": "选项对应加班制度中的加班费计算基数，原文完整回答了确定方式。",
+            "supported": true
+          },
+          {
+            "question": "请假休假制度中,公司标准与法定标准不一致时如何处理?",
+            "reason": "选项对应请假制度中公司标准与法定标准不一致的处理，原文完整回答了处理规则。",
+            "supported": true
+          }
+        ],
+        "candidate_pool_count": 24,
+        "evidence_valid_option_count": 5,
+        "missing_intents": [],
+        "model_action": "clarify",
+        "reason": "grounded_options",
+        "shown_evidence_chars": 3633,
+        "shown_evidence_count": 24,
+        "valid_option_count": 5
+      },
+      "timings": {
+        "clarification_ms": 5855.304478000107,
+        "first_output_ms": 9342.418975000328,
+        "preprocessing_ms": 1410.5277240005307,
+        "query_preparation_ms": 1423.934475000351,
+        "retrieval_ms": 2035.7246329995178,
+        "total_ms": 9342.42419400016
+      },
+      "record": "11514736175c4a6a8d0bc17eb912fe31",
+      "candidateCount": 51,
+      "contextCount": 0,
+      "documents": [
+        "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+        "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md",
+        "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+        "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+        "09_薪酬与奖金管理制度.ef6e55b2087e.a8cffde97a4947170d3c.md",
+        "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md",
+        "M12_2026-08-26_财务岗位资格与轮岗会.e4b08b2afa2b.b8117ec60c319e14b648.md",
+        "18_客户投诉管理制度.7c085d65153f.48a26ffcbbf571750e11.md",
+        "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+        "20_会议管理制度.967c3b529dde.9e079c1e3dbbe3e61ce7.md"
+      ],
+      "context": [],
+      "contractPassed": true,
+      "expectedShape": true,
+      "clicks": [
+        {
+          "question": "加班与调休制度适用于哪些员工?",
+          "session": "ecc5e0eecdc611f1ac78e3540a1bce4c",
+          "elapsed": 2799,
+          "answer": "加班与调休制度适用于因业务需要在适用工作时间之外工作的员工，以及安排、审批、核算加班的管理人员[ID:0]。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 2687.4648900002285,
+            "answer_validation_ms": 1291.5641339996,
+            "first_output_ms": 2739.668420000271,
+            "query_preparation_ms": 24.44020900020405,
+            "retrieval_ms": 0.25759299933270086,
+            "total_ms": 2739.671385999827
+          },
+          "record": "aa298256470549159424b6802d789725",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ],
+          "context": [
+            {
+              "id": "d7d799a4d56a66b8",
+              "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+              "text": "来源：05_加班与调休管理制度.md\n分块：3/23\n上下文：加班与调休管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于因业务需要在适用工作时间之外工作的员工和安排、审批、核算加班的管理人员。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+            }
+          ]
+        },
+        {
+          "question": "值班管理制度适用于哪些部门和人员?",
+          "session": "ecc5e0eecdc611f1ac78e3540a1bce4c",
+          "elapsed": 3071,
+          "answer": "值班管理制度适用于参加现场值班、电话值守、技术保障和应急备勤的部门及人员[ID:0]。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 2955.664092999541,
+            "answer_validation_ms": 1545.6018119994042,
+            "first_output_ms": 3006.2523429996872,
+            "query_preparation_ms": 24.089438999908452,
+            "retrieval_ms": 0.21862799985683523,
+            "total_ms": 3006.2551249993703
+          },
+          "record": "e7f403bd3b984b248ed4461fa9f7ac6d",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md"
+          ],
+          "context": [
+            {
+              "id": "238c5d8ef7cc029e",
+              "document": "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+              "text": "来源：01_值班管理制度.md\n分块：3/23\n上下文：值班管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于参加现场值班、电话值守、技术保障和应急备勤的部门及人员。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+            }
+          ]
+        },
+        {
+          "question": "请假休假管理制度涵盖哪些假期类型?",
+          "session": "ecc5e0eecdc611f1ac78e3540a1bce4c",
+          "elapsed": 3645,
+          "answer": "请假休假管理制度涵盖年休假、事假、病假、婚假、产假、陪产假、丧假及依法适用的其他假期[ID:0]。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 3543.9273450001565,
+            "answer_validation_ms": 2085.9616280004047,
+            "first_output_ms": 3593.5626209993643,
+            "query_preparation_ms": 24.020840000048338,
+            "retrieval_ms": 0.22448199979407946,
+            "total_ms": 3593.5654479999357
+          },
+          "record": "1eea2e1fc52949328319180ac072aaca",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md"
+          ],
+          "context": [
+            {
+              "id": "eed98e8e7acafb46",
+              "document": "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+              "text": "来源：04_请假休假管理制度.md\n分块：3/23\n上下文：请假与休假管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于公司员工的年休假、事假、病假、婚假、产假、陪产假、丧假及依法适用的其他假期。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+            }
+          ]
+        },
+        {
+          "question": "加班费的计算基数如何确定?",
+          "session": "ecc5e0eecdc611f1ac78e3540a1bce4c",
+          "elapsed": 3646,
+          "answer": "加班费计算基数原则上采用正常出勤对应的基本工资与按月固定、正常出勤即可取得的工资项目之和[ID:0]。双方已有合法有效且不低于当地最低工资标准的书面约定时，按约定执行[ID:0]。日工资＝计算基数÷21.75，小时工资＝计算基数÷21.75÷8，具体倍数按加班与调休制度执行[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 3535.1230490005037,
+            "answer_validation_ms": 1518.377284000053,
+            "first_output_ms": 3588.2335149999562,
+            "query_preparation_ms": 26.218462000542786,
+            "retrieval_ms": 0.3040649999093148,
+            "total_ms": 3588.2372709993433
+          },
+          "record": "0109676b3d124549a8c38dd8f49025c8",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "09_薪酬与奖金管理制度.ef6e55b2087e.a8cffde97a4947170d3c.md"
+          ],
+          "context": [
+            {
+              "id": "e35e74185a794b77",
+              "document": "09_薪酬与奖金管理制度.ef6e55b2087e.a8cffde97a4947170d3c.md",
+              "text": "来源：09_薪酬与奖金管理制度.md\n分块：12/23\n上下文：薪酬与奖金管理制度 > 第二章 管理规则 > 第十一条\n\n**第十一条**\n加班费计算基数原则上采用正常出勤对应的基本工资与按月固定、正常出勤即可取得的工资项目之和；双方已有合法有效且不低于当地最低工资标准的书面约定时按约定执行。日工资＝计算基数÷21.75，小时工资＝计算基数÷21.75÷8，具体倍数按加班与调休制度执行。\n\n"
+            }
+          ]
+        },
+        {
+          "question": "请假休假制度中,公司标准与法定标准不一致时如何处理?",
+          "session": "ecc5e0eecdc611f1ac78e3540a1bce4c",
+          "elapsed": 2742,
+          "answer": "员工依法享有的假期按照国家及工作所在地有效规定执行；公司标准高于法定标准的，按公司公布标准执行[ID:0]。制度与新生效规定不一致时，应及时更新并按对员工适用的规则处理[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 2632.7136720001363,
+            "answer_validation_ms": 1560.6064479998167,
+            "first_output_ms": 2685.5709399997068,
+            "query_preparation_ms": 26.019484999778797,
+            "retrieval_ms": 0.22206199992069742,
+            "total_ms": 2685.573922999538
+          },
+          "record": "1961d586978a4958b2e6b96ae0501574",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md"
+          ],
+          "context": [
+            {
+              "id": "f454acb1dd4b2932",
+              "document": "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md",
+              "text": "来源：04_请假休假管理制度.md\n分块：6/23\n上下文：请假与休假管理制度 > 第二章 管理规则 > 第五条\n\n## 第二章 管理规则\n\n**第五条**\n员工依法享有的假期按照国家及工作所在地有效规定执行；公司标准高于法定标准的，按公司公布标准执行。制度与新生效规定不一致时，应及时更新并按对员工适用的规则处理。\n\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "long-broad",
+      "question": "我刚入职，对公司的工作安排和员工管理规定还不熟悉，暂时没有具体的办理事项，也不确定应该先看哪些条款。我想先了解一下加班和值班这两类制度，请根据已有制度列出几个有依据、可以继续了解的方向让我选择。",
+      "expected": "clarify",
+      "session": "f756c924cdc611f1ac78e3540a1bce4c",
+      "elapsed": 9654,
+      "answer": "这个问题可能涉及不同的业务场景。请选择你想了解的方向，或在输入框补充说明。",
+      "options": [
+        {
+          "id": "af194906c0464475885b2e178d2d2b94",
+          "question": "加班与调休管理制度适用于哪些员工?劳务派遣、外包、实习或合作方人员是否适用?",
+          "sources": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ]
+        },
+        {
+          "id": "6b0a201da1a84d0db559047cb618a88a",
+          "question": "计划加班需要说明哪些内容、由谁批准?大范围或连续加班如何处理?",
+          "sources": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ]
+        },
+        {
+          "id": "2e76a25a85804aeca2490ebdaed59201",
+          "question": "标准工时员工的加班费计算基数和日工资、小时工资如何计算?工作日延时加班按什么倍数计算?",
+          "sources": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ]
+        },
+        {
+          "id": "d60523c97e8848feb311f0a914e432b2",
+          "question": "值班管理制度适用于哪些部门和人员?劳务派遣、外包、实习或合作方人员是否适用?",
+          "sources": [
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md"
+          ]
+        },
+        {
+          "id": "7cda7364bc6e46e7b628073f18db3720",
+          "question": "值班表应列明哪些内容?排班对连续夜间班次有什么限制?",
+          "sources": [
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md"
+          ]
+        }
+      ],
+      "needsInput": false,
+      "cacheId": "76e2a0f5a9b346c484b9e564e7560351",
+      "cacheStatus": "not_requested",
+      "preprocessing": {
+        "ambiguity_reasons": [
+          "用户明确要求列出可继续了解的方向供选择,未限定具体条款或办理事项"
+        ],
+        "ambiguity_score": 0.2,
+        "ambiguity_signals": [
+          "generic_expression"
+        ],
+        "confidence": 0.95,
+        "context_used": false,
+        "corrections": [],
+        "intent_parts": [
+          "加班制度",
+          "值班制度"
+        ],
+        "missing_topic": false,
+        "model_called": true,
+        "normalized_question": "我刚入职,对公司的工作安排和员工管理规定还不熟悉,暂时没有具体的办理事项,也不确定应该先看哪些条款。我想先了解一下加班和值班这两类制度,请根据已有制度列出几个有依据、可以继续了解的方向让我选择。",
+        "original_question": "我刚入职，对公司的工作安排和员工管理规定还不熟悉，暂时没有具体的办理事项，也不确定应该先看哪些条款。我想先了解一下加班和值班这两类制度，请根据已有制度列出几个有依据、可以继续了解的方向让我选择。",
+        "retrieval_queries": [
+          "我刚入职,对公司的工作安排和员工管理规定还不熟悉,暂时没有具体的办理事项,也不确定应该先看哪些条款。我想先了解一下加班和值班这两类制度,请根据已有制度列出几个有依据、可以继续了解的方向让我选择。",
+          "加班制度 规定 适用范围 申请流程 补偿方式",
+          "值班制度 规定 适用范围 安排方式 补偿方式"
+        ],
+        "status": "success"
+      },
+      "decision": {
+        "answer_coverage": [
+          {
+            "question": "加班与调休管理制度适用于哪些员工?劳务派遣、外包、实习或合作方人员是否适用?",
+            "reason": "选项对应加班制度，原文完整回答了适用员工范围及劳务派遣等人员是否适用的问题。",
+            "supported": true
+          },
+          {
+            "question": "计划加班需要说明哪些内容、由谁批准?大范围或连续加班如何处理?",
+            "reason": "选项对应加班制度，原文完整回答了计划加班说明内容、批准主体及大范围或连续加班的处理。",
+            "supported": true
+          },
+          {
+            "question": "标准工时员工的加班费计算基数和日工资、小时工资如何计算?工作日延时加班按什么倍数计算?",
+            "reason": "选项对应加班制度，原文完整回答了计算基数、日工资、小时工资及工作日延时加班倍数。",
+            "supported": true
+          },
+          {
+            "question": "值班管理制度适用于哪些部门和人员?劳务派遣、外包、实习或合作方人员是否适用?",
+            "reason": "选项对应值班制度，原文完整回答了适用部门人员范围及劳务派遣等人员是否适用的问题。",
+            "supported": true
+          },
+          {
+            "question": "值班表应列明哪些内容?排班对连续夜间班次有什么限制?",
+            "reason": "选项对应值班制度，原文完整回答了值班表列明内容及连续夜间班次限制。",
+            "supported": true
+          }
+        ],
+        "candidate_pool_count": 24,
+        "evidence_valid_option_count": 5,
+        "missing_intents": [],
+        "model_action": "clarify",
+        "reason": "grounded_options",
+        "shown_evidence_chars": 4299,
+        "shown_evidence_count": 24,
+        "valid_option_count": 5
+      },
+      "timings": {
+        "clarification_ms": 6340.305898999759,
+        "first_output_ms": 9609.621746999437,
+        "preprocessing_ms": 1815.2802710001197,
+        "query_preparation_ms": 1829.657213000246,
+        "retrieval_ms": 1390.7208829996307,
+        "total_ms": 9609.625891999713
+      },
+      "record": "25f38875413b418ea5fac3eaf6fc852f",
+      "candidateCount": 47,
+      "contextCount": 0,
+      "documents": [
+        "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+        "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+        "08_培训与发展管理制度.c9263654ab42.cd1b7f6bd7cad80133aa.md",
+        "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md",
+        "09_薪酬与奖金管理制度.ef6e55b2087e.a8cffde97a4947170d3c.md",
+        "19_项目管理制度.7fcdc1cdc88a.03ff71614215e9e8e22d.md",
+        "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md"
+      ],
+      "context": [],
+      "contractPassed": true,
+      "expectedShape": true,
+      "clicks": [
+        {
+          "question": "加班与调休管理制度适用于哪些员工?劳务派遣、外包、实习或合作方人员是否适用?",
+          "session": "f756c924cdc611f1ac78e3540a1bce4c",
+          "elapsed": 2962,
+          "answer": "根据《加班与调休管理制度》第二条规定，该制度适用于因业务需要在适用工作时间之外工作的员工，以及安排、审批、核算加班的管理人员[ID:0]。至于劳务派遣、外包、实习或合作方人员是否适用，制度并未直接给出统一结论，而是要求依据合同、管理边界和实际工作场景另行明确[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 2851.736571999936,
+            "answer_validation_ms": 1376.3172489998396,
+            "first_output_ms": 2904.497139000341,
+            "query_preparation_ms": 25.060004000806657,
+            "retrieval_ms": 0.22916399939276744,
+            "total_ms": 2904.5000220003203
+          },
+          "record": "d20a8094c7c54a208aa0946cd2c56a73",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ],
+          "context": [
+            {
+              "id": "d7d799a4d56a66b8",
+              "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+              "text": "来源：05_加班与调休管理制度.md\n分块：3/23\n上下文：加班与调休管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于因业务需要在适用工作时间之外工作的员工和安排、审批、核算加班的管理人员。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+            }
+          ]
+        },
+        {
+          "question": "计划加班需要说明哪些内容、由谁批准?大范围或连续加班如何处理?",
+          "session": "f756c924cdc611f1ac78e3540a1bce4c",
+          "elapsed": 3000,
+          "answer": "计划加班应由任务负责人说明事项、人员、日期、预计时长和不能在正常时间完成的原因，并经直属负责人按权限批准[ID:0]。涉及大范围或连续加班的，还应由人力资源部评估工时和健康风险[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 2892.068133999601,
+            "answer_validation_ms": 1599.7002479998628,
+            "first_output_ms": 2944.4518480004263,
+            "query_preparation_ms": 24.010659999476047,
+            "retrieval_ms": 0.23533800049335696,
+            "total_ms": 2944.45537699994
+          },
+          "record": "4e2b761441f0458bab383b28b471d949",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ],
+          "context": [
+            {
+              "id": "9e7825ddbb75ea87",
+              "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+              "text": "来源：05_加班与调休管理制度.md\n分块：7/23\n上下文：加班与调休管理制度 > 第二章 管理规则 > 第六条\n\n**第六条**\n计划加班应由任务负责人说明事项、人员、日期、预计时长和不能在正常时间完成的原因，经直属负责人按权限批准。涉及大范围或连续加班的，还应由人力资源部评估工时和健康风险。\n\n"
+            }
+          ]
+        },
+        {
+          "question": "标准工时员工的加班费计算基数和日工资、小时工资如何计算?工作日延时加班按什么倍数计算?",
+          "session": "f756c924cdc611f1ac78e3540a1bce4c",
+          "elapsed": 3010,
+          "answer": "标准工时员工的加班费计算基数为劳动合同约定的正常出勤月工资；约定不明时，按公司工资支付制度及适用法律确定，且不得低于工作所在地最低工资标准[ID:0]。日工资＝加班费计算基数÷21.75，小时工资＝加班费计算基数÷21.75÷8[ID:0]。工作日延时按小时工资×实际加班小时×150%计算[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 2909.7876779997023,
+            "answer_validation_ms": 1427.0535929999824,
+            "first_output_ms": 2970.6004159997974,
+            "query_preparation_ms": 25.560746999872208,
+            "retrieval_ms": 0.2550100007283618,
+            "total_ms": 2970.6041190001997
+          },
+          "record": "1763593ebe8f47f7a76bcae7ebe1f1b1",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md"
+          ],
+          "context": [
+            {
+              "id": "252173b8f2f49fb9",
+              "document": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+              "text": "来源：05_加班与调休管理制度.md\n分块：12/23\n上下文：加班与调休管理制度 > 第二章 管理规则 > 第十一条\n\n**第十一条**\n标准工时员工的加班费计算基数为劳动合同约定的正常出勤月工资；约定不明时，按公司工资支付制度及适用法律确定，且不得低于工作所在地最低工资标准。日工资＝加班费计算基数÷21.75，小时工资＝加班费计算基数÷21.75÷8。工作日延时按小时工资×实际加班小时×150%计算。\n\n"
+            }
+          ]
+        },
+        {
+          "question": "值班管理制度适用于哪些部门和人员?劳务派遣、外包、实习或合作方人员是否适用?",
+          "session": "f756c924cdc611f1ac78e3540a1bce4c",
+          "elapsed": 2823,
+          "answer": "《值班管理制度》适用于参加现场值班、电话值守、技术保障和应急备勤的部门及人员[ID:0]。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 2705.5235429997992,
+            "answer_validation_ms": 1322.9621669997869,
+            "first_output_ms": 2756.8997349999336,
+            "query_preparation_ms": 24.27803299997322,
+            "retrieval_ms": 0.2147189998140675,
+            "total_ms": 2756.902672000251
+          },
+          "record": "2d5db5ac3c14448ca793d6445f684a31",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md"
+          ],
+          "context": [
+            {
+              "id": "238c5d8ef7cc029e",
+              "document": "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+              "text": "来源：01_值班管理制度.md\n分块：3/23\n上下文：值班管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于参加现场值班、电话值守、技术保障和应急备勤的部门及人员。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+            }
+          ]
+        },
+        {
+          "question": "值班表应列明哪些内容?排班对连续夜间班次有什么限制?",
+          "session": "f756c924cdc611f1ac78e3540a1bce4c",
+          "elapsed": 3324,
+          "answer": "值班表应列明日期、班次、地点、值班人、备勤人、联系电话和交接事项[ID:0]。排班应兼顾岗位胜任能力与休息时间，同一人员原则上不得连续承担两个夜间班次；确需连续安排的，由部门负责人说明原因并调整后续休息[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 3195.0388680006654,
+            "answer_validation_ms": 1651.5253580000717,
+            "first_output_ms": 3245.568148999155,
+            "query_preparation_ms": 24.10159700048098,
+            "retrieval_ms": 0.23113699990062742,
+            "total_ms": 3245.571263999409
+          },
+          "record": "ba561e7139e94efdbd853cfd5b0a146f",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md"
+          ],
+          "context": [
+            {
+              "id": "a8a72ec47be98be7",
+              "document": "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+              "text": "来源：01_值班管理制度.md\n分块：7/23\n上下文：值班管理制度 > 第二章 管理规则 > 第六条\n\n**第六条**\n值班表应列明日期、班次、地点、值班人、备勤人、联系电话和交接事项。排班应兼顾岗位胜任能力与休息时间，同一人员原则上不得连续承担两个夜间班次；确需连续安排的，由部门负责人说明原因并调整后续休息。\n\n"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "finished": "2026-10-22T03:16:50.989Z"
+}

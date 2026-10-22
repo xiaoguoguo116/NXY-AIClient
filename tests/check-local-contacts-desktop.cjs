@@ -3,12 +3,16 @@ const { chromium } = require('C:/Users/94719/.cache/codex-runtimes/codex-primary
 
 ;(async () => {
   const browser = await chromium.connectOverCDP('http://127.0.0.1:19224')
+  let page
+  let previousChats
   try {
-    const page = browser
+    page = browser
       .contexts()
       .flatMap((context) => context.pages())
       .find((candidate) => candidate.url().includes('/home'))
     if (!page) throw new Error('EM 主窗口未打开')
+    await page.setViewportSize({ width: 1100, height: 720 })
+    previousChats = await page.evaluate(() => localStorage.getItem('em.local-chat.v1'))
 
     const pageErrors = []
     page.on('pageerror', (error) => pageErrors.push(error.message))
@@ -28,18 +32,25 @@ const { chromium } = require('C:/Users/94719/.cache/codex-runtimes/codex-primary
     await page.screenshot({ path: 'D:/ai/NXY-AIClient/.preview/my-contact-profile.png' })
     await page.getByRole('button', { name: '关闭资料' }).click()
 
-    assert.equal(await page.locator('.organization-tree__row').count(), 8)
+    assert.equal(await page.locator('.organization-tree__row').count(), 16)
     await page.locator('.organization-tree__row').filter({ hasText: '研发中心' }).click()
-    assert.equal(await page.locator('.organization-member').count(), 6)
+    assert.equal(await page.locator('.organization-member').count(), 12)
+    await page.locator('.organization-tree__row').filter({ hasText: '数据平台组' }).click()
+    assert.equal(await page.locator('.organization-member').count(), 2)
+    await page.locator('.organization-tree__row').filter({ hasText: '安全运维组' }).click()
+    assert.equal(await page.locator('.organization-member').count(), 2)
+    await page.locator('.organization-tree__row').filter({ hasText: '财务与法务' }).click()
+    assert.equal(await page.locator('.organization-member').count(), 3)
+    await page.locator('.organization-tree__row').filter({ hasText: '研发中心' }).click()
     const avatarSources = await page.locator('.organization-member__avatar img').evaluateAll((images) =>
       images.map((image) => image.getAttribute('src'))
     )
-    assert.equal(avatarSources.length, 6)
+    assert.equal(avatarSources.length, 12)
     assert.ok(avatarSources.every((source) => source?.startsWith('data:image/svg+xml,')))
     await page.mouse.move(900, 800)
     await page.screenshot({ path: 'D:/ai/NXY-AIClient/.preview/contacts-organization-light.png' })
     await page.locator('.organization-tree__row').filter({ hasText: '前端组' }).click()
-    assert.equal(await page.locator('.organization-member').count(), 2)
+    assert.equal(await page.locator('.organization-member').count(), 3)
 
     await page.locator('.organization-member').filter({ hasText: '苏晴' }).click()
     await page.locator('.directory-profile__identity').filter({ hasText: '苏晴' }).waitFor()
@@ -87,6 +98,13 @@ const { chromium } = require('C:/Users/94719/.cache/codex-runtimes/codex-primary
     assert.equal(pageErrors.length, 0, pageErrors.join('\n'))
     console.log('PASS: local contacts, direct conversation reuse, profiles, and global search')
   } finally {
+    if (page && previousChats !== undefined) {
+      await page.evaluate((value) => {
+        if (value === null) localStorage.removeItem('em.local-chat.v1')
+        else localStorage.setItem('em.local-chat.v1', value)
+      }, previousChats)
+      await page.reload()
+    }
     await browser.close()
   }
 })().catch((error) => {

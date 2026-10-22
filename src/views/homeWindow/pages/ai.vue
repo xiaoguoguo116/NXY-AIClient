@@ -3,15 +3,19 @@
     <nav class="ai-sections" aria-label="AI Work 功能">
       <strong>AI Work</strong>
       <button :class="{ selected: knowledgeMode }" @click="selectSection('knowledge')">知识问答</button>
-      <button
-        v-for="(label, view) in complianceSections"
-        :key="view"
-        :class="{ selected: route.query.view === view }"
-        @click="selectSection(view)">
-        {{ label }}
-      </button>
+      <button :class="{ selected: assistantMode }" @click="selectSection(lastAssistantView)">合规助手</button>
       <button :class="{ selected: !knowledgeMode && !complianceMode }" @click="selectSection('tasks')">任务助手</button>
     </nav>
+    <fieldset v-if="assistantMode" class="assistant-options" aria-label="合规助手功能">
+      <legend>选择功能</legend>
+      <label
+        v-for="option in assistantOptions"
+        :key="option.value"
+        :class="{ selected: assistantView === option.value }">
+        <input v-model="assistantView" type="radio" name="compliance-assistant-view" :value="option.value" />
+        {{ option.label }}
+      </label>
+    </fieldset>
     <div v-show="knowledgeMode" class="knowledge-slot">
       <p v-if="knowledgeError" role="alert">{{ knowledgeError }}，请到应用中心配置 RAGFlow 地址。</p>
       <KeepAlive>
@@ -23,7 +27,9 @@
           @close="selectSection('tasks')" />
       </KeepAlive>
     </div>
-    <ComplianceWorkbench v-if="complianceMode" :mode="complianceMode" class="compliance-slot" />
+    <KeepAlive>
+      <ComplianceWorkbench v-if="complianceMode" :key="complianceMode" :mode="complianceMode" class="compliance-slot" />
+    </KeepAlive>
     <div v-show="!knowledgeMode && !complianceMode" class="workbench" @keydown.capture="onWorkbenchKeydown">
       <div class="workbench__body">
         <aside class="workbench__sidebar">
@@ -34,10 +40,6 @@
               @click="newConversation">
               <svg><use href="#message-plus" /></svg>
               <span>{{ t('ai.menu.newChat') }}</span>
-            </button>
-            <button type="button" :class="{ active: activeView === 'skills' }" @click="activeView = 'skills'">
-              <svg><use href="#star" /></svg>
-              <span>{{ t('ai.work.nav.skills') }}</span>
             </button>
           </nav>
 
@@ -116,193 +118,177 @@
         </aside>
 
         <main class="workbench__main">
-          <template v-if="activeView === 'skills'">
-            <n-scrollbar class="workbench__page-scroll"><SkillsMarket /></n-scrollbar>
-          </template>
+          <header class="workbench__topbar" :class="{ 'workbench__topbar--locked': conversationId }">
+            <div class="workbench__session-title">
+              <strong>{{ currentTitle }}</strong>
+            </div>
+            <div v-if="!conversationId" class="workbench__scope-switch" :aria-label="scopeSwitchLabel">
+              <button type="button" :class="{ active: store.scopeMode === 'chat' }" @click="selectScopeMode('chat')">
+                <svg><use href="#message" /></svg>
+                {{ t('ai.work.scope.chat') }}
+              </button>
+              <button
+                type="button"
+                :class="{ active: store.scopeMode === 'workspace' }"
+                @click="selectScopeMode('workspace')">
+                <svg><use href="#folder" /></svg>
+                {{ t('ai.work.scope.workspace') }}
+              </button>
+            </div>
+            <div v-else class="workbench__scope-badge">
+              <svg><use :href="sessionScopeIcon" /></svg>
+              <span>{{ sessionScopeLabel }}</span>
+            </div>
+          </header>
 
-          <template v-else>
-            <header class="workbench__topbar" :class="{ 'workbench__topbar--locked': conversationId }">
-              <div class="workbench__session-title">
-                <strong>{{ currentTitle }}</strong>
+          <div class="workbench__chat-layout">
+            <section class="workbench__chat">
+              <div v-if="!displayMessages.length" class="workbench__welcome">
+                <div class="workbench__welcome-mark">
+                  <img src="/ai-logo.png" alt="" />
+                </div>
+                <h1>{{ t('ai.work.welcome.title') }}</h1>
+                <p>{{ t('ai.work.welcome.subtitle') }}</p>
+                <div class="workbench__quick-grid">
+                  <button
+                    v-for="action in quickActions"
+                    :key="action.key"
+                    type="button"
+                    @click="useQuickAction(action.prompt)">
+                    <span :class="`workbench__quick-icon workbench__quick-icon--${action.key}`">
+                      <img :src="action.icon" alt="" />
+                    </span>
+                    <span>
+                      <strong>{{ t(`ai.work.quick.${action.key}.title`) }}</strong>
+                      <small>{{ t(`ai.work.quick.${action.key}.desc`) }}</small>
+                    </span>
+                    <svg class="workbench__quick-arrow"><use href="#arrow-right" /></svg>
+                  </button>
+                </div>
               </div>
-              <div v-if="!conversationId" class="workbench__scope-switch" :aria-label="scopeSwitchLabel">
-                <button type="button" :class="{ active: store.scopeMode === 'chat' }" @click="selectScopeMode('chat')">
-                  <svg><use href="#message" /></svg>
-                  {{ t('ai.work.scope.chat') }}
-                </button>
-                <button
-                  type="button"
-                  :class="{ active: store.scopeMode === 'workspace' }"
-                  @click="selectScopeMode('workspace')">
-                  <svg><use href="#folder" /></svg>
-                  {{ t('ai.work.scope.workspace') }}
-                </button>
-              </div>
-              <div v-else class="workbench__scope-badge">
-                <svg><use :href="sessionScopeIcon" /></svg>
-                <span>{{ sessionScopeLabel }}</span>
-              </div>
-            </header>
 
-            <div class="workbench__chat-layout">
-              <section class="workbench__chat">
-                <div v-if="!displayMessages.length" class="workbench__welcome">
-                  <div class="workbench__welcome-mark">
-                    <img src="/ai-logo.png" alt="" />
-                  </div>
-                  <h1>{{ t('ai.work.welcome.title') }}</h1>
-                  <p>{{ t('ai.work.welcome.subtitle') }}</p>
-                  <n-select
-                    v-if="!conversationId"
-                    style="width: 260px; margin-bottom: 16px"
-                    :value="store.activeRuntimeId"
-                    :options="store.runtimes.map((item) => ({ label: item.name, value: item.id }))"
-                    :disabled="busy || installing"
-                    :aria-label="t('settings.work.runtime.select')"
-                    @update:value="selectRuntime" />
-                  <p v-if="store.activeRuntimeId === 'office'">{{ t('settings.work.runtime.officeDesc') }}</p>
+              <n-scrollbar
+                v-else
+                ref="messageScrollRef"
+                class="workbench__messages-scroll"
+                @scroll="handleMessageScroll">
+                <div class="workbench__messages">
+                  <template v-for="message in displayMessages" :key="message.id">
+                    <AiMessageBubble
+                      :role="message.role"
+                      :content="message.content"
+                      :attachments="message.attachments"
+                      :streaming="message.streaming"
+                      :rich="message.role === 'assistant'"
+                      @resized="handleMessageResized"
+                      @regenerate="regenerateMessage(message)" />
+                    <WorkRunTimeline
+                      v-if="message.role === 'user' && message.runId && stepsByRun[message.runId]"
+                      :steps="stepsByRun[message.runId]"
+                      :running="isViewingLive && currentRunId === message.runId && busy"
+                      :stalled="isViewingLive && currentRunId === message.runId && stalled"
+                      :started-at="isViewingLive && currentRunId === message.runId ? runStartedAt : 0"
+                      @continue-waiting="continueWaiting"
+                      @stop="stopPrompt" />
+                  </template>
+                </div>
+              </n-scrollbar>
 
-                  <div class="workbench__quick-grid">
+              <button
+                v-if="displayMessages.length && !isAtBottom"
+                type="button"
+                class="workbench__scroll-bottom"
+                :title="t('ai.work.messages.backToBottom')"
+                @click="scrollToBottom('smooth', true)">
+                <svg><use href="#left-arrow" /></svg>
+              </button>
+
+              <div class="workbench__composer-wrap">
+                <div v-if="workError" class="workbench__error-card">
+                  <span>
+                    <svg><use href="#info" /></svg>
+                    {{ workErrorMessage }}
+                  </span>
+                  <button type="button" @click="handleErrorAction">{{ workErrorActionLabel }}</button>
+                </div>
+                <div class="workbench__composer" :class="{ 'workbench__composer--busy': busy }">
+                  <textarea
+                    ref="inputRef"
+                    v-model="inputText"
+                    :placeholder="t('ai.work.input.placeholder')"
+                    rows="3"
+                    @keydown="onInputKeydown" />
+                  <WorkAttachmentList
+                    v-if="attachments.length"
+                    class="workbench__composer-attachments"
+                    :attachments="attachments"
+                    removable
+                    @remove="removeAttachment" />
+                  <div class="workbench__composer-bar">
+                    <div>
+                      <button type="button" :title="t('ai.input.attach')" @click="chooseAttachments">
+                        <svg><use href="#paperclip" /></svg>
+                      </button>
+                      <button
+                        v-if="store.scopeMode === 'workspace'"
+                        type="button"
+                        :title="t('ai.work.workspace.choose')"
+                        @click="chooseWorkspace">
+                        <svg><use href="#folder" /></svg>
+                      </button>
+                      <WorkExecutionPolicy
+                        :work-mode="store.workMode"
+                        :approval-mode="store.approvalMode"
+                        :disabled="busy"
+                        @update:work-mode="updateWorkMode"
+                        @update:approval-mode="updateApprovalMode" />
+                    </div>
                     <button
-                      v-for="action in quickActions"
-                      :key="action.key"
+                      v-if="busy"
                       type="button"
-                      @click="useQuickAction(action.prompt)">
-                      <span :class="`workbench__quick-icon workbench__quick-icon--${action.key}`">
-                        <img :src="action.icon" alt="" />
-                      </span>
-                      <span>
-                        <strong>{{ t(`ai.work.quick.${action.key}.title`) }}</strong>
-                        <small>{{ t(`ai.work.quick.${action.key}.desc`) }}</small>
-                      </span>
-                      <svg class="workbench__quick-arrow"><use href="#arrow-right" /></svg>
+                      class="workbench__stop"
+                      :title="t('ai.work.input.stop')"
+                      @click="stopPrompt">
+                      <i />
+                    </button>
+                    <button v-else type="button" class="workbench__send" :disabled="!canSend" @click="sendPrompt">
+                      <svg><use href="#arrow-up" /></svg>
                     </button>
                   </div>
                 </div>
+                <small class="workbench__input-hint">{{ t('ai.work.input.hint') }}</small>
+              </div>
+            </section>
 
-                <n-scrollbar
-                  v-else
-                  ref="messageScrollRef"
-                  class="workbench__messages-scroll"
-                  @scroll="handleMessageScroll">
-                  <div class="workbench__messages">
-                    <template v-for="message in displayMessages" :key="message.id">
-                      <AiMessageBubble
-                        :role="message.role"
-                        :content="message.content"
-                        :attachments="message.attachments"
-                        :streaming="message.streaming"
-                        :rich="message.role === 'assistant'"
-                        @resized="handleMessageResized"
-                        @regenerate="regenerateMessage(message)" />
-                      <WorkRunTimeline
-                        v-if="message.role === 'user' && message.runId && stepsByRun[message.runId]"
-                        :steps="stepsByRun[message.runId]"
-                        :running="isViewingLive && currentRunId === message.runId && busy"
-                        :stalled="isViewingLive && currentRunId === message.runId && stalled"
-                        :started-at="isViewingLive && currentRunId === message.runId ? runStartedAt : 0"
-                        @continue-waiting="continueWaiting"
-                        @stop="stopPrompt" />
-                    </template>
+            <aside v-if="displayActivities.length || displayPlanEntries.length" class="workbench__activity">
+              <header>
+                <strong>{{ t('ai.work.activity.title') }}</strong>
+                <span v-if="isViewingLive && busy">{{ t('ai.work.activity.running') }}</span>
+              </header>
+              <n-scrollbar>
+                <div v-if="displayPlanEntries.length" class="workbench__plan">
+                  <span class="workbench__activity-label">{{ t('ai.work.activity.plan') }}</span>
+                  <div v-for="(entry, index) in displayPlanEntries" :key="index" :class="entry.status">
+                    <i />
+                    <span>{{ entry.content }}</span>
                   </div>
-                </n-scrollbar>
-
-                <button
-                  v-if="displayMessages.length && !isAtBottom"
-                  type="button"
-                  class="workbench__scroll-bottom"
-                  :title="t('ai.work.messages.backToBottom')"
-                  @click="scrollToBottom('smooth', true)">
-                  <svg><use href="#left-arrow" /></svg>
-                </button>
-
-                <div class="workbench__composer-wrap">
-                  <div v-if="workError" class="workbench__error-card">
-                    <span>
-                      <svg><use href="#info" /></svg>
-                      {{ workErrorMessage }}
-                    </span>
-                    <button type="button" @click="handleErrorAction">{{ workErrorActionLabel }}</button>
-                  </div>
-                  <div class="workbench__composer" :class="{ 'workbench__composer--busy': busy }">
-                    <textarea
-                      ref="inputRef"
-                      v-model="inputText"
-                      :placeholder="t('ai.work.input.placeholder')"
-                      rows="3"
-                      @keydown="onInputKeydown" />
-                    <WorkAttachmentList
-                      v-if="attachments.length"
-                      class="workbench__composer-attachments"
-                      :attachments="attachments"
-                      removable
-                      @remove="removeAttachment" />
-                    <div class="workbench__composer-bar">
-                      <div>
-                        <button type="button" :title="t('ai.input.attach')" @click="chooseAttachments">
-                          <svg><use href="#paperclip" /></svg>
-                        </button>
-                        <button
-                          v-if="store.scopeMode === 'workspace'"
-                          type="button"
-                          :title="t('ai.work.workspace.choose')"
-                          @click="chooseWorkspace">
-                          <svg><use href="#folder" /></svg>
-                        </button>
-                        <WorkExecutionPolicy
-                          :work-mode="store.workMode"
-                          :approval-mode="store.approvalMode"
-                          :disabled="busy"
-                          @update:work-mode="updateWorkMode"
-                          @update:approval-mode="updateApprovalMode" />
-                      </div>
-                      <button
-                        v-if="busy"
-                        type="button"
-                        class="workbench__stop"
-                        :title="t('ai.work.input.stop')"
-                        @click="stopPrompt">
-                        <i />
-                      </button>
-                      <button v-else type="button" class="workbench__send" :disabled="!canSend" @click="sendPrompt">
-                        <svg><use href="#arrow-up" /></svg>
-                      </button>
-                    </div>
-                  </div>
-                  <small class="workbench__input-hint">{{ t('ai.work.input.hint') }}</small>
                 </div>
-              </section>
-
-              <aside v-if="displayActivities.length || displayPlanEntries.length" class="workbench__activity">
-                <header>
-                  <strong>{{ t('ai.work.activity.title') }}</strong>
-                  <span v-if="isViewingLive && busy">{{ t('ai.work.activity.running') }}</span>
-                </header>
-                <n-scrollbar>
-                  <div v-if="displayPlanEntries.length" class="workbench__plan">
-                    <span class="workbench__activity-label">{{ t('ai.work.activity.plan') }}</span>
-                    <div v-for="(entry, index) in displayPlanEntries" :key="index" :class="entry.status">
-                      <i />
-                      <span>{{ entry.content }}</span>
+                <div class="workbench__tools">
+                  <span class="workbench__activity-label">{{ t('ai.work.activity.tools') }}</span>
+                  <article v-for="activity in displayActivities" :key="activity.id">
+                    <span class="workbench__tool-icon">
+                      <svg><use :href="toolIcon(activity.kind)" /></svg>
+                    </span>
+                    <div>
+                      <strong>{{ activity.title }}</strong>
+                      <small>{{ activity.detail || t(`ai.work.activity.status.${activity.status}`) }}</small>
                     </div>
-                  </div>
-                  <div class="workbench__tools">
-                    <span class="workbench__activity-label">{{ t('ai.work.activity.tools') }}</span>
-                    <article v-for="activity in displayActivities" :key="activity.id">
-                      <span class="workbench__tool-icon">
-                        <svg><use :href="toolIcon(activity.kind)" /></svg>
-                      </span>
-                      <div>
-                        <strong>{{ activity.title }}</strong>
-                        <small>{{ activity.detail || t(`ai.work.activity.status.${activity.status}`) }}</small>
-                      </div>
-                      <i :class="activity.status" />
-                    </article>
-                  </div>
-                </n-scrollbar>
-              </aside>
-            </div>
-          </template>
+                    <i :class="activity.status" />
+                  </article>
+                </div>
+              </n-scrollbar>
+            </aside>
+          </div>
         </main>
       </div>
 
@@ -334,6 +320,24 @@
       ? (String(route.query.view) as ComplianceMode)
       : undefined
   )
+  const assistantOptions = [
+    { value: 'compare', label: MODE_LABELS.compare },
+    { value: 'report', label: MODE_LABELS.report },
+    { value: 'review', label: MODE_LABELS.review }
+  ]
+  const assistantMode = computed(() => Boolean(complianceMode.value))
+  const lastAssistantView = ref('compare')
+  const assistantView = computed({
+    get: () => String(route.query.view),
+    set: (view: string) => selectSection(view)
+  })
+  watch(
+    assistantView,
+    (view) => {
+      if (assistantOptions.some((option) => option.value === view)) lastAssistantView.value = view
+    },
+    { immediate: true }
+  )
   const knowledgeUrl = ref(DEFAULT_RAGFLOW.url),
     knowledgeError = ref('')
   function selectSection(view: string) {
@@ -357,7 +361,6 @@
   import { stat } from '@tauri-apps/plugin-fs'
   import type { ScrollbarInst } from 'naive-ui'
   import AiMessageBubble from '@/components/AI/MessageBubble/index.vue'
-  import SkillsMarket from '@/components/AI/Work/SkillsMarket.vue'
   import WorkAttachmentList from '@/components/AI/Work/WorkAttachmentList.vue'
   import WorkExecutionPolicy from '@/components/AI/Work/WorkExecutionPolicy.vue'
   import WorkPermissionDialog from '@/components/AI/Work/WorkPermissionDialog.vue'
@@ -376,6 +379,7 @@
     type WorkConversationRecord
   } from '@/db/workAssistant'
   import * as workService from '@/services/workService'
+  import { readWorkGlobalModel, workModelSignature, type WorkGlobalModel } from '@/services/workGlobalModel'
   import { initDatabase } from '@/db'
   import { parseWorkError, type ParsedWorkError } from '@/services/workError'
   import { useWorkAssistantStore } from '@/stores/app/workAssistant'
@@ -424,7 +428,9 @@
   const displayPlanEntries = computed(() => (isViewingLive.value ? sessionStore.livePlanEntries : []))
 
   const runtime = computed(() => store.runtimes.find((item) => item.id === store.activeRuntimeId))
-  const canSend = computed(() => Boolean((inputText.value.trim() || attachments.value.length) && !busy.value))
+  const canSend = computed(() =>
+    Boolean(store.initialized && (inputText.value.trim() || attachments.value.length) && !busy.value)
+  )
   const stepsByRun = computed(() =>
     displaySteps.value.reduce<Record<string, WorkStepRecord[]>>((result, step) => {
       result[step.runId] ||= []
@@ -434,7 +440,6 @@
   )
   const currentConversation = computed(() => conversations.value.find((item) => item.id === conversationId.value))
   const currentTitle = computed(() => currentConversation.value?.title || t('ai.work.welcome.newTask'))
-  const activeProvider = computed(() => store.providers.find((item) => item.id === store.activeProviderId))
   const workspaceName = computed(() =>
     store.scopeMode === 'chat'
       ? t('ai.work.scope.chatDescription')
@@ -517,7 +522,7 @@
     isAtBottom.value = target.scrollHeight - target.scrollTop - target.clientHeight < 80
   }
   const handleMessageResized = () => scrollToBottom('auto')
-  const openSettings = () => createSetWinodw('work')
+  const openSettings = () => createSetWinodw('aiModel')
   const toolIcon = (kind: string) =>
     ({ read: '#document', edit: '#edit', execute: '#terminal', search: '#search' })[kind] || '#settings'
 
@@ -703,26 +708,21 @@
     }
   }
 
-  const selectRuntime = async (activeRuntimeId: string) => {
-    try {
-      await sessionStore.closeBoundSession(store.activeRuntimeId)
-      await store.savePreferences({ activeRuntimeId })
-      await store.refreshStatus()
-    } catch (error) {
-      showFriendlyError(error)
-    }
-  }
   const ensureSession = async (
     runtimeId: string,
     scopeMode: WorkScopeMode,
     targetConversationId: string,
     cwd: string,
-    runId: string
+    runId: string,
+    globalModel: WorkGlobalModel
   ) => {
+    const signature = await workModelSignature(globalModel)
     if (sessionStore.currentRunId !== runId) throw new Error('WORK_CANCELLED')
     if (
       sessionStore.sessionId &&
-      (sessionStore.boundConversationId !== targetConversationId || sessionStore.sessionRuntimeId !== runtimeId)
+      (sessionStore.boundConversationId !== targetConversationId ||
+        sessionStore.sessionRuntimeId !== runtimeId ||
+        sessionStore.sessionModelSignature !== signature)
     ) {
       await sessionStore.closeBoundSession(runtimeId)
     }
@@ -732,13 +732,14 @@
         runtimeId,
         scopeMode,
         targetConversationId,
-        scopeMode === 'workspace' ? cwd : undefined
+        scopeMode === 'workspace' ? cwd : undefined,
+        globalModel
       )
       if (sessionStore.currentRunId !== runId) {
         await workService.closeSession(runtimeId, session.sessionId).catch(() => undefined)
         throw new Error('WORK_CANCELLED')
       }
-      sessionStore.setSessionId(session.sessionId, runtimeId, targetConversationId)
+      sessionStore.setSessionId(session.sessionId, runtimeId, targetConversationId, signature)
     }
   }
   const createConversationLocally = (text: string) => {
@@ -781,14 +782,13 @@
     t('ai.work.welcome.newTask')
   const sendPrompt = async () => {
     const text = inputText.value.trim()
-    if ((!text && !attachments.value.length) || sessionStore.busy) return
+    if (!store.initialized || (!text && !attachments.value.length) || sessionStore.busy) return
     workError.value = null
+    let globalModel: WorkGlobalModel
     try {
+      store.refreshGlobalModel()
+      globalModel = readWorkGlobalModel()
       if (!runtime.value?.installed) throw new Error('WORK_RUNTIME_NOT_INSTALLED')
-      if (!activeProvider.value) throw new Error('WORK_PROVIDER_NOT_CONFIGURED')
-      if (!activeProvider.value.hasApiKey) throw new Error('WORK_PROVIDER_KEY_REQUIRED')
-      const activeModel = store.activeModel || activeProvider.value.defaultModel
-      if (!activeModel) throw new Error('WORK_MODEL_NOT_FOUND')
       if (store.scopeMode === 'workspace' && !store.workspacePath) await chooseWorkspace()
       if (store.scopeMode === 'workspace' && !store.workspacePath) throw new Error('WORK_WORKSPACE_REQUIRED')
     } catch (error) {
@@ -864,7 +864,7 @@
     Promise.resolve(
       conversationRecord ? upsertWorkConversation(conversationRecord) : touchConversation(targetConversationId)
     )
-      .then(() => ensureSession(runtimeId, scopeMode, targetConversationId, workspacePath, runId))
+      .then(() => ensureSession(runtimeId, scopeMode, targetConversationId, workspacePath, runId, globalModel))
       .then(() => Promise.all([persistChatMessage(userMessage, targetConversationId), saveWorkStep(startingStep)]))
       .then(() => {
         if (sessionStore.currentRunId !== runId) throw new Error('WORK_CANCELLED')
@@ -896,8 +896,11 @@
     const action = workError.value?.action
     if (action === 'workspace') await chooseWorkspace()
     else if (action === 'install') await installRuntime()
-    else if (action === 'settings') openSettings()
-    else workError.value = null
+    else if (action === 'settings') {
+      if (workError.value?.code.startsWith('WORK_OFFICE_') || workError.value?.code.startsWith('WORK_RUNTIME_'))
+        createSetWinodw('work')
+      else openSettings()
+    } else workError.value = null
   }
   const stopPrompt = async () => {
     if (!sessionStore.busy) return
@@ -1007,7 +1010,10 @@
     }
   )
 
+  const refreshGlobalModel = () => store.refreshGlobalModel()
   onMounted(async () => {
+    window.addEventListener('storage', refreshGlobalModel)
+    window.addEventListener('focus', refreshGlobalModel)
     await sessionStore.ensureListening()
     await Promise.all([store.initialize(), loadHistory()]).catch(showFriendlyError)
     ensureNotificationPermission().catch(() => undefined)
@@ -1019,10 +1025,13 @@
     }, 3000)
   })
   onActivated(() => {
+    store.refreshGlobalModel()
     applyAiTabPayload().catch(() => undefined)
     if (isViewingLive.value) scrollToBottom('auto', true)
   })
   onBeforeUnmount(() => {
+    window.removeEventListener('storage', refreshGlobalModel)
+    window.removeEventListener('focus', refreshGlobalModel)
     if (stalledTimer) clearInterval(stalledTimer)
   })
 </script>
@@ -1064,6 +1073,48 @@
     position: relative;
     flex: 1;
     min-height: 0;
+  }
+  .assistant-options {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    margin: 0;
+    padding: 12px 18px;
+    border: 0;
+    border-bottom: 1px solid #dbe5f2;
+    background: #fff;
+    color: #49617e;
+  }
+  .assistant-options legend {
+    float: left;
+    margin-right: 12px;
+    padding: 8px 0;
+    font-size: 13px;
+  }
+  .assistant-options label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 14px;
+    border: 1px solid #dbe5f2;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .assistant-options label.selected {
+    background: #edf5ff;
+    border-color: #80b4ef;
+    color: #2174ca;
+  }
+  .assistant-options input {
+    margin: 0;
+    accent-color: #338fe9;
+  }
+  .assistant-options label:focus-within {
+    outline: 2px solid #338fe9;
+    outline-offset: 2px;
   }
   .compliance-slot {
     flex: 1;

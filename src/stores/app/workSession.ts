@@ -32,6 +32,7 @@ export interface WorkLivePlanEntry {
 
 type WorkSessionState = {
   sessionId: string
+  sessionModelSignature: string
   sessionRuntimeId: string
   boundConversationId: string
   conversationId: string
@@ -83,6 +84,7 @@ export const useWorkSessionStore = defineStore('workSession', {
   state: (): WorkSessionState => ({
     sessionId: '',
     sessionRuntimeId: '',
+    sessionModelSignature: '',
     boundConversationId: '',
     conversationId: '',
     conversationTitle: '',
@@ -105,8 +107,13 @@ export const useWorkSessionStore = defineStore('workSession', {
         this.handleEvent(event)
       })
     },
-    setSessionId(sessionId: string, runtimeId = '', conversationId = '') {
-      this.$patch({ sessionId, sessionRuntimeId: runtimeId, boundConversationId: conversationId })
+    setSessionId(sessionId: string, runtimeId = '', conversationId = '', modelSignature = '') {
+      this.$patch({
+        sessionId,
+        sessionRuntimeId: runtimeId,
+        boundConversationId: conversationId,
+        sessionModelSignature: modelSignature
+      })
     },
     isViewingLive(conversationId: string) {
       return Boolean(conversationId && conversationId === this.conversationId && this.liveMessages.length)
@@ -158,7 +165,7 @@ export const useWorkSessionStore = defineStore('workSession', {
       if (event.kind === 'session_update') this.handleSessionUpdate(event.payload)
       if (event.kind === 'permission_request' && event.requestId) this.handlePermissionRequest(event)
       if (event.kind === 'runtime_stopped') {
-        this.$patch({ sessionId: '', boundConversationId: '', sessionRuntimeId: '' })
+        this.$patch({ sessionId: '', boundConversationId: '', sessionRuntimeId: '', sessionModelSignature: '' })
         if (this.busy) this.failRunLocal(i18n.global.t('ai.work.errors.runtimeDisconnected')).catch(() => undefined)
       }
     },
@@ -444,7 +451,7 @@ export const useWorkSessionStore = defineStore('workSession', {
       const sessionId = this.sessionId
       if (!sessionId) return
       const boundRuntimeId = this.sessionRuntimeId || runtimeId
-      this.$patch({ sessionId: '', sessionRuntimeId: '', boundConversationId: '' })
+      this.$patch({ sessionId: '', sessionRuntimeId: '', boundConversationId: '', sessionModelSignature: '' })
       await workService.closeSession(boundRuntimeId, sessionId).catch(() => undefined)
     },
     async stopListening() {

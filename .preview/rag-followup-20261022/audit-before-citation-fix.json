@@ -1,0 +1,592 @@
+{
+  "checked": [
+    {
+      "record": "2f025ffa26a74dea99fa0c33632776f2",
+      "question": "值班制度",
+      "options": 5,
+      "cache": "not_requested",
+      "contextCount": 0,
+      "status": "clarification"
+    },
+    {
+      "record": "3d48987e5f8c4873b4a3acfe37e78fa7",
+      "question": "加班",
+      "options": 5,
+      "cache": "not_requested",
+      "contextCount": 0,
+      "status": "clarification"
+    },
+    {
+      "record": "c7dcbc8854024c959e5b43e034c44921",
+      "question": "加值班制度",
+      "options": 5,
+      "cache": "not_requested",
+      "contextCount": 0,
+      "status": "clarification"
+    },
+    {
+      "record": "9fa382215d8c41e18eeb452ff0b107d6",
+      "question": "请假制度",
+      "options": 5,
+      "cache": "not_requested",
+      "contextCount": 0,
+      "status": "clarification"
+    },
+    {
+      "record": "c645a7e156d04a8088ea9f79f225e686",
+      "question": "加班与调休管理制度由哪个部门负责解释和归口管理?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 2,
+      "status": "answered"
+    },
+    {
+      "record": "8fb955929d984bdb82a0d0e723a8f11c",
+      "question": "加班与调休管理制度的适用范围是什么?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "838022fbfdde4bb587d04bf05bd0e5f3",
+      "question": "报销制度",
+      "options": 5,
+      "cache": "not_requested",
+      "contextCount": 0,
+      "status": "clarification"
+    },
+    {
+      "record": "c8096936c41745968ccdb549cc8d23b2",
+      "question": "不同城市类别和职级的住宿限额标准是多少?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 2,
+      "status": "answered"
+    },
+    {
+      "record": "8954d707c0c9431ba23d0836d360553e",
+      "question": "差旅费用报销的提交流程和时限是什么?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "236404aaa8b54527861907ffe7a90aca",
+      "question": "账号怎么处理？",
+      "options": 5,
+      "cache": "not_requested",
+      "contextCount": 0,
+      "status": "clarification"
+    },
+    {
+      "record": "87edc8e27ec74765ab12f2d461a29c0c",
+      "question": "离职人员的账号应如何处理?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 3,
+      "status": "answered"
+    },
+    {
+      "record": "0b9c95735bd34e84afb5fe249527c2e0",
+      "question": "这个呢？",
+      "options": 0,
+      "cache": "not_requested",
+      "contextCount": 0,
+      "status": "clarification"
+    },
+    {
+      "record": "077ab0980cd945888fe2f508838b3f1d",
+      "question": "怎么申请？",
+      "options": 0,
+      "cache": "not_requested",
+      "contextCount": 0,
+      "status": "clarification"
+    },
+    {
+      "record": "f5534c83d74b43858435f1e1451e856f",
+      "question": "账号权限申请应遵循什么要求和审批流程?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "5d86a17b6b3d4daca5f5d12dfe0aeeed",
+      "question": "我是想申请加班，需要哪些步骤？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "passed",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "7d05aa84ff984f78a6438208f745c768",
+      "question": "《值班管理制度》由哪个部门负责解释？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "passed",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "f5299021b0c141d1a799567c6415256e",
+      "question": "加班和值班制度分别适用于哪些人？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "passed",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "8627d066d9f44ab7a82fd303e85b3cc9",
+      "question": "加班与值班制度有什么区别？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "passed",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "35a7f8bb3eba45c79a750ff7d4149f00",
+      "question": "加班与调休管理制度的适用范围是什么？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "passed",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "e241bcb65a174cf18993b3454a91cce3",
+      "question": "那外包人员呢？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "passed",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "b1a546d541d64a6b84130711d1a0b3c8",
+      "question": "由哪个部门负责解释？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "passed",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "4846041089af429995e8d2cefee5edab",
+      "question": "住宿报消标准是多少？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "passed",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "5f3d6e4e357d4aeb937610f2c38c83e4",
+      "question": "加班、值班和请假制度",
+      "options": 5,
+      "cache": "not_requested",
+      "contextCount": 0,
+      "status": "clarification"
+    },
+    {
+      "record": "0713a8868eab48fa915d8534ef0751cd",
+      "question": "加值班制度",
+      "options": 5,
+      "cache": "not_requested",
+      "contextCount": 0,
+      "status": "clarification"
+    },
+    {
+      "record": "ca3c0bf83e334034a484388d6346a3a6",
+      "question": "我刚入职，对公司的工作安排和员工管理规定还不熟悉，暂时没有具体的办理事项，也不确定应该先看哪些条款。我想先了解一下加班和值班这两类制度，请根据已有制度列出几个有依据、可以继续了解的方向让我选择。",
+      "options": 5,
+      "cache": "not_requested",
+      "contextCount": 0,
+      "status": "clarification"
+    },
+    {
+      "record": "06846af7a4144475be180432e18eaf83",
+      "question": "加班费的计算基数如何确定?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "7c1b5068fcc24c868d498f686045b437",
+      "question": "加班与调休管理制度的适用范围是什么?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "64d1c5480256469d899a16e644fce1cf",
+      "question": "值班管理制度的适用范围是什么?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "d8c423b6208b41208b9a9f261593ec31",
+      "question": "值班管理制度由哪个部门归口管理?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "2de2985b64144d889c92761e7d0eb40e",
+      "question": "加班与调休管理制度由哪个部门归口管理?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "7f1bcd8b0aa74aeaa3e8d99f829ac7df",
+      "question": "加班",
+      "options": 5,
+      "cache": "not_requested",
+      "contextCount": 0,
+      "status": "clarification"
+    },
+    {
+      "record": "f4537a1d9496413d99f55d71769fe8bb",
+      "question": "加班申请需要说明哪些事项、由谁批准?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "e5726887972e496b9b5c62547a7fcbd6",
+      "question": "加班费的计算基数和不同加班类型的支付标准是什么?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 2,
+      "status": "answered"
+    },
+    {
+      "record": "b405d0ea725e4402a858259275093c7a",
+      "question": "实际加班未被记录或审批与事实不符时如何处理?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "bf6b17db7405472ba48ffff47cf6942b",
+      "question": "加班起止时间如何认定,哪些情形不直接认定为加班?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "7ea0dd93ff4748b8a67bcfbde05f8661",
+      "question": "值班制度",
+      "options": 4,
+      "cache": "not_requested",
+      "contextCount": 0,
+      "status": "clarification"
+    },
+    {
+      "record": "a33857c4e2d1467f8835818ce473832c",
+      "question": "值班制度适用于哪些部门和人员?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "e3db77907b82425db38f5592c0a49e78",
+      "question": "值班制度制定的目的是什么?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "1c947452b8314cbe8101bb2ae2d6bda3",
+      "question": "违反值班制度会如何处理?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 2,
+      "status": "answered"
+    },
+    {
+      "record": "2c9f158ebb884fb4a7f6af451fb52e17",
+      "question": "值班制度由哪个部门负责解释和归口管理?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 2,
+      "status": "answered"
+    },
+    {
+      "record": "8ccf49c1bd9f464aa526d9e569cce4e1",
+      "question": "不同城市类别和职级的住宿报销限额是多少?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 2,
+      "status": "answered"
+    },
+    {
+      "record": "acd15367670c4b4fb3020a3edf0daabd",
+      "question": "差旅费用报销的提交时限和具体流程是什么?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "b130e294fd7a448292a2a42a8e24c399",
+      "question": "报销制度",
+      "options": 4,
+      "cache": "not_requested",
+      "contextCount": 0,
+      "status": "clarification"
+    },
+    {
+      "record": "290420f141f248fa9f5244a5f0878c5d",
+      "question": "出差伙食补助和市内交通补助的标准及扣减规则是什么?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "562ebeaf000c482fafcc75b339282d52",
+      "question": "员工对报销退回、扣减或逾期处理有异议时如何申请复核?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 2,
+      "status": "answered"
+    },
+    {
+      "record": "48ee1980a42e4b259f452079b6d462e7",
+      "question": "请假制度",
+      "options": 2,
+      "cache": "not_requested",
+      "contextCount": 0,
+      "status": "clarification"
+    },
+    {
+      "record": "16eff04f8e414e55aa34ac56d0b9c72c",
+      "question": "请假制度适用于哪些假期类型和人员范围?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "29b3f99570df416ebf1bcf7e70c6ea67",
+      "question": "请假制度由哪个部门负责解释和管理?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "645dfd5adacd470fb232f8ec59536fc8",
+      "question": "离职人员的账号应如何处理?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 2,
+      "status": "answered"
+    },
+    {
+      "record": "5d10c0ee3bf547bb9929dd2d226cb80a",
+      "question": "账号怎么处理？",
+      "options": 5,
+      "cache": "not_requested",
+      "contextCount": 0,
+      "status": "clarification"
+    },
+    {
+      "record": "e775cf9366b442e29b72e7edc446aac6",
+      "question": "共享账号应如何处理?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "26e8b2fac6a14dab92758f04f958f87a",
+      "question": "申请账号权限需要满足哪些要求?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "5527570c54ad41acb5b78d2bf0c6a464",
+      "question": "员工忘记密码后如何重置账号密码?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "7dc9c607e63c492dae1adca46153bce0",
+      "question": "远程办公时发生账号异常应如何处理?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "fdd5bf89556a48dfb3a6b0627a1c8bb6",
+      "question": "加班费的计算基数如何确定?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "b242d9ce3c2e41b492501d0dbab24c84",
+      "question": "加班与调休管理制度适用于哪些员工?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "9fbf8e585c0f4135836cf55a72a0a17b",
+      "question": "加班、值班和请假制度",
+      "options": 5,
+      "cache": "not_requested",
+      "contextCount": 0,
+      "status": "clarification"
+    },
+    {
+      "record": "ed5936ce53ca4d2fb745bd5975fcdb0a",
+      "question": "值班管理制度适用于哪些部门和人员?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "a7a9ceb3d6ed4abb88e8621fa50fe850",
+      "question": "请假与休假管理制度涵盖哪些假期类型?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "6e15aba49a4749d8b5081ee7258896e0",
+      "question": "请假与休假管理制度对假期标准与法定规定不一致时如何处理?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "8342a94987ca45fe98e0fc419efa9fc7",
+      "question": "加班制度适用于哪些员工?劳务派遣、外包、实习或合作方人员是否适用?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "9e8a010da51f44cfa2d7acb27c71995b",
+      "question": "我刚入职，对公司的工作安排和员工管理规定还不熟悉，暂时没有具体的办理事项，也不确定应该先看哪些条款。我想先了解一下加班和值班这两类制度，请根据已有制度列出几个有依据、可以继续了解的方向让我选择。",
+      "options": 5,
+      "cache": "not_requested",
+      "contextCount": 0,
+      "status": "clarification"
+    },
+    {
+      "record": "1c70adac436e46e4a4949cde0910fa15",
+      "question": "计划加班需要经过什么审批流程?由谁批准、需要说明哪些内容?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "539434856eb94118943d7242b286e4ae",
+      "question": "值班制度适用于哪些部门和人员?值班安排覆盖哪些时段?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 2,
+      "status": "answered"
+    },
+    {
+      "record": "5a19fdea93714bcba64c84818ea82b91",
+      "question": "加班费如何计算?工作日延时、休息日工作和法定节假日工作的支付或补休标准分别是什么?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 2,
+      "status": "answered"
+    },
+    {
+      "record": "8f419c0dc2a942bcb3cb7de8a30638fb",
+      "question": "值班表应列明哪些内容?排班对连续夜班和休息时间有什么要求?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    }
+  ],
+  "errors": [
+    {
+      "question": "火星驻外津贴制度的领取标准是多少？",
+      "record": "714d1fb78d8c418586bc8512f09f453b",
+      "error": "answer has evidence but lacks citations"
+    },
+    {
+      "question": "休息日加班如何安排补休?",
+      "record": "8e0428071bfb4e19ace06b2f315414c1",
+      "error": "citation index outside current evidence"
+    }
+  ]
+}

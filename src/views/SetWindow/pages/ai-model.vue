@@ -2,7 +2,7 @@
   <div class="ai-model-settings">
     <header>
       <h2>全局模型设置</h2>
-      <p>在此设置一次，所有本地聊天和群共用。保存后应用重启仍会保留。</p>
+      <p>在此设置一次，本地聊天、群聊、任务助手和合规助手共用。保存后应用重启仍会保留。</p>
     </header>
 
     <SettingCard>

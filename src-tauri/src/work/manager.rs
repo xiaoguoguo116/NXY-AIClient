@@ -55,6 +55,9 @@ impl WorkManager {
         } else {
             WorkSettings::default()
         };
+        settings.active_runtime_id = super::office::ID.into();
+        settings.active_provider_id = None;
+        settings.active_model = None;
         for provider in &mut settings.providers {
             provider.models = provider
                 .models
@@ -100,15 +103,11 @@ impl WorkManager {
     }
 
     pub async fn runtimes(&self) -> Vec<RuntimeManifest> {
-        vec![super::office::manifest(&self.root), self.detect_reasonix()]
+        vec![super::office::manifest(&self.root)]
     }
 
     pub async fn active_runtime(&self) -> RuntimeManifest {
-        if self.settings.lock().await.active_runtime_id == super::office::ID {
-            super::office::manifest(&self.root)
-        } else {
-            self.detect_reasonix()
-        }
+        super::office::manifest(&self.root)
     }
 
     pub fn detect_reasonix(&self) -> RuntimeManifest {
@@ -185,7 +184,7 @@ impl WorkManager {
         &self,
         input: PreferencesInput,
     ) -> Result<WorkSettings, String> {
-        if !["reasonix", super::office::ID].contains(&input.active_runtime_id.as_str())
+        if input.active_runtime_id != super::office::ID
             || !["ask", "auto", "yolo"].contains(&input.approval_mode.as_str())
             || !["economy", "balanced", "delivery"].contains(&input.work_mode.as_str())
         {
@@ -210,7 +209,7 @@ impl WorkManager {
         settings.approval_mode = input.approval_mode;
         settings.work_mode = input.work_mode;
         self.persist_settings(&settings)?;
-        self.write_reasonix_config(&settings)?;
+        self.sync_active_runtime_config(&settings)?;
         Ok(settings.clone())
     }
 
@@ -276,7 +275,7 @@ impl WorkManager {
             }
         }
         self.persist_settings(&settings)?;
-        self.write_reasonix_config(&settings)?;
+        self.sync_active_runtime_config(&settings)?;
         Ok(profile)
     }
 
@@ -372,7 +371,7 @@ impl WorkManager {
             let _ = entry.delete_credential();
         }
         self.persist_settings(&settings)?;
-        self.write_reasonix_config(&settings)
+        self.sync_active_runtime_config(&settings)
     }
 
     pub async fn install_skill(
@@ -478,28 +477,13 @@ impl WorkManager {
             if !super::office::manifest(&self.root).installed {
                 return Err("WORK_RUNTIME_NOT_INSTALLED".into());
             }
-            let settings = self.settings().await;
-            let provider = settings
-                .providers
-                .iter()
-                .find(|p| p.enabled && Some(&p.id) == settings.active_provider_id.as_ref())
-                .ok_or("WORK_PROVIDER_NOT_CONFIGURED")?;
-            let key = read_provider_key(&provider.id).ok_or("WORK_PROVIDER_KEY_REQUIRED")?;
-            let model = settings.active_model.as_ref().unwrap_or(&provider.default_model);
             let script = super::office::materialize(&self.root)?;
-            let config = serde_json::json!({
-                "baseUrl": provider.base_url, "kind": provider.kind,
-                "model": model, "apiKeyEnv": "EM_OFFICE_API_KEY"
-            });
             let connection = AcpConnection::spawn(
                 app,
                 runtime_id.into(),
                 &super::office::python_path(&self.root).to_string_lossy(),
                 &["-I".into(), "-u".into(), script.to_string_lossy().into_owned()],
-                &[
-                    ("EM_OFFICE_CONFIG".into(), config.to_string()),
-                    ("EM_OFFICE_API_KEY".into(), key),
-                ],
+                &[],
                 script.parent().ok_or("WORK_RUNTIME_START_FAILED")?,
             )
             .await?;
@@ -566,6 +550,16 @@ impl WorkManager {
     ) -> Result<(), String> {
         let bytes = serde_json::to_vec_pretty(settings).map_err(|error| error.to_string())?;
         fs::write(self.root.join("settings.json"), bytes).map_err(|error| error.to_string())
+    }
+
+    fn sync_active_runtime_config(
+        &self,
+        settings: &WorkSettings,
+    ) -> Result<(), String> {
+        if settings.active_runtime_id == "reasonix" {
+            self.write_reasonix_config(settings)?;
+        }
+        Ok(())
     }
 
     fn write_reasonix_config(
@@ -689,4 +683,30 @@ fn runtime_command(path: &Path) -> Command {
     };
     super::process::hide_console(&mut command);
     command
+}
+
+#[cfg(test)]
+mod office_settings_tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn office_settings_do_not_depend_on_reasonix_config_directory() {
+        let root =
+            std::env::temp_dir().join(format!("em-office-settings-{}", uuid::Uuid::new_v4()));
+        let manager = WorkManager::initialize(root.clone()).unwrap();
+        fs::write(manager.reasonix_home(), b"blocked config directory").unwrap();
+        let result = manager
+            .save_preferences(PreferencesInput {
+                active_runtime_id: "office".into(),
+                active_provider_id: None,
+                active_model: None,
+                approval_mode: "ask".into(),
+                work_mode: "balanced".into(),
+            })
+            .await;
+        assert!(result.is_ok(), "Office preferences unexpectedly required Reasonix: {result:?}");
+        assert!(manager.write_reasonix_config(&manager.settings().await).is_err());
+        drop(manager);
+        fs::remove_dir_all(root).unwrap();
+    }
 }

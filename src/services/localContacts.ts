@@ -24,6 +24,33 @@ type LocalColleague = {
   role?: string
 }
 
+function exampleColleague(
+  id: string,
+  name: string,
+  account: string,
+  departmentId: string,
+  departmentName: string,
+  title: string,
+  phoneSuffix: number,
+  signature: string,
+  role?: string
+): LocalColleague {
+  return {
+    id,
+    name,
+    account,
+    departmentId,
+    departmentName,
+    title,
+    email: `${account}@example.local`,
+    phone: `138 0000 ${phoneSuffix}`,
+    gender: '未设置',
+    location: '本地工作区',
+    signature,
+    role
+  }
+}
+
 const colleagues: LocalColleague[] = [
   {
     id: 'local-colleague-lin-zhixia',
@@ -198,7 +225,194 @@ const colleagues: LocalColleague[] = [
     location: '上海',
     signature: '让团队安心地把事情做好。',
     role: 'leader'
-  }
+  },
+  exampleColleague(
+    'local-colleague-wei-ran',
+    '魏然',
+    'wei.ran',
+    'local-dept-product',
+    '产品中心',
+    '产品运营经理',
+    6001,
+    '让上线后的产品持续产生价值。'
+  ),
+  exampleColleague(
+    'local-colleague-gu-xun',
+    '顾寻',
+    'gu.xun',
+    'local-dept-product',
+    '产品中心',
+    '业务分析师',
+    6002,
+    '用业务流程连接需求与交付。'
+  ),
+  exampleColleague(
+    'local-colleague-xu-lan',
+    '许岚',
+    'xu.lan',
+    'local-dept-frontend',
+    '前端组',
+    '移动端工程师',
+    6101,
+    '让移动体验稳定、顺畅。'
+  ),
+  exampleColleague(
+    'local-colleague-fang-ning',
+    '方宁',
+    'fang.ning',
+    'local-dept-quality',
+    '质量保障组',
+    '自动化测试工程师',
+    6301,
+    '把高频回归交给自动化。'
+  ),
+  exampleColleague(
+    'local-colleague-xu-zhiyuan',
+    '许知远',
+    'xu.zhiyuan',
+    'local-dept-data',
+    '数据平台组',
+    '数据工程师',
+    6401,
+    '让数据链路可追溯。',
+    'leader'
+  ),
+  exampleColleague(
+    'local-colleague-wei-qing',
+    '卫青',
+    'wei.qing',
+    'local-dept-data',
+    '数据平台组',
+    '数据分析师',
+    6402,
+    '用统一口径解释业务变化。'
+  ),
+  exampleColleague(
+    'local-colleague-han-ce',
+    '韩策',
+    'han.ce',
+    'local-dept-security',
+    '安全运维组',
+    '信息安全工程师',
+    6501,
+    '把安全要求落实到流程。',
+    'leader'
+  ),
+  exampleColleague(
+    'local-colleague-bai-he',
+    '白河',
+    'bai.he',
+    'local-dept-security',
+    '安全运维组',
+    '站点可靠性工程师',
+    6502,
+    '先发现故障，再缩短恢复时间。'
+  ),
+  exampleColleague(
+    'local-colleague-he-qing',
+    '何清',
+    'he.qing',
+    'local-dept-design',
+    '设计中心',
+    '用户研究员',
+    7001,
+    '从真实使用场景中发现体验问题。'
+  ),
+  exampleColleague(
+    'local-colleague-ye-ning',
+    '叶宁',
+    'ye.ning',
+    'local-dept-market',
+    '市场与客户成功',
+    '客户服务经理',
+    7101,
+    '让客户反馈得到明确回应。'
+  ),
+  exampleColleague(
+    'local-colleague-liang-chen',
+    '梁晨',
+    'liang.chen',
+    'local-dept-market',
+    '市场与客户成功',
+    '销售运营专员',
+    7102,
+    '让商机和交付衔接顺畅。'
+  ),
+  exampleColleague(
+    'local-colleague-su-yi',
+    '苏一',
+    'su.yi',
+    'local-dept-hr',
+    '人力资源组',
+    '薪酬福利专员',
+    8001,
+    '把薪酬福利事项办理清楚。',
+    'leader'
+  ),
+  exampleColleague(
+    'local-colleague-zheng-yan',
+    '郑言',
+    'zheng.yan',
+    'local-dept-admin',
+    '行政采购组',
+    '采购专员',
+    8101,
+    '让采购有记录、有交付。',
+    'leader'
+  ),
+  exampleColleague(
+    'local-colleague-shen-mo',
+    '沈茉',
+    'shen.mo',
+    'local-dept-admin',
+    '行政采购组',
+    '行政专员',
+    8102,
+    '让日常办公更省心。'
+  ),
+  exampleColleague(
+    'local-colleague-lu-bei',
+    '陆北',
+    'lu.bei',
+    'local-dept-it',
+    'IT 支持组',
+    '内部 IT 专员',
+    8201,
+    '让办公账号和设备保持可用。',
+    'leader'
+  ),
+  exampleColleague(
+    'local-colleague-ruan-ming',
+    '阮明',
+    'ruan.ming',
+    'local-dept-finance',
+    '财务组',
+    '费用会计',
+    9001,
+    '让费用与发票流程准确透明。',
+    'leader'
+  ),
+  exampleColleague(
+    'local-colleague-song-he',
+    '宋禾',
+    'song.he',
+    'local-dept-finance',
+    '财务组',
+    '结算会计',
+    9002,
+    '按时完成付款和结算。'
+  ),
+  exampleColleague(
+    'local-colleague-ji-tian',
+    '季恬',
+    'ji.tian',
+    'local-dept-legal',
+    '法务组',
+    '法务专员',
+    9101,
+    '让合同条款和合规边界清晰。',
+    'leader'
+  )
 ]
 
 function toMember(colleague: LocalColleague): EnterpriseMember {
@@ -259,9 +473,17 @@ const departments: EnterpriseDepartment[] = [
   department('local-dept-frontend', '前端组', 21, 'local-dept-engineering', 'local-colleague-su-qing'),
   department('local-dept-backend', '服务端组', 22, 'local-dept-engineering', 'local-colleague-chen-mo'),
   department('local-dept-quality', '质量保障组', 23, 'local-dept-engineering', 'local-colleague-pei-ning'),
+  department('local-dept-data', '数据平台组', 24, 'local-dept-engineering', 'local-colleague-xu-zhiyuan'),
+  department('local-dept-security', '安全运维组', 25, 'local-dept-engineering', 'local-colleague-han-ce'),
   department('local-dept-design', '设计中心', 30, '', 'local-colleague-gu-yan'),
   department('local-dept-market', '市场与客户成功', 40, '', 'local-colleague-song-ran'),
-  department('local-dept-operations', '综合支持', 50, '', 'local-colleague-qiao-an')
+  department('local-dept-operations', '综合支持', 50, '', 'local-colleague-qiao-an'),
+  department('local-dept-hr', '人力资源组', 51, 'local-dept-operations', 'local-colleague-su-yi'),
+  department('local-dept-admin', '行政采购组', 52, 'local-dept-operations', 'local-colleague-zheng-yan'),
+  department('local-dept-it', 'IT 支持组', 53, 'local-dept-operations', 'local-colleague-lu-bei'),
+  department('local-dept-finance-legal', '财务与法务', 60),
+  department('local-dept-finance', '财务组', 61, 'local-dept-finance-legal', 'local-colleague-ruan-ming'),
+  department('local-dept-legal', '法务组', 62, 'local-dept-finance-legal', 'local-colleague-ji-tian')
 ]
 
 for (const entry of departments) {

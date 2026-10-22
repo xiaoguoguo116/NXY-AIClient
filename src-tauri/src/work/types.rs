@@ -115,13 +115,22 @@ pub struct WorkStatus {
     pub installed_skills: usize,
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct OfficeModelConfig {
+    pub base_url: String,
+    pub model: String,
+    pub api_key: String,
+}
+
+#[derive(Clone, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct SessionNewInput {
     pub runtime_id: String,
     pub cwd: Option<String>,
     pub scope_mode: String,
     pub conversation_id: String,
+    pub global_model: Option<OfficeModelConfig>,
 }
 
 #[derive(Clone, Debug, Deserialize)]

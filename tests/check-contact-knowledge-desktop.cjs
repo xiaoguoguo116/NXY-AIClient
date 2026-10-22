@@ -8,6 +8,7 @@ const CHAT_KEY = 'em.local-chat.v1'
   const browser = await chromium.connectOverCDP('http://127.0.0.1:19224')
   const page = browser.contexts().flatMap((context) => context.pages()).find((candidate) => candidate.url().includes('/home'))
   if (!page) throw new Error('EM 主窗口未打开')
+  await page.setViewportSize({ width: 1100, height: 720 })
 
   const snapshot = await page.evaluate(({ responsibilityKey, chatKey }) => ({
     responsibility: localStorage.getItem(responsibilityKey),

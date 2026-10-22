@@ -1,0 +1,103 @@
+{
+  "phase": "improved",
+  "started": "2026-10-22T03:05:53.415Z",
+  "cases": [
+    {
+      "id": "compressed",
+      "question": "加值班制度",
+      "expected": "clarify",
+      "error": "HTTP 502"
+    },
+    {
+      "id": "overtime",
+      "question": "加班",
+      "expected": "clarify",
+      "error": "HTTP 502"
+    },
+    {
+      "id": "duty",
+      "question": "值班制度",
+      "expected": "clarify",
+      "error": "HTTP 502"
+    },
+    {
+      "id": "expense",
+      "question": "报销制度",
+      "expected": "clarify",
+      "error": "HTTP 502"
+    },
+    {
+      "id": "leave",
+      "question": "请假制度",
+      "expected": "clarify",
+      "error": "HTTP 502"
+    },
+    {
+      "id": "account",
+      "question": "账号怎么处理？",
+      "expected": "clarify",
+      "error": "HTTP 502"
+    },
+    {
+      "id": "missing-topic",
+      "question": "怎么申请？",
+      "expected": "needs_input",
+      "error": "HTTP 502"
+    },
+    {
+      "id": "specific",
+      "question": "加班与调休管理制度的适用范围是什么？",
+      "expected": "answer",
+      "error": "HTTP 502"
+    },
+    {
+      "id": "missing-reference",
+      "question": "这个呢？",
+      "expected": "needs_input",
+      "error": "HTTP 502"
+    },
+    {
+      "id": "parallel-specific",
+      "question": "加班和值班制度分别适用于哪些人？",
+      "expected": "answer",
+      "error": "HTTP 502"
+    },
+    {
+      "id": "explicit-document",
+      "question": "《值班管理制度》由哪个部门负责解释？",
+      "expected": "answer",
+      "error": "HTTP 502"
+    },
+    {
+      "id": "three-topics",
+      "question": "加班、值班和请假制度",
+      "expected": "clarify",
+      "error": "HTTP 502"
+    },
+    {
+      "id": "comparison",
+      "question": "加班与值班制度有什么区别？",
+      "expected": "answer",
+      "error": "HTTP 502"
+    },
+    {
+      "id": "typo",
+      "question": "住宿报消标准是多少？",
+      "expected": "answer",
+      "error": "HTTP 502"
+    },
+    {
+      "id": "out-of-scope",
+      "question": "火星驻外津贴制度的领取标准是多少？",
+      "expected": "no_evidence",
+      "error": "HTTP 502"
+    },
+    {
+      "id": "long-broad",
+      "question": "我刚入职，对公司的工作安排和员工管理规定还不熟悉，暂时没有具体的办理事项，也不确定应该先看哪些条款。我想先了解一下加班和值班这两类制度，请根据已有制度列出几个有依据、可以继续了解的方向让我选择。",
+      "expected": "clarify",
+      "error": "HTTP 502"
+    }
+  ],
+  "finished": "2026-10-22T03:05:53.708Z"
+}

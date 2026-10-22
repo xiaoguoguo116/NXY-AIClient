@@ -20,6 +20,7 @@ import type {
   WorkStatus
 } from '@/types/cmd/work'
 import type { WorkAttachmentRecord } from '@/db/workAssistant'
+import type { WorkGlobalModel } from '@/services/workGlobalModel'
 
 export const listRuntimes = () => invoke<WorkRuntime[]>('work_runtime_list')
 export const detectRuntime = () => invoke<WorkRuntime>('work_runtime_detect')
@@ -82,9 +83,15 @@ export const installSkill = (id: string, content: string) => invoke<void>('work_
 export const uninstallSkill = (id: string) => invoke<void>('work_skill_uninstall', { id })
 export const setSkillEnabled = (id: string, enabled: boolean) => invoke<void>('work_skill_set_enabled', { id, enabled })
 
-export const createSession = (runtimeId: string, scopeMode: WorkScopeMode, conversationId: string, cwd?: string) =>
+export const createSession = (
+  runtimeId: string,
+  scopeMode: WorkScopeMode,
+  conversationId: string,
+  cwd?: string,
+  globalModel?: WorkGlobalModel
+) =>
   invoke<WorkSessionResult>('work_session_new', {
-    input: { runtimeId, scopeMode, conversationId, cwd: cwd || null }
+    input: { runtimeId, scopeMode, conversationId, cwd: cwd || null, globalModel }
   })
 export const promptSession = (
   runtimeId: string,

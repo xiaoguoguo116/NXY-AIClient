@@ -1456,6 +1456,8 @@
         "deleted": "Provider deleted",
         "empty": "No model provider configured",
         "keySaved": "Key saved",
+        "useChatModel": "Use {'@'}AI model settings",
+        "chatModelImported": "Using the {'@'}AI endpoint, model and API key",
         "keyMissing": "Key missing",
         "editorTitle": "Provider configuration",
         "name": "Display name",

@@ -37,7 +37,6 @@ class Agent:
         self.permissions = {}
         self.lock = threading.RLock()
         self.output_lock = threading.Lock()
-        self.config = json.loads(os.environ.get("EM_OFFICE_CONFIG", "{}"))
 
     def send(self, message):
         with self.output_lock:
@@ -69,14 +68,11 @@ class Agent:
             with self.lock:
                 self.permissions.pop(request_id, None)
 
-    def model(self, messages):
-        provider = self.config
+    def model(self, messages, provider):
         base = provider["baseUrl"].rstrip("/")
         anthropic = provider.get("kind") == "anthropic"
         headers = {"Content-Type": "application/json"}
-        secret = os.environ.get(provider.get("apiKeyEnv", ""), "")
-        if not secret:
-            raise ValueError("WORK_PROVIDER_KEY_REQUIRED")
+        secret = provider.get("apiKey", "")
         if anthropic:
             endpoint = base + ("/messages" if base.endswith("/v1") else "/v1/messages")
             headers.update({"x-api-key": secret, "anthropic-version": "2023-06-01"})
@@ -86,7 +82,8 @@ class Agent:
                         for t in office.TOOLS]}
         else:
             endpoint = base if base.endswith("/chat/completions") else base + "/chat/completions"
-            headers["Authorization"] = "Bearer " + secret
+            if secret:
+                headers["Authorization"] = "Bearer " + secret
             body = {"model": provider["model"], "messages": [{"role": "system", "content": SYSTEM}, *messages],
                     "tools": [{"type": "function", "function": t} for t in office.TOOLS],
                     "tool_choice": "auto", "stream": False}
@@ -117,7 +114,7 @@ class Agent:
 
     def prompt(self, request_id, params, session):
         sid, cancel = params["sessionId"], session["cancel"]
-        anthropic = self.config.get("kind") == "anthropic"
+        anthropic = session["config"].get("kind") == "anthropic"
         # Commit only complete turns; an interrupted tool sequence must not poison the next request.
         history = list(session["messages"])
         turn = []
@@ -138,7 +135,7 @@ class Agent:
             for _ in range(limit):
                 if cancel.is_set():
                     raise InterruptedError("Task cancelled")
-                response, content, calls = self.model(history)
+                response, content, calls = self.model(history, session["config"])
                 if cancel.is_set():
                     raise InterruptedError("Task cancelled")
                 history.append(response)
@@ -226,8 +223,11 @@ class Agent:
                 cwd = Path(params["cwd"]).resolve(strict=True)
                 if not cwd.is_dir():
                     raise ValueError("WORK_WORKSPACE_NOT_FOUND")
+                config = params.get("modelConfig", {}).copy()
+                if not config.get("baseUrl") or not config.get("model"):
+                    raise ValueError("WORK_PROVIDER_NOT_CONFIGURED")
                 with self.lock:
-                    self.sessions[sid] = {"cwd": str(cwd), "messages": [], "turn_lengths": [], "attachments": set(),
+                    self.sessions[sid] = {"config": config,"cwd": str(cwd), "messages": [], "turn_lengths": [], "attachments": set(),
                                           "approval": "ask", "mode": "balanced", "busy": False, "cancel": threading.Event()}
                 result = {"sessionId": sid}
             else:

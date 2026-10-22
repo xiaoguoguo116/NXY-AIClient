@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { readWorkGlobalModel } from '@/services/workGlobalModel'
 import * as workService from '@/services/workService'
 import type {
   WorkApprovalMode,
@@ -73,15 +74,14 @@ export const useWorkAssistantStore = defineStore('workAssistant', {
           runtimes,
           providers: preferences.providers,
           status,
-          activeRuntimeId: preferences.activeRuntimeId,
+          activeRuntimeId: 'office',
           activeProviderId: preferences.activeProviderId,
           activeModel: preferences.activeModel,
           approvalMode: preferences.approvalMode,
           workMode: preferences.workMode,
           initialized: true
         })
-        // Skills 来自远程接口，失败不应阻断 AI 工作台
-        await this.refreshSkills().catch(() => undefined)
+        this.refreshGlobalModel()
       } finally {
         this.$patch({ loading: false })
       }
@@ -99,6 +99,7 @@ export const useWorkAssistantStore = defineStore('workAssistant', {
     async refreshStatus() {
       const [runtimes, status] = await Promise.all([workService.listRuntimes(), workService.getStatus()])
       this.$patch({ runtimes, status })
+      this.refreshGlobalModel()
     },
     async saveProvider(input: WorkProviderInput) {
       const provider = await workService.saveProvider(input)
@@ -109,6 +110,32 @@ export const useWorkAssistantStore = defineStore('workAssistant', {
         activeModel: preferences.activeModel
       })
       return provider
+    },
+    refreshGlobalModel() {
+      let provider: WorkProvider | undefined
+      try {
+        const config = readWorkGlobalModel()
+        provider = {
+          id: 'global',
+          name: '全局模型',
+          kind: 'openai',
+          baseUrl: config.baseUrl,
+          models: [config.model],
+          defaultModel: config.model,
+          apiKeyEnv: '',
+          hasApiKey: Boolean(config.apiKey),
+          enabled: true
+        }
+      } catch {
+        /* An incomplete global configuration must not reuse a stale provider. */
+      }
+      this.$patch({
+        activeRuntimeId: 'office',
+        providers: provider ? [provider] : [],
+        activeProviderId: provider?.id,
+        activeModel: provider?.defaultModel,
+        status: this.status ? { ...this.status, provider, model: provider?.defaultModel, installedSkills: 0 } : null
+      })
     },
     async removeProvider(id: string) {
       await workService.deleteProvider(id)
@@ -121,20 +148,21 @@ export const useWorkAssistantStore = defineStore('workAssistant', {
     },
     async savePreferences(input?: Partial<WorkPreferencesInput>) {
       const preferences = await workService.savePreferences({
-        activeRuntimeId: input?.activeRuntimeId ?? this.activeRuntimeId,
-        activeProviderId: input?.activeProviderId ?? this.activeProviderId,
-        activeModel: input?.activeModel ?? this.activeModel,
+        activeRuntimeId: 'office',
+        activeProviderId: undefined,
+        activeModel: undefined,
         approvalMode: input?.approvalMode ?? this.approvalMode,
         workMode: input?.workMode ?? this.workMode
       })
       this.$patch({
         providers: preferences.providers,
-        activeRuntimeId: preferences.activeRuntimeId,
+        activeRuntimeId: 'office',
         activeProviderId: preferences.activeProviderId,
         activeModel: preferences.activeModel,
         approvalMode: preferences.approvalMode,
         workMode: preferences.workMode
       })
+      this.refreshGlobalModel()
     },
     setWorkspace(path: string) {
       this.$patch({ workspacePath: path })
