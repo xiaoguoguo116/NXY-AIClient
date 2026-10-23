@@ -21,6 +21,7 @@
   import { Webview } from '@tauri-apps/api/webview'
   import { getCurrentWindow } from '@tauri-apps/api/window'
   import { LogicalPosition, LogicalSize } from '@tauri-apps/api/dpi'
+  import { fetch as nativeFetch } from '@tauri-apps/plugin-http'
   import { validateApplicationUrl } from '@/services/localApplications'
   const props = withDefaults(defineProps<{ url: string; title?: string; viewLabel?: string; closable?: boolean; compact?: boolean }>(), {
     title: 'RAGFlow 知识助手',
@@ -36,6 +37,7 @@
     active = true,
     disposed = false,
     creating = false
+  let probe: AbortController | undefined
   async function resize() {
     if (!view || !host.value || !active) return
     const rect = host.value.getBoundingClientRect()
@@ -52,11 +54,33 @@
         await view.close()
         view = undefined
       }
+      const url = validateApplicationUrl(props.url)
+      const controller = new AbortController()
+      probe = controller
+      let timer: ReturnType<typeof setTimeout> | undefined
+      try {
+        await Promise.race([
+          nativeFetch(url, { method: 'HEAD', headers: { Origin: '' }, signal: controller.signal })
+            .then(response => response.arrayBuffer()),
+          new Promise<never>((_, reject) => {
+            timer = setTimeout(() => {
+              controller.abort()
+              reject(new Error('服务连接超时。'))
+            }, 8000)
+          })
+        ])
+      } catch {
+        throw new Error(`无法连接${props.title}服务。`)
+      } finally {
+        if (timer) clearTimeout(timer)
+        probe = undefined
+      }
+      if (disposed) return
       await nextTick()
       const rect = host.value!.getBoundingClientRect()
       // WebView2 views sharing the main profile must use identical browser arguments.
       const options = {
-        url: validateApplicationUrl(props.url),
+        url,
         x: rect.x,
         y: rect.y,
         width: Math.max(1, rect.width),
@@ -87,8 +111,8 @@
       view = candidate
       if (!active) await view.hide()
       else await resize()
-    } catch {
-      error.value = '内嵌页面加载失败。'
+    } catch (cause) {
+      if (!disposed) error.value = cause instanceof Error ? cause.message : '内嵌页面加载失败。'
     } finally {
       creating = false
     }
@@ -119,6 +143,7 @@
   })
   onBeforeUnmount(() => {
     disposed = true
+    probe?.abort()
     observer?.disconnect()
     window.removeEventListener('resize', onResize)
     void view?.close().catch(() => undefined)

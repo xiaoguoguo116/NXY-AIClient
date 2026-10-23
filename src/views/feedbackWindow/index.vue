@@ -129,39 +129,33 @@
     )
   })
 
-  const uploadImagesSequentially = (paths: string[], index = 0) => {
-    if (index >= paths.length) {
-      uploadingImage.value = false
-      return
-    }
-
-    feedbackApi.uploadImage(paths[index]).then((res) => {
-      if (res.code === 0 && res.data) {
-        imageList.value.push(res.data)
-        uploadImagesSequentially(paths, index + 1)
-        return
-      }
-
-      uploadingImage.value = false
-      window.$message.error(res.msg || t('feedback.uploadFailed'))
-    })
-  }
-
-  const pickAndUploadImage = () => {
+  const pickAndUploadImage = async () => {
     const remaining = maxImages - imageList.value.length
     if (remaining <= 0 || uploadingImage.value) return
 
-    open({
-      multiple: true,
-      title: t('feedback.uploadPhoto'),
-      filters: [{ name: 'Images', extensions: ['png', 'jpg', 'jpeg', 'gif', 'webp'] }]
-    }).then((selected) => {
+    try {
+      const selected = await open({
+        multiple: true,
+        title: t('feedback.uploadPhoto'),
+        filters: [{ name: 'Images', extensions: ['png', 'jpg', 'jpeg', 'gif', 'webp'] }]
+      })
       if (!selected) return
 
       const paths = (Array.isArray(selected) ? selected : [selected]).slice(0, remaining)
       uploadingImage.value = true
-      uploadImagesSequentially(paths)
-    })
+      for (const path of paths) {
+        const res = await feedbackApi.uploadImage(path)
+        if (res.code !== 0 || !res.data) {
+          window.$message.error(res.msg || t('feedback.uploadFailed'))
+          return
+        }
+        imageList.value.push(res.data)
+      }
+    } catch {
+      window.$message.error(t('feedback.uploadFailed'))
+    } finally {
+      uploadingImage.value = false
+    }
   }
 
   const removeImage = (index: number) => {
@@ -174,29 +168,32 @@
     imageList.value = []
   }
 
-  const onSubmit = () => {
-    formRef.value
-      ?.validate()
-      .then(() => {
-        submitting.value = true
-        feedbackApi
-          .create({
-            title: form.title.trim(),
-            description: form.description.trim(),
-            images: imageList.value
-          })
-          .then((res) => {
-            submitting.value = false
-            if (res.code === 0) {
-              window.$message.success(t('feedback.submitSuccess'))
-              resetForm()
-              closeCurrentWindow()
-              return
-            }
-            window.$message.error(res.msg || t('feedback.submitFailed'))
-          })
+  const onSubmit = async () => {
+    if (!canSubmit.value || !formRef.value) return
+    try {
+      await formRef.value.validate()
+    } catch {
+      return
+    }
+    submitting.value = true
+    try {
+      const res = await feedbackApi.create({
+        title: form.title.trim(),
+        description: form.description.trim(),
+        images: imageList.value
       })
-      .catch(() => {})
+      if (res.code === 0) {
+        window.$message.success(t('feedback.submitSuccess'))
+        resetForm()
+        closeCurrentWindow()
+      } else {
+        window.$message.error(res.msg || t('feedback.submitFailed'))
+      }
+    } catch {
+      window.$message.error(t('feedback.submitFailed'))
+    } finally {
+      submitting.value = false
+    }
   }
 
   onMounted(() => {

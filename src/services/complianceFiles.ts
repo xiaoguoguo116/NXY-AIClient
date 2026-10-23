@@ -1,12 +1,12 @@
 import { splitParagraphs, type PolicyDocument, type SourceParagraph, type WorkResult, MODE_LABELS } from './compliance'
-import pdfWorkerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url'
+import pdfWorkerUrl from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url'
 
 export async function extractDocument(file: File, id: string): Promise<SourceParagraph[]> {
   if (file.size > 15 * 1024 * 1024) throw new Error('单个文件上限 15 MB。')
   const ext = file.name.split('.').pop()?.toLowerCase()
   let paragraphs: SourceParagraph[]
   if (ext === 'pdf') {
-    const pdfjs = await import('pdfjs-dist')
+    const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs')
     pdfjs.GlobalWorkerOptions.workerSrc = pdfWorkerUrl
     const task = pdfjs.getDocument({ data: new Uint8Array(await file.arrayBuffer()) })
     const pdf = await task.promise

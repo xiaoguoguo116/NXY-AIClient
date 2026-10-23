@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>知识问答 · EM 本地演示</title><link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<ragflow-chat>
+  <aside class="library">
+    <div class="brand"><span class="brand-mark">✦</span><div><strong>制度知识助手</strong><small>EM KNOWLEDGE</small></div></div>
+    <button class="new-chat" type="button">＋ 新建对话</button>
+    <div class="library-label">示例知识库 <span>4 份文档</span></div>
+    <nav id="documents" aria-label="示例知识库"></nav>
+    <div class="side-note"><span class="dot"></span>本机服务已就绪<p>所有制度均为虚构示例。<br>请勿用于实际人事或财务决策。</p></div>
+  </aside>
+  <main>
+    <header><div><span class="eyebrow">KNOWLEDGE / DEMO</span><h1>知识问答</h1></div><span class="demo-tag">本地演示</span></header>
+    <section class="conversation" aria-label="问答记录">
+      <div class="welcome" id="welcome"><span class="welcome-icon">✦</span><h2>把制度问题，问清楚。</h2><p>从四份示例文档中查找答案，每条回答都有依据。</p><div class="suggestions" id="suggestions"></div></div>
+      <div class="messages" id="messages" aria-live="polite" aria-relevant="additions"></div>
+    </section>
+    <div class="composer-area"><p class="error" role="alert" id="error" hidden></p><form class="composer"><label class="sr-only" for="question">输入问题</label><textarea id="question" rows="2" maxlength="12000" placeholder="试着问：请假应该怎么申请？"></textarea><button id="send" type="submit" aria-label="发送问题">↑</button></form><div class="composer-note"><span>Enter 发送 · Shift + Enter 换行</span><span>示例资料 · 本地检索回答，不连接真实模型</span></div></div>
+  </main>
+</ragflow-chat>
+<dialog id="document-dialog"><div class="dialog-top"><h2 id="document-title"></h2><button type="button" id="close-document" aria-label="关闭文档">×</button></div><p class="document-note">以下内容为虚构的演示规则。</p><div id="document-content"></div></dialog>
+<script type="module" src="/app.js"></script>
+</body></html>

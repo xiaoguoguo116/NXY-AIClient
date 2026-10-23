@@ -35,6 +35,12 @@ Enter 发送，Ctrl/Shift + Enter 换行；中文输入法选词不触发发送�
 
 服务需要单独启动。RAGFlow 地址须指向提供上述适配接口的现有知识问答前端，而非任意 RAGFlow 管理后台。
 
+本机没有真实 RAGFlow 时，可在仓库根目录运行 `pnpm demo:rag`（需 Node.js 22+），使用
+`http://127.0.0.1:8090/` 的本地演示。演示包含四份虚构示例制度、关键词检索回答、依据及追问，
+不连接真实模型、不读取真实业务资料。EM 的知识问答页面和聊天内 RAG 助手共用此服务。
+页面对话及追问上下文仅保存在内存；聊天入口的消息按 EM 原有机制保存。
+接口验证：`node --test tests/ragDemo.test.ts`。详见 `tools/rag-demo/README.md`。
+
 验证命令：`node --experimental-strip-types --test tests/ragChat.test.ts`；启动 `pnpm dev` 后运行 `node tests/check-rag-chat.cjs` 可用模拟接口验证聊天交互，不会调用真实模型或写入现有用户数据。浏览器测试需要已安装 Microsoft Edge 及项目既有 Playwright 运行时；其他开发服务端口通过 `RAG_TEST_ORIGIN` 指定。
 
 ## 待办附件、结束时间与提醒

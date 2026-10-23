@@ -38,7 +38,7 @@ const path = require('node:path');
     const firstTask = await page.locator('.todos-page > article').first().boundingBox();
     assert(firstTask && firstTask.y + firstTask.height < 720, 'task is visible without scrolling on a 720px screen');
     await toggle.click();
-    await page.getByText(/可选 13 位联系人/).waitFor();
+    await page.getByText(new RegExp(`可选 ${contacts.length} 位联系人`)).waitFor();
     await page.getByRole('button', { name: '清空选择', exact: true }).click();
     await page.getByText('请选择一个或多个接收人。').waitFor();
     const search = page.getByLabel('搜索待办接收人', { exact: true });
@@ -130,7 +130,7 @@ const path = require('node:path');
     await page.screenshot({ path: path.join(out, 'default-self-collapsed.png'), fullPage: true });
     assert.deepEqual(errors, []);
     assert.equal(await page.locator('body').evaluate(body => body.scrollWidth > innerWidth), false);
-    console.log('PASS: default self-only and collapsed; click to expand, collapse retains explicit selection, reload resets to self; create/cancel/edit/save; all 13 contacts, fuzzy search, multiple selection and empty feedback. No native dialogs.');
+    console.log(`PASS: default self-only and collapsed; click to expand, collapse retains explicit selection, reload resets to self; create/cancel/edit/save; all ${contacts.length} contacts, fuzzy search, multiple selection and empty feedback. No native dialogs.`);
   } catch (error) {
     fs.mkdirSync(path.resolve('.preview/todo-recipient-tests'), { recursive: true });
     await page.screenshot({ path: path.resolve('.preview/todo-recipient-tests/multi-failure.png'), fullPage: true });
