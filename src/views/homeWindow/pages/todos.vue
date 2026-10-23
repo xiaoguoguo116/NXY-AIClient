@@ -24,6 +24,25 @@
     <p v-if="todoState.systemNotice || meetingState.systemNotice" role="status">
       {{ todoState.systemNotice || meetingState.systemNotice }}
     </p>
+    <section class="daily-brief" aria-labelledby="daily-brief-title">
+      <div class="brief-heading">
+        <div>
+          <h2 id="daily-brief-title">今日工作简报</h2>
+          <p>自动整理本机个人待办与今日会议，可复制到日报或工作群。</p>
+        </div>
+        <button class="primary" type="button" @click="copyDailyBrief">复制简报</button>
+      </div>
+      <div class="brief-counts" aria-label="简报内容统计">
+        <span>会议 {{ dailyBrief.meetingCount }}</span>
+        <span>待处理 {{ dailyBrief.pendingCount }}</span>
+        <span>今日完成 {{ dailyBrief.completedCount }}</span>
+      </div>
+      <details>
+        <summary>预览简报内容</summary>
+        <pre>{{ dailyBrief.text }}</pre>
+      </details>
+      <p v-if="briefNotice" role="status">{{ briefNotice }}</p>
+    </section>
 
     <template v-if="section === 'todos'">
       <div class="todo-list-toolbar">
@@ -362,6 +381,8 @@
   import { openMeetingInCalendar } from '@/services/meetingCalendar'
   import { meetingCanChange, meetingResponseCounts, responseLabel, type LocalMeeting } from '@/services/localMeetings'
   import { ensureNotificationPermission } from '@/utils/desktop/notification'
+  import { writeText } from '@tauri-apps/plugin-clipboard-manager'
+  import { buildDailyBrief } from '@/services/dailyBrief'
   defineOptions({ name: 'todos' })
   // Keep the selection and its teleported menu bright even under a dark global theme.
   const recipientColors = {
@@ -396,6 +417,7 @@
     now = ref(Date.now())
   const calendarOpeningId = ref(''),
     calendarNotice = ref('')
+  const briefNotice = ref('')
   const viewers = ref<string[]>(['self']),
     view = ref<'received' | 'published'>('received'),
     assistantOpen = ref(false),
@@ -405,6 +427,15 @@
   }, 15000)
   onBeforeUnmount(() => clearInterval(timer))
   const published = computed(() => publishedTodos(todoState.items))
+  const dailyBrief = computed(() => buildDailyBrief(todoState.items, meetingState.items, now.value))
+  async function copyDailyBrief() {
+    try {
+      await writeText(dailyBrief.value.text)
+      briefNotice.value = '工作简报已复制，可以粘贴到日报或工作群。'
+    } catch {
+      briefNotice.value = '复制失败，请展开预览后手动复制。'
+    }
+  }
   const editingTodo = computed(() => todoState.items.find((item) => item.id === editing.value))
   const visiblePublished = computed(() =>
     published.value.filter(
@@ -674,6 +705,66 @@
   .meeting-toolbar p,
   .schedule-heading p {
     margin: 5px 0 0;
+  }
+  .daily-brief {
+    padding: 17px 20px;
+    margin-bottom: 18px;
+    border: 1px solid #cde0f7;
+    border-radius: 13px;
+    background: linear-gradient(120deg, #ffffff, #edf6ff);
+  }
+  .brief-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .brief-heading h2 {
+    margin: 0;
+    font-size: 16px;
+    color: #235789;
+  }
+  .brief-heading p {
+    margin: 4px 0 0;
+  }
+  .brief-counts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 12px 0 8px;
+  }
+  .brief-counts span {
+    padding: 4px 9px;
+    border-radius: 99px;
+    background: #e2f0ff;
+    color: #286495;
+    font-size: 12px;
+  }
+  .daily-brief summary {
+    width: fit-content;
+    cursor: pointer;
+    color: #2768a6;
+    font-size: 12px;
+  }
+  .daily-brief pre {
+    max-height: 300px;
+    overflow: auto;
+    margin: 12px 0 0;
+    padding: 14px;
+    border: 1px solid #e4edf7;
+    border-radius: 9px;
+    background: #fff;
+    color: #33465f;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    font: inherit;
+    line-height: 1.7;
+    user-select: text;
+  }
+  .daily-brief > p[role='status'] {
+    margin: 8px 0 0;
+    color: #286495;
   }
   .header-actions {
     display: flex;
