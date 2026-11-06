@@ -1,0 +1,92 @@
+{
+  "cases": [
+    {
+      "label": "workflow",
+      "session": "eb76c454d0d911f1b944335d6c41166e",
+      "answer": "这个问题可能涉及不同的业务场景。请选择你想了解的方向，或在输入框补充说明。",
+      "complete": true,
+      "options": [
+        {
+          "id": "46531851c95941429794d8a039a9bd26",
+          "question": "国内出差和国际/港澳台出差分别需要提前多久提交申请?审批权限如何按预算金额划分?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "efbbb3f7058d4ea4a27f03725df53323",
+          "question": "出差返程后报销的提交时限和具体操作顺序是什么?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "6162b355ff8c47599574d92e81660b66",
+          "question": "出差期间不同职级的交通乘坐标准是什么?超标准如何处理?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "079cbf6c0e25460d8a95878ac4dd1541",
+          "question": "出差伙食补助和市内交通补助按什么标准计算?出发日和返程日如何计算?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "fcf5aae4bd214559af70cac9bb33485f",
+          "question": "出差期间无法正常打卡应如何提交和确认?",
+          "sources": [
+            "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md"
+          ]
+        }
+      ],
+      "record": "eabe1c5dad304bb5830d9ec7f075ec93",
+      "cache": "not_requested",
+      "candidates": 24,
+      "visibleOptions": 5,
+      "error": "",
+      "question": "出差流程"
+    },
+    {
+      "label": "selected",
+      "session": "eb76c454d0d911f1b944335d6c41166e",
+      "answer": "国内出差应至少提前两个工作日提交申请，国际及港澳台出差应至少提前五个工作日申请[ID:0]。审批权限按预算金额划分：预算不超过5,000元由部门负责人和成本中心审批，5,001—20,000元增加分管负责人审批，超过20,000元增加财务负责人审批[ID:0]。",
+      "complete": true,
+      "options": [],
+      "record": "70bf1f94fdee48d09a3d9cf588ee85a3",
+      "cache": "hit",
+      "candidates": 1,
+      "visibleOptions": 0,
+      "error": "",
+      "question": "国内出差和国际/港澳台出差分别需要提前多久提交申请?审批权限如何按预算金额划分?"
+    },
+    {
+      "label": "typed-followup",
+      "session": "eb76c454d0d911f1b944335d6c41166e",
+      "answer": "预算6,000元属于5,001—20,000元区间，需要部门负责人、成本中心和分管负责人审批[ID:0]。",
+      "complete": true,
+      "options": [],
+      "record": "8478435458de4e1792b0d08adcebc474",
+      "cache": "not_requested",
+      "candidates": 29,
+      "visibleOptions": 0,
+      "error": "",
+      "question": "如果我这次出差预算为6000元，需要哪些人审批？"
+    },
+    {
+      "label": "emergency-followup",
+      "session": "eb76c454d0d911f1b944335d6c41166e",
+      "answer": "紧急出差可以先取得有权审批人口头同意，并在返程后两个工作日内补办[ID:0]。",
+      "complete": true,
+      "options": [],
+      "record": "ce2e1b8e23314b57b9ff717c4665660b",
+      "cache": "not_requested",
+      "candidates": 36,
+      "visibleOptions": 0,
+      "error": "",
+      "question": "如果是紧急出差，来不及提前申请呢？"
+    }
+  ]
+}

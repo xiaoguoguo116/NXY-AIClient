@@ -577,6 +577,15 @@ export function getLocalFriendList(): Contact[] {
   return colleagues.map(toContact)
 }
 
+export function getLocalDirectoryProfiles() {
+  return colleagues.map((colleague) => ({
+    userId: colleague.id,
+    name: colleague.name,
+    department: colleague.departmentName,
+    jobTitle: colleague.title
+  }))
+}
+
 export function getLocalEnterpriseList(): Contact[] {
   return [
     {

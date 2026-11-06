@@ -966,7 +966,7 @@
       },
       "welcome": {
         "title": "今天想处理什么工作？",
-        "subtitle": "整理表格、修改文档、处理图片，或查找和整理电脑里的文件",
+        "subtitle": "整理表格、修改文档，或查找和整理电脑里的文件",
         "newTask": "新工作任务"
       },
       "workspace": {
@@ -995,7 +995,6 @@
       "quick": {
         "sheet": { "title": "处理电子表格", "desc": "清洗、统计、公式与格式调整", "prompt": "帮我处理一份电子表格：" },
         "document": { "title": "修改文档", "desc": "润色、排版与内容整理", "prompt": "帮我修改一份文档：" },
-        "image": { "title": "处理图片", "desc": "裁剪、缩放、压缩与格式转换", "prompt": "帮我处理一张图片：" },
         "files": { "title": "查找整理文件", "desc": "查找文件、复制整理与另存为", "prompt": "帮我查找或整理文件：" }
       },
       "input": {
@@ -1107,7 +1106,7 @@
         "search": "搜索 Skills",
         "tip": "即装即用",
         "tipTitle": "让助手多几分本事",
-        "tipDesc": "挑一个 Skill 装上，表格、文档、图片和文件整理都能交给它。想用就开，不用就关，风险操作始终由你拍板。",
+        "tipDesc": "挑一个 Skill 装上，表格、文档和文件整理都能交给它。想用就开，不用就关，风险操作始终由你拍板。",
         "official": "官方",
         "install": "安装",
         "installed": "Skill 已安装",
@@ -1403,7 +1402,7 @@
       "tabs": { "runtime": "Agent", "providers": "供应商", "model": "模型与权限", "skills": "Skills" },
       "runtime": {
         "select": "选择智能体",
-        "officeDesc": "EM Office Agent：Excel / CSV 清洗统计、公式图表、Word 修改、PDF 文本读取和图片转换。结果另存新文件；需要 Python 3.10+ 和支持工具调用的模型。Skills 市场用于 Reasonix。",
+        "officeDesc": "EM Office Agent：Excel / CSV 清洗统计、公式图表、Word 修改、PDF 文本读取。结果另存新文件；需要 Python 3.10+ 和支持工具调用的模型。Skills 市场用于 Reasonix。",
         "ready": "运行时就绪",
         "missing": "需要安装",
         "missingDesc": "EM 会自动检测系统默认安装位置，无需手动填写 CLI 路径",

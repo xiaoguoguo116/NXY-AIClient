@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "checks": [
+    "consent before model call",
+    "immutable two-message scope",
+    "draft preserved",
+    "AI partial rendering",
+    "RAG preview replaced",
+    "cancel stops rendering",
+    "decline does not call model",
+    "read state persists"
+  ],
+  "errors": []
+}

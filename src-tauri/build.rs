@@ -29,6 +29,7 @@ fn main() {
         "work_runtime_check_update",
         "work_runtime_install",
         "work_provider_list",
+        "work_workspace_prepare",
         "work_preferences_get",
         "work_preferences_save",
         "work_provider_save",

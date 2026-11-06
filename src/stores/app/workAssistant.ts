@@ -56,15 +56,20 @@ export const useWorkAssistantStore = defineStore('workAssistant', {
     approvalMode: 'ask',
     workMode: 'balanced',
     workspacePath: '',
-    scopeMode: 'chat',
+    scopeMode: 'workspace',
     loading: false,
     initialized: false
   }),
   actions: {
+    async ensureWorkspace() {
+      this.scopeMode = 'workspace'
+      if (!this.workspacePath) this.workspacePath = await workService.prepareWorkspace()
+    },
     async initialize() {
       if (this.loading) return
       this.$patch({ loading: true })
       try {
+        await this.ensureWorkspace()
         const [runtimes, preferences, status] = await Promise.all([
           workService.listRuntimes(),
           workService.getPreferences(),

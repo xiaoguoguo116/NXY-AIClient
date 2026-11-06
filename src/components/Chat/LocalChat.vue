@@ -8,8 +8,8 @@
       </div>
       <form v-if="groupCreating" class="group-create" @submit.prevent="createLocalGroup">
         <input v-model="groupName" aria-label="本地群名称" placeholder="群名称" maxlength="60" required />
-        <input v-model="groupNames" aria-label="初始模拟成员" placeholder="成员姓名，用逗号分隔" />
-        <small>仅本机模拟，不发送真实邀请。</small>
+        <input v-model="groupNames" aria-label="初始成员" placeholder="成员姓名，用逗号分隔" />
+        <small>成员信息保存在本机，不发送邀请。</small>
         <button>创建本地群</button>
       </form>
       <button
@@ -29,6 +29,12 @@
             }}
           </small>
         </span>
+        <span
+          v-if="unreadMessages(chat).length"
+          class="unread-badge"
+          :aria-label="`${unreadMessages(chat).length} 条未读消息`">
+          {{ unreadMessages(chat).length > 99 ? '99+' : unreadMessages(chat).length }}
+        </span>
       </button>
       <p class="local-note">
         消息保存在此电脑
@@ -46,6 +52,7 @@
           <small v-if="activeChat.peerId">本地对话 · 消息仅保存在此设备</small>
         </div>
         <div class="header-icons">
+          <button v-if="!activeChat.peerId" class="knowledge-entry" @click="knowledgeOpen = true">问问本群</button>
           <button aria-label="群通知" title="群通知" @click="togglePanel('announcement')">
             <svg viewBox="0 0 24 24"><path d="M4 9h4l7-5v16l-7-5H4zM18 8q5 4 0 8" /></svg>
           </button>
@@ -86,15 +93,32 @@
           @AI 总结
         </button>
       </div>
-      <main ref="messageArea" class="messages" aria-live="polite">
+      <section v-if="unreadSummaryCount" class="unread-summary-prompt" aria-label="未读消息总结" role="region">
+        <div>
+          <strong>有 {{ unreadSummaryCount }} 条未读消息，需要 AI 帮你总结吗？</strong>
+          <small>
+            同意后，仅将{{
+              unreadSummaryCount > unreadBatchCount ? `其中前 ${unreadBatchCount} 条` : '这些'
+            }}消息发送给全局配置的模型，提炼重点、待办和待确认事项。
+          </small>
+        </div>
+        <button
+          class="primary"
+          :disabled="!!busy[activeChat.id] || !!storageError || !unreadBatchCount"
+          @click="summarizeUnread">
+          总结未读
+        </button>
+        <button :disabled="!!busy[activeChat.id]" @click="skipUnreadSummary">暂不</button>
+      </section>
+      <main ref="messageArea" class="messages" aria-live="polite" @scroll="onMessageScroll">
         <div v-if="!activeChat.messages.length" class="empty">
           <template v-if="activeChat.peerId">
             <b>和{{ activeChat.name }}开始对话</b>
-            <p>消息只保存在本机，不会送达对方。也可以用 @AI 或 @AI RAG助手 提问。</p>
+            <p>消息只保存在本机，不会送达对方。也可以用 @AI 或 @制度知识助手 提问。</p>
           </template>
           <template v-else>
             <b>开始一段新的对话</b>
-            <p>输入 @AI 和问题向模型提问，或 @AI RAG助手 查询相关制度，回答直接显示在聊天中。</p>
+            <p>输入 @AI 和问题向模型提问，或 @制度知识助手 查找负责人、查询制度，回答直接显示在聊天中。</p>
           </template>
         </div>
         <article
@@ -124,12 +148,34 @@
           </span>
           <div class="bubble-wrap">
             <small>
-              {{ messageSender(activeChat, msg).name
-              }}{{ messageSender(activeChat, msg).kind === 'simulated' ? ' · 模拟成员' : '' }} ·
+              {{ messageSender(activeChat, msg).name }} ·
               {{ formatTime(msg.createdAt) }}
             </small>
-            <p class="bubble">{{ msg.status === 'pending' ? 'AI 正在思考…' : msg.text }}</p>
+            <p class="bubble">
+              {{
+                msg.text ||
+                (msg.status === 'pending'
+                  ? msg.assistant === 'ragflow'
+                    ? '正在检索知识库并核对依据…'
+                    : 'AI 正在思考…'
+                  : '')
+              }}
+              <span v-if="msg.status === 'pending' && msg.text" class="stream-cursor" aria-label="正在输出">▍</span>
+            </p>
+            <small v-if="msg.status === 'pending' && msg.assistant === 'ragflow' && msg.text">
+              正在生成预览，完成后核对依据；请以最终回答为准。
+            </small>
+            <small v-if="msg.status === 'error' && msg.assistant === 'ragflow' && msg.text">
+              这是未完成核验的预览，请重试获取最终回答。
+            </small>
             <template v-if="msg.status === 'done' && msg.rag">
+              <small v-if="msg.rag.routing" class="rag-route-label">
+                {{
+                  { people: '已检索联系人', policy: '已查询制度知识库', clarify: '请选择检索方向' }[
+                    msg.rag.routing.intent
+                  ]
+                }}
+              </small>
               <section
                 v-if="msg.rag.options.length || msg.rag.needsInput"
                 class="rag-clarification"
@@ -156,8 +202,9 @@
                   <span class="rag-contact-card__avatar" />
                   <div class="rag-contact-card__body">
                     <strong>{{ contact.name }}</strong>
-                    <small>{{ contact.department }}</small>
+                    <small>{{ contact.department }}{{ contact.jobTitle ? ` · ${contact.jobTitle}` : '' }}</small>
                     <p>{{ contact.responsibility }}</p>
+                    <small v-if="contact.matchReason">{{ contact.matchReason }}</small>
                     <div class="rag-contact-card__actions">
                       <button type="button" @click="openContactCard(contact.userId)">查看名片</button>
                       <button type="button" @click="messageContact(contact.userId, contact.name)">发送消息</button>
@@ -176,6 +223,17 @@
                 </p>
               </details>
             </template>
+            <ChatActionCard
+              v-for="action in msg.status === 'done' ? msg.actionDrafts || [] : []"
+              :key="action.id"
+              :action="action"
+              :people="actionPeople"
+              :source-id="activeChat.id"
+              :source-name="activeChat.name"
+              :disabled="!!storageError || !!busy[activeChat.id]"
+              @change="persist()"
+              @view-todo="homeTabStore.navigateTo('todos', { view: 'todos', assignmentKey: action.id })"
+              @confirmed="persist()" />
             <div v-if="msg.status === 'done' && msg.todoSuggestions?.length" class="todo-followups">
               <strong>是否将以下事项添加到待办？</strong>
               <div v-for="suggestion in groupedSuggestions(msg)" :key="suggestion.indexes[0]">
@@ -195,7 +253,7 @@
                       已完成 {{ suggestionProgress(msg, suggestion).filter((item) => item.completed).length }}/{{
                         suggestionProgress(msg, suggestion).length
                       }}
-                      人 · 可在“待办事项 → 我发布的”查看进度
+                      人 · 可在“待办事项 → 筛选接收联系人”查看各成员状态
                     </small>
                     <small v-for="item in suggestionProgress(msg, suggestion)" :key="item.id">
                       {{ item.assigneeName || '我' }}：{{ item.completed ? '已完成' : '未完成' }}
@@ -204,9 +262,9 @@
                   <template v-else>
                     <small v-if="suggestion.recipientError" role="alert">{{ suggestion.recipientError }}</small>
                     <small v-else-if="suggestion.recipients.length > 1">一项任务，分别记录每个人的完成进度。</small>
-                    <small>仅本机演示，不会通知其他人。</small>
+                    <small>安排保存在本机，不会通知其他人。</small>
                     <button :disabled="!!suggestion.recipientError" @click="acceptTodo(msg, suggestion)">
-                      添加到待办
+                      转为待办
                     </button>
                     <button @click="dismissTodo(msg, suggestion)">暂不添加</button>
                   </template>
@@ -244,10 +302,10 @@
           </button>
           <button
             class="assistant-shortcut rag-shortcut"
-            title="查询制度知识库，使用总设置中的 RAGFlow 配置"
+            title="查找联系人或查询制度；制度查询使用总设置中的 RAGFlow 配置"
             @click="mentionRag">
-            @AI RAG助手
-            <small>制度问答</small>
+            @制度知识助手
+            <small>找人 / 查制度</small>
           </button>
           <button
             class="assistant-shortcut meeting-shortcut"
@@ -258,7 +316,7 @@
           </button>
           <span>{{ config.model ? `模型：${config.model}` : '尚未配置模型' }}</span>
           <span>最近 {{ config.contextCount }} 条 + 本次提问</span>
-          <span v-if="activeChat.peerId">本地演示会话 · 消息不会送达对方</span>
+          <span v-if="activeChat.peerId">本地会话 · 消息不会送达对方</span>
         </div>
         <div class="mention-composer">
           <div v-if="mentionOpen" class="mention-popup" role="listbox" aria-label="选择群成员">
@@ -274,7 +332,7 @@
               <small>
                 {{
                   member.id === 'ragflow'
-                    ? '制度知识问答'
+                    ? '找人 / 制度问答'
                     : member.id === 'ai'
                       ? '聊天助手'
                       : member.id === 'all'
@@ -290,7 +348,7 @@
             v-model="drafts[activeChat.id]"
             aria-label="消息输入框"
             :placeholder="
-              activeChat.peerId ? '输入消息，或 @AI 提问（仅保存在本机）…' : '输入消息，或 @AI RAG助手 查询制度…'
+              activeChat.peerId ? '输入消息，或 @AI 提问（仅保存在本机）…' : '输入消息，或 @制度知识助手 找人、查制度…'
             "
             :disabled="loadFailed"
             :aria-expanded="mentionOpen"
@@ -321,6 +379,13 @@
         @save="persist"
         @export="exportChats"
         @locate="locateMessage" />
+      <ChatKnowledgePanel
+        v-if="knowledgeOpen && !activeChat.peerId"
+        :key="`knowledge-${activeChat.id}`"
+        :group-name="activeChat.name"
+        :load-history="loadLocalKnowledgeHistory"
+        :revision="activeChat.messages"
+        @close="knowledgeOpen = false" />
     </section>
     <div v-else class="empty">
       <p>{{ storageError }}</p>
@@ -347,11 +412,16 @@
 <script setup lang="ts">
   import { computed, nextTick, onBeforeUnmount, reactive, ref, watch } from 'vue'
   import LocalChatDrawer from './LocalChatDrawer.vue'
+  import ChatKnowledgePanel from './ChatKnowledgePanel.vue'
+  import { localChatHistory } from '@/services/chatHistorySource'
   import { withExampleConversations } from '@/services/localChatExamples'
   import WorkAssistantDialog from '@/components/WorkAssistantDialog.vue'
+  import ChatActionCard from './ChatActionCard.vue'
+  import { intentMessages, parseIntentPlan, type ChatActionDraft } from '@/services/chatIntent'
+  import { useContactsStore } from '@/stores/user/contacts'
   import { meetingState } from '@/stores/localMeetings'
-  import { ragQuestion, requestRag } from '@/services/ragChat'
-  import { answerFromContactKnowledge } from '@/services/contactKnowledge'
+  import { ragQuestion } from '@/services/ragChat'
+  import { requestRoutedRag } from '@/services/ragRouter'
   import { useHomeTabStore } from '@/stores/app/homeTab'
   const homeTabStore = useHomeTabStore()
   function openContactCard(userId: string) {
@@ -366,7 +436,7 @@
     const question = ragClarificationDrafts[msg.id]?.trim()
     if (!question || !msg.rag || !activeChat.value || busy[activeChat.value.id]) return
     pendingRagFollowup = { previous: msg.rag }
-    drafts[activeChat.value.id] = `@AI RAG助手 ${question}`
+    drafts[activeChat.value.id] = `@制度知识助手 ${question}`
     try {
       await send()
       ragClarificationDrafts[msg.id] = ''
@@ -376,7 +446,7 @@
   }
   function mentionRag() {
     if (!activeChat.value) return
-    drafts[activeChat.value.id] = `@AI RAG助手 ${drafts[activeChat.value.id] || ''}`
+    drafts[activeChat.value.id] = `@制度知识助手 ${drafts[activeChat.value.id] || ''}`
     input.value?.focus()
   }
   async function ragFollowup(msg: LocalMessage, option: { id: string; question: string }) {
@@ -387,20 +457,14 @@
         ? { selection: { cache_id: msg.rag.cacheId, option_id: option.id } }
         : {})
     }
-    drafts[activeChat.value.id] = `@AI RAG助手 ${option.question}`
+    drafts[activeChat.value.id] = `@制度知识助手 ${option.question}`
     try {
       await send()
     } finally {
       pendingRagFollowup = undefined
     }
   }
-  import {
-    parseAssignedCommand,
-    resolveRecipients,
-    parseTodoSuggestions,
-    todoPrompt,
-    type TodoRecipient
-  } from '@/services/localTodos'
+  import { resolveRecipients, parseTodoSuggestions, todoPrompt, type TodoRecipient } from '@/services/localTodos'
   function mentionedRecipients(text: string, members: TodoRecipient[]) {
     const names = [...text.matchAll(/(?:^|\s)@([^\s@，,。！？?!；;：:]+)/g)]
       .map((match) => match[1])
@@ -416,9 +480,31 @@
       })
     )
   }
-  import { addAssignedTodos, initTodos, todoState } from '@/stores/localTodos'
+  import { initTodos, todoState } from '@/stores/localTodos'
   import { groupChatTodoSuggestions, type GroupedTodoSuggestion } from '@/services/chatTodoSuggestions'
   initTodos()
+  const actionContacts = useContactsStore()
+  actionContacts.ensureLocalDirectory()
+  const actionPeople = computed(() => {
+    const people = new Map<
+      string,
+      { id: string; name: string; kind: 'self' | 'simulated' | 'contact'; conversation: boolean }
+    >()
+    for (const p of todoMembers.value.filter((p) => p.kind !== 'ai'))
+      people.set(p.id, { ...p, kind: p.kind as 'self' | 'simulated', conversation: true })
+    people.set('self', { id: 'self', name: '我', kind: 'self', conversation: true })
+    for (const c of actionContacts.friendList) {
+      const id = `contact:${c.peerId || c.userId || c.id}`
+      if (!people.has(id))
+        people.set(id, {
+          id,
+          name: c.remark?.trim() || c.username?.trim() || '未命名联系人',
+          kind: 'contact',
+          conversation: false
+        })
+    }
+    return [...people.values()]
+  })
   const groupCreating = ref(false),
     groupName = ref(''),
     groupNames = ref('')
@@ -431,7 +517,7 @@
   const mentionOptions = computed(() => {
     const candidates = [
       { id: 'ai', name: 'AI' },
-      { id: 'ragflow', name: 'AI RAG助手' },
+      { id: 'ragflow', name: '制度知识助手' },
       ...(activeChat.value?.members ? [{ id: 'all', name: '全体成员' }, ...todoMembers.value] : [])
     ]
     const query = mentionQuery.value.toLowerCase()
@@ -538,7 +624,7 @@
     groupCreating.value = false
     groupName.value = ''
     groupNames.value = ''
-    notice.value = '本地演示群已创建，可在设置 → 群管理中添加或移除模拟成员。'
+    notice.value = '群聊已创建，可在设置 → 群管理中添加或移除成员。'
   }
   function groupedSuggestions(msg: LocalMessage) {
     const request = activeChat.value?.messages.find((m) => m.id === msg.replyTo)
@@ -563,6 +649,21 @@
           ? [index]
           : []
       )
+    }).map((suggestion): GroupedTodoSuggestion => {
+      if (!suggestion.added) return suggestion
+      const saved = suggestionProgress(msg, suggestion)
+      if (!saved.length) return suggestion
+      // Confirmation can change the draft title, time and owners. Show what was actually saved.
+      return {
+        ...suggestion,
+        title: saved[0].title,
+        dueAt: saved[0].dueAt,
+        recipients: saved.map((todo) => ({
+          id: todo.assigneeId || 'self',
+          name: todo.assigneeName || '我',
+          kind: todo.assigneeId && todo.assigneeId !== 'self' ? 'simulated' : 'self'
+        }))
+      }
     })
   }
   function suggestionProgress(msg: LocalMessage, suggestion: GroupedTodoSuggestion) {
@@ -576,13 +677,23 @@
     try {
       if (suggestion.recipientError) throw new Error(suggestion.recipientError)
       const recipients = suggestion.recipients
-      addAssignedTodos(
-        suggestion,
-        recipients,
-        `${msg.id}:${suggestion.indexes[0]}`,
-        activeChat.value!.id,
-        activeChat.value!.name
-      )
+      const id = `${msg.id}:${suggestion.indexes[0]}`
+      msg.actionDrafts ||= []
+      const existing = msg.actionDrafts.find((a) => a.id === id)
+      if (existing && existing.status !== 'cancelled') return
+      const action: ChatActionDraft = {
+        id,
+        kind: 'todo',
+        status: 'draft',
+        title: suggestion.title,
+        participantIds: recipients.map((p) => p.id),
+        unresolvedRecipients: [],
+        dueAt: suggestion.dueAt,
+        needsReminder: false,
+        location: ''
+      }
+      if (existing) Object.assign(existing, action)
+      else msg.actionDrafts.push(action)
       // Keep the accepted candidate at its original index; suppress its merged duplicates without shifting storage keys.
       Object.assign(msg.todoSuggestions![suggestion.indexes[0]], {
         title: suggestion.title,
@@ -590,7 +701,7 @@
       })
       for (const index of suggestion.indexes.slice(1)) msg.todoSuggestions![index].mergedInto = suggestion.indexes[0]
       persist()
-      notice.value = `已添加 1 项待办，参与人：${recipients.map((m) => m.name).join('、')}；可在“我发布的”分别查看完成进度。`
+      notice.value = '已准备待办草稿，请补齐信息并确认；尚未添加。'
     } catch (error) {
       notice.value = error instanceof Error ? error.message : '待办保存失败。'
     }
@@ -600,6 +711,16 @@
     persist()
   }
   import { localChatTarget } from '@/services/localChatNavigation'
+  import { progressiveText, visibleAiText } from '@/services/chatStream'
+  import {
+    initializeReadState,
+    unreadMessages,
+    offerUnreadSummary,
+    markChatRead,
+    pendingUnreadSummary,
+    unreadSummaryBatch,
+    dismissUnreadSummary
+  } from '@/services/localChatUnread'
   import {
     CHAT_KEY,
     API_KEY_KEY,
@@ -641,10 +762,27 @@
       }
     }
   }
+  initial.conversations.forEach(initializeReadState)
   const data = reactive(initial)
   const activeChat = computed(() => data.conversations.find((chat) => chat.id === data.selectedId))
   const sortedChats = computed(() => [...data.conversations].sort((a, b) => Number(!!b.pinned) - Number(!!a.pinned)))
+  const unreadSummaryCount = computed(() => (activeChat.value ? pendingUnreadSummary(activeChat.value).length : 0))
+  const unreadBatchCount = computed(() => (activeChat.value ? unreadSummaryBatch(activeChat.value).length : 0))
   const panel = ref<'settings' | 'announcement' | 'history' | null>(null)
+  const knowledgeOpen = ref(false)
+  async function loadLocalKnowledgeHistory() {
+    if (!activeChat.value || activeChat.value.peerId) throw new Error('请先选择本地群聊。')
+    if (storageError.value) throw new Error('本地消息尚未成功保存，请先处理保存错误。')
+    const saved = loadChats(localStorage).conversations.find((chat) => chat.id === activeChat.value?.id)
+    if (!saved) throw new Error('当前群聊记录已不存在，请重新打开会话。')
+    return localChatHistory(saved)
+  }
+  watch(
+    () => activeChat.value?.id,
+    () => {
+      knowledgeOpen.value = false
+    }
+  )
   const highlightedId = ref('')
   function togglePanel(value: 'settings' | 'announcement' | 'history') {
     panel.value = panel.value === value ? null : value
@@ -737,6 +875,46 @@
       drafts[activeChat.value.id] = '@AI 请总结选中的聊天记录，列出主要结论、待办事项和未解决问题。'
     if (!mentionsAi(drafts[activeChat.value.id])) drafts[activeChat.value.id] = `@AI ${drafts[activeChat.value.id]}`
     void send()
+  }
+  async function summarizeUnread() {
+    const chat = activeChat.value
+    if (!chat || busy[chat.id] || loadFailed.value || storageError.value) return
+    const ids = unreadSummaryBatch(chat)
+    if (!ids.length) return
+    try {
+      refreshGlobalAiSettings()
+      validateConfig(config)
+    } catch {
+      notice.value = '请先在总设置 → AI 模型中配置模型，未读消息仍保留，尚未发送给 AI。'
+      return
+    }
+    const request: LocalMessage = {
+      id: crypto.randomUUID(),
+      role: 'user',
+      createdAt: new Date().toISOString(),
+      status: 'done',
+      text: `@AI 请总结这 ${ids.length} 条未读消息，列出重点、结论、与我有关的待办和待确认事项。未明确的负责人和时间请标注未明确。`,
+      summarySourceIds: [...ids],
+      summaryKind: 'unread'
+    }
+    chat.messages.push(request)
+    if (!persist()) {
+      chat.messages.pop()
+      return
+    }
+    // The explicit click consents only to this immutable batch, not future arrivals.
+    dismissUnreadSummary(chat, ids)
+    persist()
+    await runAi(chat.id, request.id)
+  }
+  function skipUnreadSummary() {
+    const chat = activeChat.value
+    if (!chat || busy[chat.id]) return
+    dismissUnreadSummary(
+      chat,
+      pendingUnreadSummary(chat).map((message) => message.id)
+    )
+    persist()
   }
   const busy = reactive<Record<string, boolean>>({})
   const requests = new Map<string, AbortController>()
@@ -850,35 +1028,27 @@
     const rag = ragQuestion(text)
     const ask = rag !== null || mentionsAi(text)
     if (rag !== null && !rag) {
-      notice.value = '请在 @AI RAG助手 后输入制度问题。'
+      notice.value = '请在 @制度知识助手 后输入要找的人或制度问题。'
       return
     }
     let recipients
     try {
       recipients = ask && rag === null ? mentionedRecipients(text, todoMembers.value) : undefined
-    } catch (error) {
-      notice.value = error instanceof Error ? error.message : '请重新选择群成员'
-      return
-    }
-    let todoCommand
-    try {
-      todoCommand =
-        rag === null && !selecting.value && !quotedMessage.value ? parseAssignedCommand(text, todoMembers.value) : null
-    } catch (error) {
-      notice.value = error instanceof Error ? error.message : '待办内容无效。'
-      return
+    } catch {
+      // Unknown/ambiguous people are clarified in the action draft, never silently assigned to self.
+      recipients = undefined
     }
     if (ask) {
       if (busy[chat.id]) {
         notice.value = '此会话的 AI 正在回复，请等待或停止后再提问。'
         return
       }
-      if (!text.replace(/@ai/gi, '').trim()) {
+      if (!text.replace(/@\s*ai/gi, '').trim()) {
         notice.value = '请在 @AI 后输入问题。'
         return
       }
       try {
-        if (!todoCommand && rag === null) {
+        if (rag === null) {
           refreshGlobalAiSettings()
           validateConfig(config)
         }
@@ -921,34 +1091,16 @@
       selecting.value = false
       selectedIds.value = []
     }
-    if (todoCommand) {
-      try {
-        const todos = addAssignedTodos(
-          todoCommand.draft,
-          todoCommand.recipients,
-          `${msg.id}:command`,
-          chat.id,
-          chat.name
-        )
-        const todo = todos[0]
-        chat.messages.push({
-          id: crypto.randomUUID(),
-          role: 'assistant',
-          text: `已添加到待办：${todo.title}\n分配给：${todos.map((t) => t.assigneeName).join('、')}（仅本机演示，不向其他人发送）\n${todo.dueAt ? `结束时间：${new Date(todo.dueAt).toLocaleString()}（默认届时提醒）` : '未识别到明确的未来结束时间，已保存为无时间待办，请在左侧“待办事项”中设置。'}`,
-          createdAt: new Date().toISOString(),
-          status: 'done',
-          replyTo: msg.id
-        })
-        persist()
-      } catch (error) {
-        notice.value = error instanceof Error ? error.message : '待办保存失败，请重试。'
-      }
-    } else if (ask) await runAi(chat.id, msg.id)
+    if (ask) await runAi(chat.id, msg.id)
   }
   async function runAi(chatId: string, requestId: string, existing?: LocalMessage) {
     const chat = data.conversations.find((item) => item.id === chatId)
     if (!chat || busy[chatId]) return
     const request = chat.messages.find((item) => item.id === requestId)
+    if (!request) return
+    // Capture this chat's recipients before awaiting: switching chats must not redirect a draft.
+    const people = actionPeople.value.map((p) => ({ ...p }))
+    const pending = chat.messages.flatMap((m) => m.actionDrafts || []).filter((a) => a.status === 'draft')
     const question = request ? ragQuestion(request.text) : null
     const answer: LocalMessage = existing || {
       id: crypto.randomUUID(),
@@ -971,6 +1123,16 @@
       return
     }
     const controller = new AbortController()
+    let lastPartialSave = 0
+    const output = progressiveText((text) => {
+      target.text = text
+      if (Date.now() - lastPartialSave > 750) {
+        lastPartialSave = Date.now()
+        persist()
+      }
+    }, controller.signal)
+    target.summarySourceIds = request?.summarySourceIds?.slice()
+    target.summaryKind = request?.summaryKind
     requests.set(chatId, controller)
     busy[chatId] = true
     let timedOut = false
@@ -980,8 +1142,11 @@
     }, 120000)
     try {
       if (question !== null) {
-        const result =
-          answerFromContactKnowledge(question) ?? (await requestRag(question, controller.signal, request?.ragFollowup))
+        const result = await requestRoutedRag(question, controller.signal, {
+          ...request?.ragFollowup,
+          onText: (text) => output.push(text)
+        })
+        await output.finish(result.text)
         if (controller.signal.aborted) throw new Error('cancelled')
         target.text = result.text
         target.rag = result
@@ -989,21 +1154,65 @@
         if (chat.notifications !== false) notice.value = `「${chat.name}」知识助手回复已完成。`
         return
       }
-      target.text = await requestAi(
+      if (!request.intentPlan) {
+        if (request.summarySourceIds) request.intentPlan = { replyKind: 'summary', actions: [] }
+        else {
+          const raw = await requestAi(
+            { ...config },
+            apiKey.value,
+            intentMessages(request.text, people, pending),
+            controller.signal
+          )
+          if (controller.signal.aborted) throw new Error('cancelled')
+          request.intentPlan = parseIntentPlan(raw, request.id, people, pending)
+        }
+        if (!persist()) throw new Error('保存失败，未执行任何操作。')
+      }
+      const plan = request.intentPlan
+      // Stable draft IDs and store source keys make retry/reload/double confirmation idempotent.
+      target.actionDrafts ||= plan.actions.map((action) => ({
+        ...action,
+        participantIds: [...action.participantIds],
+        unresolvedRecipients: [...action.unresolvedRecipients]
+      }))
+      if (plan.replyKind === 'actions') {
+        target.text = '已识别你的操作意图。请在下方补齐信息、核对并确认；尚未创建会议或待办。'
+        target.status = 'done'
+        for (const a of target.actionDrafts) {
+          const previous = pending.find((p) => p.id === a.replacesId)
+          if (previous && previous.status === 'draft') previous.status = 'superseded'
+        }
+        return
+      }
+      const isSummary = plan.replyKind === 'summary'
+      const completedText = await requestAi(
         { ...config },
         apiKey.value,
         [
           ...buildContext(chat, requestId, config.contextCount),
-          todoPrompt(new Date(), chat.members || [{ id: 'self', name: '我', kind: 'self' }])
+          ...(isSummary ? [todoPrompt(new Date(), chat.members || [{ id: 'self', name: '我', kind: 'self' }])] : []),
+          {
+            role: 'system',
+            content: isSummary
+              ? '仅根据聊天资料进行总结。行动项只是候选，用户必须主动点击转为待办并核对确认。若用户同时要求发布会议或添加待办，界面已单独准备草稿，不要在总结中声称已经执行。'
+              : '这是普通问答流程。只回答用户问题，不提取待办候选，不输出 em-todos 代码块，不声称已创建、发布、修改任何会议或待办。需要执行的操作须在独立动作草稿中由用户确认。'
+          }
         ],
-        controller.signal
+        controller.signal,
+        undefined,
+        { onText: (text) => output.push(visibleAiText(text)) }
       )
+      await output.finish(visibleAiText(completedText))
       if (controller.signal.aborted) throw new Error('cancelled')
-      const extracted = parseTodoSuggestions(target.text)
+      const extracted = isSummary ? parseTodoSuggestions(completedText) : { text: completedText, suggestions: [] }
       target.text = extracted.text
       target.todoSuggestions = extracted.suggestions
       target.todoRecipients = chat.messages.find((m) => m.id === requestId)?.todoRecipients
       target.status = 'done'
+      for (const a of target.actionDrafts) {
+        const previous = pending.find((p) => p.id === a.replacesId)
+        if (previous && previous.status === 'draft') previous.status = 'superseded'
+      }
       if (chat.notifications !== false) notice.value = `「${chat.name}」AI 回复已完成。`
     } catch (error) {
       target.status = 'error'
@@ -1015,8 +1224,11 @@
           ? error instanceof Error && error.message.startsWith('RAGFlow：')
             ? error.message
             : 'RAGFlow：连接失败，请检查应用中心的地址和服务状态。'
-          : friendlyError(error)
+          : error instanceof Error && /^(动作|同一草稿|保存失败)/.test(error.message)
+            ? error.message
+            : friendlyError(error)
     } finally {
+      output.stop()
       clearTimeout(timer)
       requests.delete(chatId)
       busy[chatId] = false
@@ -1041,15 +1253,67 @@
       notice.value = '导出失败，请检查文件路径和写入权限。'
     }
   }
+  const atMessageBottom = ref(true)
+  const chatViewActive = ref(true)
+  function viewingChat() {
+    return chatViewActive.value && document.visibilityState === 'visible' && document.hasFocus()
+  }
+  function enterReadView() {
+    const chat = activeChat.value
+    if (!chat || !viewingChat() || loadFailed.value) return
+    offerUnreadSummary(chat)
+    if (atMessageBottom.value) markChatRead(chat)
+    persist()
+  }
+  function onMessageScroll() {
+    const area = messageArea.value
+    if (!area) return
+    atMessageBottom.value = area.scrollHeight - area.scrollTop - area.clientHeight < 48
+    const chat = activeChat.value
+    if (chat && viewingChat() && atMessageBottom.value && unreadMessages(chat).length) {
+      markChatRead(chat)
+      persist()
+    }
+  }
+  watch(
+    () => data.selectedId,
+    () => {
+      atMessageBottom.value = true
+      enterReadView()
+    },
+    { immediate: true, flush: 'post' }
+  )
+  watch(
+    () => data.conversations.map((chat) => chat.messages.map((m) => `${m.id}:${m.status}`).join('|')).join(';'),
+    () => {
+      data.conversations.forEach(initializeReadState)
+      const chat = activeChat.value
+      if (!chat || !viewingChat()) return
+      if (atMessageBottom.value && !unreadSummaryCount.value) markChatRead(chat)
+      else offerUnreadSummary(chat)
+      persist()
+    },
+    { flush: 'post' }
+  )
+  onActivated(() => {
+    chatViewActive.value = true
+    enterReadView()
+  })
+  onDeactivated(() => {
+    chatViewActive.value = false
+  })
+  window.addEventListener('focus', enterReadView)
+  document.addEventListener('visibilitychange', enterReadView)
   watch(
     () => [
       data.selectedId,
       activeChat.value?.messages.length,
-      activeChat.value?.messages[activeChat.value.messages.length - 1]?.status
+      activeChat.value?.messages[activeChat.value.messages.length - 1]?.status,
+      activeChat.value?.messages[activeChat.value.messages.length - 1]?.text
     ],
     async () => {
       await nextTick()
-      messageArea.value?.scrollTo({ top: messageArea.value.scrollHeight })
+      if (atMessageBottom.value) messageArea.value?.scrollTo({ top: messageArea.value.scrollHeight })
     },
     { immediate: true }
   )
@@ -1058,11 +1322,50 @@
     apiKey.value = ''
     window.removeEventListener('focus', refreshGlobalAiSettings)
     window.removeEventListener('storage', onGlobalAiSettingsChanged)
+    window.removeEventListener('focus', enterReadView)
+    document.removeEventListener('visibilitychange', enterReadView)
   })
   if (!loadFailed.value) persist()
 </script>
 
 <style scoped>
+  .unread-badge {
+    min-width: 20px;
+    padding: 2px 5px;
+    border-radius: 12px;
+    background: #ed665e;
+    color: white;
+    font-size: 11px;
+  }
+  .unread-summary-prompt {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    background: #f0f7ff;
+    border-bottom: 1px solid #dceaff;
+    color: #315479;
+    font-size: 13px;
+  }
+  .unread-summary-prompt > div {
+    flex: 1;
+    min-width: 220px;
+  }
+  .unread-summary-prompt small {
+    display: block;
+    margin-top: 4px;
+    color: #687d94;
+  }
+  .stream-cursor {
+    color: #2f92ed;
+    animation: stream-blink 1s steps(2) infinite;
+  }
+  @keyframes stream-blink {
+    50% {
+      opacity: 0.25;
+    }
+  }
   .rag-contact-cards {
     display: grid;
     gap: 10px;
@@ -1300,6 +1603,14 @@
     stroke-width: 1.5;
     stroke-linecap: round;
     stroke-linejoin: round;
+  }
+  .header-icons .knowledge-entry {
+    color: #2875cb;
+    font-size: 13px;
+    white-space: nowrap;
+    border: 1px solid #b5d2ef;
+    border-radius: 6px;
+    padding: 4px 9px;
   }
   .message.highlighted .bubble {
     outline: 2px solid #56b6ee;

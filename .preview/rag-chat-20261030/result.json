@@ -1,0 +1,8 @@
+{
+  "conversationId": "f60aba93-0b46-4592-a33d-c2cbb6f82d2d",
+  "status": "done",
+  "answer": "你想找负责此事的同事，还是查询相关制度和办理规定？请选择一个方向，也可以分别提问。",
+  "assistant": "ragflow",
+  "references": 0,
+  "options": 2
+}

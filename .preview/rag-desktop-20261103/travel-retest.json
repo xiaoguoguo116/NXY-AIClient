@@ -1,0 +1,111 @@
+{
+  "status": "done",
+  "text": "这个问题可能涉及不同的业务场景。请选择你想了解的方向，或在输入框补充说明。",
+  "references": 0,
+  "options": 4,
+  "elapsedMs": 11830,
+  "logs": [
+    {
+      "traceId": "77913b2e",
+      "stage": "start",
+      "elapsedMs": 0
+    },
+    {
+      "traceId": "77913b2e",
+      "stage": "request_start",
+      "elapsedMs": 14,
+      "path": "config"
+    },
+    {
+      "traceId": "77913b2e",
+      "stage": "response_headers",
+      "elapsedMs": 46,
+      "path": "config",
+      "durationMs": 33,
+      "status": 200
+    },
+    {
+      "traceId": "77913b2e",
+      "stage": "config_ready",
+      "elapsedMs": 101
+    },
+    {
+      "traceId": "77913b2e",
+      "stage": "request_start",
+      "elapsedMs": 101,
+      "path": "ragflow-api/chats/1f8d4354c38711f193a109fdac79609a/sessions"
+    },
+    {
+      "traceId": "77913b2e",
+      "stage": "response_headers",
+      "elapsedMs": 149,
+      "path": "ragflow-api/chats/1f8d4354c38711f193a109fdac79609a/sessions",
+      "durationMs": 48,
+      "status": 200
+    },
+    {
+      "traceId": "77913b2e",
+      "stage": "session_ready",
+      "elapsedMs": 153,
+      "reused": false
+    },
+    {
+      "traceId": "77913b2e",
+      "stage": "request_start",
+      "elapsedMs": 153,
+      "path": "ragflow-api/chat/completions"
+    },
+    {
+      "traceId": "77913b2e",
+      "stage": "response_headers",
+      "elapsedMs": 185,
+      "path": "ragflow-api/chat/completions",
+      "durationMs": 32,
+      "status": 200
+    },
+    {
+      "traceId": "77913b2e",
+      "stage": "first_response_byte",
+      "elapsedMs": 11474
+    },
+    {
+      "traceId": "77913b2e",
+      "stage": "first_sse_event",
+      "elapsedMs": 11484
+    },
+    {
+      "traceId": "77913b2e",
+      "stage": "answer_complete",
+      "elapsedMs": 11512,
+      "streamed": true
+    },
+    {
+      "traceId": "77913b2e",
+      "stage": "server_timings",
+      "elapsedMs": 11512,
+      "preprocessing_ms": 2817.9787139999917,
+      "query_preparation_ms": 2836.5990259999307,
+      "retrieval_ms": 1428.3701720000863,
+      "clarification_ms": 6963.720297000009,
+      "first_output_ms": 11267.268838000064,
+      "total_ms": 11267.27574000006
+    },
+    {
+      "traceId": "77913b2e",
+      "stage": "first_text",
+      "elapsedMs": 11513,
+      "chars": 37
+    },
+    {
+      "traceId": "77913b2e",
+      "stage": "first_ui_update_dispatched",
+      "elapsedMs": 11517
+    },
+    {
+      "traceId": "77913b2e",
+      "stage": "request_end",
+      "elapsedMs": 11520,
+      "aborted": false
+    }
+  ]
+}

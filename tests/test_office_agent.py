@@ -17,7 +17,6 @@ from pathlib import Path
 
 from openpyxl import Workbook, load_workbook
 from docx import Document
-from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 AGENT = ROOT / "src-tauri/src/work/office_agent.py"
@@ -118,14 +117,38 @@ class OfficeTests(unittest.TestCase):
         self.assertEqual(doc.tables[0].cell(0, 0).text, "新公司名称")
         self.assertEqual(result["replacements"], 2)
 
-    def test_image_conversion(self):
-        Image.new("RGBA", (100, 80), (255, 0, 0, 100)).save(self.root / "input.png")
-        self.tools.process_image(path="input.png", output="result.jpg", width=50, crop=[0, 0, 80, 80])
-        with Image.open(self.root / "result.jpg") as image:
-            self.assertEqual(image.size, (50, 50))
-            self.assertEqual(image.mode, "RGB")
-        with self.assertRaises(ValueError):
-            self.tools.process_image(path="input.png", output="bad.jpg", width=0)
+    def test_summary_edits_target_requested_sheet_without_changing_detail(self):
+        self.tools.edit_sheet(path="input.xlsx", output="result.xlsx", operations=[
+            {"type": "trim"}, {"type": "deduplicate"},
+            {"type": "summary", "group_column": 1, "value_column": 2},
+            {"type": "set_cells", "sheet": "Summary", "cells": {"B1": "合计"}},
+            {"type": "format", "sheet": "Summary", "range": "A1:B20", "bold": True},
+            {"type": "set_cells", "cells": {"D1": "明细备注"}},
+        ])
+        book = load_workbook(self.root / "result.xlsx")
+        self.addCleanup(book.close)
+        self.assertEqual(book["销售"]["B1"].value, "金额")
+        self.assertEqual(book["销售"]["D1"].value, "明细备注")
+        self.assertEqual(book["Summary"]["B1"].value, "合计")
+        self.assertEqual(list(book["Summary"].values)[:3], [("部门", "合计"), ("A", 10), ("B", 50)])
+        self.assertTrue(book["Summary"]["B1"].font.bold)
+        self.assertEqual((self.root / "input.xlsx").read_bytes(), self.original)
+
+    def test_unknown_operation_parameters_and_missing_sheet_never_publish(self):
+        for operation in [
+            {"type": "set_cells", "sheet_name": "Summary", "cells": {"B1": "wrong"}},
+            {"type": "set_cells", "sheet": "Missing", "cells": {"B1": "wrong"}},
+        ]:
+            with self.assertRaises(ValueError):
+                self.tools.edit_sheet(path="input.xlsx", output="bad.xlsx", operations=[{"type": "trim"}, operation])
+            self.assertFalse((self.root / "bad.xlsx").exists())
+            self.assertEqual((self.root / "input.xlsx").read_bytes(), self.original)
+
+    def test_removed_image_tool_is_unavailable(self):
+        self.assertNotIn("process_image", {tool["name"] for tool in office.TOOLS})
+        with self.assertRaisesRegex(ValueError, "Unknown tool"):
+            self.tools.execute("process_image", {"path": "input.png", "output": "result.jpg"})
+        self.assertFalse((self.root / "result.jpg").exists())
 
     def test_scope_and_no_overwrite(self):
         with tempfile.TemporaryDirectory() as external:

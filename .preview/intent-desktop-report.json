@@ -1,0 +1,103 @@
+[
+  {
+    "text": "请总结以上两条项目会议记录，列出结论和行动项",
+    "kind": "summary",
+    "actions": [],
+    "summaryCandidates": 1
+  },
+  {
+    "text": "怎样发布会议？",
+    "kind": "general",
+    "actions": [],
+    "summaryCandidates": 0
+  },
+  {
+    "text": "不要添加待办，也不要发布会议，只解释两者的区别。",
+    "kind": "general",
+    "actions": [],
+    "summaryCandidates": 0
+  },
+  {
+    "text": "如果要安排会议，该怎么做？",
+    "kind": "general",
+    "actions": [],
+    "summaryCandidates": 0
+  },
+  {
+    "text": "他说“请发布会议”，我只是转述，请解释这句话。",
+    "kind": "general",
+    "actions": [],
+    "summaryCandidates": 0
+  },
+  {
+    "text": "下周五下午五点提醒我准备会议材料",
+    "kind": "actions",
+    "actions": [
+      {
+        "kind": "todo",
+        "title": "准备会议材料",
+        "participants": [
+          "self"
+        ],
+        "reminderAt": "2026-11-13T09:00:00.000Z"
+      }
+    ],
+    "summaryCandidates": 0
+  },
+  {
+    "text": "帮我发布一场项目评审会议",
+    "kind": "actions",
+    "actions": [
+      {
+        "kind": "meeting",
+        "title": "项目评审会议",
+        "participants": []
+      }
+    ],
+    "summaryCandidates": 0
+  },
+  {
+    "text": "补充刚才的会议：明天下午三点，我、张三和李四参加，地点是二号会议室",
+    "kind": "actions",
+    "actions": [
+      {
+        "kind": "meeting",
+        "title": "项目评审会议",
+        "participants": [
+          "self",
+          "intent-acceptance-1793687144327:zhang",
+          "intent-acceptance-1793687144327:li"
+        ],
+        "startAt": "2026-11-04T07:00:00.000Z"
+      }
+    ],
+    "summaryCandidates": 0
+  },
+  {
+    "text": "明天下午三点开会",
+    "kind": "actions",
+    "actions": [
+      {
+        "kind": "choose",
+        "title": "",
+        "participants": []
+      }
+    ],
+    "summaryCandidates": 0
+  },
+  {
+    "text": "先总结这次项目讨论，再帮我邀请张三后天下午四点开项目复盘会",
+    "kind": "summary",
+    "actions": [
+      {
+        "kind": "meeting",
+        "title": "项目复盘会",
+        "participants": [
+          "intent-acceptance-1793687144327:zhang"
+        ],
+        "startAt": "2026-11-05T08:00:00.000Z"
+      }
+    ],
+    "summaryCandidates": 1
+  }
+]

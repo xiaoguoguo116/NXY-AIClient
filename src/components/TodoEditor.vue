@@ -26,11 +26,18 @@
               <option value="off">不提醒</option>
             </select>
           </label>
-          <TodoDateTimePicker v-if="reminderMode === 'custom'" v-model="reminder" label="待办提醒时间" />
+          <TodoDateTimePicker
+            v-if="reminderMode === 'custom'"
+            v-model="reminder"
+            label="待办提醒时间"
+            :minute-step="60" />
         </div>
       </div>
       <p v-if="timeNotice" class="hint" role="status">{{ timeNotice }}</p>
-      <p class="hint">日期可选未来任意一天；时刻每 15 分钟一档。结束时间用于判断是否逾期，提醒时间可独立设置。</p>
+      <p class="hint">
+        日期可选未来任意一天；自定义提醒按整点选择，截止时间每 15
+        分钟一档。设置提醒不会改变截止时间，已有的非整点时间会保留。
+      </p>
       <label>
         文档附件
         <input type="file" multiple :accept="TODO_ATTACHMENT_ACCEPT" aria-label="待办文档附件" @change="chooseFiles" />

@@ -2,44 +2,26 @@
   <n-config-provider :theme="lightTheme" class="ai-shell ai-work-light">
     <nav class="ai-sections" aria-label="AI Work 功能">
       <strong>AI Work</strong>
-      <button :class="{ selected: knowledgeMode }" @click="selectSection('knowledge')">知识问答</button>
-      <button :class="{ selected: assistantMode }" @click="selectSection(lastAssistantView)">合规助手</button>
-      <button :class="{ selected: !knowledgeMode && !complianceMode }" @click="selectSection('tasks')">任务助手</button>
+      <span>任务助手</span>
     </nav>
-    <fieldset v-if="assistantMode" class="assistant-options" aria-label="合规助手功能">
-      <legend>选择功能</legend>
-      <label
-        v-for="option in assistantOptions"
-        :key="option.value"
-        :class="{ selected: assistantView === option.value }">
-        <input v-model="assistantView" type="radio" name="compliance-assistant-view" :value="option.value" />
-        {{ option.label }}
-      </label>
-    </fieldset>
-    <div v-show="knowledgeMode" class="knowledge-slot">
-      <p v-if="knowledgeError" role="alert">{{ knowledgeError }}，请到应用中心配置 RAGFlow 地址。</p>
-      <KeepAlive>
-        <EmbeddedApplication
-          v-if="knowledgeMode && !knowledgeError"
-          :key="knowledgeUrl"
-          :url="knowledgeUrl"
-          compact
-          @close="selectSection('tasks')" />
-      </KeepAlive>
-    </div>
-    <KeepAlive>
-      <ComplianceWorkbench v-if="complianceMode" :key="complianceMode" :mode="complianceMode" class="compliance-slot" />
-    </KeepAlive>
-    <div v-show="!knowledgeMode && !complianceMode" class="workbench" @keydown.capture="onWorkbenchKeydown">
+    <div class="workbench">
       <div class="workbench__body">
         <aside class="workbench__sidebar">
           <nav class="workbench__nav">
+            <button v-if="compareMode" type="button" @click="selectSection('tasks')">
+              <svg><use href="#left-arrow" /></svg>
+              <span>返回当前任务</span>
+            </button>
             <button
               type="button"
-              :class="{ active: activeView === 'chat' && !conversationId }"
+              :class="{ active: !compareMode && activeView === 'chat' && !conversationId }"
               @click="newConversation">
               <svg><use href="#message-plus" /></svg>
-              <span>{{ t('ai.menu.newChat') }}</span>
+              <span>新建任务</span>
+            </button>
+            <button type="button" :class="{ active: compareMode }" @click="selectSection('compare')">
+              <svg><use href="#document" /></svg>
+              <span>制度比对</span>
             </button>
           </nav>
 
@@ -53,7 +35,7 @@
                 :key="item.id"
                 class="workbench__history-item"
                 :class="{
-                  active: activeView === 'chat' && conversationId === item.id,
+                  active: !compareMode && activeView === 'chat' && conversationId === item.id,
                   renaming: renamingId === item.id
                 }">
                 <button
@@ -102,9 +84,10 @@
 
           <div class="workbench__workspace-slot">
             <button
-              v-if="store.scopeMode === 'workspace'"
               type="button"
               class="workbench__workspace"
+              :title="store.workspacePath"
+              :disabled="busy"
               @click="chooseWorkspace">
               <span class="workbench__workspace-icon">
                 <svg><use href="#folder" /></svg>
@@ -117,28 +100,19 @@
           </div>
         </aside>
 
-        <main class="workbench__main">
+        <main v-show="!compareMode" class="workbench__main">
           <header class="workbench__topbar" :class="{ 'workbench__topbar--locked': conversationId }">
             <div class="workbench__session-title">
               <strong>{{ currentTitle }}</strong>
             </div>
-            <div v-if="!conversationId" class="workbench__scope-switch" :aria-label="scopeSwitchLabel">
-              <button type="button" :class="{ active: store.scopeMode === 'chat' }" @click="selectScopeMode('chat')">
-                <svg><use href="#message" /></svg>
-                {{ t('ai.work.scope.chat') }}
-              </button>
-              <button
-                type="button"
-                :class="{ active: store.scopeMode === 'workspace' }"
-                @click="selectScopeMode('workspace')">
-                <svg><use href="#folder" /></svg>
-                {{ t('ai.work.scope.workspace') }}
-              </button>
-            </div>
-            <div v-else class="workbench__scope-badge">
-              <svg><use :href="sessionScopeIcon" /></svg>
-              <span>{{ sessionScopeLabel }}</span>
-            </div>
+            <button
+              class="workbench__scope-badge"
+              :title="store.workspacePath"
+              :disabled="busy"
+              @click="chooseWorkspace">
+              <svg><use href="#folder" /></svg>
+              <span>工作目录：{{ workspaceName }}</span>
+            </button>
           </header>
 
           <div class="workbench__chat-layout">
@@ -154,13 +128,21 @@
                     v-for="action in quickActions"
                     :key="action.key"
                     type="button"
-                    @click="useQuickAction(action.prompt)">
+                    @click="action.key === 'compare' ? selectSection('compare') : useQuickAction(action.prompt)">
                     <span :class="`workbench__quick-icon workbench__quick-icon--${action.key}`">
                       <img :src="action.icon" alt="" />
                     </span>
                     <span>
-                      <strong>{{ t(`ai.work.quick.${action.key}.title`) }}</strong>
-                      <small>{{ t(`ai.work.quick.${action.key}.desc`) }}</small>
+                      <strong>
+                        {{ action.key === 'compare' ? '制度比对' : t(`ai.work.quick.${action.key}.title`) }}
+                      </strong>
+                      <small>
+                        {{
+                          action.key === 'compare'
+                            ? '左右对照原文，直接查看修改内容'
+                            : t(`ai.work.quick.${action.key}.desc`)
+                        }}
+                      </small>
                     </span>
                     <svg class="workbench__quick-arrow"><use href="#arrow-right" /></svg>
                   </button>
@@ -230,7 +212,7 @@
                         <svg><use href="#paperclip" /></svg>
                       </button>
                       <button
-                        v-if="store.scopeMode === 'workspace'"
+                        :disabled="busy"
                         type="button"
                         :title="t('ai.work.workspace.choose')"
                         @click="chooseWorkspace">
@@ -281,7 +263,9 @@
                     </span>
                     <div>
                       <strong>{{ activity.title }}</strong>
-                      <small>{{ activity.detail || t(`ai.work.activity.status.${activity.status}`) }}</small>
+                      <small :title="activity.detail">
+                        {{ activity.detail || t(`ai.work.activity.status.${activity.status}`) }}
+                      </small>
                     </div>
                     <i :class="activity.status" />
                   </article>
@@ -290,6 +274,9 @@
             </aside>
           </div>
         </main>
+        <KeepAlive>
+          <ComplianceWorkbench v-if="compareMode" mode="compare" class="task-comparison" />
+        </KeepAlive>
       </div>
 
       <WorkStatusBar :status="store.status" @open-settings="openSettings" />
@@ -306,56 +293,9 @@
   defineOptions({ name: 'ai' })
   import { lightTheme } from 'naive-ui'
   import '@/styles/ai-work-light.css'
-  import EmbeddedApplication from '@/components/Application/EmbeddedApplication.vue'
   import ComplianceWorkbench from '@/components/AI/ComplianceWorkbench.vue'
-  import { MODE_LABELS, type WorkMode as ComplianceMode } from '@/services/compliance'
-  import { DEFAULT_RAGFLOW, loadRagflowLinks } from '@/services/localApplications'
-  import { useRoute, useRouter } from 'vue-router'
-  const route = useRoute(),
-    router = useRouter()
-  const complianceSections = { compare: MODE_LABELS.compare, review: MODE_LABELS.review, report: MODE_LABELS.report }
-  const knowledgeMode = computed(() => route.query.view === 'knowledge' || route.query.view === 'policy')
-  const complianceMode = computed(() =>
-    Object.keys(complianceSections).includes(String(route.query.view))
-      ? (String(route.query.view) as ComplianceMode)
-      : undefined
-  )
-  const assistantOptions = [
-    { value: 'compare', label: MODE_LABELS.compare },
-    { value: 'report', label: MODE_LABELS.report },
-    { value: 'review', label: MODE_LABELS.review }
-  ]
-  const assistantMode = computed(() => Boolean(complianceMode.value))
-  const lastAssistantView = ref('compare')
-  const assistantView = computed({
-    get: () => String(route.query.view),
-    set: (view: string) => selectSection(view)
-  })
-  watch(
-    assistantView,
-    (view) => {
-      if (assistantOptions.some((option) => option.value === view)) lastAssistantView.value = view
-    },
-    { immediate: true }
-  )
-  const knowledgeUrl = ref(DEFAULT_RAGFLOW.url),
-    knowledgeError = ref('')
-  function selectSection(view: string) {
-    void router.replace({ path: '/home/ai', query: { view } })
-  }
-  watch(
-    knowledgeMode,
-    (isKnowledge) => {
-      if (!isKnowledge) return
-      try {
-        knowledgeUrl.value = loadRagflowLinks(localStorage).url
-        knowledgeError.value = ''
-      } catch {
-        knowledgeError.value = 'RAGFlow 地址配置无法读取'
-      }
-    },
-    { immediate: true }
-  )
+  import { useAiWorkNavigation } from '@/services/aiWorkNavigation'
+  const { compareMode, selectSection } = useAiWorkNavigation()
 
   import { open } from '@tauri-apps/plugin-dialog'
   import { stat } from '@tauri-apps/plugin-fs'
@@ -440,28 +380,17 @@
   )
   const currentConversation = computed(() => conversations.value.find((item) => item.id === conversationId.value))
   const currentTitle = computed(() => currentConversation.value?.title || t('ai.work.welcome.newTask'))
-  const workspaceName = computed(() =>
-    store.scopeMode === 'chat'
-      ? t('ai.work.scope.chatDescription')
-      : fileName(store.workspacePath) || t('ai.work.workspace.choose')
-  )
-  const scopeLabel = computed(() =>
-    store.scopeMode === 'chat' ? t('ai.work.scope.chat') : t('ai.work.workspace.label')
-  )
-  const scopeSwitchLabel = computed(() => t('ai.work.scope.label'))
-  const sessionScopeLabel = computed(() =>
-    store.scopeMode === 'chat' ? t('ai.work.scope.chat') : t('ai.work.scope.workspace')
-  )
-  const sessionScopeIcon = computed(() => (store.scopeMode === 'chat' ? '#message' : '#folder'))
+  const workspaceName = computed(() => fileName(store.workspacePath) || '正在准备工作目录…')
+  const scopeLabel = computed(() => '工作目录 · 点击更换')
   const workErrorMessage = computed(() => (workError.value ? t(workError.value.key) : ''))
   const workErrorActionLabel = computed(() => t(`ai.work.errors.actions.${workError.value?.action || 'retry'}`))
   const quickActions = computed(() =>
     [
       { key: 'sheet', icon: '/ai-excel.png' },
       { key: 'document', icon: '/ai-document.png' },
-      { key: 'image', icon: '/ai-images.png' },
-      { key: 'files', icon: '/ai-folder.png' }
-    ].map((item) => ({ ...item, prompt: t(`ai.work.quick.${item.key}.prompt`) }))
+      { key: 'files', icon: '/ai-folder.png' },
+      { key: 'compare', icon: '/ai-document.png' }
+    ].map((item) => ({ ...item, prompt: item.key === 'compare' ? '' : t(`ai.work.quick.${item.key}.prompt`) }))
   )
 
   const fileName = (path: string) => path.split(/[\\/]/).filter(Boolean).pop() || ''
@@ -607,6 +536,7 @@
     else if (key === 'delete') confirmDeleteConversation(record)
   }
   const newConversation = async () => {
+    selectSection('tasks')
     activeView.value = 'chat'
     conversationId.value = ''
     messages.value = []
@@ -614,14 +544,15 @@
     inputText.value = ''
     attachments.value = []
     isAtBottom.value = true
-    if (store.scopeMode === 'workspace') store.setWorkspace('')
+    await store.ensureWorkspace()
     nextTick(() => inputRef.value?.focus())
   }
   const openConversation = async (record: WorkConversationRecord) => {
+    selectSection('tasks')
     activeView.value = 'chat'
     conversationId.value = record.id
-    store.setScopeMode(record.scopeMode || 'chat')
-    store.setWorkspace(record.workspacePath || '')
+    store.setScopeMode('workspace')
+    store.setWorkspace(record.workspacePath || (await workService.prepareWorkspace(record.id)))
     if (sessionStore.isViewingLive(record.id)) {
       messages.value = []
       steps.value = []
@@ -662,19 +593,16 @@
     window.$message?.success(t('ai.history.deleted'))
   }
   const chooseWorkspace = async () => {
+    if (busy.value) return
     const selected = await open({ directory: true, multiple: false, title: t('ai.work.workspace.dialogTitle') })
     if (typeof selected === 'string') {
+      await sessionStore.closeBoundSession(store.activeRuntimeId)
       store.setScopeMode('workspace')
       store.setWorkspace(selected)
+      if (conversationId.value)
+        await touchConversation(conversationId.value, { scopeMode: 'workspace', workspacePath: selected })
       workError.value = null
     }
-  }
-  const selectScopeMode = async (scopeMode: WorkScopeMode) => {
-    if (store.scopeMode === scopeMode) return
-    if (!sessionStore.busy) await sessionStore.closeBoundSession(store.activeRuntimeId)
-    store.setScopeMode(scopeMode)
-    workError.value = null
-    if (scopeMode === 'workspace' && !store.workspacePath) await chooseWorkspace()
   }
   const chooseAttachments = async () => {
     const selected = await open({ multiple: true, directory: false, title: t('ai.work.input.attachTitle') })
@@ -789,7 +717,7 @@
       store.refreshGlobalModel()
       globalModel = readWorkGlobalModel()
       if (!runtime.value?.installed) throw new Error('WORK_RUNTIME_NOT_INSTALLED')
-      if (store.scopeMode === 'workspace' && !store.workspacePath) await chooseWorkspace()
+      await store.ensureWorkspace()
       if (store.scopeMode === 'workspace' && !store.workspacePath) throw new Error('WORK_WORKSPACE_REQUIRED')
     } catch (error) {
       showFriendlyError(error)
@@ -862,7 +790,9 @@
     nextTick(() => scrollToBottom('smooth', true))
 
     Promise.resolve(
-      conversationRecord ? upsertWorkConversation(conversationRecord) : touchConversation(targetConversationId)
+      conversationRecord
+        ? upsertWorkConversation(conversationRecord)
+        : touchConversation(targetConversationId, { scopeMode, workspacePath })
     )
       .then(() => ensureSession(runtimeId, scopeMode, targetConversationId, workspacePath, runId, globalModel))
       .then(() => Promise.all([persistChatMessage(userMessage, targetConversationId), saveWorkStep(startingStep)]))
@@ -953,9 +883,6 @@
       negativeText: t('common.cancel'),
       onPositiveClick: apply
     })
-  }
-  const onWorkbenchKeydown = (event: KeyboardEvent) => {
-    if (event.key === 'Tab') event.preventDefault()
   }
   const onInputKeydown = (event: KeyboardEvent) => {
     if (event.key !== 'Enter' || event.shiftKey || event.isComposing) return
@@ -1069,61 +996,10 @@
     background: #338fe922;
     color: #338fe9;
   }
-  .knowledge-slot {
-    position: relative;
+  .task-comparison {
     flex: 1;
-    min-height: 0;
-  }
-  .assistant-options {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
-    margin: 0;
-    padding: 12px 18px;
-    border: 0;
-    border-bottom: 1px solid #dbe5f2;
-    background: #fff;
-    color: #49617e;
-  }
-  .assistant-options legend {
-    float: left;
-    margin-right: 12px;
-    padding: 8px 0;
-    font-size: 13px;
-  }
-  .assistant-options label {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    padding: 8px 14px;
-    border: 1px solid #dbe5f2;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  .assistant-options label.selected {
-    background: #edf5ff;
-    border-color: #80b4ef;
-    color: #2174ca;
-  }
-  .assistant-options input {
-    margin: 0;
-    accent-color: #338fe9;
-  }
-  .assistant-options label:focus-within {
-    outline: 2px solid #338fe9;
-    outline-offset: 2px;
-  }
-  .compliance-slot {
-    flex: 1;
-    min-height: 0;
-  }
-  .ai-shell > .workbench {
-    flex: 1;
-    min-height: 0;
-    height: auto;
+    min-width: 0;
+    overflow: auto;
   }
   .workbench {
     display: flex;
@@ -1405,49 +1281,6 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       font-size: 12px;
-    }
-    &__scope-switch {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      display: flex;
-      gap: 4px;
-      padding: 3px;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      background: var(--bg-secondary-color);
-    }
-    &__scope-switch button {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      height: 28px;
-      padding: 0 10px;
-      border: 1px solid transparent;
-      border-radius: 7px;
-      background: transparent;
-      color: var(--text-secondary-color);
-      font-size: 11px;
-      box-sizing: border-box;
-      cursor: pointer;
-      transition:
-        border-color 0.15s ease,
-        background-color 0.15s ease,
-        color 0.15s ease;
-    }
-    &__scope-switch button:hover {
-      background-color: color-mix(in srgb, var(--bg-muted-color) 80%, var(--bg-secondary-color));
-      color: var(--text-color);
-    }
-    &__scope-switch button.active {
-      border-color: color-mix(in srgb, var(--primary-color) 60%, transparent);
-      background-color: color-mix(in srgb, var(--primary-color) 6%, var(--bg-secondary-color));
-      color: var(--primary-color);
-    }
-    &__scope-switch svg {
-      width: 13px;
-      height: 13px;
     }
     &__scope-badge {
       z-index: 1;
@@ -1758,6 +1591,8 @@
     }
     &__activity {
       flex: 0 0 270px;
+      min-width: 0;
+      max-width: 30%;
       display: flex;
       flex-direction: column;
       min-height: 0;

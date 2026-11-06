@@ -1,0 +1,25 @@
+RAG 首字延迟实测与修复（2026-11-02）
+
+测试入口：http://127.0.0.1:8090，实际转发至本机 RAGFlow。
+测试问题：加班需要满足什么条件、由谁审批？
+
+修改前：首轮首包 13.40 秒；第二轮首文字 16.10 秒。
+第二轮阶段：问题准备 9.21 秒（含预处理 9.15 秒），检索 3.05 秒，澄清判断 1.52 秒。
+修改后：首文字 9.22 秒，首事件含 2 个字，完整返回 19.54 秒，返回 6 条引用。
+修改后阶段：问题准备 3.67 秒，检索 2.33 秒，澄清判断 1.83 秒，模型首个可见文字 1.24 秒。
+各阶段不是全部互斥：preprocessing_ms 属于 query_preparation_ms，answer_validation_ms 属于 answer_generation_ms。
+单轮对比受上游模型延迟波动影响，不能将全部改善归因于取消缓冲。
+
+服务端修复：仅 stream_preview=true 时取消 _stream_with_think_delta 的 16-token 累积；其他通道保持原行为。
+新增 before_model_stream_ms、model_first_visible_text_ms 诊断。仍保留最终答案核验。
+stream-preview.patch 已应用于本机 ragflow-ragflow-cpu-1 容器并重启 API 验证。
+容器重新创建会丢失容器内改动，需要将补丁纳入后续镜像构建。
+原始源码备份：.preview/rag-latency/dialog_service.original.py。
+复测原始记录：.preview/rag-latency/baseline.json、measurement.json。
+
+客户端源码：收到文字立即更新；控制台 [RAG timing] 同时输出客户端与服务端阶段耗时。
+first_ui_update_dispatched 表示界面更新回调已执行，不代表屏幕绘制完成。
+服务端旧 first_output_ms 统计的是正式 answer，可能晚于 preview_answer，不应用它评估预览首字。
+当前桌面安装包尚未重新构建；服务端取消缓冲已在真实请求中生效。
+
+验证：前端相关测试 13 项通过，类型检查通过；独立后端异步测试验证首字无需等待后续内容、普通通道保留原缓冲行为。

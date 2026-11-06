@@ -1,0 +1,66 @@
+const assert = require('node:assert/strict')
+const { chromium } = require('C:/Users/94719/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright')
+
+;(async () => {
+  const browser = await chromium.connectOverCDP('http://127.0.0.1:19224')
+  const page = browser.contexts().flatMap((context) => context.pages()).find((candidate) => candidate.url().includes('/home'))
+  if (!page) throw new Error('EM 主窗口未打开')
+  await page.setViewportSize({ width: 1100, height: 720 })
+  const chats = await page.evaluate(() => localStorage.getItem('em.local-chat.v1'))
+  const errors = []
+  page.on('pageerror', (error) => errors.push(error.message))
+  async function ask(question, fresh = true) {
+    await page.locator('.home__sider-nav [aria-label="消息"]').click()
+    if (fresh) await page.locator('.list-head button').filter({ hasText: '新建' }).click()
+    await page.getByRole('textbox', { name: '消息输入框' }).fill(`@AI RAG助手 ${question}`)
+    await page.locator('.send-row button.primary').click()
+  }
+  try {
+    await ask('找前端开发')
+    const su = page.locator('.rag-contact-card').filter({ hasText: '苏晴' })
+    await su.getByRole('button', { name: '查看名片' }).click()
+    await page.waitForURL(/\/home\/contacts$/)
+    await page.getByRole('button', { name: '发送消息' }).click()
+    await page.locator('.chat-title').filter({ hasText: '苏晴' }).waitFor()
+    await ask('我要找产品经理', false)
+    const product = page.locator('.rag-contact-card').filter({ hasText: '陈澄' }).last()
+    await product.waitFor()
+    assert.match(await product.innerText(), /高级产品经理/)
+    assert.match(await product.innerText(), /姓名\/岗位\/部门匹配/)
+    await page.screenshot({ path: '.preview/rag-intent-product-manager.png' })
+    await product.getByRole('button', { name: '查看名片' }).click()
+    await page.locator('.directory-profile__identity').filter({ hasText: '陈澄' }).waitFor()
+    await page.getByRole('button', { name: '发送消息' }).click()
+    await page.locator('.chat-title').filter({ hasText: '陈澄' }).waitFor()
+    console.log('PASS 苏晴单聊：找产品经理 → 陈澄名片 → 发送消息')
+
+    await ask('产品经理')
+    await page.getByText('请选择检索方向', { exact: true }).waitFor()
+    assert.equal(await page.locator('.rag-contact-card').count(), 0)
+    await page.screenshot({ path: '.preview/rag-intent-clarification.png' })
+    await page.getByRole('button', { name: '找人：产品经理', exact: true }).click()
+    await page.locator('.rag-contact-card').filter({ hasText: '陈澄' }).waitFor()
+    console.log('PASS 含糊问法：选择找人后推荐陈澄')
+
+    await ask('报销制度是什么，找谁审批？')
+    await page.getByText('请选择检索方向', { exact: true }).waitFor()
+    await page.getByRole('button', { name: '找人：报销制度是什么，找谁审批？', exact: true }).click()
+    await page.locator('.rag-contact-card').filter({ hasText: '阮明' }).waitFor()
+    console.log('PASS 混合问法：先澄清，选择找人后推荐阮明')
+
+    await ask('找不存在的岗位')
+    await page.getByText('已检索联系人', { exact: true }).waitFor()
+    assert.equal(await page.locator('.rag-contact-card').count(), 0)
+    assert.match(await page.locator('.bubble').last().innerText(), /暂时没有找到/)
+    assert.doesNotMatch(await page.locator('.bubble').last().innerText(), /unauthorized|无权访问/i)
+    assert.deepEqual(errors, [])
+    console.log('PASS 未匹配岗位：本地提示补充，不误转制度库或报鉴权错误')
+  } finally {
+    await page.evaluate((value) => {
+      if (value === null) localStorage.removeItem('em.local-chat.v1')
+      else localStorage.setItem('em.local-chat.v1', value)
+    }, chats)
+    await page.reload()
+    await browser.close()
+  }
+})().catch((error) => { console.error(error); process.exitCode = 1 })

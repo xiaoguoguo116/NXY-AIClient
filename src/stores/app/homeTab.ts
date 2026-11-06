@@ -28,6 +28,7 @@ export interface HomeTabAiPayload {
 
 export interface HomeTabTodosPayload {
   view?: 'todos' | 'meetings' | 'schedule'
+  assignmentKey?: string
 }
 
 type HomeTabPayloadMap = {
@@ -129,6 +130,9 @@ export const useHomeTabStore = defineStore('homeTab', {
     applyNavigate(tabId: HomeTabId, payload?: HomeTabPayloadMap[HomeTabId]): Promise<void> | void {
       if (payload && Object.keys(payload).length > 0) {
         this.setTabPayload(tabId, payload)
+      } else if (tabId === 'todos') {
+        // A normal menu click must not reuse a previous task locator.
+        this.consumeTabPayload('todos')
       }
 
       this.$patch((state) => {
@@ -140,9 +144,18 @@ export const useHomeTabStore = defineStore('homeTab', {
         return emitTo(HOME_WINDOW_LABEL, HOME_TAB_NAVIGATE_EVENT, eventPayload).then(() => undefined)
       }
 
-      const todoView = tabId === 'todos' ? (payload as HomeTabTodosPayload | undefined)?.view : undefined
-      const target = todoView ? { path: TAB_PATHS.todos, query: { view: todoView } } : TAB_PATHS[tabId]
-      const targetFullPath = todoView ? `${TAB_PATHS.todos}?view=${todoView}` : TAB_PATHS[tabId]
+      const todoPayload = tabId === 'todos' ? (payload as HomeTabTodosPayload | undefined) : undefined
+      const target =
+        todoPayload?.view || todoPayload?.assignmentKey
+          ? {
+              path: TAB_PATHS.todos,
+              query: {
+                view: todoPayload.view || 'todos',
+                ...(todoPayload.assignmentKey ? { assignment: todoPayload.assignmentKey } : {})
+              }
+            }
+          : TAB_PATHS[tabId]
+      const targetFullPath = router.resolve(target).fullPath
       if (router.currentRoute.value.fullPath !== targetFullPath) {
         return router.push(target).then(() => undefined)
       }

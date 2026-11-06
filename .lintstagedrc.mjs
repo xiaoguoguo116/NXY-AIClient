@@ -8,11 +8,12 @@ export default {
         (f) =>
             !f.includes('src-tauri/') &&
             !f.includes('public/') &&
+            !f.includes('.preview/') &&
             !f.endsWith('.d.ts') &&
             !f.includes('.vscode/')
     )
     return filteredFiles.length > 0
-        ? `biome check --write --unsafe ${filteredFiles
+        ? `biome check --write ${filteredFiles
             .map((f) => path.relative(process.cwd(), f))
             .join(' ')}`
         : 'echo "No JS/TS/JSON files to check"'
@@ -24,7 +25,7 @@ export default {
 
     const relativeFiles = filenames.map((f) => path.relative(process.cwd(), f)).join(' ')
     return [
-      `biome check --write --unsafe ${relativeFiles}`,
+      `biome check --write ${relativeFiles}`,
       `prettier --write ${relativeFiles}`
     ]
   },

@@ -21,7 +21,7 @@ pub fn manifest(root: &Path) -> RuntimeManifest {
     RuntimeManifest {
         id: ID.into(),
         name: "EM Office Agent".into(),
-        description: "Excel / CSV / Word / PDF / images · structured office tools".into(),
+        description: "Excel / CSV / Word / PDF · structured office tools".into(),
         protocol: "acp-v1".into(),
         installed,
         version: Some("1.0.0".into()),
@@ -33,7 +33,6 @@ pub fn manifest(root: &Path) -> RuntimeManifest {
             "permissions".into(),
             "spreadsheets".into(),
             "documents".into(),
-            "images".into(),
         ],
     }
 }

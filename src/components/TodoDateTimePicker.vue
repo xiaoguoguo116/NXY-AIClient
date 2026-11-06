@@ -7,17 +7,20 @@
       @input="setDay(($event.target as HTMLInputElement).value)" />
     <select :value="clock" :aria-label="`${label}时刻`" @change="setClock(($event.target as HTMLSelectElement).value)">
       <option value="" disabled>选择时刻</option>
-      <option v-if="clock && !TODO_TIME_OPTIONS.includes(clock)" :value="clock">{{ clock }}（原时间）</option>
-      <option v-for="time in TODO_TIME_OPTIONS" :key="time" :value="time">{{ time }}</option>
+      <option v-if="clock && !timeOptions.includes(clock)" :value="clock">{{ clock }}（原时间）</option>
+      <option v-for="time in timeOptions" :key="time" :value="time">{{ time }}</option>
     </select>
     <button v-if="day || clock" type="button" :aria-label="`清除${label}`" @click="clear">清除</button>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { ref, watch } from 'vue'
+  import { computed, ref, watch } from 'vue'
   import { TODO_TIME_OPTIONS, toTodoLocalTime } from '@/services/todoTime'
-  const props = defineProps<{ modelValue: string; label: string }>()
+  const props = defineProps<{ modelValue: string; label: string; minuteStep?: 15 | 60 }>()
+  const timeOptions = computed(() =>
+    props.minuteStep === 60 ? TODO_TIME_OPTIONS.filter((time) => time.endsWith(':00')) : TODO_TIME_OPTIONS
+  )
   const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
   const day = ref(''),
     clock = ref('')

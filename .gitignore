@@ -25,3 +25,4 @@ dist-ssr
 .agents/
 __pycache__/
 *.pyc
+.presentation-build/

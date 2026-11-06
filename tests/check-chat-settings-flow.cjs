@@ -1,0 +1,63 @@
+// Isolated browser profile: no changes to the user's conversations or settings.
+const { chromium } = require('C:/Users/94719/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const assert = require('node:assert/strict');
+(async () => {
+  const browser = await chromium.launch({ channel: 'msedge', headless: true });
+  const page = await browser.newPage({ viewport: { width: 1360, height: 960 } });
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  page.setDefaultTimeout(12000);
+  await page.addInitScript(() => {
+    window.__TAURI_INTERNALS__ = { invoke: async command => command === 'plugin:notification|is_permission_granted' ? false : null };
+  });
+  try {
+    await page.goto('http://127.0.0.1:1420/tests/todo-flow-preview.html');
+    await page.getByRole('button', { name: '＋ 建群', exact: true }).click();
+    await page.getByLabel('本地群名称', { exact: true }).fill('设置隔离测试群');
+    await page.getByLabel('初始成员', { exact: true }).fill('张工，李工');
+    await page.getByRole('button', { name: '创建本地群', exact: true }).click();
+    await page.getByRole('textbox', { name: '消息输入框', exact: true }).fill('联合索引验证消息');
+    await page.getByRole('button', { name: '发送', exact: true }).click();
+    await page.getByRole('button', { name: '设置', exact: true }).click();
+    const memberCount = await page.locator('.member-card').count();
+    assert(memberCount > 1);
+    await page.getByRole('button', { name: '搜索群成员', exact: true }).click();
+    await page.getByRole('textbox', { name: '搜索成员姓名' }).fill('张工');
+    assert.equal(await page.locator('.member-card').count(), 1);
+    await page.getByRole('textbox', { name: '搜索成员姓名' }).fill('');
+    await page.getByRole('switch', { name: '置顶会话' }).check();
+    await page.getByRole('switch', { name: '允许消息通知' }).uncheck();
+    await page.getByRole('button', { name: '添加成员' }).click();
+    await page.getByRole('textbox', { name: '成员姓名' }).fill('隔离测试成员');
+    await page.getByRole('button', { name: '添加', exact: true }).click();
+    assert.equal(await page.locator('.member-card').count(), memberCount + 1);
+    await page.getByRole('button', { name: '群管理' }).click();
+    await page.getByLabel('群名称', { exact: true }).fill('设置隔离测试群');
+    await page.getByRole('button', { name: '保存群名称' }).click();
+    assert.match(await page.locator('.chat-title').innerText(), /设置隔离测试群/);
+    await page.getByRole('button', { name: '关闭面板' }).click();
+    await page.getByRole('button', { name: '群通知', exact: true }).click();
+    await page.getByLabel('编辑群通知').fill('验证群通知持久化');
+    await page.getByRole('button', { name: '保存群通知' }).click();
+    await page.reload();
+    await page.getByRole('button', { name: '群通知', exact: true }).click();
+    assert.equal(await page.locator('.announcement').innerText(), '验证群通知持久化');
+    await page.getByRole('button', { name: '关闭面板' }).click();
+    await page.getByRole('button', { name: '设置', exact: true }).click();
+    assert(await page.getByRole('switch', { name: '置顶会话' }).isChecked());
+    assert(!await page.getByRole('switch', { name: '允许消息通知' }).isChecked());
+    assert.equal(await page.locator('.member-card').count(), memberCount + 1);
+    await page.getByRole('button', { name: '关闭面板' }).click();
+    await page.getByRole('button', { name: '消息记录', exact: true }).click();
+    await page.getByRole('textbox', { name: '搜索消息记录' }).fill('联合索引');
+    await page.locator('.history-item').first().click();
+    await page.locator('.message.highlighted').waitFor();
+    assert.equal(await page.locator('.chat-drawer').count(), 0);
+    await page.locator('.bubble').first().click({ button: 'right' });
+    await page.getByText('多选', { exact: true }).click();
+    assert(await page.getByRole('checkbox').count() > 0);
+    await page.getByRole('button', { name: '取消多选' }).click();
+    assert.deepEqual(errors, []);
+    console.log('PASS: member search/add, rename, pin/mute, announcement persistence, message search/location and multi-select in isolated browser.');
+  } finally { await browser.close(); }
+})().catch(error => { console.error(error); process.exitCode = 1; });

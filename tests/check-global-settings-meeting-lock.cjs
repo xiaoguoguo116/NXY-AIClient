@@ -18,7 +18,7 @@ const assert=require('node:assert/strict');
   assert.equal(await page.getByRole('button',{name:'配置 AI 接口',exact:true}).count(),0);
   assert.equal(await page.locator('form.settings').count(),0);
   const hasConfig=await page.evaluate(()=>!!JSON.parse(localStorage.getItem('em.local-ai.v1')||'{}').model);
-  if(hasConfig) await page.getByText(/已使用全局模型：/).waitFor();
+  if(hasConfig) await page.getByText(/^模型：/).waitFor();
   await page.goto('http://tauri.localhost/home/todos?view=meetings');
   await page.locator('.meeting-filters button').count();
   const buttons=page.getByRole('button',{name:'全部',exact:true});await buttons.last().click();

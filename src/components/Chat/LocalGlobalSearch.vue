@@ -20,7 +20,7 @@
         <span>{{ item.detail }}</span>
       </button>
       <p v-if="!results.length && !error">没有找到匹配结果</p>
-      <p>搜索本机群聊、模拟成员、消息和功能入口（最多显示 40 项）</p>
+      <p>搜索本机群聊、成员、消息和功能入口（最多显示 40 项）</p>
       <button class="close-search" @click="open = false">关闭搜索</button>
     </div>
   </div>
@@ -76,7 +76,7 @@
     if ('ragflow 知识助手 追问'.includes(q))
       matches.push({
         kind: '应用',
-        title: 'RAGFlow 知识助手',
+        title: '制度知识助手',
         detail: '应用中心 · 升级版知识库与追问',
         tab: 'application'
       })

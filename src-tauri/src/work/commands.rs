@@ -405,6 +405,27 @@ pub async fn work_skill_set_enabled(
     manager.set_skill_enabled(&id, enabled).await
 }
 
+// Stable, app-owned workspace; legacy conversations retain their original files.
+#[tauri::command]
+pub async fn work_workspace_prepare(
+    manager: State<'_, WorkManager>,
+    legacy_conversation_id: Option<String>,
+) -> Result<String, String> {
+    let path = if let Some(id) = legacy_conversation_id {
+        let safe_id: String =
+            id.chars().filter(|c| c.is_ascii_alphanumeric() || *c == '-' || *c == '_').collect();
+        manager.root().join("chat-workspaces").join(if safe_id.is_empty() {
+            "default"
+        } else {
+            &safe_id
+        })
+    } else {
+        manager.root().join("workspace")
+    };
+    fs::create_dir_all(&path).map_err(|error| format!("WORK_CHAT_WORKSPACE_FAILED: {error}"))?;
+    Ok(path.to_string_lossy().into_owned())
+}
+
 #[tauri::command]
 pub async fn work_session_new(
     app: AppHandle,

@@ -33,6 +33,9 @@ export const testProvider = (input: WorkProviderInput) =>
   invoke<WorkProviderTestResult>('work_provider_test', { input })
 export const deleteProvider = (id: string) => invoke<void>('work_provider_delete', { id })
 
+export const prepareWorkspace = (legacyConversationId?: string) =>
+  invoke<string>('work_workspace_prepare', { legacyConversationId })
+
 export const getPreferences = () => invoke<WorkPreferences>('work_preferences_get')
 export const savePreferences = (input: WorkPreferencesInput) =>
   invoke<WorkPreferences>('work_preferences_save', { input })

@@ -1,0 +1,138 @@
+{
+  "passed": true,
+  "groups": [
+    "unread-demo-release-20261026",
+    "unread-demo-ops-20261026"
+  ],
+  "generatedUnread": 20,
+  "result": {
+    "answer": {
+      "id": "ed432022-09a9-4b87-8316-6a6bc827cc02",
+      "role": "assistant",
+      "text": "## 主题\n支付接口联调进入收尾阶段，重点确认 PAY-217 修复、回归验证与发布条件。\n\n## 重点\n- **PAY-217**：请求超时后重试会重复生成订单，当前仍未解决。\n- **周铭**负责幂等键修复；最新提交时间调整为**今天 16:30 前**（原为 16:00），完成后通知测试。\n- **李妍**负责**今天 17:30 前**完成重复请求和超时重试回归。\n- **赵宁**负责**今天 18:00 前**核对支付成功率和重复订单告警，并反馈验证结果。\n- 发布条件为三项全部满足：**PAY-217 回归通过、监控验证完成、变更窗口获批**；三项均满足后才能发布。\n- 接口文档已补充幂等键格式和错误码，**文档更新已完成，不列为待办**。\n- 今晚生产变更窗口**尚未批准**；上线日期待变更审批后再定。\n\n## 结论\n- 不能将“今晚发布”视为已确认计划；上线日期尚未确定。\n- PAY-217 修复与回归、监控验证、变更窗口获批是发布前的关键门槛。\n- 验收数据需要业务方确认，当前**负责人和时间均未明确**。\n\n## 与你有关的待办\n- **明天 10:00 前**整理联调纪要。\n- **明天 10:00 前**向业务方确认验收数据负责人。\n\n## 待确认事项\n- 生产变更窗口的审批状态及获批时间：**未明确**。\n- 监控验证完成的责任人和时间：**未明确**；赵宁目前仅明确负责核对支付成功率和重复订单告警。\n- 验收数据业务方确认负责人及确认时间：**未明确**。\n- 上线日期：待变更审批后确定。\n\n以下为候选待办，需你确认后再添加：",
+      "createdAt": "2026-10-26T03:10:30.012Z",
+      "status": "done",
+      "replyTo": "1b5609fd-195f-4a8d-bd92-39d23fd103bb",
+      "summarySourceIds": [
+        "unread-demo-release-20261026-0",
+        "unread-demo-release-20261026-1",
+        "unread-demo-release-20261026-2",
+        "unread-demo-release-20261026-3",
+        "unread-demo-release-20261026-4",
+        "unread-demo-release-20261026-5",
+        "unread-demo-release-20261026-6",
+        "unread-demo-release-20261026-7",
+        "unread-demo-release-20261026-8",
+        "unread-demo-release-20261026-9",
+        "unread-demo-release-20261026-10",
+        "unread-demo-release-20261026-11"
+      ],
+      "summaryKind": "unread",
+      "todoSuggestions": [
+        {
+          "title": "提交 PAY-217 幂等键修复并通知测试",
+          "dueAt": "2026-10-26T08:30:00.000Z",
+          "assigneeIds": [
+            "dev"
+          ]
+        },
+        {
+          "title": "完成重复请求和超时重试回归",
+          "dueAt": "2026-10-26T09:30:00.000Z",
+          "assigneeIds": [
+            "qa"
+          ]
+        },
+        {
+          "title": "核对支付成功率和重复订单告警并反馈验证结果",
+          "dueAt": "2026-10-26T10:00:00.000Z",
+          "assigneeIds": [
+            "ops"
+          ]
+        },
+        {
+          "title": "整理联调纪要",
+          "dueAt": "2026-10-27T02:00:00.000Z",
+          "assigneeIds": [
+            "self"
+          ]
+        },
+        {
+          "title": "向业务方确认验收数据负责人",
+          "dueAt": "2026-10-27T02:00:00.000Z",
+          "assigneeIds": [
+            "self"
+          ]
+        }
+      ]
+    },
+    "request": {
+      "id": "1b5609fd-195f-4a8d-bd92-39d23fd103bb",
+      "role": "user",
+      "createdAt": "2026-10-26T03:10:30.007Z",
+      "status": "done",
+      "text": "@AI 请总结这 12 条未读消息，列出重点、结论、与我有关的待办和待确认事项。未明确的负责人和时间请标注未明确。",
+      "summarySourceIds": [
+        "unread-demo-release-20261026-0",
+        "unread-demo-release-20261026-1",
+        "unread-demo-release-20261026-2",
+        "unread-demo-release-20261026-3",
+        "unread-demo-release-20261026-4",
+        "unread-demo-release-20261026-5",
+        "unread-demo-release-20261026-6",
+        "unread-demo-release-20261026-7",
+        "unread-demo-release-20261026-8",
+        "unread-demo-release-20261026-9",
+        "unread-demo-release-20261026-10",
+        "unread-demo-release-20261026-11"
+      ],
+      "summaryKind": "unread"
+    },
+    "samples": [
+      {
+        "ms": 17592,
+        "length": 2
+      },
+      {
+        "ms": 17607,
+        "length": 3
+      },
+      {
+        "ms": 17624,
+        "length": 4
+      },
+      {
+        "ms": 17648,
+        "length": 5
+      },
+      {
+        "ms": 17666,
+        "length": 8
+      },
+      {
+        "ms": 17682,
+        "length": 11
+      },
+      {
+        "ms": 17700,
+        "length": 14
+      },
+      {
+        "ms": 17718,
+        "length": 17
+      },
+      {
+        "ms": 17732,
+        "length": 20
+      }
+    ],
+    "elapsedMs": 21810,
+    "otherUnread": 8
+  },
+  "intact": {
+    "settings": true,
+    "messages": true,
+    "summaryRestored": true,
+    "otherUnread": true
+  }
+}

@@ -1,0 +1,2213 @@
+{
+  "started": "2026-10-26T00:58:20.409Z",
+  "cases": [
+    {
+      "id": "travel",
+      "question": "出差",
+      "session": "565c45acd0d811f1b9eacd99fe22c3f4",
+      "answer": "这个问题可能涉及不同的业务场景。请选择你想了解的方向，或在输入框补充说明。",
+      "options": [
+        {
+          "id": "6c42b98326654ae09dfca1ab4d876f01",
+          "question": "出差申请需要提前多久提交,不同预算金额分别由谁审批?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "080855bcd7de4c299240040b8051b04a",
+          "question": "出差结束后应在多长时间内、按什么流程提交报销?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "c46dfa67f56a41f8adbff0e082316676",
+          "question": "出差伙食补助和市内交通补助按什么标准发放?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "0e63422b46a344fd84bc05bf04642c04",
+          "question": "不同职级出差乘坐飞机、高铁等交通工具的标准是什么?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "49898d954b4d443f959657811f6f6b0b",
+          "question": "出差住宿费的限额标准按城市类别和职级如何规定?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        }
+      ],
+      "cacheId": "49e416a0256b42a6adf428f290894527",
+      "needsInput": false,
+      "cacheStatus": "not_requested",
+      "record": "23b51bf5c3984a3f80ba8112104a5a6d",
+      "preprocessing": {
+        "ambiguity_reasons": [
+          "仅给出主题名词“出差”,未说明具体所问事项(如差旅报销、出差审批、出差标准等)"
+        ],
+        "ambiguity_score": 0.7,
+        "ambiguity_signals": [
+          "short_question",
+          "missing_specific_focus"
+        ],
+        "confidence": 0.95,
+        "context_used": false,
+        "corrections": [],
+        "intent_parts": [
+          "出差"
+        ],
+        "missing_topic": false,
+        "model_called": true,
+        "normalized_question": "出差",
+        "original_question": "出差",
+        "retrieval_queries": [
+          "出差"
+        ],
+        "status": "success"
+      },
+      "decision": {
+        "answer_coverage": [
+          {
+            "question": "出差申请需要提前多久提交,不同预算金额分别由谁审批?",
+            "reason": "选项同时询问提前提交时限和不同预算金额的审批人，原文完整给出国内/国际提前时限及三档预算审批规则，可直接回答。",
+            "supported": true
+          },
+          {
+            "question": "出差结束后应在多长时间内、按什么流程提交报销?",
+            "reason": "选项询问报销时限和流程，原文明确返程后十五个工作日内及完整流程顺序，可直接回答。",
+            "supported": true
+          },
+          {
+            "question": "出差伙食补助和市内交通补助按什么标准发放?",
+            "reason": "选项询问伙食补助和市内交通补助标准，原文按城市类别给出两项补助的具体金额，可直接回答。",
+            "supported": true
+          },
+          {
+            "question": "不同职级出差乘坐飞机、高铁等交通工具的标准是什么?",
+            "reason": "选项询问不同职级乘坐飞机、高铁等交通工具标准，原文按职级完整列出对应舱位/座席标准，可直接回答。",
+            "supported": true
+          },
+          {
+            "question": "出差住宿费的限额标准按城市类别和职级如何规定?",
+            "reason": "选项询问住宿费限额按城市类别和职级的规定，原文完整给出三类城市各职级限额，可直接回答。",
+            "supported": true
+          }
+        ],
+        "candidate_pool_count": 24,
+        "evidence_valid_option_count": 5,
+        "model_action": "clarify",
+        "reason": "grounded_options",
+        "shown_evidence_chars": 4540,
+        "shown_evidence_count": 24,
+        "valid_option_count": 5
+      },
+      "candidateCount": 24,
+      "contextCount": 0,
+      "documents": [
+        "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+        "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+        "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md"
+      ],
+      "context": [],
+      "timings": {
+        "clarification_ms": 7992.108556999994,
+        "first_output_ms": 14431.649921999991,
+        "preprocessing_ms": 4743.89735599999,
+        "query_preparation_ms": 4773.49951299999,
+        "retrieval_ms": 1598.572058000002,
+        "total_ms": 14431.655163000016
+      },
+      "elapsed": 14494,
+      "problems": []
+    },
+    {
+      "id": "workflow",
+      "question": "出差流程",
+      "session": "565db3f6d0d811f1b9eacd99fe22c3f4",
+      "answer": "这个问题可能涉及不同的业务场景。请选择你想了解的方向，或在输入框补充说明。",
+      "options": [
+        {
+          "id": "041c70ccea564b6eb2a7c8f59b4bba97",
+          "question": "国内出差和国际及港澳台出差分别需要提前多久提交申请,预算不同由谁审批?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "2e195629a9ce499aa72c897003e2234f",
+          "question": "出差返程后报销应按什么顺序提交,财务多久完成审核?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "bfc3a5ff935142b99644ab31092caacd",
+          "question": "出差伙食补助和市内交通补助按什么标准计算?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "ae007ee362a3426f92ce848e4e1f0cdf",
+          "question": "不同职级出差乘坐飞机、高铁或动车的标准是什么?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "d368d4aaf77c4005ab31146f587bc5bb",
+          "question": "出差期间因公务外出无法正常打卡应如何提交和确认?",
+          "sources": [
+            "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md"
+          ]
+        }
+      ],
+      "cacheId": "50957f6f727e4afb8b34a3435f85a136",
+      "needsInput": false,
+      "cacheStatus": "not_requested",
+      "record": "1a3abeac78b74e0ea8cff61bbbb86eb4",
+      "preprocessing": {
+        "ambiguity_reasons": [
+          "问题仅给出主题,未明确所问事项(如申请、审批、报销等具体环节)"
+        ],
+        "ambiguity_score": 0.3,
+        "ambiguity_signals": [
+          "short_question"
+        ],
+        "confidence": 0.95,
+        "context_used": false,
+        "corrections": [],
+        "intent_parts": [
+          "出差流程"
+        ],
+        "missing_topic": false,
+        "model_called": true,
+        "normalized_question": "出差流程",
+        "original_question": "出差流程",
+        "retrieval_queries": [
+          "出差流程"
+        ],
+        "status": "success"
+      },
+      "decision": {
+        "answer_coverage": [
+          {
+            "question": "国内出差和国际及港澳台出差分别需要提前多久提交申请,预算不同由谁审批?",
+            "reason": "选项直接对应出差流程中的申请时限与预算审批权限，原文完整给出提前工作日和分级审批规则。",
+            "supported": true
+          },
+          {
+            "question": "出差返程后报销应按什么顺序提交,财务多久完成审核?",
+            "reason": "选项对应出差流程中的报销提交顺序和财务审核时限，原文完整给出顺序及五个工作日审核要求。",
+            "supported": true
+          },
+          {
+            "question": "出差伙食补助和市内交通补助按什么标准计算?",
+            "reason": "选项对应出差流程中的补助标准，原文完整给出伙食补助和市内交通补助的计算标准及扣减规则。",
+            "supported": true
+          },
+          {
+            "question": "不同职级出差乘坐飞机、高铁或动车的标准是什么?",
+            "reason": "选项对应出差流程中的交通标准，原文完整给出不同职级乘坐飞机、高铁或动车的标准。",
+            "supported": true
+          },
+          {
+            "question": "出差期间因公务外出无法正常打卡应如何提交和确认?",
+            "reason": "选项对应出差流程中因公务外出无法打卡的处理，原文完整给出提交内容、确认人及补说明规则。",
+            "supported": true
+          }
+        ],
+        "candidate_pool_count": 24,
+        "evidence_valid_option_count": 5,
+        "model_action": "clarify",
+        "reason": "grounded_options",
+        "shown_evidence_chars": 4518,
+        "shown_evidence_count": 24,
+        "valid_option_count": 5
+      },
+      "candidateCount": 24,
+      "contextCount": 0,
+      "documents": [
+        "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+        "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md",
+        "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+        "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+      ],
+      "context": [],
+      "timings": {
+        "clarification_ms": 7868.993283000009,
+        "first_output_ms": 14309.89318799999,
+        "preprocessing_ms": 4537.0588879999905,
+        "query_preparation_ms": 4560.656755999986,
+        "retrieval_ms": 1825.6708840000044,
+        "total_ms": 14309.928788999998
+      },
+      "elapsed": 14370,
+      "problems": [],
+      "clicks": [
+        {
+          "question": "国内出差和国际及港澳台出差分别需要提前多久提交申请,预算不同由谁审批?",
+          "session": "565db3f6d0d811f1b9eacd99fe22c3f4",
+          "answer": "国内出差应至少提前两个工作日提交目的、地点、日期、拜访对象、交通方案和预算；国际及港澳台出差至少提前五个工作日申请[ID:0]。预算不超过5,000元由部门负责人和成本中心审批，5,001—20,000元增加分管负责人审批，超过20,000元增加财务负责人审批[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "record": "7216335af0b14f0c82367abe1f5e1673",
+          "preprocessing": {},
+          "decision": {},
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ],
+          "context": [
+            {
+              "id": "5786c4fce296d8e8",
+              "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+              "text": "来源：06_差旅与费用报销制度.md\n分块：7/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第六条\n\n**第六条**\n国内出差应至少提前两个工作日提交目的、地点、日期、拜访对象、交通方案和预算；国际及港澳台出差至少提前五个工作日申请。预算不超过5,000元由部门负责人和成本中心审批，5,001—20,000元增加分管负责人审批，超过20,000元增加财务负责人审批。紧急出差先取得有权审批人口头同意，并在返程后两个工作日内补办。\n\n"
+            }
+          ],
+          "timings": {
+            "answer_generation_ms": 2873.8464289999965,
+            "answer_validation_ms": 1829.4493329999852,
+            "first_output_ms": 3033.784333999989,
+            "query_preparation_ms": 102.125271999995,
+            "retrieval_ms": 17.27851200001851,
+            "total_ms": 3033.7877320000075
+          },
+          "elapsed": 3102,
+          "problems": []
+        },
+        {
+          "question": "出差返程后报销应按什么顺序提交,财务多久完成审核?",
+          "session": "565db3f6d0d811f1b9eacd99fe22c3f4",
+          "answer": "返程后十五个工作日内，员工应按“填写报销单—关联出差申请—上传交通、住宿及支付凭证—直属负责人确认业务—成本中心复核预算—财务审核票据—出纳付款”的顺序提交[ID:0]。材料齐全后财务原则上在五个工作日内完成审核，并在下一付款批次支付[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "record": "34425795601f42d699cb5821eddddd37",
+          "preprocessing": {},
+          "decision": {},
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ],
+          "context": [
+            {
+              "id": "9cf74693d51d51ef",
+              "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+              "text": "来源：06_差旅与费用报销制度.md\n分块：14/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十三条\n\n**第十三条**\n返程后十五个工作日内，员工应按“填写报销单—关联出差申请—上传交通、住宿及支付凭证—直属负责人确认业务—成本中心复核预算—财务审核票据—出纳付款”的顺序提交。电子发票应验真查重；纸质票据按档案要求移交。材料齐全后财务原则上在五个工作日内完成审核，并在下一付款批次支付。\n\n"
+            }
+          ],
+          "timings": {
+            "answer_generation_ms": 2515.7513679999965,
+            "answer_validation_ms": 1334.578442999998,
+            "first_output_ms": 2585.4102659999967,
+            "query_preparation_ms": 32.02353700001481,
+            "retrieval_ms": 3.3738959999993767,
+            "total_ms": 2585.4133180000076
+          },
+          "elapsed": 2634,
+          "problems": []
+        },
+        {
+          "question": "出差伙食补助和市内交通补助按什么标准计算?",
+          "session": "565db3f6d0d811f1b9eacd99fe22c3f4",
+          "answer": "出差伙食补助按自然日计算：A类城市120元/人/天、B类城市100元/人/天、C类城市80元/人/天；市内交通补助分别为80元、60元和50元/人/天[ID:0]。出发日和返程日均按全天计算[ID:0]。主办方每提供一顿正餐，伙食补助扣减30元；统一提供市内交通的，当日不再发放交通补助[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "record": "e34226637cb34797aa0ad36fc53f39c3",
+          "preprocessing": {},
+          "decision": {},
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ],
+          "context": [
+            {
+              "id": "ffdb8a429109d21b",
+              "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+              "text": "来源：06_差旅与费用报销制度.md\n分块：12/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十一条\n\n**第十一条**\n出差伙食补助按自然日计算：A类城市120元/人/天、B类城市100元/人/天、C类城市80元/人/天；市内交通补助分别为80元、60元和50元/人/天。出发日和返程日均按全天计算。主办方每提供一顿正餐，伙食补助扣减30元；统一提供市内交通的，当日不再发放交通补助。\n\n"
+            }
+          ],
+          "timings": {
+            "answer_generation_ms": 3208.0675510000274,
+            "answer_validation_ms": 1950.8873170000243,
+            "first_output_ms": 3267.098931000021,
+            "query_preparation_ms": 26.918596999990996,
+            "retrieval_ms": 1.250971000018808,
+            "total_ms": 3267.1018080000067
+          },
+          "elapsed": 3311,
+          "problems": []
+        },
+        {
+          "question": "不同职级出差乘坐飞机、高铁或动车的标准是什么?",
+          "session": "565db3f6d0d811f1b9eacd99fe22c3f4",
+          "answer": "职级P1—P3乘坐飞机经济舱、高铁或动车二等座、普通列车硬卧；P4—P5及M1—M2可乘飞机经济舱、高铁或动车一等座、普通列车软卧；M3及以上可乘前述标准，单程飞行超过6小时可事前申请公务舱[ID:0]。超标准部分未经批准由个人承担，低于标准按实际金额报销，不发放差额[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "record": "d777b66675c14746a7fa4f23c3f6c66d",
+          "preprocessing": {},
+          "decision": {},
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ],
+          "context": [
+            {
+              "id": "45b931f9d15e08c8",
+              "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+              "text": "来源：06_差旅与费用报销制度.md\n分块：8/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第七条\n\n**第七条**\n职级P1—P3乘坐飞机经济舱、高铁或动车二等座、普通列车硬卧；P4—P5及M1—M2可乘飞机经济舱、高铁或动车一等座、普通列车软卧；M3及以上可乘前述标准，单程飞行超过6小时可事前申请公务舱。超标准部分未经批准由个人承担，低于标准按实际金额报销，不发放差额。\n\n"
+            }
+          ],
+          "timings": {
+            "answer_generation_ms": 2471.7622169999913,
+            "answer_validation_ms": 1410.850193999977,
+            "first_output_ms": 2537.3404819999905,
+            "query_preparation_ms": 30.366624999999203,
+            "retrieval_ms": 2.4275629999692683,
+            "total_ms": 2537.3435170000107
+          },
+          "elapsed": 2598,
+          "problems": []
+        },
+        {
+          "question": "出差期间因公务外出无法正常打卡应如何提交和确认?",
+          "session": "565db3f6d0d811f1b9eacd99fe22c3f4",
+          "answer": "员工因公务外出、出差、培训或客户现场工作无法正常打卡的，应在系统中提交地点、时段和事项，由直属负责人确认[ID:0]。能够事先申请而未申请的，应补充说明，但不得仅因缺少打卡直接否定实际出勤[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "record": "5ed99385af3a4151af18e3b5ac3a84f7",
+          "preprocessing": {},
+          "decision": {},
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md"
+          ],
+          "context": [
+            {
+              "id": "c0f5abb3d858088b",
+              "document": "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md",
+              "text": "来源：02_考勤管理制度.md\n分块：9/23\n上下文：考勤管理制度 > 第二章 管理规则 > 第八条\n\n**第八条**\n员工因公务外出、出差、培训或客户现场工作无法正常打卡的，应在系统中提交地点、时段和事项，由直属负责人确认。能够事先申请而未申请的，应补充说明，但不得仅因缺少打卡直接否定实际出勤。\n\n"
+            }
+          ],
+          "timings": {
+            "answer_generation_ms": 2926.4038230000438,
+            "answer_validation_ms": 1902.5346370000307,
+            "first_output_ms": 2984.9403309999616,
+            "query_preparation_ms": 27.320734999989327,
+            "retrieval_ms": 0.7366730000057942,
+            "total_ms": 2984.942923999995
+          },
+          "elapsed": 3030,
+          "problems": []
+        }
+      ]
+    },
+    {
+      "id": "directions",
+      "question": "我准备出差，请根据差旅制度给我几个可以继续了解的办理方向。",
+      "session": "5f0648e2d0d811f1b9eacd99fe22c3f4",
+      "answer": "这个问题可能涉及不同的业务场景。请选择你想了解的方向，或在输入框补充说明。",
+      "options": [
+        {
+          "id": "7c80e0bdbd9340b8bc714529d7b04bb0",
+          "question": "国内出差和国际及港澳台出差分别需要提前多久提交申请,不同预算金额由谁审批?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "62e69b8e6d6945fb8b1cf3a38b0b0675",
+          "question": "出差返程后报销应按什么顺序提交,需要哪些材料,财务多久完成审核?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "827fa973875c4ab781fd46fbc1e4bb8e",
+          "question": "不同职级出差乘坐飞机、高铁或动车的标准是什么,超标准如何处理?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "7223312ac85a4294b9f4d82a2356095c",
+          "question": "不同城市类别和职级的住宿费限额是多少?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "8da45baa8724448cb297b14d39cf282a",
+          "question": "出差伙食补助和市内交通补助按什么标准计算,出发日和返程日怎么算?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        }
+      ],
+      "cacheId": "a089dadc53704b0d84638ec1844481fe",
+      "needsInput": false,
+      "cacheStatus": "not_requested",
+      "record": "f0c49877c14f4206bca407326c6d5ecf",
+      "preprocessing": {
+        "ambiguity_reasons": [
+          "未明确具体办理事项(如申请、审批、报销、预订等),仅泛问可了解方向"
+        ],
+        "ambiguity_score": 0.35,
+        "ambiguity_signals": [
+          "generic_expression"
+        ],
+        "confidence": 0.95,
+        "context_used": false,
+        "corrections": [],
+        "intent_parts": [
+          "出差办理方向"
+        ],
+        "missing_topic": false,
+        "model_called": true,
+        "normalized_question": "我准备出差,请根据差旅制度给我几个可以继续了解的办理方向。",
+        "original_question": "我准备出差，请根据差旅制度给我几个可以继续了解的办理方向。",
+        "retrieval_queries": [
+          "我准备出差,请根据差旅制度给我几个可以继续了解的办理方向。",
+          "差旅制度 出差办理流程 可了解方向"
+        ],
+        "status": "success"
+      },
+      "decision": {
+        "answer_coverage": [
+          {
+            "question": "国内出差和国际及港澳台出差分别需要提前多久提交申请,不同预算金额由谁审批?",
+            "reason": "选项对应出差申请办理方向，原文完整回答了提前时限和不同预算金额的审批人。",
+            "supported": true
+          },
+          {
+            "question": "出差返程后报销应按什么顺序提交,需要哪些材料,财务多久完成审核?",
+            "reason": "选项对应出差报销办理方向，原文完整回答了提交顺序、材料要求和财务审核时限。",
+            "supported": true
+          },
+          {
+            "question": "不同职级出差乘坐飞机、高铁或动车的标准是什么,超标准如何处理?",
+            "reason": "选项对应出差交通标准办理方向，原文完整回答了各职级标准和超标准处理。",
+            "supported": true
+          },
+          {
+            "question": "不同城市类别和职级的住宿费限额是多少?",
+            "reason": "选项对应出差住宿标准办理方向，原文完整回答了不同城市类别和职级的住宿费限额。",
+            "supported": true
+          },
+          {
+            "question": "出差伙食补助和市内交通补助按什么标准计算,出发日和返程日怎么算?",
+            "reason": "选项对应出差补助办理方向，原文完整回答了伙食补助、市内交通补助标准及出发日和返程日计算方式。",
+            "supported": true
+          }
+        ],
+        "candidate_pool_count": 24,
+        "evidence_valid_option_count": 5,
+        "model_action": "clarify",
+        "reason": "grounded_options",
+        "shown_evidence_chars": 4510,
+        "shown_evidence_count": 24,
+        "valid_option_count": 5
+      },
+      "candidateCount": 25,
+      "contextCount": 0,
+      "documents": [
+        "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+        "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+        "10_远程办公管理制度.0661197500c3.109a94309f7e0772dce0.md"
+      ],
+      "context": [],
+      "timings": {
+        "clarification_ms": 8081.497737000007,
+        "first_output_ms": 10935.250232000015,
+        "preprocessing_ms": 1298.3325099999945,
+        "query_preparation_ms": 1316.539634999998,
+        "retrieval_ms": 1495.1994459999867,
+        "total_ms": 10935.254157999992
+      },
+      "elapsed": 11019,
+      "problems": [],
+      "clicks": [
+        {
+          "question": "国内出差和国际及港澳台出差分别需要提前多久提交申请,不同预算金额由谁审批?",
+          "session": "5f0648e2d0d811f1b9eacd99fe22c3f4",
+          "answer": "国内出差应至少提前两个工作日提交申请，国际及港澳台出差至少提前五个工作日申请[ID:0]。预算不超过5,000元由部门负责人和成本中心审批，5,001—20,000元增加分管负责人审批，超过20,000元增加财务负责人审批[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "record": "739f4920c7ad4eca9b777e31d259f7eb",
+          "preprocessing": {},
+          "decision": {},
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ],
+          "context": [
+            {
+              "id": "5786c4fce296d8e8",
+              "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+              "text": "来源：06_差旅与费用报销制度.md\n分块：7/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第六条\n\n**第六条**\n国内出差应至少提前两个工作日提交目的、地点、日期、拜访对象、交通方案和预算；国际及港澳台出差至少提前五个工作日申请。预算不超过5,000元由部门负责人和成本中心审批，5,001—20,000元增加分管负责人审批，超过20,000元增加财务负责人审批。紧急出差先取得有权审批人口头同意，并在返程后两个工作日内补办。\n\n"
+            }
+          ],
+          "timings": {
+            "answer_generation_ms": 2938.181310999994,
+            "answer_validation_ms": 1866.5502009999955,
+            "first_output_ms": 2992.6282220000076,
+            "query_preparation_ms": 27.45674400000553,
+            "retrieval_ms": 0.29205300000967327,
+            "total_ms": 2992.63116100002
+          },
+          "elapsed": 3044,
+          "problems": []
+        },
+        {
+          "question": "出差返程后报销应按什么顺序提交,需要哪些材料,财务多久完成审核?",
+          "session": "5f0648e2d0d811f1b9eacd99fe22c3f4",
+          "answer": "返程后十五个工作日内，员工应按“填写报销单—关联出差申请—上传交通、住宿及支付凭证—直属负责人确认业务—成本中心复核预算—财务审核票据—出纳付款”的顺序提交[ID:0]。材料包括交通、住宿及支付凭证，电子发票应验真查重，纸质票据按档案要求移交[ID:0]。材料齐全后财务原则上在五个工作日内完成审核，并在下一付款批次支付[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "record": "b4e770d79d984f65a42017a57c81a8ed",
+          "preprocessing": {},
+          "decision": {},
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ],
+          "context": [
+            {
+              "id": "9cf74693d51d51ef",
+              "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+              "text": "来源：06_差旅与费用报销制度.md\n分块：14/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十三条\n\n**第十三条**\n返程后十五个工作日内，员工应按“填写报销单—关联出差申请—上传交通、住宿及支付凭证—直属负责人确认业务—成本中心复核预算—财务审核票据—出纳付款”的顺序提交。电子发票应验真查重；纸质票据按档案要求移交。材料齐全后财务原则上在五个工作日内完成审核，并在下一付款批次支付。\n\n"
+            }
+          ],
+          "timings": {
+            "answer_generation_ms": 2807.752138000012,
+            "answer_validation_ms": 1603.1336259999875,
+            "first_output_ms": 2862.650866000024,
+            "query_preparation_ms": 27.71418999998332,
+            "retrieval_ms": 0.3069059999916135,
+            "total_ms": 2862.654408000026
+          },
+          "elapsed": 2938,
+          "problems": []
+        },
+        {
+          "question": "不同职级出差乘坐飞机、高铁或动车的标准是什么,超标准如何处理?",
+          "session": "5f0648e2d0d811f1b9eacd99fe22c3f4",
+          "answer": "职级P1—P3乘坐飞机经济舱、高铁或动车二等座、普通列车硬卧；P4—P5及M1—M2可乘飞机经济舱、高铁或动车一等座、普通列车软卧；M3及以上可乘前述标准，单程飞行超过6小时可事前申请公务舱[ID:0]。超标准部分未经批准由个人承担，低于标准按实际金额报销，不发放差额[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "record": "d21eb65750584f45a89c7d3f2f125037",
+          "preprocessing": {},
+          "decision": {},
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ],
+          "context": [
+            {
+              "id": "45b931f9d15e08c8",
+              "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+              "text": "来源：06_差旅与费用报销制度.md\n分块：8/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第七条\n\n**第七条**\n职级P1—P3乘坐飞机经济舱、高铁或动车二等座、普通列车硬卧；P4—P5及M1—M2可乘飞机经济舱、高铁或动车一等座、普通列车软卧；M3及以上可乘前述标准，单程飞行超过6小时可事前申请公务舱。超标准部分未经批准由个人承担，低于标准按实际金额报销，不发放差额。\n\n"
+            }
+          ],
+          "timings": {
+            "answer_generation_ms": 2445.733034,
+            "answer_validation_ms": 1524.0961689999608,
+            "first_output_ms": 2504.9797530000433,
+            "query_preparation_ms": 27.187594999986686,
+            "retrieval_ms": 0.2562239999974736,
+            "total_ms": 2504.982059000042
+          },
+          "elapsed": 2565,
+          "problems": []
+        },
+        {
+          "question": "不同城市类别和职级的住宿费限额是多少?",
+          "session": "5f0648e2d0d811f1b9eacd99fe22c3f4",
+          "answer": "住宿限额按每间夜、含税价控制：A类城市P1—P3为500元、P4—P5及M1—M2为650元、M3及以上为850元；B类城市分别为400元、520元、700元；C类城市分别为320元、420元、560元[ID:0]。A类包括北京、上海、广州、深圳；B类包括天津、重庆、杭州、南京、苏州、成都、武汉、西安及其他省会城市；其他境内城市为C类[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "record": "731825a0c1094bca99e220f119fdde65",
+          "preprocessing": {},
+          "decision": {},
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ],
+          "context": [
+            {
+              "id": "05ea79f2c3a53519",
+              "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+              "text": "来源：06_差旅与费用报销制度.md\n分块：9/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第八条\n\n**第八条**\n住宿限额按每间夜、含税价控制：A类城市P1—P3为500元、P4—P5及M1—M2为650元、M3及以上为850元；B类城市分别为400元、520元、700元；C类城市分别为320元、420元、560元。A类包括北京、上海、广州、深圳；B类包括天津、重庆、杭州、南京、苏州、成都、武汉、西安及其他省会城市；其他境内城市为C类。\n\n"
+            }
+          ],
+          "timings": {
+            "answer_generation_ms": 3147.1380600000316,
+            "answer_validation_ms": 1612.8053920000411,
+            "first_output_ms": 3204.400805999967,
+            "query_preparation_ms": 28.35698199999115,
+            "retrieval_ms": 0.9299769999984164,
+            "total_ms": 3204.4037889999686
+          },
+          "elapsed": 3257,
+          "problems": []
+        },
+        {
+          "question": "出差伙食补助和市内交通补助按什么标准计算,出发日和返程日怎么算?",
+          "session": "5f0648e2d0d811f1b9eacd99fe22c3f4",
+          "answer": "出差伙食补助按自然日计算：A类城市120元/人/天、B类城市100元/人/天、C类城市80元/人/天；市内交通补助分别为80元、60元和50元/人/天[ID:0]。出发日和返程日均按全天计算[ID:0]。主办方每提供一顿正餐，伙食补助扣减30元；统一提供市内交通的，当日不再发放交通补助[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "record": "a4f6df8f55ff4444953baa14e913414b",
+          "preprocessing": {},
+          "decision": {},
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ],
+          "context": [
+            {
+              "id": "ffdb8a429109d21b",
+              "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+              "text": "来源：06_差旅与费用报销制度.md\n分块：12/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十一条\n\n**第十一条**\n出差伙食补助按自然日计算：A类城市120元/人/天、B类城市100元/人/天、C类城市80元/人/天；市内交通补助分别为80元、60元和50元/人/天。出发日和返程日均按全天计算。主办方每提供一顿正餐，伙食补助扣减30元；统一提供市内交通的，当日不再发放交通补助。\n\n"
+            }
+          ],
+          "timings": {
+            "answer_generation_ms": 2298.942686000032,
+            "answer_validation_ms": 1266.5333799999985,
+            "first_output_ms": 2366.161911000006,
+            "query_preparation_ms": 27.250802000025942,
+            "retrieval_ms": 0.24757399995678497,
+            "total_ms": 2366.1647849999667
+          },
+          "elapsed": 2407,
+          "problems": []
+        }
+      ]
+    },
+    {
+      "id": "application",
+      "question": "国内出差需要提前多久申请，填写哪些信息？",
+      "session": "67b242e8d0d811f1b9eacd99fe22c3f4",
+      "answer": "国内出差应至少提前两个工作日提交申请，申请中需填写目的、地点、日期、拜访对象、交通方案和预算[ID:1]。",
+      "options": [],
+      "needsInput": false,
+      "cacheStatus": "not_requested",
+      "record": "e1e45580e69f4ca5b851ae2d738b956a",
+      "preprocessing": {
+        "ambiguity_reasons": [],
+        "ambiguity_score": 0.1,
+        "ambiguity_signals": [],
+        "confidence": 0.98,
+        "context_used": false,
+        "corrections": [],
+        "intent_parts": [
+          "国内出差申请提前时间",
+          "国内出差申请填写信息"
+        ],
+        "missing_topic": false,
+        "model_called": true,
+        "normalized_question": "国内出差需要提前多久申请,填写哪些信息?",
+        "original_question": "国内出差需要提前多久申请，填写哪些信息？",
+        "retrieval_queries": [
+          "国内出差需要提前多久申请,填写哪些信息?",
+          "国内出差需要提前多久申请"
+        ],
+        "status": "success"
+      },
+      "decision": {
+        "candidate_pool_count": 24,
+        "evidence_valid_option_count": 0,
+        "model_action": "answer",
+        "reason": "model_chose_answer",
+        "shown_evidence_chars": 5228,
+        "shown_evidence_count": 24,
+        "valid_option_count": 0
+      },
+      "candidateCount": 29,
+      "contextCount": 6,
+      "documents": [
+        "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md",
+        "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+        "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+        "10_远程办公管理制度.0661197500c3.109a94309f7e0772dce0.md",
+        "14_印章与证照管理制度.421af9b9a594.a78457db4f16340f1523.md",
+        "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+        "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md",
+        "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+        "M05_2026-08-24_财务共享中心月度例会.e0a29c2c4ea5.549d81db773b1098c319.md"
+      ],
+      "context": [
+        {
+          "id": "8ffebec1492effb3",
+          "document": "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md",
+          "text": "来源：04_请假休假管理制度.md\n分块：8/23\n上下文：请假与休假管理制度 > 第二章 管理规则 > 第七条\n\n**第七条**\n可预见的休假原则上提前申请：三天以内提前一个工作日，三天以上提前三个工作日。年休假安排应兼顾员工意愿和业务需要，部门不得长期以工作繁忙为由拒绝安排。\n\n"
+        },
+        {
+          "id": "5786c4fce296d8e8",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：7/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第六条\n\n**第六条**\n国内出差应至少提前两个工作日提交目的、地点、日期、拜访对象、交通方案和预算；国际及港澳台出差至少提前五个工作日申请。预算不超过5,000元由部门负责人和成本中心审批，5,001—20,000元增加分管负责人审批，超过20,000元增加财务负责人审批。紧急出差先取得有权审批人口头同意，并在返程后两个工作日内补办。\n\n"
+        },
+        {
+          "id": "9cf74693d51d51ef",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：14/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十三条\n\n**第十三条**\n返程后十五个工作日内，员工应按“填写报销单—关联出差申请—上传交通、住宿及支付凭证—直属负责人确认业务—成本中心复核预算—财务审核票据—出纳付款”的顺序提交。电子发票应验真查重；纸质票据按档案要求移交。材料齐全后财务原则上在五个工作日内完成审核，并在下一付款批次支付。\n\n"
+        },
+        {
+          "id": "51638b415f024342",
+          "document": "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+          "text": "来源：04_请假休假管理制度.md\n分块：15/23\n上下文：请假与休假管理制度 > 第二章 管理规则 > 第十四条\n\n**第十四条**\n普通因私出国（境）须至少提前10个工作日提交完整申请，材料包括目的地及经停地、出入境日期、自然日天数、占用工作日及假别、当年已用次数和天数、交接清单、紧急联系人；只登记核验必要证件信息，不要求公司保管普通员工的护照原件。审批链为员工→直属主管（2个工作日内）→人力资源（2个工作日内核验次数、天数和假期余额）→分管负责人（2个工作日内终审）。三个节点串行总处理目标为6个工作日，完整提交至少提前10个工作日不是承诺10天后自动通过。补件耗时不计入节点办理时限；员工应补足提前量，离境前须获得明确批准。出境审批不增加带薪假期，行程占用的工作日须另用年假、调休或已批准事假覆盖；周末与节假日虽不占请假工作日，仍计出境自然日。\n\n"
+        },
+        {
+          "id": "6a15218bc313dccf",
+          "document": "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+          "text": "来源：04_请假休假管理制度.md\n分块：17/23\n上下文：请假与休假管理制度 > 第二章 管理规则 > 第十六条\n\n**第十六条**\n休假或出境前至少1个工作日完成交接并登记替岗人。因私出国（境）获批后，变更目的地、延长天数或新增占用工作日，应在变更实施前至少3个工作日重新提交；若变更触及例外限制，须取得总经理终审，未取得批准不得将原批准解释为无限延期。突发航班取消、疾病等客观滞留应在可联系时24小时内报告并提供证明，按紧急程序处理，不机械套用提前3天。取消行程应在确定取消后1个工作日内撤销申请，未实际出境不计次数。返岗后2个工作日内完成销假及实际行程确认，人力资源在随后3个工作日内更新次数、自然日和假期余额；员工发现天数或扣减错误可在收到月度核算后5个工作日内申请复核，人力资源在5个工作日内给出书面结果。\n\n"
+        },
+        {
+          "id": "6adf84103c5d9aed",
+          "document": "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+          "text": "来源：04_请假休假管理制度.md\n分块：9/23\n上下文：请假与休假管理制度 > 第二章 管理规则 > 第八条\n\n**第八条**\n可预见的普通请假，连续不超过3个工作日的至少提前1个工作日申请；超过3天至5天的至少提前3个工作日；超过5天的至少提前5个工作日。普通审批链为员工提交→直属主管审核→人力资源核验→超过5天追加分管负责人批准，前三类审批节点各在1个工作日内处理。提交应附假别、起止时间、工作日数、交接人和联系方式。因私出国（境）适用第十三至十五条的10或15个工作日特殊提前量，不能套用普通请假的1、3、5天。紧急病假不要求提前申请。\n\n"
+        }
+      ],
+      "timings": {
+        "answer_generation_ms": 2327.913063999972,
+        "answer_validation_ms": 1267.166331999988,
+        "clarification_ms": 1096.20951200003,
+        "first_output_ms": 5786.125717999994,
+        "preprocessing_ms": 1136.632007000003,
+        "query_preparation_ms": 1150.56271200001,
+        "retrieval_ms": 1181.3462240000376,
+        "total_ms": 5786.129416999984
+      },
+      "elapsed": 5844,
+      "problems": [],
+      "followups": [
+        {
+          "question": "那去香港呢？",
+          "session": "67b242e8d0d811f1b9eacd99fe22c3f4",
+          "answer": "去香港属于国际及港澳台出差，应至少提前五个工作日申请[ID:1]。申请同样需要填写目的、地点、日期、拜访对象、交通方案和预算[ID:1]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "not_requested",
+          "record": "604b3c7d944f4055a4585cf67e957efc",
+          "preprocessing": {
+            "ambiguity_reasons": [
+              "当前问题省略了出差申请这一对象,已依据历史补全为去香港出差申请"
+            ],
+            "ambiguity_score": 0.2,
+            "ambiguity_signals": [
+              "short_question",
+              "missing_specific_focus"
+            ],
+            "confidence": 0.9,
+            "context_used": true,
+            "corrections": [],
+            "intent_parts": [
+              "去香港出差申请提前多久",
+              "去香港出差申请填写哪些信息"
+            ],
+            "missing_topic": false,
+            "model_called": true,
+            "normalized_question": "去香港出差需要提前多久申请,填写哪些信息?",
+            "original_question": "那去香港呢？",
+            "retrieval_queries": [
+              "那去香港呢?",
+              "去香港出差 提前多久申请",
+              "去香港出差 申请 填写哪些信息",
+              "去香港出差需要提前多久申请,填写哪些信息?"
+            ],
+            "status": "success"
+          },
+          "decision": {
+            "candidate_pool_count": 24,
+            "evidence_valid_option_count": 0,
+            "model_action": "answer",
+            "reason": "model_chose_answer",
+            "shown_evidence_chars": 4826,
+            "shown_evidence_count": 24,
+            "valid_option_count": 0
+          },
+          "candidateCount": 43,
+          "contextCount": 6,
+          "documents": [
+            "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+            "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+            "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md",
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+            "10_远程办公管理制度.0661197500c3.109a94309f7e0772dce0.md",
+            "14_印章与证照管理制度.421af9b9a594.a78457db4f16340f1523.md",
+            "M05_2026-08-24_财务共享中心月度例会.e0a29c2c4ea5.549d81db773b1098c319.md",
+            "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md",
+            "21_保密与信息分级制度.42981f3ff733.5d6c85f8a321c584e828.md",
+            "15_档案管理制度.575753e1f623.daa9c89e4da4d6c5e449.md",
+            "18_客户投诉管理制度.7c085d65153f.48a26ffcbbf571750e11.md",
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+            "08_培训与发展管理制度.c9263654ab42.cd1b7f6bd7cad80133aa.md",
+            "19_项目管理制度.7fcdc1cdc88a.03ff71614215e9e8e22d.md",
+            "12_采购管理制度.94ac86c2be83.59c1a87576a1fbb5dbc6.md"
+          ],
+          "context": [
+            {
+              "id": "da472ba618eefc55",
+              "document": "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+              "text": "来源：04_请假休假管理制度.md\n分块：14/23\n上下文：请假与休假管理制度 > 第二章 管理规则 > 第十三条\n\n**第十三条**\n本测试企业对因私出国（境）实行内部登记审批，适用旅游、探亲等个人行程，境外目的地包括香港、澳门、台湾以及外国；因公出差另按差旅制度办理，不占因私次数。普通因私行程每年最多2次、每次最多连续10个自然日、全年累计最多20个自然日，三项限制同时适用，不结转余额。这是虚构企业测试政策，并非国家对普通公民出境次数或天数的限制。一次从境内出发到最终返回境内的连续旅程计1次，途中访问多个境外目的地不重复计次；返回境内后再次出境另计1次。出发年度记次数，跨年行程按自然日分别记入两年累计天数，但单次10天上限仍按完整行程计算。例如12月28日至次年1月5日共9天、1次，出发年度计4天、次年计5天。\n\n"
+            },
+            {
+              "id": "5786c4fce296d8e8",
+              "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+              "text": "来源：06_差旅与费用报销制度.md\n分块：7/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第六条\n\n**第六条**\n国内出差应至少提前两个工作日提交目的、地点、日期、拜访对象、交通方案和预算；国际及港澳台出差至少提前五个工作日申请。预算不超过5,000元由部门负责人和成本中心审批，5,001—20,000元增加分管负责人审批，超过20,000元增加财务负责人审批。紧急出差先取得有权审批人口头同意，并在返程后两个工作日内补办。\n\n"
+            },
+            {
+              "id": "9cf74693d51d51ef",
+              "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+              "text": "来源：06_差旅与费用报销制度.md\n分块：14/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十三条\n\n**第十三条**\n返程后十五个工作日内，员工应按“填写报销单—关联出差申请—上传交通、住宿及支付凭证—直属负责人确认业务—成本中心复核预算—财务审核票据—出纳付款”的顺序提交。电子发票应验真查重；纸质票据按档案要求移交。材料齐全后财务原则上在五个工作日内完成审核，并在下一付款批次支付。\n\n"
+            },
+            {
+              "id": "51638b415f024342",
+              "document": "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+              "text": "来源：04_请假休假管理制度.md\n分块：15/23\n上下文：请假与休假管理制度 > 第二章 管理规则 > 第十四条\n\n**第十四条**\n普通因私出国（境）须至少提前10个工作日提交完整申请，材料包括目的地及经停地、出入境日期、自然日天数、占用工作日及假别、当年已用次数和天数、交接清单、紧急联系人；只登记核验必要证件信息，不要求公司保管普通员工的护照原件。审批链为员工→直属主管（2个工作日内）→人力资源（2个工作日内核验次数、天数和假期余额）→分管负责人（2个工作日内终审）。三个节点串行总处理目标为6个工作日，完整提交至少提前10个工作日不是承诺10天后自动通过。补件耗时不计入节点办理时限；员工应补足提前量，离境前须获得明确批准。出境审批不增加带薪假期，行程占用的工作日须另用年假、调休或已批准事假覆盖；周末与节假日虽不占请假工作日，仍计出境自然日。\n\n"
+            },
+            {
+              "id": "c9a8ec815a4eb0f1",
+              "document": "21_保密与信息分级制度.42981f3ff733.5d6c85f8a321c584e828.md",
+              "text": "来源：21_保密与信息分级制度.md\n分块：18/23\n上下文：保密与信息分级管理制度 > 第三章 申请、记录与监督 > 第十七条\n\n## 第三章 申请、记录与监督\n\n**第十七条**\n申请人应如实填写事项、时间、原因和必要附件。审批人应核对事实、规则、权限和业务影响；系统自动通过或退回不能替代应有的人工判断，重大例外应说明依据。\n\n"
+            },
+            {
+              "id": "8ffebec1492effb3",
+              "document": "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md",
+              "text": "来源：04_请假休假管理制度.md\n分块：8/23\n上下文：请假与休假管理制度 > 第二章 管理规则 > 第七条\n\n**第七条**\n可预见的休假原则上提前申请：三天以内提前一个工作日，三天以上提前三个工作日。年休假安排应兼顾员工意愿和业务需要，部门不得长期以工作繁忙为由拒绝安排。\n\n"
+            }
+          ],
+          "timings": {
+            "answer_generation_ms": 2314.747445000023,
+            "answer_validation_ms": 1263.1158940000091,
+            "clarification_ms": 1159.2973810000444,
+            "first_output_ms": 5767.616996000015,
+            "preprocessing_ms": 1211.1606150000398,
+            "query_preparation_ms": 1223.9884450000318,
+            "retrieval_ms": 1037.6125699999648,
+            "total_ms": 5767.619949999982
+          },
+          "elapsed": 5836,
+          "problems": []
+        },
+        {
+          "question": "如果是紧急出差，来不及提前申请呢？",
+          "session": "67b242e8d0d811f1b9eacd99fe22c3f4",
+          "answer": "暂时未能生成有充分依据的追问选项。请补充您想了解的具体事项，例如适用范围、申请流程或相关标准，也可以重新提问。",
+          "options": [],
+          "needsInput": true,
+          "cacheStatus": "not_requested",
+          "record": "85590dc3fa4c47cc9fe50a6fa2f9497a",
+          "preprocessing": {
+            "ambiguity_reasons": [
+              "未明确是补申请流程还是例外审批要求,需知识库证据澄清"
+            ],
+            "ambiguity_score": 0.2,
+            "ambiguity_signals": [],
+            "confidence": 0.95,
+            "context_used": true,
+            "corrections": [],
+            "intent_parts": [
+              "紧急出差来不及提前申请的申请方式"
+            ],
+            "missing_topic": false,
+            "model_called": true,
+            "normalized_question": "如果是紧急出差,来不及提前申请呢?",
+            "original_question": "如果是紧急出差，来不及提前申请呢？",
+            "retrieval_queries": [
+              "如果是紧急出差,来不及提前申请呢?",
+              "紧急出差 来不及提前申请 如何处理"
+            ],
+            "status": "success"
+          },
+          "decision": {
+            "answer_coverage": [
+              {
+                "question": "紧急出差来不及提前申请时,如何先取得口头同意并在返程后补办?",
+                "reason": "选项直接对应紧急出差来不及提前申请的情形，原文明确给出先取得口头同意、返程后两个工作日内补办的方式，可完整回答。",
+                "supported": true
+              },
+              {
+                "question": "突发疾病或紧急事项无法事先请假时,应如何报告并在恢复联系后补办手续?",
+                "reason": "选项讨论突发疾病或紧急事项无法事先请假，属于请假制度，与紧急出差申请方式无关，不能回答原问题。",
+                "supported": false
+              }
+            ],
+            "candidate_pool_count": 24,
+            "evidence_valid_option_count": 2,
+            "fallback": "ask_user_not_guess",
+            "model_action": "clarify",
+            "reason": "options_failed_validation",
+            "shown_evidence_chars": 4627,
+            "shown_evidence_count": 24,
+            "valid_option_count": 0
+          },
+          "candidateCount": 36,
+          "contextCount": 0,
+          "documents": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+            "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md",
+            "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+            "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+            "14_印章与证照管理制度.421af9b9a594.a78457db4f16340f1523.md",
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+            "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md",
+            "10_远程办公管理制度.0661197500c3.109a94309f7e0772dce0.md",
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+            "09_薪酬与奖金管理制度.ef6e55b2087e.a8cffde97a4947170d3c.md",
+            "18_客户投诉管理制度.7c085d65153f.48a26ffcbbf571750e11.md",
+            "20_会议管理制度.967c3b529dde.9e079c1e3dbbe3e61ce7.md",
+            "08_培训与发展管理制度.c9263654ab42.cd1b7f6bd7cad80133aa.md"
+          ],
+          "context": [],
+          "timings": {
+            "clarification_ms": 3286.508695000009,
+            "first_output_ms": 7554.954818999988,
+            "preprocessing_ms": 1064.2078730000435,
+            "query_preparation_ms": 1087.7430209999943,
+            "retrieval_ms": 3129.241848999982,
+            "total_ms": 7554.958264999982
+          },
+          "elapsed": 7602,
+          "problems": [
+            "missing expected fact: 口头",
+            "missing expected fact: 返程",
+            "missing expected fact: 两|2|二",
+            "missing expected fact: 工作日"
+          ]
+        },
+        {
+          "question": "回来以后怎么报销，多久内要提交？",
+          "session": "67b242e8d0d811f1b9eacd99fe22c3f4",
+          "answer": "返程后十五个工作日内，员工应按“填写报销单—关联出差申请—上传交通、住宿及支付凭证—直属负责人确认业务—成本中心复核预算—财务审核票据—出纳付款”的顺序提交[ID:0]。电子发票应验真查重，纸质票据按档案要求移交[ID:0]。材料齐全后财务原则上在五个工作日内完成审核，并在下一付款批次支付[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "not_requested",
+          "record": "6a9d2770e5da45b3860fc72b213549c4",
+          "preprocessing": {
+            "ambiguity_reasons": [
+              "未明确出差类型(国内/香港),但报销流程与时限主题明确"
+            ],
+            "ambiguity_score": 0.2,
+            "ambiguity_signals": [],
+            "confidence": 0.9,
+            "context_used": true,
+            "corrections": [],
+            "intent_parts": [
+              "出差报销流程",
+              "报销提交时限"
+            ],
+            "missing_topic": false,
+            "model_called": true,
+            "normalized_question": "出差回来后怎么报销,多久内要提交?",
+            "original_question": "回来以后怎么报销，多久内要提交？",
+            "retrieval_queries": [
+              "回来以后怎么报销,多久内要提交?",
+              "出差回来后怎么报销,多久内要提交?"
+            ],
+            "status": "success"
+          },
+          "decision": {
+            "candidate_pool_count": 24,
+            "evidence_valid_option_count": 0,
+            "model_action": "answer",
+            "reason": "model_chose_answer",
+            "shown_evidence_chars": 5043,
+            "shown_evidence_count": 24,
+            "valid_option_count": 0
+          },
+          "candidateCount": 34,
+          "contextCount": 6,
+          "documents": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+            "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+            "18_客户投诉管理制度.7c085d65153f.48a26ffcbbf571750e11.md",
+            "M07_2026-09-09_供应商接入验收会.a8b34bc311e6.986259d33d330982a3d9.md",
+            "13_合同管理制度.8bb5da8cf5f5.fabca1435d2edc7e8f46.md",
+            "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+            "19_项目管理制度.7fcdc1cdc88a.03ff71614215e9e8e22d.md",
+            "M05_2026-08-24_财务共享中心月度例会.e0a29c2c4ea5.549d81db773b1098c319.md",
+            "M08_2026-09-16_档案系统可信验证专题会.a8d584f9a8bb.25f9683b88beba0a6dd9.md",
+            "M02_2026-08-07_电子签章服务续期评审会.2c180a25b582.5c921d9b1162404f5c34.md",
+            "15_档案管理制度.575753e1f623.daa9c89e4da4d6c5e449.md",
+            "14_印章与证照管理制度.421af9b9a594.a78457db4f16340f1523.md",
+            "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+            "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md"
+          ],
+          "context": [
+            {
+              "id": "9cf74693d51d51ef",
+              "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+              "text": "来源：06_差旅与费用报销制度.md\n分块：14/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十三条\n\n**第十三条**\n返程后十五个工作日内，员工应按“填写报销单—关联出差申请—上传交通、住宿及支付凭证—直属负责人确认业务—成本中心复核预算—财务审核票据—出纳付款”的顺序提交。电子发票应验真查重；纸质票据按档案要求移交。材料齐全后财务原则上在五个工作日内完成审核，并在下一付款批次支付。\n\n"
+            },
+            {
+              "id": "5786c4fce296d8e8",
+              "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+              "text": "来源：06_差旅与费用报销制度.md\n分块：7/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第六条\n\n**第六条**\n国内出差应至少提前两个工作日提交目的、地点、日期、拜访对象、交通方案和预算；国际及港澳台出差至少提前五个工作日申请。预算不超过5,000元由部门负责人和成本中心审批，5,001—20,000元增加分管负责人审批，超过20,000元增加财务负责人审批。紧急出差先取得有权审批人口头同意，并在返程后两个工作日内补办。\n\n"
+            },
+            {
+              "id": "e37f95ee71a6732f",
+              "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+              "text": "来源：06_差旅与费用报销制度.md\n分块：17/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十六条\n\n**第十六条**\n员工对退回、扣减或逾期处理有异议的，可提交复核。财务部应说明依据；制度标准变化影响已批准行程时，原则上按批准时或对员工更合理的有效规则衔接处理。\n\n"
+            },
+            {
+              "id": "bbc28b7acebc5495",
+              "document": "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+              "text": "来源：11_业务招待管理制度.md\n分块：13/23\n上下文：业务招待管理制度 > 第二章 管理规则 > 第十二条\n\n**第十二条**\n报销应在活动结束后十个工作日内提交申请单、发票、支付记录和参与人员名单。名单可只保留姓名、单位和职务，不得收集身份证号等无关信息。\n\n"
+            },
+            {
+              "id": "e11bc47b93968ee7",
+              "document": "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+              "text": "来源：11_业务招待管理制度.md\n分块：17/23\n上下文：业务招待管理制度 > 第二章 管理规则 > 第十六条\n\n**第十六条**\n招待申请和报销记录保存五年，涉及重大合同谈判的随合同档案保存十年。员工对退回有异议的，应在五个工作日内提出，财务部在七个工作日内反馈。\n\n"
+            },
+            {
+              "id": "2ee54499d9047ca8",
+              "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+              "text": "来源：06_差旅与费用报销制度.md\n分块：13/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十二条\n\n**第十二条**\n城际交通票、机场或车站往返交通费按批准路线凭票据实报销。市内使用交通补助后，普通通勤不再另报出租车；携带大型设备、夜间23:00后到达或无公共交通等情形，经说明可凭票另报，不扣减当日交通补助。自驾出差须事前批准，按0.8元/公里报销燃油及车辆损耗，高速费和停车费凭票另报。\n\n"
+            }
+          ],
+          "timings": {
+            "answer_generation_ms": 4768.249694000019,
+            "answer_validation_ms": 2667.32358400003,
+            "clarification_ms": 1630.7589209999946,
+            "first_output_ms": 9715.022777000002,
+            "preprocessing_ms": 2403.557895000006,
+            "query_preparation_ms": 2420.1149729999543,
+            "retrieval_ms": 851.7871700000228,
+            "total_ms": 9715.025539999999
+          },
+          "elapsed": 9773,
+          "problems": []
+        }
+      ]
+    },
+    {
+      "id": "approval",
+      "question": "出差预算为5000元、5001元、20000元和20001元时，分别需要哪些人审批？",
+      "session": "6e1700ced0d811f1b9eacd99fe22c3f4",
+      "answer": "根据差旅与费用报销制度，出差预算不超过5,000元由部门负责人和成本中心审批，5,001—20,000元增加分管负责人审批，超过20,000元增加财务负责人审批[ID:0]。\n\n因此：\n- 预算5,000元：由部门负责人和成本中心审批[ID:0]。\n- 预算5,001元：属于5,001—20,000元区间，需部门负责人、成本中心和分管负责人审批[ID:0]。\n- 预算20,000元：属于5,001—20,000元区间，需部门负责人、成本中心和分管负责人审批[ID:0]。\n- 预算20,001元：超过20,000元，需部门负责人、成本中心、分管负责人和财务负责人审批[ID:0]。",
+      "options": [],
+      "needsInput": false,
+      "cacheStatus": "not_requested",
+      "record": "adb2dd1a32f34ccebc17e9495be95320",
+      "preprocessing": {
+        "ambiguity_reasons": [
+          "问题明确询问不同预算金额对应的审批人,仅需知识库证据确认具体审批层级"
+        ],
+        "ambiguity_score": 0.05,
+        "ambiguity_signals": [],
+        "confidence": 0.98,
+        "context_used": false,
+        "corrections": [],
+        "intent_parts": [
+          "出差预算审批人"
+        ],
+        "missing_topic": false,
+        "model_called": true,
+        "normalized_question": "出差预算为5000元、5001元、20000元和20001元时,分别需要哪些人审批?",
+        "original_question": "出差预算为5000元、5001元、20000元和20001元时，分别需要哪些人审批？",
+        "retrieval_queries": [
+          "出差预算为5000元、5001元、20000元和20001元时,分别需要哪些人审批?",
+          "出差预算为5000元、5001元、20000元和20001元时分别需要哪些人审批"
+        ],
+        "status": "success"
+      },
+      "decision": {},
+      "candidateCount": 7,
+      "contextCount": 6,
+      "documents": [
+        "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+        "17_预算管理制度.b67a60a8e087.ce2e31f9c14a86e510b0.md",
+        "12_采购管理制度.94ac86c2be83.59c1a87576a1fbb5dbc6.md"
+      ],
+      "context": [
+        {
+          "id": "5786c4fce296d8e8",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：7/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第六条\n\n**第六条**\n国内出差应至少提前两个工作日提交目的、地点、日期、拜访对象、交通方案和预算；国际及港澳台出差至少提前五个工作日申请。预算不超过5,000元由部门负责人和成本中心审批，5,001—20,000元增加分管负责人审批，超过20,000元增加财务负责人审批。紧急出差先取得有权审批人口头同意，并在返程后两个工作日内补办。\n\n"
+        },
+        {
+          "id": "ffdb8a429109d21b",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：12/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十一条\n\n**第十一条**\n出差伙食补助按自然日计算：A类城市120元/人/天、B类城市100元/人/天、C类城市80元/人/天；市内交通补助分别为80元、60元和50元/人/天。出发日和返程日均按全天计算。主办方每提供一顿正餐，伙食补助扣减30元；统一提供市内交通的，当日不再发放交通补助。\n\n"
+        },
+        {
+          "id": "9f95551f0b43c628",
+          "document": "17_预算管理制度.b67a60a8e087.ce2e31f9c14a86e510b0.md",
+          "text": "来源：17_预算管理制度.md\n分块：12/23\n上下文：预算编制与费用控制制度 > 第二章 管理规则 > 第十一条\n\n**第十一条**\n部门月度实际费用超过预算10%或20,000元（取较低者）时，应在次月第五个工作日前提交偏差说明；连续两个月超支的，应提交纠偏计划。\n\n"
+        },
+        {
+          "id": "8610c5be68770297",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：15/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十四条\n\n**第十四条**\n审批人对业务真实性、必要性和预算负责，财务部对标准、票据和会计处理负责。审批人不得审批本人费用；上级与财务复核不能相互替代。\n\n"
+        },
+        {
+          "id": "faad244ae4ed123b",
+          "document": "12_采购管理制度.94ac86c2be83.59c1a87576a1fbb5dbc6.md",
+          "text": "来源：12_采购管理制度.md\n分块：15/23\n上下文：采购管理制度 > 第二章 管理规则 > 第十四条\n\n**第十四条**\n采购变更导致金额增加超过原合同10%或20,000元（取较低者）时，应重新履行对应金额审批；不得通过补充订单连续扩大范围规避招标。\n\n"
+        },
+        {
+          "id": "da071d514af8faeb",
+          "document": "17_预算管理制度.b67a60a8e087.ce2e31f9c14a86e510b0.md",
+          "text": "来源：17_预算管理制度.md\n分块：8/23\n上下文：预算编制与费用控制制度 > 第二章 管理规则 > 第七条\n\n**第七条**\n预算科目分为人员、市场、差旅、采购、系统、办公和资本支出等。跨科目挪用累计不超过5,000元且不超过原科目10%的，由部门负责人和财务经理批准。\n\n"
+        }
+      ],
+      "timings": {
+        "answer_generation_ms": 2608.593273999986,
+        "answer_validation_ms": 1236.7289139999684,
+        "first_output_ms": 7348.161941,
+        "preprocessing_ms": 1413.9628539999762,
+        "query_preparation_ms": 1437.098476000017,
+        "retrieval_ms": 3268.799170999955,
+        "total_ms": 7348.165762999997
+      },
+      "elapsed": 7403,
+      "problems": []
+    },
+    {
+      "id": "approval-followup",
+      "question": "我这次国内出差预算6000元，要找谁审批？",
+      "session": "72854c92d0d811f1b9eacd99fe22c3f4",
+      "answer": "国内出差预算不超过5,000元由部门负责人和成本中心审批，5,001—20,000元增加分管负责人审批，超过20,000元增加财务负责人审批[ID:0]。您的预算为6,000元，属于5,001—20,000元区间，因此需要部门负责人、成本中心以及分管负责人审批[ID:0]。",
+      "options": [],
+      "needsInput": false,
+      "cacheStatus": "not_requested",
+      "record": "ddfa4415c48045f6a811400d0e9960de",
+      "preprocessing": {
+        "ambiguity_reasons": [
+          "审批权限可能因职级或制度而异,但所问事项明确"
+        ],
+        "ambiguity_score": 0.1,
+        "ambiguity_signals": [],
+        "confidence": 0.98,
+        "context_used": false,
+        "corrections": [],
+        "intent_parts": [
+          "国内出差预算6000元的审批人"
+        ],
+        "missing_topic": false,
+        "model_called": true,
+        "normalized_question": "我这次国内出差预算6000元,要找谁审批?",
+        "original_question": "我这次国内出差预算6000元，要找谁审批？",
+        "retrieval_queries": [
+          "我这次国内出差预算6000元,要找谁审批?"
+        ],
+        "status": "success"
+      },
+      "decision": {
+        "candidate_pool_count": 24,
+        "evidence_valid_option_count": 0,
+        "model_action": "answer",
+        "reason": "model_chose_answer",
+        "shown_evidence_chars": 5839,
+        "shown_evidence_count": 24,
+        "valid_option_count": 0
+      },
+      "candidateCount": 24,
+      "contextCount": 6,
+      "documents": [
+        "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+        "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+        "17_预算管理制度.b67a60a8e087.ce2e31f9c14a86e510b0.md",
+        "19_项目管理制度.7fcdc1cdc88a.03ff71614215e9e8e22d.md",
+        "M04_2026-08-18_移动审批安全评审会.7bfb68aa68bf.544f961dfc8b93159c6c.md",
+        "M09_2026-09-21_年度预算预审会.b336a763ab5d.12e600a70132d08cfc6e.md",
+        "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+        "M01_2026-08-03_采购平台上线协调会.0dec617e4c13.f54653ded7a4410cee7a.md",
+        "12_采购管理制度.94ac86c2be83.59c1a87576a1fbb5dbc6.md"
+      ],
+      "context": [
+        {
+          "id": "5786c4fce296d8e8",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：7/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第六条\n\n**第六条**\n国内出差应至少提前两个工作日提交目的、地点、日期、拜访对象、交通方案和预算；国际及港澳台出差至少提前五个工作日申请。预算不超过5,000元由部门负责人和成本中心审批，5,001—20,000元增加分管负责人审批，超过20,000元增加财务负责人审批。紧急出差先取得有权审批人口头同意，并在返程后两个工作日内补办。\n\n"
+        },
+        {
+          "id": "58aff99d5da3c898",
+          "document": "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+          "text": "来源：11_业务招待管理制度.md\n分块：15/23\n上下文：业务招待管理制度 > 第二章 管理规则 > 第十四条\n\n**第十四条**\n实际费用超过批准预算10%或超过500元（取较低者）时，应在报销前补充说明并重新审批。因来宾人数临时增加的，应记录到场时间和原因，不得事后虚构。\n\n"
+        },
+        {
+          "id": "10d277f0988c10ef",
+          "document": "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+          "text": "来源：11_业务招待管理制度.md\n分块：14/23\n上下文：业务招待管理制度 > 第二章 管理规则 > 第十三条\n\n**第十三条**\n预算在3,000元以内由部门负责人批准；3,001—10,000元增加分管负责人批准；超过10,000元增加总经理和财务负责人批准。审批人本人为主要受益人的，由其上一级审批。\n\n"
+        },
+        {
+          "id": "fe9aaa39da65f7d9",
+          "document": "17_预算管理制度.b67a60a8e087.ce2e31f9c14a86e510b0.md",
+          "text": "来源：17_预算管理制度.md\n分块：11/23\n上下文：预算编制与费用控制制度 > 第二章 管理规则 > 第十条\n\n**第十条**\n年度预算调整窗口为每年六月和九月。非窗口期仅处理重大客户变化、法律要求、安全事件或管理层批准的战略事项，不接受为弥补普通超支而事后调整。\n\n| 支出金额 | 预算内审批 | 预算外审批 |\n| --- | --- | --- |\n| 10,000元以内 | 部门负责人 | 分管负责人、财务经理 |\n| 10,001—100,000元 | 增加分管负责人 | 在预算内权限上浮一级 |\n| 100,001—500,000元 | 增加财务负责人 | 在预算内权限上浮一级 |\n| 超过500,000元 | 总经理 | 总经理及财务负责人 |\n\n"
+        },
+        {
+          "id": "ca93872ecec8a94c",
+          "document": "19_项目管理制度.7fcdc1cdc88a.03ff71614215e9e8e22d.md",
+          "text": "来源：19_项目管理制度.md\n分块：11/23\n上下文：项目立项与变更管理制度 > 第二章 管理规则 > 第十条\n\n**第十条**\n一般变更由项目发起人批准，累计金额超过50,000元或延期超过二十个工作日的，由原立项审批层级重新批准。紧急止损措施可先执行，二十四小时内补办。\n\n| 触发事项 | 阈值 | 必要动作 |\n| --- | --- | --- |\n| 正式立项 | 周期>3个月、预算>10万元或跨3部门 | 提交完整立项材料 |\n| 范围变更 | 预算/工期/工作量增加>10% | 变更审批 |\n| 进度偏差 | 延期>5个工作日 | 提交纠偏计划 |\n\n"
+        },
+        {
+          "id": "77614280eddc492c",
+          "document": "17_预算管理制度.b67a60a8e087.ce2e31f9c14a86e510b0.md",
+          "text": "来源：17_预算管理制度.md\n分块：10/23\n上下文：预算编制与费用控制制度 > 第二章 管理规则 > 第九条\n\n**第九条**\n预算外支出无论金额均应说明未纳入原因、资金来源和不执行影响。10,000元以内由分管负责人和财务经理批准，超过10,000元按预算内权限上浮一级审批。\n\n"
+        }
+      ],
+      "timings": {
+        "answer_generation_ms": 3899.7730649999767,
+        "answer_validation_ms": 2037.6056189999758,
+        "clarification_ms": 2560.542587000043,
+        "first_output_ms": 8348.05566,
+        "preprocessing_ms": 1308.3277910000106,
+        "query_preparation_ms": 1325.7360009999957,
+        "retrieval_ms": 522.7328160000297,
+        "total_ms": 8348.05918699999
+      },
+      "elapsed": 8396,
+      "problems": [],
+      "followups": [
+        {
+          "question": "如果预算改成25000元呢？",
+          "session": "72854c92d0d811f1b9eacd99fe22c3f4",
+          "answer": "如果预算改为25,000元，属于超过20,000元的区间，需要在部门负责人和成本中心审批的基础上，增加分管负责人审批，并增加财务负责人审批[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "not_requested",
+          "record": "a25e24396b254d90a8986bd8b6aef9b6",
+          "preprocessing": {
+            "ambiguity_reasons": [
+              "当前问题省略了审批对象,已依据历史补全为国内出差预算审批"
+            ],
+            "ambiguity_score": 0.2,
+            "ambiguity_signals": [
+              "missing_specific_focus"
+            ],
+            "confidence": 0.9,
+            "context_used": true,
+            "corrections": [],
+            "intent_parts": [
+              "国内出差预算25000元的审批人"
+            ],
+            "missing_topic": false,
+            "model_called": true,
+            "normalized_question": "如果国内出差预算改成25000元,要找谁审批?",
+            "original_question": "如果预算改成25000元呢？",
+            "retrieval_queries": [
+              "如果预算改成25000元呢?",
+              "国内出差预算25000元 找谁审批",
+              "如果国内出差预算改成25000元,要找谁审批?"
+            ],
+            "status": "success"
+          },
+          "decision": {
+            "candidate_pool_count": 24,
+            "evidence_valid_option_count": 0,
+            "model_action": "answer",
+            "reason": "model_chose_answer",
+            "shown_evidence_chars": 5802,
+            "shown_evidence_count": 24,
+            "valid_option_count": 0
+          },
+          "candidateCount": 46,
+          "contextCount": 6,
+          "documents": [
+            "17_预算管理制度.b67a60a8e087.ce2e31f9c14a86e510b0.md",
+            "19_项目管理制度.7fcdc1cdc88a.03ff71614215e9e8e22d.md",
+            "M09_2026-09-21_年度预算预审会.b336a763ab5d.12e600a70132d08cfc6e.md",
+            "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+            "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+            "M01_2026-08-03_采购平台上线协调会.0dec617e4c13.f54653ded7a4410cee7a.md",
+            "M04_2026-08-18_移动审批安全评审会.7bfb68aa68bf.544f961dfc8b93159c6c.md",
+            "M05_2026-08-24_财务共享中心月度例会.e0a29c2c4ea5.549d81db773b1098c319.md",
+            "12_采购管理制度.94ac86c2be83.59c1a87576a1fbb5dbc6.md",
+            "13_合同管理制度.8bb5da8cf5f5.fabca1435d2edc7e8f46.md"
+          ],
+          "context": [
+            {
+              "id": "5786c4fce296d8e8",
+              "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+              "text": "来源：06_差旅与费用报销制度.md\n分块：7/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第六条\n\n**第六条**\n国内出差应至少提前两个工作日提交目的、地点、日期、拜访对象、交通方案和预算；国际及港澳台出差至少提前五个工作日申请。预算不超过5,000元由部门负责人和成本中心审批，5,001—20,000元增加分管负责人审批，超过20,000元增加财务负责人审批。紧急出差先取得有权审批人口头同意，并在返程后两个工作日内补办。\n\n"
+            },
+            {
+              "id": "58aff99d5da3c898",
+              "document": "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+              "text": "来源：11_业务招待管理制度.md\n分块：15/23\n上下文：业务招待管理制度 > 第二章 管理规则 > 第十四条\n\n**第十四条**\n实际费用超过批准预算10%或超过500元（取较低者）时，应在报销前补充说明并重新审批。因来宾人数临时增加的，应记录到场时间和原因，不得事后虚构。\n\n"
+            },
+            {
+              "id": "ca93872ecec8a94c",
+              "document": "19_项目管理制度.7fcdc1cdc88a.03ff71614215e9e8e22d.md",
+              "text": "来源：19_项目管理制度.md\n分块：11/23\n上下文：项目立项与变更管理制度 > 第二章 管理规则 > 第十条\n\n**第十条**\n一般变更由项目发起人批准，累计金额超过50,000元或延期超过二十个工作日的，由原立项审批层级重新批准。紧急止损措施可先执行，二十四小时内补办。\n\n| 触发事项 | 阈值 | 必要动作 |\n| --- | --- | --- |\n| 正式立项 | 周期>3个月、预算>10万元或跨3部门 | 提交完整立项材料 |\n| 范围变更 | 预算/工期/工作量增加>10% | 变更审批 |\n| 进度偏差 | 延期>5个工作日 | 提交纠偏计划 |\n\n"
+            },
+            {
+              "id": "10d277f0988c10ef",
+              "document": "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+              "text": "来源：11_业务招待管理制度.md\n分块：14/23\n上下文：业务招待管理制度 > 第二章 管理规则 > 第十三条\n\n**第十三条**\n预算在3,000元以内由部门负责人批准；3,001—10,000元增加分管负责人批准；超过10,000元增加总经理和财务负责人批准。审批人本人为主要受益人的，由其上一级审批。\n\n"
+            },
+            {
+              "id": "fe9aaa39da65f7d9",
+              "document": "17_预算管理制度.b67a60a8e087.ce2e31f9c14a86e510b0.md",
+              "text": "来源：17_预算管理制度.md\n分块：11/23\n上下文：预算编制与费用控制制度 > 第二章 管理规则 > 第十条\n\n**第十条**\n年度预算调整窗口为每年六月和九月。非窗口期仅处理重大客户变化、法律要求、安全事件或管理层批准的战略事项，不接受为弥补普通超支而事后调整。\n\n| 支出金额 | 预算内审批 | 预算外审批 |\n| --- | --- | --- |\n| 10,000元以内 | 部门负责人 | 分管负责人、财务经理 |\n| 10,001—100,000元 | 增加分管负责人 | 在预算内权限上浮一级 |\n| 100,001—500,000元 | 增加财务负责人 | 在预算内权限上浮一级 |\n| 超过500,000元 | 总经理 | 总经理及财务负责人 |\n\n"
+            },
+            {
+              "id": "9cf74693d51d51ef",
+              "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+              "text": "来源：06_差旅与费用报销制度.md\n分块：14/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十三条\n\n**第十三条**\n返程后十五个工作日内，员工应按“填写报销单—关联出差申请—上传交通、住宿及支付凭证—直属负责人确认业务—成本中心复核预算—财务审核票据—出纳付款”的顺序提交。电子发票应验真查重；纸质票据按档案要求移交。材料齐全后财务原则上在五个工作日内完成审核，并在下一付款批次支付。\n\n"
+            }
+          ],
+          "timings": {
+            "answer_generation_ms": 2814.465499999983,
+            "answer_validation_ms": 1485.539770999992,
+            "clarification_ms": 1177.4850880000258,
+            "first_output_ms": 6437.564199999997,
+            "preprocessing_ms": 1453.1239869999695,
+            "query_preparation_ms": 1469.4963659999871,
+            "retrieval_ms": 935.1859410000429,
+            "total_ms": 6437.567322000006
+          },
+          "elapsed": 6507,
+          "problems": []
+        },
+        {
+          "question": "审批人可以批准自己的费用吗？",
+          "session": "72854c92d0d811f1b9eacd99fe22c3f4",
+          "answer": "不可以。审批人不得审批本人费用，且上级与财务复核不能相互替代[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "not_requested",
+          "record": "e86b3c14a7414f919f08b35f8ff4957f",
+          "preprocessing": {
+            "ambiguity_reasons": [
+              "问题明确询问审批人能否批准自己的费用,仅未限定费用类型,不影响主题识别"
+            ],
+            "ambiguity_score": 0.1,
+            "ambiguity_signals": [],
+            "confidence": 0.95,
+            "context_used": false,
+            "corrections": [],
+            "intent_parts": [
+              "审批人批准自己的费用"
+            ],
+            "missing_topic": false,
+            "model_called": true,
+            "normalized_question": "审批人可以批准自己的费用吗?",
+            "original_question": "审批人可以批准自己的费用吗？",
+            "retrieval_queries": [
+              "审批人可以批准自己的费用吗?",
+              "审批人可以批准自己的费用吗"
+            ],
+            "status": "success"
+          },
+          "decision": {
+            "candidate_pool_count": 24,
+            "evidence_valid_option_count": 0,
+            "model_action": "answer",
+            "reason": "model_chose_answer",
+            "shown_evidence_chars": 4487,
+            "shown_evidence_count": 24,
+            "valid_option_count": 0
+          },
+          "candidateCount": 28,
+          "contextCount": 6,
+          "documents": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+            "17_预算管理制度.b67a60a8e087.ce2e31f9c14a86e510b0.md",
+            "M04_2026-08-18_移动审批安全评审会.7bfb68aa68bf.544f961dfc8b93159c6c.md",
+            "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+            "14_印章与证照管理制度.421af9b9a594.a78457db4f16340f1523.md",
+            "M02_2026-08-07_电子签章服务续期评审会.2c180a25b582.5c921d9b1162404f5c34.md",
+            "M11_2026-08-14_工程供应商资质审核会.db37db46bb79.1188cda5ca403b7716bf.md",
+            "09_薪酬与奖金管理制度.ef6e55b2087e.a8cffde97a4947170d3c.md",
+            "15_档案管理制度.575753e1f623.daa9c89e4da4d6c5e449.md",
+            "M09_2026-09-21_年度预算预审会.b336a763ab5d.12e600a70132d08cfc6e.md",
+            "19_项目管理制度.7fcdc1cdc88a.03ff71614215e9e8e22d.md",
+            "08_培训与发展管理制度.c9263654ab42.cd1b7f6bd7cad80133aa.md",
+            "03_招聘录用管理制度.cd8dcd1b7571.7ebe560274bf921e8f0d.md",
+            "18_客户投诉管理制度.7c085d65153f.48a26ffcbbf571750e11.md",
+            "12_采购管理制度.94ac86c2be83.59c1a87576a1fbb5dbc6.md",
+            "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+            "13_合同管理制度.8bb5da8cf5f5.fabca1435d2edc7e8f46.md",
+            "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md",
+            "16_固定资产管理制度.68a6d31149c7.483203e35ee7f4be2959.md",
+            "20_会议管理制度.967c3b529dde.9e079c1e3dbbe3e61ce7.md",
+            "M07_2026-09-09_供应商接入验收会.a8b34bc311e6.986259d33d330982a3d9.md",
+            "M08_2026-09-16_档案系统可信验证专题会.a8d584f9a8bb.25f9683b88beba0a6dd9.md"
+          ],
+          "context": [
+            {
+              "id": "8610c5be68770297",
+              "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+              "text": "来源：06_差旅与费用报销制度.md\n分块：15/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十四条\n\n**第十四条**\n审批人对业务真实性、必要性和预算负责，财务部对标准、票据和会计处理负责。审批人不得审批本人费用；上级与财务复核不能相互替代。\n\n"
+            },
+            {
+              "id": "0831e33f283b8ad8",
+              "document": "17_预算管理制度.b67a60a8e087.ce2e31f9c14a86e510b0.md",
+              "text": "来源：17_预算管理制度.md\n分块：18/23\n上下文：预算编制与费用控制制度 > 第三章 申请、记录与监督 > 第十七条\n\n## 第三章 申请、记录与监督\n\n**第十七条**\n申请人应如实填写事项、时间、原因和必要附件。审批人应核对事实、规则、权限和业务影响；系统自动通过或退回不能替代应有的人工判断，重大例外应说明依据。\n\n"
+            },
+            {
+              "id": "b2c702ec93e485cc",
+              "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+              "text": "来源：06_差旅与费用报销制度.md\n分块：18/23\n上下文：差旅与费用报销管理制度 > 第三章 申请、记录与监督 > 第十七条\n\n## 第三章 申请、记录与监督\n\n**第十七条**\n申请人应如实填写事项、时间、原因和必要附件。审批人应核对事实、规则、权限和业务影响；系统自动通过或退回不能替代应有的人工判断，重大例外应说明依据。\n\n"
+            },
+            {
+              "id": "06179ea07fb0f74c",
+              "document": "17_预算管理制度.b67a60a8e087.ce2e31f9c14a86e510b0.md",
+              "text": "来源：17_预算管理制度.md\n分块：19/23\n上下文：预算编制与费用控制制度 > 第三章 申请、记录与监督 > 第十八条\n\n**第十八条**\n事项发生变化、取消或延期时，申请人应及时更新，审批人重新确认影响。紧急情形允许先采取保护人员、资产或业务连续性的必要措施，事后按规定补充记录。\n\n"
+            },
+            {
+              "id": "ad486fbe73e51b93",
+              "document": "M04_2026-08-18_移动审批安全评审会.7bfb68aa68bf.544f961dfc8b93159c6c.md",
+              "text": "来源：M04_2026-08-18_移动审批安全评审会.md\n分块：2/2\n上下文：2026-08-18 移动审批安全评审会\n\n产品组提出将审批首页由六个入口调整为四个入口，与会人员认为这一改动不影响当前的身份核验设计。设计稿由何雨在8月21日前完成，测试组邀请8名业务代表进行可用性走查。相关改版意见仅作为下一迭代输入，不计入本次安全试点验收范围。\n\n会议结束前，记录人逐项复述了已形成的决定。各责任人应将办理凭据和验收结果提交综合办公室，办公室于下一次例会核对进度；尚未批准的建议继续保留为待讨论事项。纪要分发后两个工作日内可以提出事实性更正，涉及预算、范围或期限的变更须重新评审，不得直接覆盖原记录。\n\n本材料为检索与分块测试专用的虚构会议纪要，机构、人员及业务数据均为示例。\n"
+            },
+            {
+              "id": "58aff99d5da3c898",
+              "document": "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+              "text": "来源：11_业务招待管理制度.md\n分块：15/23\n上下文：业务招待管理制度 > 第二章 管理规则 > 第十四条\n\n**第十四条**\n实际费用超过批准预算10%或超过500元（取较低者）时，应在报销前补充说明并重新审批。因来宾人数临时增加的，应记录到场时间和原因，不得事后虚构。\n\n"
+            }
+          ],
+          "timings": {
+            "answer_generation_ms": 3358.9368300000046,
+            "answer_validation_ms": 1375.1762310000117,
+            "clarification_ms": 1046.9448810000017,
+            "first_output_ms": 6535.974855000006,
+            "preprocessing_ms": 1072.5497550000114,
+            "query_preparation_ms": 1088.7017160000028,
+            "retrieval_ms": 984.9311349999539,
+            "total_ms": 6535.977378999974
+          },
+          "elapsed": 6592,
+          "problems": []
+        }
+      ]
+    },
+    {
+      "id": "reimbursement",
+      "question": "出差回来报销，具体流程和时限是什么？",
+      "session": "7907ea02d0d811f1b9eacd99fe22c3f4",
+      "answer": "出差返回后，员工应在返程后十五个工作日内提交报销，并按“填写报销单—关联出差申请—上传交通、住宿及支付凭证—直属负责人确认业务—成本中心复核预算—财务审核票据—出纳付款”的顺序办理[ID:0]。电子发票应验真查重，纸质票据按档案要求移交；材料齐全后，财务原则上在五个工作日内完成审核，并在下一付款批次支付[ID:0]。",
+      "options": [],
+      "needsInput": false,
+      "cacheStatus": "not_requested",
+      "record": "b607d555b3cd4db2b918d887d1d88388",
+      "preprocessing": {
+        "ambiguity_reasons": [
+          "问题明确询问出差报销的流程和时限,主题清晰"
+        ],
+        "ambiguity_score": 0.1,
+        "ambiguity_signals": [],
+        "confidence": 0.98,
+        "context_used": false,
+        "corrections": [],
+        "intent_parts": [
+          "出差报销流程",
+          "出差报销时限"
+        ],
+        "missing_topic": false,
+        "model_called": true,
+        "normalized_question": "出差回来报销,具体流程和时限是什么?",
+        "original_question": "出差回来报销，具体流程和时限是什么？",
+        "retrieval_queries": [
+          "出差回来报销,具体流程和时限是什么?",
+          "出差回来报销的具体流程是什么",
+          "出差回来报销的时限要求是什么"
+        ],
+        "status": "success"
+      },
+      "decision": {
+        "candidate_pool_count": 24,
+        "evidence_valid_option_count": 0,
+        "model_action": "answer",
+        "reason": "model_chose_answer",
+        "shown_evidence_chars": 4977,
+        "shown_evidence_count": 24,
+        "valid_option_count": 0
+      },
+      "candidateCount": 28,
+      "contextCount": 6,
+      "documents": [
+        "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+        "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+        "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+        "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md",
+        "10_远程办公管理制度.0661197500c3.109a94309f7e0772dce0.md"
+      ],
+      "context": [
+        {
+          "id": "9cf74693d51d51ef",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：14/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十三条\n\n**第十三条**\n返程后十五个工作日内，员工应按“填写报销单—关联出差申请—上传交通、住宿及支付凭证—直属负责人确认业务—成本中心复核预算—财务审核票据—出纳付款”的顺序提交。电子发票应验真查重；纸质票据按档案要求移交。材料齐全后财务原则上在五个工作日内完成审核，并在下一付款批次支付。\n\n"
+        },
+        {
+          "id": "5786c4fce296d8e8",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：7/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第六条\n\n**第六条**\n国内出差应至少提前两个工作日提交目的、地点、日期、拜访对象、交通方案和预算；国际及港澳台出差至少提前五个工作日申请。预算不超过5,000元由部门负责人和成本中心审批，5,001—20,000元增加分管负责人审批，超过20,000元增加财务负责人审批。紧急出差先取得有权审批人口头同意，并在返程后两个工作日内补办。\n\n"
+        },
+        {
+          "id": "2ee54499d9047ca8",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：13/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十二条\n\n**第十二条**\n城际交通票、机场或车站往返交通费按批准路线凭票据实报销。市内使用交通补助后，普通通勤不再另报出租车；携带大型设备、夜间23:00后到达或无公共交通等情形，经说明可凭票另报，不扣减当日交通补助。自驾出差须事前批准，按0.8元/公里报销燃油及车辆损耗，高速费和停车费凭票另报。\n\n"
+        },
+        {
+          "id": "05a4f170f25d9180",
+          "document": "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+          "text": "来源：11_业务招待管理制度.md\n分块：11/23\n上下文：业务招待管理制度 > 第二章 管理规则 > 第十条\n\n**第十条**\n接送车辆优先使用公司车辆或合规网约车。单程超过300元或跨城市包车应在申请中列明；临时发生时应保存路线、乘车人和业务原因。\n\n| 类型 | 人均上限 | 单次预算审批 | 报销时限 |\n| --- | ---: | --- | --- |\n| 普通接待 | 200元 | 3,000元内部门负责人 | 结束后10个工作日 |\n| 重要客户/专家 | 350元 | 10,000元内增加分管负责人 | 结束后10个工作日 |\n| 重大活动 | 500元 | 超10,000元增加总经理、财务负责人 | 结束后10个工作日 |\n\n"
+        },
+        {
+          "id": "76847bf0b254e9ca",
+          "document": "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+          "text": "来源：04_请假休假管理制度.md\n分块：16/23\n上下文：请假与休假管理制度 > 第二章 管理规则 > 第十五条\n\n**第十五条**\n因私行程拟超过每年2次、单次10个自然日或年累计20个自然日任一限制，均须在计划出发前至少15个工作日走例外流程：员工说明必要原因→直属主管2个工作日内审核→人力资源2个工作日内复核→分管负责人2个工作日内审核→总经理3个工作日内终审，串行目标9个工作日。例外通道的测试上限为每年3次、单次15个自然日、年累计30个自然日，三项同时适用，达到上限后的新增超限申请不能沿用本通道；例外并非自动批准。第3次出境即使只有2天也须走例外流程。境外近亲属病危等紧急情况应立即报告，提交证明后申请加急，主管、人力资源和有权终审人目标各在4个工作小时内处理；该时限为办理目标，不等于保证批准，不能以普通事项名义绕过审批。\n\n"
+        },
+        {
+          "id": "51638b415f024342",
+          "document": "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+          "text": "来源：04_请假休假管理制度.md\n分块：15/23\n上下文：请假与休假管理制度 > 第二章 管理规则 > 第十四条\n\n**第十四条**\n普通因私出国（境）须至少提前10个工作日提交完整申请，材料包括目的地及经停地、出入境日期、自然日天数、占用工作日及假别、当年已用次数和天数、交接清单、紧急联系人；只登记核验必要证件信息，不要求公司保管普通员工的护照原件。审批链为员工→直属主管（2个工作日内）→人力资源（2个工作日内核验次数、天数和假期余额）→分管负责人（2个工作日内终审）。三个节点串行总处理目标为6个工作日，完整提交至少提前10个工作日不是承诺10天后自动通过。补件耗时不计入节点办理时限；员工应补足提前量，离境前须获得明确批准。出境审批不增加带薪假期，行程占用的工作日须另用年假、调休或已批准事假覆盖；周末与节假日虽不占请假工作日，仍计出境自然日。\n\n"
+        }
+      ],
+      "timings": {
+        "answer_generation_ms": 3214.539744000035,
+        "answer_validation_ms": 1841.03338999995,
+        "clarification_ms": 1379.772160000016,
+        "first_output_ms": 7024.887332999981,
+        "preprocessing_ms": 1167.922840000017,
+        "query_preparation_ms": 1181.3633149999987,
+        "retrieval_ms": 1216.4832209999759,
+        "total_ms": 7024.893356000007
+      },
+      "elapsed": 7090,
+      "problems": []
+    },
+    {
+      "id": "accommodation",
+      "question": "我是P2员工，出差到北京，住宿每晚最多报销多少？",
+      "session": "7d43ad2cd0d811f1b9eacd99fe22c3f4",
+      "answer": "作为P2员工出差到北京，住宿每晚最多报销500元[ID:1]。北京属于A类城市，P1—P3职级的住宿限额为每间夜、含税价500元[ID:1]。",
+      "options": [],
+      "needsInput": false,
+      "cacheStatus": "not_requested",
+      "record": "6cd3adf8f393407f87b8110d402b8120",
+      "preprocessing": {
+        "ambiguity_reasons": [],
+        "ambiguity_score": 0.05,
+        "ambiguity_signals": [],
+        "confidence": 0.98,
+        "context_used": false,
+        "corrections": [],
+        "intent_parts": [
+          "P2员工北京出差住宿每晚报销标准"
+        ],
+        "missing_topic": false,
+        "model_called": true,
+        "normalized_question": "我是P2员工,出差到北京,住宿每晚最多报销多少?",
+        "original_question": "我是P2员工，出差到北京，住宿每晚最多报销多少？",
+        "retrieval_queries": [
+          "我是P2员工,出差到北京,住宿每晚最多报销多少?",
+          "P2员工出差到北京住宿每晚最多报销多少"
+        ],
+        "status": "success"
+      },
+      "decision": {
+        "candidate_pool_count": 24,
+        "evidence_valid_option_count": 0,
+        "model_action": "answer",
+        "reason": "model_chose_answer",
+        "shown_evidence_chars": 5138,
+        "shown_evidence_count": 24,
+        "valid_option_count": 0
+      },
+      "candidateCount": 27,
+      "contextCount": 6,
+      "documents": [
+        "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+        "09_薪酬与奖金管理制度.ef6e55b2087e.a8cffde97a4947170d3c.md",
+        "M05_2026-08-24_财务共享中心月度例会.e0a29c2c4ea5.549d81db773b1098c319.md",
+        "10_远程办公管理制度.0661197500c3.109a94309f7e0772dce0.md",
+        "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md",
+        "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md",
+        "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+        "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md"
+      ],
+      "context": [
+        {
+          "id": "9cf74693d51d51ef",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：14/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十三条\n\n**第十三条**\n返程后十五个工作日内，员工应按“填写报销单—关联出差申请—上传交通、住宿及支付凭证—直属负责人确认业务—成本中心复核预算—财务审核票据—出纳付款”的顺序提交。电子发票应验真查重；纸质票据按档案要求移交。材料齐全后财务原则上在五个工作日内完成审核，并在下一付款批次支付。\n\n"
+        },
+        {
+          "id": "05ea79f2c3a53519",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：9/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第八条\n\n**第八条**\n住宿限额按每间夜、含税价控制：A类城市P1—P3为500元、P4—P5及M1—M2为650元、M3及以上为850元；B类城市分别为400元、520元、700元；C类城市分别为320元、420元、560元。A类包括北京、上海、广州、深圳；B类包括天津、重庆、杭州、南京、苏州、成都、武汉、西安及其他省会城市；其他境内城市为C类。\n\n"
+        },
+        {
+          "id": "0a7991e7393fab47",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：3/23\n上下文：差旅与费用报销管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于员工因公发生的交通、住宿、餐费、招待、采购及其他经批准可报销费用。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+        },
+        {
+          "id": "d860a384197252c0",
+          "document": "09_薪酬与奖金管理制度.ef6e55b2087e.a8cffde97a4947170d3c.md",
+          "text": "来源：09_薪酬与奖金管理制度.md\n分块：11/23\n上下文：薪酬与奖金管理制度 > 第二章 管理规则 > 第十条\n\n**第十条**\n员工在月中入职、离职或发生无薪缺勤时，基本工资＝月基本工资÷21.75×实际计薪天数；月度目标绩效工资按本条同样折算后再乘绩效系数。计算结果保留到分，最终应发金额四舍五入到人民币元；工作所在地另有强制规则的，从其规定。\n\n| 职级 | 目标月薪带宽 | 基本/绩效比例 | 年度目标奖金 |\n| --- | ---: | ---: | ---: |\n| P1 | 6,000—8,000元 | 70%/30% | 1个月 |\n| P2 | 8,001—12,000元 | 70%/30% | 1个月 |\n| P3 | 12,001—18,000元 | 70%/30% | 2个月 |\n| P4 | 18,001—28,000元 | 70%/30% | 2个月 |\n| P5 | 28,001—45,000元 | 70%/30% | 2个月 |\n| M1 | 15,000—25,000元 | 70%/30% | 2.5个月 |\n| M2 | 25,001—40,000元 | 70%/30% | 2.5个月 |\n| M3 | 40,001—65,000元 | 70%/30% | 3个月 |\n\n"
+        },
+        {
+          "id": "0a4105abf96d3b15",
+          "document": "M05_2026-08-24_财务共享中心月度例会.e0a29c2c4ea5.549d81db773b1098c319.md",
+          "text": "来源：M05_2026-08-24_财务共享中心月度例会.md\n分块：3/4\n上下文：2026-08-24 财务共享中心月度例会\n\n费用审核组同时提出差旅发票积压问题，上月仍有42单因缺少行程证明退回。各部门应在8月28日前补齐材料，超过期限的单据转入待补件队列。会议没有提高住宿报销标准，现行城市与职级限额继续执行，不能把凭证续期预算理解为差旅额度的调整。\n\n"
+        },
+        {
+          "id": "472e8cf8d342a7dd",
+          "document": "10_远程办公管理制度.0661197500c3.109a94309f7e0772dce0.md",
+          "text": "来源：10_远程办公管理制度.md\n分块：16/23\n上下文：远程办公管理制度 > 第二章 管理规则 > 第十五条\n\n**第十五条**\n因公司要求到办公地点参加会议或领取设备产生的城际交通，按差旅制度报销；日常居住地与约定办公地点之间的通勤不报销。未经批准自行选择异地办公造成的额外费用由员工承担。\n\n"
+        }
+      ],
+      "timings": {
+        "answer_generation_ms": 3771.074311999996,
+        "answer_validation_ms": 1834.239719999971,
+        "clarification_ms": 2193.187573999978,
+        "first_output_ms": 8008.62796399997,
+        "preprocessing_ms": 1065.1710870000102,
+        "query_preparation_ms": 1082.8092739999988,
+        "retrieval_ms": 892.4944290000099,
+        "total_ms": 8008.632175999992
+      },
+      "elapsed": 8080,
+      "problems": [],
+      "followups": [
+        {
+          "question": "遇到大型展会房价超过标准怎么办？",
+          "session": "7d43ad2cd0d811f1b9eacd99fe22c3f4",
+          "answer": "遇到大型展会、极端天气导致房价普遍超过限额的，应提交三个可比酒店价格，经分管负责人事前批准后可上浮，最高不超过原限额的30%[ID:1]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "not_requested",
+          "record": "89e0d60471f146d19a1bd2e09baf3e91",
+          "preprocessing": {
+            "ambiguity_reasons": [
+              "未明确是申请特批、自行承担差额还是其他处理方式,所问事项略宽泛"
+            ],
+            "ambiguity_score": 0.2,
+            "ambiguity_signals": [],
+            "confidence": 0.95,
+            "context_used": false,
+            "corrections": [],
+            "intent_parts": [
+              "大型展会期间住宿房价超过报销标准"
+            ],
+            "missing_topic": false,
+            "model_called": true,
+            "normalized_question": "遇到大型展会房价超过标准怎么办?",
+            "original_question": "遇到大型展会房价超过标准怎么办？",
+            "retrieval_queries": [
+              "遇到大型展会房价超过标准怎么办?",
+              "大型展会期间住宿房价超过报销标准怎么办"
+            ],
+            "status": "success"
+          },
+          "decision": {
+            "candidate_pool_count": 24,
+            "evidence_valid_option_count": 0,
+            "model_action": "answer",
+            "reason": "model_chose_answer",
+            "shown_evidence_chars": 3868,
+            "shown_evidence_count": 24,
+            "valid_option_count": 0
+          },
+          "candidateCount": 40,
+          "contextCount": 6,
+          "documents": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+            "M05_2026-08-24_财务共享中心月度例会.e0a29c2c4ea5.549d81db773b1098c319.md",
+            "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+            "19_项目管理制度.7fcdc1cdc88a.03ff71614215e9e8e22d.md",
+            "13_合同管理制度.8bb5da8cf5f5.fabca1435d2edc7e8f46.md",
+            "M11_2026-08-14_工程供应商资质审核会.db37db46bb79.1188cda5ca403b7716bf.md",
+            "12_采购管理制度.94ac86c2be83.59c1a87576a1fbb5dbc6.md",
+            "项目上线会议纪要.30e742520242d6c8.a3bec64b8b93edf2.md",
+            "17_预算管理制度.b67a60a8e087.ce2e31f9c14a86e510b0.md",
+            "20_会议管理制度.967c3b529dde.9e079c1e3dbbe3e61ce7.md",
+            "M01_2026-08-03_采购平台上线协调会.0dec617e4c13.f54653ded7a4410cee7a.md",
+            "M09_2026-09-21_年度预算预审会.b336a763ab5d.12e600a70132d08cfc6e.md",
+            "10_远程办公管理制度.0661197500c3.109a94309f7e0772dce0.md"
+          ],
+          "context": [
+            {
+              "id": "0a4105abf96d3b15",
+              "document": "M05_2026-08-24_财务共享中心月度例会.e0a29c2c4ea5.549d81db773b1098c319.md",
+              "text": "来源：M05_2026-08-24_财务共享中心月度例会.md\n分块：3/4\n上下文：2026-08-24 财务共享中心月度例会\n\n费用审核组同时提出差旅发票积压问题，上月仍有42单因缺少行程证明退回。各部门应在8月28日前补齐材料，超过期限的单据转入待补件队列。会议没有提高住宿报销标准，现行城市与职级限额继续执行，不能把凭证续期预算理解为差旅额度的调整。\n\n"
+            },
+            {
+              "id": "d80b632f31f245a1",
+              "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+              "text": "来源：06_差旅与费用报销制度.md\n分块：10/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第九条\n\n**第九条**\n住宿费在限额内凭票据按实际金额报销，不向员工支付节约差额。两人自愿合住一间房时仍按一间房实际金额报销。大型展会、极端天气导致价格普遍超过限额的，应提交三个可比酒店价格，经分管负责人事前批准后可上浮，最高不超过原限额的30%。\n\n"
+            },
+            {
+              "id": "4ca1026c0e5867c4",
+              "document": "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+              "text": "来源：11_业务招待管理制度.md\n分块：7/23\n上下文：业务招待管理制度 > 第二章 管理规则 > 第六条\n\n**第六条**\n餐饮标准按公司参加人员和外部人员总数计算：普通接待每人不超过200元，重要客户或专家每人不超过350元，董事长或总经理批准的重大活动每人不超过500元。酒水计入标准，香烟不予报销。\n\n"
+            },
+            {
+              "id": "45b931f9d15e08c8",
+              "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+              "text": "来源：06_差旅与费用报销制度.md\n分块：8/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第七条\n\n**第七条**\n职级P1—P3乘坐飞机经济舱、高铁或动车二等座、普通列车硬卧；P4—P5及M1—M2可乘飞机经济舱、高铁或动车一等座、普通列车软卧；M3及以上可乘前述标准，单程飞行超过6小时可事前申请公务舱。超标准部分未经批准由个人承担，低于标准按实际金额报销，不发放差额。\n\n"
+            },
+            {
+              "id": "0cb236e7f19b0bc9",
+              "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+              "text": "来源：06_差旅与费用报销制度.md\n分块：11/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十条\n\n**第十条**\n业务招待应事前说明对象、目的、人数和预算，接待标准应适度。报销时列明实际参与人员及业务事项；涉及客户个人信息的，仅保留财务审核所需信息并限制访问。\n\n| 城市类别 | P1—P3住宿上限 | P4—P5、M1—M2 | M3及以上 | 伙食/交通补助 |\n| --- | ---: | ---: | ---: | ---: |\n| A类：北上广深 | 500元/间夜 | 650元/间夜 | 850元/间夜 | 120元/80元每天 |\n| B类：省会及重点城市 | 400元/间夜 | 520元/间夜 | 700元/间夜 | 100元/60元每天 |\n| C类：其他境内城市 | 320元/间夜 | 420元/间夜 | 560元/间夜 | 80元/50元每天 |\n\n"
+            },
+            {
+              "id": "c0fbad8a0676063f",
+              "document": "19_项目管理制度.7fcdc1cdc88a.03ff71614215e9e8e22d.md",
+              "text": "来源：19_项目管理制度.md\n分块：10/23\n上下文：项目立项与变更管理制度 > 第二章 管理规则 > 第九条\n\n**第九条**\n范围增加导致预算、工期或工作量任一增加超过10%的，必须提交变更申请；不超过10%但影响验收标准、数据安全或合同义务的，也必须审批。\n\n"
+            }
+          ],
+          "timings": {
+            "answer_generation_ms": 4082.6368489999822,
+            "answer_validation_ms": 2074.7332180000058,
+            "clarification_ms": 1286.1895020000134,
+            "first_output_ms": 7689.853987999982,
+            "preprocessing_ms": 1564.8925000000418,
+            "query_preparation_ms": 1578.4457049999787,
+            "retrieval_ms": 705.7542340000396,
+            "total_ms": 7689.857157000006
+          },
+          "elapsed": 7744,
+          "problems": []
+        }
+      ]
+    },
+    {
+      "id": "allowance",
+      "question": "出差到上海，主办方包一顿正餐并统一提供市内交通，当天伙食和交通补助怎么算？",
+      "session": "7f59fc88d0d811f1b9eacd99fe22c3f4",
+      "answer": "上海属于A类城市，出差伙食补助标准为120元/人/天，市内交通补助为80元/人/天[ID:0][ID:1]。出发日和返程日均按全天计算[ID:0]。主办方每提供一顿正餐，伙食补助扣减30元，因此当天伙食补助为120-30=90元[ID:0]。统一提供市内交通的，当日不再发放交通补助，因此当天交通补助为0元[ID:0]。综上，当天可领取伙食补助90元，交通补助不再发放。",
+      "options": [],
+      "needsInput": false,
+      "cacheStatus": "not_requested",
+      "record": "2b629aaa063d427e91d494ec914ea227",
+      "preprocessing": {
+        "ambiguity_reasons": [
+          "未明确适用的差旅费管理制度或单位范围,需知识库证据确认"
+        ],
+        "ambiguity_score": 0.2,
+        "ambiguity_signals": [],
+        "confidence": 0.95,
+        "context_used": false,
+        "corrections": [],
+        "intent_parts": [
+          "伙食补助",
+          "交通补助"
+        ],
+        "missing_topic": false,
+        "model_called": true,
+        "normalized_question": "出差到上海,主办方包一顿正餐并统一提供市内交通,当天伙食补助和交通补助怎么算?",
+        "original_question": "出差到上海，主办方包一顿正餐并统一提供市内交通，当天伙食和交通补助怎么算？",
+        "retrieval_queries": [
+          "出差到上海,主办方包一顿正餐并统一提供市内交通,当天伙食和交通补助怎么算?",
+          "出差上海 主办方包一顿正餐 当天伙食补助怎么算",
+          "出差上海 主办方统一提供市内交通 当天交通补助怎么算",
+          "出差到上海,主办方包一顿正餐并统一提供市内交通,当天伙食补助和交通补助怎么算?"
+        ],
+        "status": "success"
+      },
+      "decision": {
+        "candidate_pool_count": 24,
+        "evidence_valid_option_count": 0,
+        "model_action": "answer",
+        "reason": "model_chose_answer",
+        "shown_evidence_chars": 5106,
+        "shown_evidence_count": 24,
+        "valid_option_count": 0
+      },
+      "candidateCount": 33,
+      "contextCount": 6,
+      "documents": [
+        "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+        "10_远程办公管理制度.0661197500c3.109a94309f7e0772dce0.md",
+        "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+        "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+        "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+        "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md",
+        "M05_2026-08-24_财务共享中心月度例会.e0a29c2c4ea5.549d81db773b1098c319.md"
+      ],
+      "context": [
+        {
+          "id": "ffdb8a429109d21b",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：12/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十一条\n\n**第十一条**\n出差伙食补助按自然日计算：A类城市120元/人/天、B类城市100元/人/天、C类城市80元/人/天；市内交通补助分别为80元、60元和50元/人/天。出发日和返程日均按全天计算。主办方每提供一顿正餐，伙食补助扣减30元；统一提供市内交通的，当日不再发放交通补助。\n\n"
+        },
+        {
+          "id": "0cb236e7f19b0bc9",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：11/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十条\n\n**第十条**\n业务招待应事前说明对象、目的、人数和预算，接待标准应适度。报销时列明实际参与人员及业务事项；涉及客户个人信息的，仅保留财务审核所需信息并限制访问。\n\n| 城市类别 | P1—P3住宿上限 | P4—P5、M1—M2 | M3及以上 | 伙食/交通补助 |\n| --- | ---: | ---: | ---: | ---: |\n| A类：北上广深 | 500元/间夜 | 650元/间夜 | 850元/间夜 | 120元/80元每天 |\n| B类：省会及重点城市 | 400元/间夜 | 520元/间夜 | 700元/间夜 | 100元/60元每天 |\n| C类：其他境内城市 | 320元/间夜 | 420元/间夜 | 560元/间夜 | 80元/50元每天 |\n\n"
+        },
+        {
+          "id": "2ee54499d9047ca8",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：13/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十二条\n\n**第十二条**\n城际交通票、机场或车站往返交通费按批准路线凭票据实报销。市内使用交通补助后，普通通勤不再另报出租车；携带大型设备、夜间23:00后到达或无公共交通等情形，经说明可凭票另报，不扣减当日交通补助。自驾出差须事前批准，按0.8元/公里报销燃油及车辆损耗，高速费和停车费凭票另报。\n\n"
+        },
+        {
+          "id": "472e8cf8d342a7dd",
+          "document": "10_远程办公管理制度.0661197500c3.109a94309f7e0772dce0.md",
+          "text": "来源：10_远程办公管理制度.md\n分块：16/23\n上下文：远程办公管理制度 > 第二章 管理规则 > 第十五条\n\n**第十五条**\n因公司要求到办公地点参加会议或领取设备产生的城际交通，按差旅制度报销；日常居住地与约定办公地点之间的通勤不报销。未经批准自行选择异地办公造成的额外费用由员工承担。\n\n"
+        },
+        {
+          "id": "9cf74693d51d51ef",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：14/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十三条\n\n**第十三条**\n返程后十五个工作日内，员工应按“填写报销单—关联出差申请—上传交通、住宿及支付凭证—直属负责人确认业务—成本中心复核预算—财务审核票据—出纳付款”的顺序提交。电子发票应验真查重；纸质票据按档案要求移交。材料齐全后财务原则上在五个工作日内完成审核，并在下一付款批次支付。\n\n"
+        },
+        {
+          "id": "5786c4fce296d8e8",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：7/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第六条\n\n**第六条**\n国内出差应至少提前两个工作日提交目的、地点、日期、拜访对象、交通方案和预算；国际及港澳台出差至少提前五个工作日申请。预算不超过5,000元由部门负责人和成本中心审批，5,001—20,000元增加分管负责人审批，超过20,000元增加财务负责人审批。紧急出差先取得有权审批人口头同意，并在返程后两个工作日内补办。\n\n"
+        }
+      ],
+      "timings": {
+        "answer_generation_ms": 4667.866863999961,
+        "answer_validation_ms": 2627.1273849999943,
+        "clarification_ms": 2167.340459000002,
+        "first_output_ms": 9509.752143000014,
+        "preprocessing_ms": 1354.5817780000107,
+        "query_preparation_ms": 1368.8767730000109,
+        "retrieval_ms": 1265.3639890000363,
+        "total_ms": 9509.758717000012
+      },
+      "elapsed": 9570,
+      "problems": []
+    },
+    {
+      "id": "change",
+      "question": "出差审批通过后行程延期或取消，需要怎么办？",
+      "session": "8511465ed0d811f1b9eacd99fe22c3f4",
+      "answer": "出差审批通过后，若行程延期或取消，申请人应及时更新，审批人重新确认影响[ID:5]。如遇紧急情形，允许先采取保护人员、资产或业务连续性的必要措施，事后按规定补充记录[ID:5]。",
+      "options": [],
+      "needsInput": false,
+      "cacheStatus": "not_requested",
+      "record": "24e73b477ded415ea61cbbaa28331170",
+      "preprocessing": {
+        "ambiguity_reasons": [
+          "未明确延期或取消后的具体办理渠道与时限,需知识库证据补充"
+        ],
+        "ambiguity_score": 0.2,
+        "ambiguity_signals": [],
+        "confidence": 0.95,
+        "context_used": false,
+        "corrections": [],
+        "intent_parts": [
+          "出差审批通过后行程延期",
+          "出差审批通过后行程取消"
+        ],
+        "missing_topic": false,
+        "model_called": true,
+        "normalized_question": "出差审批通过后行程延期或取消,需要怎么办?",
+        "original_question": "出差审批通过后行程延期或取消，需要怎么办？",
+        "retrieval_queries": [
+          "出差审批通过后行程延期或取消,需要怎么办?",
+          "出差审批通过后行程延期怎么办",
+          "出差审批通过后行程取消怎么办"
+        ],
+        "status": "success"
+      },
+      "decision": {
+        "candidate_pool_count": 24,
+        "evidence_valid_option_count": 0,
+        "model_action": "answer",
+        "reason": "model_chose_answer",
+        "shown_evidence_chars": 5136,
+        "shown_evidence_count": 24,
+        "valid_option_count": 0
+      },
+      "candidateCount": 35,
+      "contextCount": 6,
+      "documents": [
+        "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+        "M04_2026-08-18_移动审批安全评审会.7bfb68aa68bf.544f961dfc8b93159c6c.md",
+        "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+        "10_远程办公管理制度.0661197500c3.109a94309f7e0772dce0.md",
+        "14_印章与证照管理制度.421af9b9a594.a78457db4f16340f1523.md",
+        "18_客户投诉管理制度.7c085d65153f.48a26ffcbbf571750e11.md",
+        "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md",
+        "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+        "15_档案管理制度.575753e1f623.daa9c89e4da4d6c5e449.md",
+        "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md",
+        "20_会议管理制度.967c3b529dde.9e079c1e3dbbe3e61ce7.md",
+        "12_采购管理制度.94ac86c2be83.59c1a87576a1fbb5dbc6.md",
+        "19_项目管理制度.7fcdc1cdc88a.03ff71614215e9e8e22d.md",
+        "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+        "08_培训与发展管理制度.c9263654ab42.cd1b7f6bd7cad80133aa.md",
+        "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+        "13_合同管理制度.8bb5da8cf5f5.fabca1435d2edc7e8f46.md",
+        "M02_2026-08-07_电子签章服务续期评审会.2c180a25b582.5c921d9b1162404f5c34.md",
+        "M11_2026-08-14_工程供应商资质审核会.db37db46bb79.1188cda5ca403b7716bf.md",
+        "M05_2026-08-24_财务共享中心月度例会.e0a29c2c4ea5.549d81db773b1098c319.md"
+      ],
+      "context": [
+        {
+          "id": "6a15218bc313dccf",
+          "document": "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+          "text": "来源：04_请假休假管理制度.md\n分块：17/23\n上下文：请假与休假管理制度 > 第二章 管理规则 > 第十六条\n\n**第十六条**\n休假或出境前至少1个工作日完成交接并登记替岗人。因私出国（境）获批后，变更目的地、延长天数或新增占用工作日，应在变更实施前至少3个工作日重新提交；若变更触及例外限制，须取得总经理终审，未取得批准不得将原批准解释为无限延期。突发航班取消、疾病等客观滞留应在可联系时24小时内报告并提供证明，按紧急程序处理，不机械套用提前3天。取消行程应在确定取消后1个工作日内撤销申请，未实际出境不计次数。返岗后2个工作日内完成销假及实际行程确认，人力资源在随后3个工作日内更新次数、自然日和假期余额；员工发现天数或扣减错误可在收到月度核算后5个工作日内申请复核，人力资源在5个工作日内给出书面结果。\n\n"
+        },
+        {
+          "id": "51638b415f024342",
+          "document": "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+          "text": "来源：04_请假休假管理制度.md\n分块：15/23\n上下文：请假与休假管理制度 > 第二章 管理规则 > 第十四条\n\n**第十四条**\n普通因私出国（境）须至少提前10个工作日提交完整申请，材料包括目的地及经停地、出入境日期、自然日天数、占用工作日及假别、当年已用次数和天数、交接清单、紧急联系人；只登记核验必要证件信息，不要求公司保管普通员工的护照原件。审批链为员工→直属主管（2个工作日内）→人力资源（2个工作日内核验次数、天数和假期余额）→分管负责人（2个工作日内终审）。三个节点串行总处理目标为6个工作日，完整提交至少提前10个工作日不是承诺10天后自动通过。补件耗时不计入节点办理时限；员工应补足提前量，离境前须获得明确批准。出境审批不增加带薪假期，行程占用的工作日须另用年假、调休或已批准事假覆盖；周末与节假日虽不占请假工作日，仍计出境自然日。\n\n"
+        },
+        {
+          "id": "76847bf0b254e9ca",
+          "document": "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+          "text": "来源：04_请假休假管理制度.md\n分块：16/23\n上下文：请假与休假管理制度 > 第二章 管理规则 > 第十五条\n\n**第十五条**\n因私行程拟超过每年2次、单次10个自然日或年累计20个自然日任一限制，均须在计划出发前至少15个工作日走例外流程：员工说明必要原因→直属主管2个工作日内审核→人力资源2个工作日内复核→分管负责人2个工作日内审核→总经理3个工作日内终审，串行目标9个工作日。例外通道的测试上限为每年3次、单次15个自然日、年累计30个自然日，三项同时适用，达到上限后的新增超限申请不能沿用本通道；例外并非自动批准。第3次出境即使只有2天也须走例外流程。境外近亲属病危等紧急情况应立即报告，提交证明后申请加急，主管、人力资源和有权终审人目标各在4个工作小时内处理；该时限为办理目标，不等于保证批准，不能以普通事项名义绕过审批。\n\n"
+        },
+        {
+          "id": "5786c4fce296d8e8",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：7/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第六条\n\n**第六条**\n国内出差应至少提前两个工作日提交目的、地点、日期、拜访对象、交通方案和预算；国际及港澳台出差至少提前五个工作日申请。预算不超过5,000元由部门负责人和成本中心审批，5,001—20,000元增加分管负责人审批，超过20,000元增加财务负责人审批。紧急出差先取得有权审批人口头同意，并在返程后两个工作日内补办。\n\n"
+        },
+        {
+          "id": "35f31f8565327b5d",
+          "document": "M04_2026-08-18_移动审批安全评审会.7bfb68aa68bf.544f961dfc8b93159c6c.md",
+          "text": "来源：M04_2026-08-18_移动审批安全评审会.md\n分块：1/2\n上下文：2026-08-18 移动审批安全评审会\n\n# 2026-08-18 移动审批安全评审会\n\n2026-08-18上午9时30分，星桥示例公司召开移动审批安全评审会，会议于11时结束，由综合办公室记录。主持人要求先核对事实，再明确可执行的决定与尚待论证的事项。与会人员确认，本次纪要中的期限按自然日理解；需要延期的任务应在截止前说明原因，不能因口头沟通自行变更。\n\n移动端负责人介绍离线审批方案。为防止审批意见被替换，客户端计划使用企业签名证书对审批摘要进行电子签名，服务端依据公钥及签发链校验签署人身份和内容完整性。安全组指出，私钥不得写入客户端安装包，遗失设备后必须具备吊销能力。试点仅覆盖20名部门主管，不开放给外部访客。\n\n会议同意先开展签名证书的封闭试点，由林晓在8月25日前完成安全存储接入，郭宁在8月27日前完成设备遗失与凭证吊销演练。验收要验证旧凭证吊销后无法继续产生被接受的审批签名，并保留20份签名与验签样本。采购只能执行试点预算3,600元，未获准进行全公司推广。\n\n"
+        },
+        {
+          "id": "9f37d2570e2b702b",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：19/23\n上下文：差旅与费用报销管理制度 > 第三章 申请、记录与监督 > 第十八条\n\n**第十八条**\n事项发生变化、取消或延期时，申请人应及时更新，审批人重新确认影响。紧急情形允许先采取保护人员、资产或业务连续性的必要措施，事后按规定补充记录。\n\n"
+        }
+      ],
+      "timings": {
+        "answer_generation_ms": 4186.038413000006,
+        "answer_validation_ms": 1447.8991429999724,
+        "clarification_ms": 2533.638719999999,
+        "first_output_ms": 9380.146243000014,
+        "preprocessing_ms": 1349.561891999997,
+        "query_preparation_ms": 1363.3128660000011,
+        "retrieval_ms": 1266.1021779999828,
+        "total_ms": 9380.149640000014
+      },
+      "elapsed": 9460,
+      "problems": []
+    },
+    {
+      "id": "missing-invoice",
+      "question": "出差住宿发票丢失，可以直接用付款截图代替发票报销吗？",
+      "session": "86b72906d0d811f1b9eacd99fe22c3f4",
+      "answer": "根据现有制度内容，无法直接确认“住宿发票丢失后能否用付款截图代替发票报销”这一具体情形。制度仅规定报销需“上传交通、住宿及支付凭证”，并要求“电子发票应验真查重；纸质票据按档案要求移交”[ID:0]。此外，会议提到上月仍有42单因缺少行程证明被退回，各部门应在8月28日前补齐材料，超过期限的单据转入待补件队列[ID:1]。但上述内容均未明确付款截图能否替代发票，因此该问题的直接答案在资料中未作规定。\n\nThe answer you are looking for is not found in the dataset!",
+      "options": [],
+      "needsInput": false,
+      "cacheStatus": "not_requested",
+      "record": "8f5682e371f24d6faa97c5774d4f72cc",
+      "preprocessing": {
+        "ambiguity_reasons": [],
+        "ambiguity_score": 0.05,
+        "ambiguity_signals": [],
+        "confidence": 0.98,
+        "context_used": false,
+        "corrections": [],
+        "intent_parts": [
+          "出差住宿发票丢失后能否用付款截图代替发票报销"
+        ],
+        "missing_topic": false,
+        "model_called": true,
+        "normalized_question": "出差住宿发票丢失,可以直接用付款截图代替发票报销吗?",
+        "original_question": "出差住宿发票丢失，可以直接用付款截图代替发票报销吗？",
+        "retrieval_queries": [
+          "出差住宿发票丢失,可以直接用付款截图代替发票报销吗?",
+          "出差住宿发票丢失 付款截图 代替发票 报销"
+        ],
+        "status": "success"
+      },
+      "decision": {
+        "candidate_pool_count": 24,
+        "evidence_valid_option_count": 0,
+        "model_action": "answer",
+        "reason": "model_chose_answer",
+        "shown_evidence_chars": 4530,
+        "shown_evidence_count": 24,
+        "valid_option_count": 0
+      },
+      "candidateCount": 26,
+      "contextCount": 6,
+      "documents": [
+        "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+        "M05_2026-08-24_财务共享中心月度例会.e0a29c2c4ea5.549d81db773b1098c319.md",
+        "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+        "10_远程办公管理制度.0661197500c3.109a94309f7e0772dce0.md",
+        "M02_2026-08-07_电子签章服务续期评审会.2c180a25b582.5c921d9b1162404f5c34.md",
+        "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md"
+      ],
+      "context": [
+        {
+          "id": "9cf74693d51d51ef",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：14/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十三条\n\n**第十三条**\n返程后十五个工作日内，员工应按“填写报销单—关联出差申请—上传交通、住宿及支付凭证—直属负责人确认业务—成本中心复核预算—财务审核票据—出纳付款”的顺序提交。电子发票应验真查重；纸质票据按档案要求移交。材料齐全后财务原则上在五个工作日内完成审核，并在下一付款批次支付。\n\n"
+        },
+        {
+          "id": "0a4105abf96d3b15",
+          "document": "M05_2026-08-24_财务共享中心月度例会.e0a29c2c4ea5.549d81db773b1098c319.md",
+          "text": "来源：M05_2026-08-24_财务共享中心月度例会.md\n分块：3/4\n上下文：2026-08-24 财务共享中心月度例会\n\n费用审核组同时提出差旅发票积压问题，上月仍有42单因缺少行程证明退回。各部门应在8月28日前补齐材料，超过期限的单据转入待补件队列。会议没有提高住宿报销标准，现行城市与职级限额继续执行，不能把凭证续期预算理解为差旅额度的调整。\n\n"
+        },
+        {
+          "id": "bbc28b7acebc5495",
+          "document": "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+          "text": "来源：11_业务招待管理制度.md\n分块：13/23\n上下文：业务招待管理制度 > 第二章 管理规则 > 第十二条\n\n**第十二条**\n报销应在活动结束后十个工作日内提交申请单、发票、支付记录和参与人员名单。名单可只保留姓名、单位和职务，不得收集身份证号等无关信息。\n\n"
+        },
+        {
+          "id": "0a7991e7393fab47",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：3/23\n上下文：差旅与费用报销管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于员工因公发生的交通、住宿、餐费、招待、采购及其他经批准可报销费用。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+        },
+        {
+          "id": "0cb236e7f19b0bc9",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：11/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十条\n\n**第十条**\n业务招待应事前说明对象、目的、人数和预算，接待标准应适度。报销时列明实际参与人员及业务事项；涉及客户个人信息的，仅保留财务审核所需信息并限制访问。\n\n| 城市类别 | P1—P3住宿上限 | P4—P5、M1—M2 | M3及以上 | 伙食/交通补助 |\n| --- | ---: | ---: | ---: | ---: |\n| A类：北上广深 | 500元/间夜 | 650元/间夜 | 850元/间夜 | 120元/80元每天 |\n| B类：省会及重点城市 | 400元/间夜 | 520元/间夜 | 700元/间夜 | 100元/60元每天 |\n| C类：其他境内城市 | 320元/间夜 | 420元/间夜 | 560元/间夜 | 80元/50元每天 |\n\n"
+        },
+        {
+          "id": "56048ce5b746c6f6",
+          "document": "10_远程办公管理制度.0661197500c3.109a94309f7e0772dce0.md",
+          "text": "来源：10_远程办公管理制度.md\n分块：9/23\n上下文：远程办公管理制度 > 第二章 管理规则 > 第八条\n\n**第八条**\n公司按固定远程员工每月100元、混合办公员工每月50元发放网络补助；临时远程不另发补助。补助随工资发放，不要求员工提交家庭宽带发票，也不代表公司取得员工住所或网络设备的控制权。\n\n"
+        }
+      ],
+      "timings": {
+        "answer_generation_ms": 3319.233906000022,
+        "answer_validation_ms": 1683.9779460000273,
+        "clarification_ms": 1480.6727480000177,
+        "first_output_ms": 6889.432770999974,
+        "preprocessing_ms": 1377.2452210000097,
+        "query_preparation_ms": 1392.1301430000312,
+        "retrieval_ms": 667.943174999948,
+        "total_ms": 6889.435946999982
+      },
+      "elapsed": 6979,
+      "problems": []
+    },
+    {
+      "id": "unsupported",
+      "question": "差旅制度中去火星出差的每日补贴标准是多少？",
+      "session": "8aba6108d0d811f1b9eacd99fe22c3f4",
+      "answer": "The answer you are looking for is not found in the dataset!",
+      "options": [],
+      "needsInput": false,
+      "cacheStatus": "not_requested",
+      "record": "30e0da26df8f47d2a3c0cb7f1ecda695",
+      "preprocessing": {
+        "ambiguity_reasons": [
+          "主题和所问事项明确,仅需知识库确认是否存在相关制度"
+        ],
+        "ambiguity_score": 0.1,
+        "ambiguity_signals": [],
+        "confidence": 0.95,
+        "context_used": false,
+        "corrections": [],
+        "intent_parts": [
+          "差旅制度中去火星出差的每日补贴标准"
+        ],
+        "missing_topic": false,
+        "model_called": true,
+        "normalized_question": "差旅制度中去火星出差的每日补贴标准是多少?",
+        "original_question": "差旅制度中去火星出差的每日补贴标准是多少？",
+        "retrieval_queries": [
+          "差旅制度中去火星出差的每日补贴标准是多少?"
+        ],
+        "status": "success"
+      },
+      "decision": {
+        "candidate_pool_count": 24,
+        "evidence_valid_option_count": 0,
+        "model_action": "answer",
+        "reason": "model_chose_answer",
+        "shown_evidence_chars": 4569,
+        "shown_evidence_count": 24,
+        "valid_option_count": 0
+      },
+      "candidateCount": 24,
+      "contextCount": 6,
+      "documents": [
+        "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+        "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+        "M05_2026-08-24_财务共享中心月度例会.e0a29c2c4ea5.549d81db773b1098c319.md"
+      ],
+      "context": [
+        {
+          "id": "e37f95ee71a6732f",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：17/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十六条\n\n**第十六条**\n员工对退回、扣减或逾期处理有异议的，可提交复核。财务部应说明依据；制度标准变化影响已批准行程时，原则上按批准时或对员工更合理的有效规则衔接处理。\n\n"
+        },
+        {
+          "id": "01c82cc48347291e",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：6/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第五条\n\n## 第二章 管理规则\n\n**第五条**\n费用应遵循真实发生、业务相关、标准适当和凭证完整原则。任何人不得拆分报销规避审批，不得报销个人消费、虚假交易或已由第三方承担的费用。\n\n"
+        },
+        {
+          "id": "0cb236e7f19b0bc9",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：11/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十条\n\n**第十条**\n业务招待应事前说明对象、目的、人数和预算，接待标准应适度。报销时列明实际参与人员及业务事项；涉及客户个人信息的，仅保留财务审核所需信息并限制访问。\n\n| 城市类别 | P1—P3住宿上限 | P4—P5、M1—M2 | M3及以上 | 伙食/交通补助 |\n| --- | ---: | ---: | ---: | ---: |\n| A类：北上广深 | 500元/间夜 | 650元/间夜 | 850元/间夜 | 120元/80元每天 |\n| B类：省会及重点城市 | 400元/间夜 | 520元/间夜 | 700元/间夜 | 100元/60元每天 |\n| C类：其他境内城市 | 320元/间夜 | 420元/间夜 | 560元/间夜 | 80元/50元每天 |\n\n"
+        },
+        {
+          "id": "45b931f9d15e08c8",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：8/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第七条\n\n**第七条**\n职级P1—P3乘坐飞机经济舱、高铁或动车二等座、普通列车硬卧；P4—P5及M1—M2可乘飞机经济舱、高铁或动车一等座、普通列车软卧；M3及以上可乘前述标准，单程飞行超过6小时可事前申请公务舱。超标准部分未经批准由个人承担，低于标准按实际金额报销，不发放差额。\n\n"
+        },
+        {
+          "id": "8610c5be68770297",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：15/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十四条\n\n**第十四条**\n审批人对业务真实性、必要性和预算负责，财务部对标准、票据和会计处理负责。审批人不得审批本人费用；上级与财务复核不能相互替代。\n\n"
+        },
+        {
+          "id": "ffdb8a429109d21b",
+          "document": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：12/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十一条\n\n**第十一条**\n出差伙食补助按自然日计算：A类城市120元/人/天、B类城市100元/人/天、C类城市80元/人/天；市内交通补助分别为80元、60元和50元/人/天。出发日和返程日均按全天计算。主办方每提供一顿正餐，伙食补助扣减30元；统一提供市内交通的，当日不再发放交通补助。\n\n"
+        }
+      ],
+      "timings": {
+        "answer_generation_ms": 2295.5478179999886,
+        "answer_validation_ms": 1240.9674839999525,
+        "clarification_ms": 674.2786560000127,
+        "first_output_ms": 4769.215635999955,
+        "preprocessing_ms": 1190.3869779999923,
+        "query_preparation_ms": 1204.7395810000125,
+        "retrieval_ms": 558.6719529999868,
+        "total_ms": 4769.219185999987
+      },
+      "elapsed": 4837,
+      "problems": []
+    }
+  ],
+  "errors": [
+    {
+      "question": "如果是紧急出差，来不及提前申请呢？",
+      "problem": "missing expected fact: 口头"
+    },
+    {
+      "question": "如果是紧急出差，来不及提前申请呢？",
+      "problem": "missing expected fact: 返程"
+    },
+    {
+      "question": "如果是紧急出差，来不及提前申请呢？",
+      "problem": "missing expected fact: 两|2|二"
+    },
+    {
+      "question": "如果是紧急出差，来不及提前申请呢？",
+      "problem": "missing expected fact: 工作日"
+    }
+  ],
+  "finished": "2026-10-26T00:59:53.266Z"
+}

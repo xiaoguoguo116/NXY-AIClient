@@ -1,0 +1,72 @@
+{
+  "status": "error",
+  "error": "请求超时，请稍后重试。",
+  "text": "",
+  "elapsedMs": 120257,
+  "logs": [
+    {
+      "traceId": "36b7a5d1",
+      "stage": "start",
+      "elapsedMs": 0
+    },
+    {
+      "traceId": "36b7a5d1",
+      "stage": "request_start",
+      "elapsedMs": 13,
+      "path": "config"
+    },
+    {
+      "traceId": "36b7a5d1",
+      "stage": "response_headers",
+      "elapsedMs": 26,
+      "path": "config",
+      "durationMs": 13,
+      "status": 200
+    },
+    {
+      "traceId": "36b7a5d1",
+      "stage": "config_ready",
+      "elapsedMs": 39
+    },
+    {
+      "traceId": "36b7a5d1",
+      "stage": "request_start",
+      "elapsedMs": 39,
+      "path": "ragflow-api/chats/1f8d4354c38711f193a109fdac79609a/sessions"
+    },
+    {
+      "traceId": "36b7a5d1",
+      "stage": "response_headers",
+      "elapsedMs": 85,
+      "path": "ragflow-api/chats/1f8d4354c38711f193a109fdac79609a/sessions",
+      "durationMs": 46,
+      "status": 200
+    },
+    {
+      "traceId": "36b7a5d1",
+      "stage": "session_ready",
+      "elapsedMs": 90,
+      "reused": false
+    },
+    {
+      "traceId": "36b7a5d1",
+      "stage": "request_start",
+      "elapsedMs": 90,
+      "path": "ragflow-api/chat/completions"
+    },
+    {
+      "traceId": "36b7a5d1",
+      "stage": "response_headers",
+      "elapsedMs": 123,
+      "path": "ragflow-api/chat/completions",
+      "durationMs": 34,
+      "status": 200
+    },
+    {
+      "traceId": "36b7a5d1",
+      "stage": "request_end",
+      "elapsedMs": 120005,
+      "aborted": true
+    }
+  ]
+}

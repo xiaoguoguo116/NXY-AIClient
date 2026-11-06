@@ -6,6 +6,7 @@ import {
   getResponsibility
 } from '../src/services/contactKnowledge.ts'
 import { getLocalFriendList } from '../src/services/localContacts.ts'
+import { classifyRagIntent } from '../src/services/ragIntent.ts'
 
 const storage = { getItem: () => null }
 
@@ -68,6 +69,18 @@ test('each department has at least one resolvable contact', () => {
   const names = new Set(duties.map(([name]) => name))
   assert.equal(names.size, 31)
   for (const contact of getLocalFriendList()) assert.ok(names.has(contact.username), contact.username)
+})
+
+test('every responsibility can be queried as a policy without being intercepted by contact cards', () => {
+  for (const [, topicList] of duties) {
+    for (const topic of topicList.split('|')) {
+      for (const question of [`${topic}有哪些规定？`, `${topic}怎么办理？`]) {
+        assert.equal(classifyRagIntent(question).intent, 'policy', question)
+        assert.deepEqual(findResponsibleContacts(question, storage), [], question)
+        assert.equal(answerFromContactKnowledge(question, storage), null, question)
+      }
+    }
+  }
 })
 
 test('two clearly named duties retain both owners across the directory', () => {

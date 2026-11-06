@@ -1,0 +1,136 @@
+{
+  "checks": [
+    {
+      "label": "workflow",
+      "session": "36e6af22d0d911f19ad97dc17e3b5306",
+      "answer": "这个问题可能涉及不同的业务场景。请选择你想了解的方向，或在输入框补充说明。",
+      "complete": true,
+      "options": [
+        {
+          "id": "29e9d71bac50487cbfc3145863216679",
+          "question": "出差申请需要提前多久提交,不同预算由谁审批?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "0c3e545b93524d47837847d60316eb22",
+          "question": "出差结束后如何提交报销,流程顺序和时限是什么?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "c858fa34789a46a1a7fbe195b1a356dd",
+          "question": "出差期间伙食补助和市内交通补助的标准是多少?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "82af57b20c874b649f5e046c1d77eaf3",
+          "question": "出差乘坐飞机、高铁等交通工具的职级标准是什么?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "0d14ac7bf981490fa466c187d7a9c330",
+          "question": "出差期间无法正常打卡应如何登记?",
+          "sources": [
+            "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md"
+          ]
+        }
+      ],
+      "record": "9100ee7e6b7f4532974b063d4fd6a6db",
+      "cache": "not_requested",
+      "candidates": 24,
+      "visibleOptions": 5,
+      "error": ""
+    },
+    {
+      "label": "history-restored",
+      "session": "36e6af22d0d911f19ad97dc17e3b5306",
+      "answer": "这个问题可能涉及不同的业务场景。请选择你想了解的方向，或在输入框补充说明。",
+      "complete": true,
+      "options": [
+        {
+          "id": "29e9d71bac50487cbfc3145863216679",
+          "question": "出差申请需要提前多久提交,不同预算由谁审批?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "0c3e545b93524d47837847d60316eb22",
+          "question": "出差结束后如何提交报销,流程顺序和时限是什么?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "c858fa34789a46a1a7fbe195b1a356dd",
+          "question": "出差期间伙食补助和市内交通补助的标准是多少?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "82af57b20c874b649f5e046c1d77eaf3",
+          "question": "出差乘坐飞机、高铁等交通工具的职级标准是什么?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "0d14ac7bf981490fa466c187d7a9c330",
+          "question": "出差期间无法正常打卡应如何登记?",
+          "sources": [
+            "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md"
+          ]
+        }
+      ],
+      "record": "9100ee7e6b7f4532974b063d4fd6a6db",
+      "cache": "not_requested",
+      "visibleOptions": 5,
+      "error": ""
+    },
+    {
+      "label": "selected",
+      "session": "36e6af22d0d911f19ad97dc17e3b5306",
+      "answer": "国内出差应至少提前两个工作日提交目的、地点、日期、拜访对象、交通方案和预算；国际及港澳台出差至少提前五个工作日申请[ID:0]。预算不超过5,000元由部门负责人和成本中心审批，5,001—20,000元增加分管负责人审批，超过20,000元增加财务负责人审批[ID:0]。紧急出差先取得有权审批人口头同意，并在返程后两个工作日内补办[ID:0]。",
+      "complete": true,
+      "options": [],
+      "record": "6e464da550ef456a99d016a8d38e9ca0",
+      "cache": "hit",
+      "candidates": 1,
+      "visibleOptions": 0,
+      "error": ""
+    },
+    {
+      "label": "typed-followup",
+      "session": "36e6af22d0d911f19ad97dc17e3b5306",
+      "answer": "预算为6,000元属于5,001—20,000元区间，需要部门负责人、成本中心和分管负责人审批[ID:0]。",
+      "complete": true,
+      "options": [],
+      "record": "06d16d8c984744d7b50586106a7e73c2",
+      "cache": "not_requested",
+      "candidates": 29,
+      "visibleOptions": 0,
+      "error": ""
+    },
+    {
+      "label": "emergency-followup",
+      "session": "36e6af22d0d911f19ad97dc17e3b5306",
+      "answer": "紧急出差可以先取得有权审批人的口头同意，并在返程后两个工作日内补办手续[ID:0]。",
+      "complete": true,
+      "options": [],
+      "record": "dfd4abae173e4ac382774639ce88e9a6",
+      "cache": "not_requested",
+      "candidates": 36,
+      "visibleOptions": 0,
+      "error": ""
+    }
+  ],
+  "passed": true
+}

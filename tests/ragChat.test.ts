@@ -7,6 +7,8 @@ const storage = { getItem: () => JSON.stringify({ url: 'http://127.0.0.1:8090/' 
 const json = (data: unknown) => new Response(JSON.stringify(data), { headers: { 'Content-Type': 'application/json' } })
 
 test('RAG mention is distinct from ordinary AI, people, email and missing questions', () => {
+  assert.equal(ragQuestion('@制度知识助手 请假制度是什么？'), '请假制度是什么？')
+  assert.equal(mentionsAi('@制度知识助手 请假制度是什么？'), false)
   assert.equal(ragQuestion('@AI RAG助手 请假制度是什么？'), '请假制度是什么？')
   assert.equal(ragQuestion('请 @ai RAG助手：报销要求'), '请 报销要求')
   assert.equal(ragQuestion('@AI RAG助手'), '')
@@ -19,7 +21,6 @@ test('RAG mention is distinct from ordinary AI, people, email and missing questi
   for (const text of ['@AI 总结', '@张三 请假', 'user@AI RAG助手 test', '@AI RAG助手们 问题'])
     assert.equal(ragQuestion(text), null)
 })
-
 test('text-only clarification retains needsInput and reuses the previous session', async () => {
   const requests: any[] = []
   const fetcher = async (url: string, init: RequestInit) => {
@@ -56,7 +57,7 @@ test('general AI and RAG have different senders and independent implicit history
       { id: 'q', role: 'user' as const, text: '@AI 你好', status: 'done' as const, createdAt: '' }
     ]
   }
-  assert.equal(messageSender(chat, chat.messages[1]).name, 'AI RAG助手')
+  assert.equal(messageSender(chat, chat.messages[1]).name, '制度知识助手')
   assert.equal(messageSender(chat, { ...chat.messages[1], assistant: undefined }).name, 'AI 助手')
   const context = buildContext(chat, 'q', 12)
   assert.equal(context.length, 2)
@@ -94,7 +95,7 @@ test('uses configured gateway, isolated session, complete SSE answer, evidence a
   const result = await requestRag('如何请假？', new AbortController().signal, { storage, fetcher })
   assert.equal(result.text, '按第三条办理。')
   assert.deepEqual(result.references, [{ name: '请假制度', text: '第三条：提前申请。' }])
-  assert.match(formatRagReply(result), /【AI RAG助手】[\s\S]*请假制度/)
+  assert.match(formatRagReply(result), /【制度知识助手】[\s\S]*请假制度/)
   assert.equal(requests.length, 3)
   assert.deepEqual(requests[2].body.messages, [{ role: 'user', content: '如何请假？' }])
   assert.equal(requests[2].body.session_id, 'session-one')

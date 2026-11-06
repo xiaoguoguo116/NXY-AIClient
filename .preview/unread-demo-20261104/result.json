@@ -1,0 +1,30 @@
+{
+  "preserved": true,
+  "selectedUnchanged": true,
+  "groups": [
+    {
+      "id": "demo-unread-20261104-pay",
+      "name": "答辩演示·支付联调（模拟）",
+      "count": 12,
+      "unread": 12
+    },
+    {
+      "id": "demo-unread-20261104-ops",
+      "name": "答辩演示·运维交接（模拟）",
+      "count": 10,
+      "unread": 10
+    },
+    {
+      "id": "demo-unread-20261104-qa",
+      "name": "答辩演示·测试验收（模拟）",
+      "count": 10,
+      "unread": 10
+    },
+    {
+      "id": "demo-unread-20261104-policy",
+      "name": "答辩演示·制度知识更新（模拟）",
+      "count": 10,
+      "unread": 10
+    }
+  ]
+}

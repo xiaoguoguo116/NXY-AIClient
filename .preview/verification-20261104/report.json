@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-04",
+  "services": {
+    "documentAgent8092": "healthy",
+    "ragGateway8090": "healthy",
+    "ragflow": "running",
+    "dockerRecovery": "Preserved stale runtime directory and restarted successfully"
+  },
+  "checks": {
+    "nodeRegression": {"passed": 128, "failed": 0},
+    "officePython": {"passed": 25, "skipped": 1, "skipReason": "Windows symlink privilege unavailable"},
+    "originalConversationsPreserved": 25,
+    "messageIdsMetadataMembersTodosMeetingsPreserved": true,
+    "chatBusinessLabels": "passed",
+    "desktopGeneralAI": {"passed": true, "seconds": 8.369},
+    "desktopKnowledgeQA": {"passed": true, "seconds": 8.665, "references": 6},
+    "desktopPeopleLookup": {"passed": true, "seconds": 0.352},
+    "desktopNavigation": "passed",
+    "todoCreateEditReminderExpiryPersistence": "passed",
+    "contactResponsibilitiesPersistenceAndCards": "passed",
+    "embeddedDocumentAgentNavigationPermissions": "passed",
+    "documentUploadChunkingDownload": "passed",
+    "documentModelAndKnowledgeConnections": "passed",
+    "documentKnowledgeIngestionReadback": "passed; separate temporary dataset removed",
+    "realModelExcelWordCopyAttachments": "passed; originals unchanged",
+    "realModelDocumentComparisonReviewPersistence": "passed"
+  },
+  "scope": "Current local desktop workflows. No claim of exhaustive coverage of remote IM, multi-device delivery, audio/video calls, all providers or all document formats.",
+  "backup": "before-labels.json",
+  "buildLog": "desktop-release.log"
+}

@@ -1,4 +1,5 @@
-import { getLocalFriendList } from './localContacts.ts'
+import { getLocalDirectoryProfiles } from './localContacts.ts'
+import { classifyRagIntent } from './ragIntent.ts'
 import type { RagResult } from './ragChat.ts'
 
 export const LOCAL_SELF_ID = 'local-directory-self'
@@ -144,6 +145,30 @@ const WordSegmenter = (
 ).Segmenter
 const wordSegmenter = new WordSegmenter('zh', { granularity: 'word' })
 
+const roleAliases: Record<string, string> = {
+  产品pm: '产品经理',
+  产品经理pm: '产品经理',
+  前端开发: '前端工程师',
+  后端开发: '后端工程师',
+  人事: '行政与人力伙伴',
+  财务: '财务组',
+  ui设计师: '视觉设计师',
+  薪酬专员: '薪酬福利专员'
+}
+
+function personTarget(question: string) {
+  return question
+    .normalize('NFKC')
+    .toLowerCase()
+    .replace(
+      /请帮我|帮我|麻烦|请问|我想要|我想|我要|我需要|想要|能不能|可不可以|可以|应该|请|一下|给我|查看|提供|的名片|名片|的联系方式|联系方式/g,
+      ''
+    )
+    .replace(/寻找|查找|找谁|由谁|哪位|哪个|联系|找(?:个|位)?|谁|一位|一个|同事|负责(?!人)/g, '')
+    .replace(/[\s，,。？?！!：:]/g, '')
+    .replace(/的(?=产品|前端|后端|经理|工程师|负责人)/g, '')
+}
+
 function questionTopics(question: string): string[][] {
   return question
     .toLowerCase()
@@ -151,7 +176,10 @@ function questionTopics(question: string): string[][] {
     .split(/[和及与,，。?？;；]/)
     .map((clause) => {
       const terms = new Set<string>()
-      let remainder = clause.replace(/请问|哪位|同事|应该|联系|找谁|由谁|谁|负责|需要|可以/g, ' ')
+      let remainder = clause.replace(
+        /(?:制度|政策|规定)是什么|请帮我|帮我|我想要|我想|我要|我有|遇到|关于|一个|一位|麻烦|寻找|查找|请问|哪位|同事|应该|联系|找谁|由谁|谁|负责|需要|可以|找|一下/g,
+        ' '
+      )
       for (const compound of compoundTopics) {
         if (!remainder.includes(compound)) continue
         terms.add(compound)
@@ -198,15 +226,16 @@ function keywords(text: string): string[] {
 }
 
 export function findResponsibleContacts(question: string, storage: Reader = localStorage) {
-  if (!/谁|找谁|哪位|联系人|负责|开通|申请|审批/.test(question)) return []
-  const contacts = getLocalFriendList().map((contact) => ({
-    userId: contact.peerId,
-    name: contact.username,
-    department: contact.tag,
-    responsibility: getResponsibility(contact.peerId, storage)
+  const route = classifyRagIntent(question)
+  if (route.intent !== 'people') return []
+  question = route.query
+  const contacts = getLocalDirectoryProfiles().map((contact) => ({
+    ...contact,
+    responsibility: getResponsibility(contact.userId, storage)
   }))
   const selfWork = getResponsibility(LOCAL_SELF_ID, storage)
-  if (selfWork) contacts.push({ userId: LOCAL_SELF_ID, name: '我', department: '个人主页', responsibility: selfWork })
+  if (selfWork)
+    contacts.push({ userId: LOCAL_SELF_ID, name: '我', department: '个人主页', jobTitle: '', responsibility: selfWork })
   const clauses = question
     .toLowerCase()
     .slice(0, 500)
@@ -215,13 +244,41 @@ export function findResponsibleContacts(question: string, storage: Reader = loca
     .filter((clause) => questionTopics(clause).length > 0)
   if (!clauses.length) return []
 
+  const directoryMatches = (clause: string) => {
+    const target = personTarget(clause)
+    const role = roleAliases[target] ?? target
+    return contacts.filter((contact) => {
+      const fullTitle = contact.jobTitle.toLowerCase().replace(/\s/g, '')
+      const title = fullTitle.replace(/高级|资深|初级|中级/g, '')
+      const department = contact.department.toLowerCase().replace(/\s/g, '')
+      return (
+        role === contact.name ||
+        (title &&
+          (role === fullTitle ||
+            role === title ||
+            role === department + title ||
+            role === department + '的' + title)) ||
+        role === department
+      )
+    })
+  }
   const matchesForClause = (clause: string) => {
+    const exact = directoryMatches(clause)
+    // A broad department should be refined rather than silently showing arbitrary people.
+    if (exact.length > 2) return []
+    if (exact.length)
+      return exact.map((contact) => ({
+        ...contact,
+        score: 100,
+        matchReason: `姓名/岗位/部门匹配：${contact.name} · ${contact.jobTitle} · ${contact.department}`
+      }))
     const terms = keywords(clause)
     const topics = questionTopics(clause)
     if (!terms.length || !topics.length) return []
     const ranked = contacts
       .map((contact) => ({
         ...contact,
+        matchReason: `职责匹配：${personTarget(clause)}`,
         score: terms.reduce(
           (score, term) => score + (contact.responsibility.toLowerCase().includes(term) ? term.length : 0),
           0
@@ -243,6 +300,8 @@ export function findResponsibleContacts(question: string, storage: Reader = loca
     )
   }
 
+  // “与/和” can be part of a real job title or department, not two requests.
+  if (directoryMatches(question).length) return matchesForClause(question).slice(0, 2)
   if (clauses.length === 1) return matchesForClause(clauses[0]).slice(0, 2)
   const distinct = new Map<string, ReturnType<typeof matchesForClause>[number]>()
   for (const clause of clauses) {
@@ -257,17 +316,19 @@ export function answerFromContactKnowledge(question: string, storage: Reader = l
   const matches = findResponsibleContacts(question, storage)
   if (!matches.length) return null
   return {
-    text: `根据本机人员职责知识库，下方同事的职责可能与问题相关。请查看名片核实具体事项后再联系。`,
+    text: `已检索本机联系人及工作职责，下方同事可能与问题相关。匹配依据见名片，请核实具体事项后再联系。`,
     baseUrl: 'local-contact-knowledge',
     chatId: 'contact-responsibilities',
     sessionId: '',
     references: matches.map((contact) => ({ name: `${contact.name} · 工作职责`, text: contact.responsibility })),
     options: [],
-    contacts: matches.map(({ userId, name, department, responsibility }) => ({
+    contacts: matches.map(({ userId, name, department, responsibility, jobTitle, matchReason }) => ({
       userId,
       name,
       department,
-      responsibility
+      responsibility,
+      jobTitle,
+      matchReason
     }))
   }
 }

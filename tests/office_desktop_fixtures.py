@@ -35,8 +35,14 @@ elif mode == "verify":
     hashes = json.loads((root / "original-hashes.json").read_text(encoding="utf-8"))
     assert all(digest(root / name) == value for name, value in hashes.items()), "Original files changed"
     book = load_workbook(root / "result.xlsx")
-    assert list(book["Summary"].values) == [("部门", "sum"), ("支付", 301), ("风控", 50)]
-    assert book["明细"].max_row == 4
+    def populated_rows(sheet):
+        rows = [row for row in sheet.values if any(value is not None for value in row)]
+        assert all(all(value is None for value in row[2:]) for row in rows), "Unexpected extra data columns"
+        return [row[:2] for row in rows]
+    assert populated_rows(book["Summary"]) == [("部门", "sum"), ("支付", 301), ("风控", 50)]
+    assert populated_rows(book["明细"]) == [
+        ("部门", "金额"), ("支付", 100.25), ("支付", 200.75), ("风控", 50)
+    ], "Cleaned detail values or original headers changed"
     assert book["明细"]["A2"].value == "支付"
     book.close()
     doc = Document(root / "result.docx")

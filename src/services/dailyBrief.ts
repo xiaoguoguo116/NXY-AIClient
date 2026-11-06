@@ -1,5 +1,5 @@
 import type { LocalMeeting } from './localMeetings.ts'
-import type { LocalTodo } from './localTodos.ts'
+import { todoIsExpired, type LocalTodo } from './localTodos.ts'
 
 interface BriefEntry {
   label: string
@@ -26,15 +26,16 @@ export function buildDailyBrief(todos: LocalTodo[], meetings: LocalMeeting[], no
   const today = new Date(now)
   const dayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime()
   const nextDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1).getTime()
-  const personal = todos.filter((todo) => !todo.assigneeId || todo.assigneeId === 'self')
+  const personal = todos.filter((todo) => (!todo.assigneeId || todo.assigneeId === 'self') && !todoIsExpired(todo, now))
 
   const todayMeetings = meetings
     .filter((meeting) => {
       const start = Date.parse(meeting.startAt)
       return (
         !meeting.cancelledAt &&
-        start >= dayStart &&
         start < nextDay &&
+        // With no end time there is no reliable ongoing interval; only show upcoming meetings.
+        (meeting.endAt ? Date.parse(meeting.endAt) > now : start >= now) &&
         meeting.participants.find((person) => person.id === 'self')?.response !== 'declined'
       )
     })
@@ -48,11 +49,7 @@ export function buildDailyBrief(todos: LocalTodo[], meetings: LocalMeeting[], no
     .filter((todo) => !todo.completed && (!todo.dueAt || Date.parse(todo.dueAt) < nextDay))
     .map((todo) => {
       const due = todo.dueAt ? Date.parse(todo.dueAt) : Number.POSITIVE_INFINITY
-      const marker = !todo.dueAt
-        ? '待排期'
-        : due < now
-          ? `已到期 ${new Date(due).toLocaleDateString('zh-CN', { month: 'numeric', day: 'numeric' })} ${clock(due)}`
-          : `今日 ${clock(due)}`
+      const marker = !todo.dueAt ? '待排期' : `今日 ${clock(due)}`
       return { at: due, label: `[${marker}] ${singleLine(todo.title)}` }
     })
     .sort((a, b) => a.at - b.at)
@@ -60,7 +57,7 @@ export function buildDailyBrief(todos: LocalTodo[], meetings: LocalMeeting[], no
   const completed = personal
     .filter((todo) => {
       const at = todo.completedAt ? Date.parse(todo.completedAt) : Number.NaN
-      return todo.completed && at >= dayStart && at < nextDay
+      return todo.completed && at >= dayStart && at <= now
     })
     .map((todo) => ({ at: Date.parse(todo.completedAt!), label: singleLine(todo.title) }))
     .sort((a, b) => b.at - a.at)

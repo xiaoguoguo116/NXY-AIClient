@@ -73,6 +73,7 @@
         "noImplicitAnyLet": "off",
         "noConfusingVoidType": "off",
         "noArrayIndexKey": "off",
+        "noPrototypeBuiltins": "off",
         "useIterableCallbackReturn": "off"
       }
     }

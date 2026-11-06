@@ -1,0 +1,17 @@
+2026-11-03 客户端打包与真实聊天测试
+
+已更新桌面快捷方式所指向的 src-tauri/target/release/em.exe，并核验与旧版文件哈希不同。
+已生成 src-tauri/target/release/bundle/msi/EM_2.0.1_x64_en-US.msi（30,720,000 字节）。
+前端类型检查、前端打包、Rust release 编译和 MSI 生成完成。
+
+实际客户端使用新建本地聊天发送：@AI RAG助手 查制度：加班需要满足什么条件、由谁审批？
+第一轮：原 Docker localhost 转发访问超时，会话创建返回 502。
+恢复方式：本机 8090 网关直接连接同一 Docker 虚拟机的 172.23.123.118/api/v1。
+这只是当前本机连接恢复；该 IP 可能随 Docker/WSL 重启改变。启动脚本为本目录 gateway-direct.py；未修改原服务配置文件。
+第二轮：config_ready 34ms，session_ready 114ms，回答响应头 169ms；120006ms 超时，无 first_text 和无气泡文字更新。
+容器内 RAG API 正常；容器直连 api.deepseek.com 以及沿用系统代理均超时；Windows 访问同一模型地址返回预期的未鉴权 401。
+实际 UI 结果为错误“请求超时，请稍后重试。”，未能验证成功流式输出；没有使用模拟回答替代真实测试。
+
+记录：ui-result.json、initial-failure.json、complete.png。
+原客户端备份：em-before-update.exe。
+客户端已重新打开，保留测试会话与用户原有数据。

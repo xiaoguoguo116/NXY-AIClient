@@ -1,0 +1,222 @@
+{
+  "phase": "account-recheck",
+  "started": "2026-10-26T01:13:38.470Z",
+  "cases": [
+    {
+      "id": "account",
+      "question": "账号怎么处理？",
+      "expected": "clarify",
+      "session": "798ec160d0da11f1b944335d6c41166e",
+      "elapsed": 10276,
+      "answer": "这个问题可能涉及不同的业务场景。请选择你想了解的方向，或在输入框补充说明。",
+      "options": [
+        {
+          "id": "375fcd38b4ca48c9804e6f7285c68093",
+          "question": "离职人员的账号应如何处理?",
+          "sources": [
+            "信息安全管理制度.bdb9da804ed7cc43.be58e8cb3fe6a574.md",
+            "M13_2026-09-04_登录安全与账号治理例会.c8ea48e6709d.ab1d3d2c6f23c48fb684.md"
+          ]
+        },
+        {
+          "id": "c925cba7380c4988b6af13bb9b348dbf",
+          "question": "申请账号权限需要满足哪些要求?",
+          "sources": [
+            "信息安全管理制度.212718b4bfd3.30010621ed37840e95b1.md"
+          ]
+        },
+        {
+          "id": "e32ceb5270b9469288ff1e2b699ccfc9",
+          "question": "远程办公时发生账号异常应如何处理?",
+          "sources": [
+            "10_远程办公管理制度.0661197500c3.109a94309f7e0772dce0.md"
+          ]
+        },
+        {
+          "id": "6e1d2495094547b49c8fb923cedc2155",
+          "question": "员工离职、转岗或项目结束时,账号权限应如何处理?",
+          "sources": [
+            "21_保密与信息分级制度.42981f3ff733.5d6c85f8a321c584e828.md"
+          ]
+        },
+        {
+          "id": "740dab63639f4fc7b887f5e370adeaca",
+          "question": "生产故障处置期间如何申请紧急授权?",
+          "sources": [
+            "信息安全管理制度.212718b4bfd3.30010621ed37840e95b1.md"
+          ]
+        }
+      ],
+      "needsInput": false,
+      "cacheId": "37b113b81a76465b9c4cbcbda8e692f1",
+      "cacheStatus": "not_requested",
+      "preprocessing": {
+        "ambiguity_reasons": [
+          "未说明账号类型(如系统账号、业务账号、离职账号等)",
+          "未说明处理场景或目的(如开通、注销、变更、找回等)",
+          "缺少具体所问事项,无法确定查询范围"
+        ],
+        "ambiguity_score": 0.85,
+        "ambiguity_signals": [
+          "short_question",
+          "underspecified_action"
+        ],
+        "confidence": 0.9,
+        "context_used": false,
+        "corrections": [],
+        "intent_parts": [
+          "账号处理"
+        ],
+        "missing_topic": false,
+        "model_called": true,
+        "normalized_question": "账号怎么处理?",
+        "original_question": "账号怎么处理？",
+        "retrieval_queries": [
+          "账号怎么处理?",
+          "账号怎么处理"
+        ],
+        "status": "success"
+      },
+      "decision": {
+        "answer_coverage": [
+          {
+            "question": "离职人员的账号应如何处理?",
+            "reason": "选项问离职人员账号处理，证据明确要求停用/禁用离职账号，可直接回答。",
+            "supported": true
+          },
+          {
+            "question": "申请账号权限需要满足哪些要求?",
+            "reason": "选项问账号权限申请要求，证据完整列出申请条件与审批要求。",
+            "supported": true
+          },
+          {
+            "question": "远程办公时发生账号异常应如何处理?",
+            "reason": "选项问远程办公账号异常处理，证据给出时限和具体措施，可直接回答。",
+            "supported": true
+          },
+          {
+            "question": "员工离职、转岗或项目结束时,账号权限应如何处理?",
+            "reason": "选项问离职、转岗或项目结束时的账号权限处理，证据明确要求当日收回不再需要的权限。",
+            "supported": true
+          },
+          {
+            "question": "生产故障处置期间如何申请紧急授权?",
+            "reason": "选项问生产故障期间紧急授权申请，证据完整说明条件、记录和补审批要求。",
+            "supported": true
+          }
+        ],
+        "candidate_pool_count": 24,
+        "evidence_valid_option_count": 5,
+        "model_action": "clarify",
+        "reason": "grounded_options",
+        "shown_evidence_chars": 4715,
+        "shown_evidence_count": 24,
+        "valid_option_count": 5
+      },
+      "timings": {
+        "clarification_ms": 6926.97262799993,
+        "first_output_ms": 10207.690634000073,
+        "preprocessing_ms": 2111.833789000002,
+        "query_preparation_ms": 2129.750377999926,
+        "retrieval_ms": 1113.2151330000397,
+        "total_ms": 10207.696077000037
+      },
+      "record": "f4dd348f9e624967814632bf90f6c9fb",
+      "candidateCount": 27,
+      "contextCount": 0,
+      "documents": [
+        "M13_2026-09-04_登录安全与账号治理例会.c8ea48e6709d.ab1d3d2c6f23c48fb684.md",
+        "信息安全管理制度.bdb9da804ed7cc43.be58e8cb3fe6a574.md",
+        "信息安全管理制度.212718b4bfd3.30010621ed37840e95b1.md",
+        "业务分析报告.552dd4b0c7e12482.4805f21e667c4f6f.md",
+        "业务分析报告.0a7048181247.2608606a1da78ca9fed1.md",
+        "05-人民币银行结算账户管理办法实施细则.8c9f48871ceb.10377732b1a6bd9a9064.md",
+        "10_远程办公管理制度.0661197500c3.109a94309f7e0772dce0.md",
+        "18_客户投诉管理制度.7c085d65153f.48a26ffcbbf571750e11.md",
+        "14_印章与证照管理制度.421af9b9a594.a78457db4f16340f1523.md",
+        "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md",
+        "21_保密与信息分级制度.42981f3ff733.5d6c85f8a321c584e828.md",
+        "06-银行卡收单业务管理办法.0ac61aa51c7b.c4468f5ebb870041891b.md",
+        "04-人民币银行结算账户管理办法.37173235b564.885e0e015181e1fbc1df.md",
+        "17_预算管理制度.b67a60a8e087.ce2e31f9c14a86e510b0.md",
+        "16_固定资产管理制度.68a6d31149c7.483203e35ee7f4be2959.md"
+      ],
+      "context": [],
+      "contractPassed": true,
+      "expectedShape": true,
+      "clicks": [
+        {
+          "question": "离职人员的账号应如何处理?",
+          "session": "798ec160d0da11f1b944335d6c41166e",
+          "elapsed": 3145,
+          "answer": "离职人员的账号处理方式如下：\n\n安全组检查内部知识平台账号时，发现17个离职人员账号尚未禁用[ID:0]。会议决定由魏然在9月6日前禁用这17个离职账号[ID:0]。审计要求恢复便利性不能削弱离职账号禁用措施[ID:0]。\n\n此外，按照制度要求，系统负责人每季度组织账号复核，停用离职人员账号和无业务用途的账号[ID:1]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 2999.7108139998545,
+            "answer_validation_ms": 1683.4787679999863,
+            "first_output_ms": 3091.170732000137,
+            "query_preparation_ms": 45.835891000024276,
+            "retrieval_ms": 4.189498999949137,
+            "total_ms": 3091.175719000148
+          },
+          "record": "532b3e1aff1449a295aa24f75d4a63c6",
+          "candidateCount": 2,
+          "contextCount": 2,
+          "documents": [
+            "M13_2026-09-04_登录安全与账号治理例会.c8ea48e6709d.ab1d3d2c6f23c48fb684.md",
+            "信息安全管理制度.bdb9da804ed7cc43.be58e8cb3fe6a574.md"
+          ],
+          "context": [
+            {
+              "id": "360451b72659db23",
+              "document": "M13_2026-09-04_登录安全与账号治理例会.c8ea48e6709d.ab1d3d2c6f23c48fb684.md",
+              "text": "来源：M13_2026-09-04_登录安全与账号治理例会.md\n分块：2/4\n上下文：2026-09-04 登录安全与账号治理例会\n\n安全组检查了内部知识平台账号，发现17个离职人员账号尚未禁用，另有6个共享账号无法确定具体使用人。运维建议启用口令复杂度校验和短信二次验证，业务负责人希望保留部门共用账号以降低培训成本，审计明确要求操作行为能够追溯到自然人。\n\n会议决定由魏然在9月6日前禁用17个离职账号，由各部门在9月8日前拆分6个共享账号。短信验证先覆盖管理员，连续5次输错口令锁定15分钟。此次改造只涉及账号、口令和短信验证码，没有采购、签发或续费机构身份凭证的安排。\n\n客服另提出老员工忘记密码后恢复流程过长的问题，服务台将重置响应目标设为2小时，重置前必须核验工号和直属主管确认。齐悦在9月10日前更新操作手册，并抽查10张重置工单。审计要求恢复便利性不能削弱离职账号禁用措施。\n\n"
+            },
+            {
+              "id": "83adbaba20ce3e6e",
+              "document": "信息安全管理制度.bdb9da804ed7cc43.be58e8cb3fe6a574.md",
+              "text": "来源：信息安全管理制度.md\n分块：3/4\n标题：信息安全管理制度 > 第二章 账号与访问管理 > 第二节 定期复核\n\n### 第二节 定期复核\n\n第五条 系统负责人每季度组织账号复核，停用离职人员账号和无业务用途的账号。\n\n| 复核对象 | 频率 | 责任部门 |\n| --- | --- | --- |\n| 特权账号 | 每月 | 技术部 |\n| 普通账号 | 每季度 | 各使用部门 |\n\n"
+            }
+          ]
+        },
+        {
+          "question": "申请账号权限需要满足哪些要求?",
+          "session": "798ec160d0da11f1b944335d6c41166e",
+          "elapsed": 2904,
+          "answer": "申请账号权限需要满足以下要求：\n\n权限申请应遵循最小必要原则[ID:0]。申请人应说明业务用途、访问范围和使用期限[ID:0]。部门负责人核实业务需要，系统负责人审核权限范围[ID:0]。临时权限到期后自动回收；确需延期的，应重新履行审批手续[ID:0]。",
+          "options": [],
+          "needsInput": false,
+          "cacheStatus": "hit",
+          "preprocessing": {},
+          "decision": {},
+          "timings": {
+            "answer_generation_ms": 2777.9441979998865,
+            "answer_validation_ms": 1443.396182000015,
+            "first_output_ms": 2842.823029999863,
+            "query_preparation_ms": 32.51357600015581,
+            "retrieval_ms": 0.2777999998215819,
+            "total_ms": 2842.828215999816
+          },
+          "record": "aede689227a346a288e49bb2881030aa",
+          "candidateCount": 1,
+          "contextCount": 1,
+          "documents": [
+            "信息安全管理制度.212718b4bfd3.30010621ed37840e95b1.md"
+          ],
+          "context": [
+            {
+              "id": "7d8b1caa2b1ef5b7",
+              "document": "信息安全管理制度.212718b4bfd3.30010621ed37840e95b1.md",
+              "text": "来源：信息安全管理制度.md\n分块：3/6\n上下文：信息安全管理制度 > 第二章 账号与访问管理 > 第一节 权限申请 > 第三条\n\n## 第二章 账号与访问管理\n\n### 第一节 权限申请\n\n第三条 权限申请应遵循最小必要原则，并满足以下要求：\n（一）申请人应说明业务用途、访问范围和使用期限。\n（二）部门负责人核实业务需要，系统负责人审核权限范围。\n（三）临时权限到期后自动回收；确需延期的，应重新履行审批手续。\n\n"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "finished": "2026-10-26T01:13:54.941Z"
+}

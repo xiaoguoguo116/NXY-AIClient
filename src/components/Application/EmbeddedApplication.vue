@@ -23,12 +23,15 @@
   import { LogicalPosition, LogicalSize } from '@tauri-apps/api/dpi'
   import { fetch as nativeFetch } from '@tauri-apps/plugin-http'
   import { validateApplicationUrl } from '@/services/localApplications'
-  const props = withDefaults(defineProps<{ url: string; title?: string; viewLabel?: string; closable?: boolean; compact?: boolean }>(), {
-    title: 'RAGFlow 知识助手',
-    viewLabel: 'ragflow-embedded',
-    closable: false,
-    compact: false
-  })
+  const props = withDefaults(
+    defineProps<{ url: string; title?: string; viewLabel?: string; closable?: boolean; compact?: boolean }>(),
+    {
+      title: '制度知识助手',
+      viewLabel: 'ragflow-embedded',
+      closable: false,
+      compact: false
+    }
+  )
   defineEmits<{ close: [] }>()
   const host = ref<HTMLElement>(),
     error = ref('')
@@ -60,8 +63,9 @@
       let timer: ReturnType<typeof setTimeout> | undefined
       try {
         await Promise.race([
-          nativeFetch(url, { method: 'HEAD', headers: { Origin: '' }, signal: controller.signal })
-            .then(response => response.arrayBuffer()),
+          nativeFetch(url, { method: 'HEAD', headers: { Origin: '' }, signal: controller.signal }).then((response) =>
+            response.arrayBuffer()
+          ),
           new Promise<never>((_, reject) => {
             timer = setTimeout(() => {
               controller.abort()

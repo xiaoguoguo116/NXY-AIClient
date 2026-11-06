@@ -70,7 +70,11 @@
       </div>
 
       <n-scrollbar class="application-center__scroll">
-        <LocalApplications v-if="activeView === 'local'" :keyword="searchKeyword" @open="openKnowledge" @open-markdown="openMarkdown" />
+        <LocalApplications
+          v-if="activeView === 'local'"
+          :keyword="searchKeyword"
+          @open="openKnowledge"
+          @open-markdown="openMarkdown" />
         <div v-else-if="!userStore.authInfo.token && activeView === 'market'" class="application-center__empty">
           <strong>在线应用市场暂不可用</strong>
           <p>原有应用列表来自服务端，未被删除。本地模式没有登录凭证，不能加载该列表。</p>
@@ -114,7 +118,7 @@
       v-if="markdownUrl"
       :key="markdownUrl"
       :url="markdownUrl"
-      title="Markdown 文档上传智能体"
+      :title="embeddedTitle"
       view-label="markdown-agent-embedded"
       closable
       @close="markdownUrl = ''" />
@@ -217,13 +221,14 @@
   import LocalApplications from '@/components/Application/LocalApplications.vue'
   import EmbeddedApplication from '@/components/Application/EmbeddedApplication.vue'
   const markdownUrl = ref('')
+  const embeddedTitle = ref('Markdown 文档上传智能体')
   function openMarkdown(url: string) {
     markdownUrl.value = url
+    embeddedTitle.value = 'Markdown 文档上传智能体'
   }
-  import { useRouter } from 'vue-router'
-  const router = useRouter()
-  function openKnowledge() {
-    void router.push({ path: '/home/ai', query: { view: 'knowledge' } })
+  function openKnowledge(url: string) {
+    embeddedTitle.value = '制度知识助手'
+    markdownUrl.value = url
   }
   import PluginCard from '@/components/Application/PluginCard.vue'
   import PluginDetailDrawer from '@/components/Application/PluginDetailDrawer.vue'

@@ -25,7 +25,7 @@ const path = require('node:path');
       localStorage.setItem('em.todo-test-contacts', JSON.stringify(contacts));
       localStorage.setItem('em.local-todos.v1', JSON.stringify({ version: 1, items: todos }));
     }, { contacts, todos });
-    await page.goto('http://127.0.0.1:1425/tests/todos-preview.html');
+    await page.goto(`${process.env.TEST_ORIGIN || 'http://127.0.0.1:1425'}/tests/todos-preview.html`);
     const toggle = page.getByRole('button', { name: '筛选接收联系人', exact: true });
     await toggle.waitFor();
     assert.equal(await toggle.getAttribute('aria-expanded'), 'false');

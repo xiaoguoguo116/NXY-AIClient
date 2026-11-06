@@ -34,6 +34,21 @@ export interface LocalTodo extends TodoDraft {
   publisherId?: string
   completedAt?: string
 }
+/** A reminder firing is not a deadline: only the task's dueAt makes it read-only. */
+export function todoIsExpired(todo: Pick<TodoDraft, 'dueAt'>, now = Date.now()) {
+  return !!todo.dueAt && Number.isFinite(Date.parse(todo.dueAt)) && Date.parse(todo.dueAt) <= now
+}
+export function assertTodoEditable(todo: LocalTodo | undefined, now = Date.now()) {
+  if (!todo) throw new Error('待办不存在，请刷新列表。')
+  if (todoIsExpired(todo, now)) throw new Error('待办已过截止时间，仅供查看，不能再操作。')
+}
+export function compareTodoDeadline(a: LocalTodo, b: LocalTodo, now = Date.now()) {
+  return (
+    Number(todoIsExpired(a, now)) - Number(todoIsExpired(b, now)) ||
+    (a.dueAt ? Date.parse(a.dueAt) : Infinity) - (b.dueAt ? Date.parse(b.dueAt) : Infinity) ||
+    Date.parse(a.createdAt) - Date.parse(b.createdAt)
+  )
+}
 export function publishedTodos(items: LocalTodo[]) {
   const groups = new Map<string, LocalTodo[]>()
   for (const item of items) {
@@ -173,7 +188,7 @@ export function isDue(todo: LocalTodo, now = Date.now()) {
     !todo.remindedAt
   )
 }
-// Only explicitly addressed, affirmative commands create tasks without confirmation.
+// Legacy parser retained for import compatibility; chat execution uses confirmed action drafts.
 export function parseTodoCommand(text: string, now = new Date()): TodoDraft | null {
   const command = text.trim().replace(/^@ai(?=[\s，,:：\u4e00-\u9fff])[\s，,:：]*/i, '')
   if (command === text.trim()) return null

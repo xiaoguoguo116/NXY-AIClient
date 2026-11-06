@@ -1,0 +1,409 @@
+{
+  "checked": [
+    {
+      "record": "a9d77e061f9947b68d4395622ef24f75",
+      "question": "国内出差和国际及港澳台出差分别需要提前多久提交申请,预算不同由谁审批?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "4198d78a3916458f9864a66296964bda",
+      "question": "出差",
+      "options": 5,
+      "cache": "not_requested",
+      "contextCount": 0,
+      "status": "clarification"
+    },
+    {
+      "record": "c9f5eca70da048f4a088ea9a43792bf0",
+      "question": "出差流程",
+      "options": 5,
+      "cache": "not_requested",
+      "contextCount": 0,
+      "status": "clarification"
+    },
+    {
+      "record": "ba0f99414ea14906804f16f9f684a6f8",
+      "question": "出差返程后报销应按什么顺序提交,财务多久完成审核?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "dfae4165760c4c2884408e58b1c6d5a7",
+      "question": "不同职级出差乘坐飞机、高铁、列车分别适用什么标准?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "11f01fbe5b28423fb57fc5c9208e3ce0",
+      "question": "出差伙食补助和市内交通补助按什么标准计算?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "e2350c4e55c84294a15281c06df6e783",
+      "question": "出差期间因公务外出无法正常打卡应如何提交和确认?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "3c8e9a3d096f4840b51d2627918720b7",
+      "question": "出差申请需要提前多久提交,预算不同分别由谁审批?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "3f81c0b8fb944f0f8a02a1a0c9abf2a9",
+      "question": "我准备出差，请根据差旅制度给我几个可以继续了解的办理方向。",
+      "options": 5,
+      "cache": "not_requested",
+      "contextCount": 0,
+      "status": "clarification"
+    },
+    {
+      "record": "055f02a4fa704bd9a3c23e231a69059a",
+      "question": "出差回来后报销应按什么顺序提交,需要哪些材料?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "41913eac5c4b41469187d7b96a0ed070",
+      "question": "不同职级出差乘坐飞机、高铁的标准是什么?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "f6d15694c325443ba4cd3dbc8f9d5474",
+      "question": "出差住宿费的限额标准是多少?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 2,
+      "status": "answered"
+    },
+    {
+      "record": "9908e806962a47ef92d4cf561925d14e",
+      "question": "国内出差需要提前多久申请，填写哪些信息？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "passed",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "79d48052d3b8417fa4edffb88d1b9998",
+      "question": "出差伙食补助和市内交通补助按什么标准计算?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "99e8a98b45c54f498bdcad8c54447e65",
+      "question": "那去香港呢？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "passed",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "2d60b369ac104564896597acfa9b9e91",
+      "question": "如果是紧急出差，来不及提前申请呢？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "passed",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "22d5ce03011945c0b29dbfd0eddd9023",
+      "question": "回来以后怎么报销，多久内要提交？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "passed",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "1db5ef0ba33a4ad2ac4d31dc9c42294d",
+      "question": "出差预算为5000元、5001元、20000元和20001元时，分别需要哪些人审批？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "passed",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "f865e8d7d2964ce094cc8766d4b1418c",
+      "question": "如果预算改成25000元呢？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "passed",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "fbe8ae2472304016a962f8fb02fb75d7",
+      "question": "我这次国内出差预算6000元，要找谁审批？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "passed",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "c927ca9169c04d67a44a442e541d6652",
+      "question": "审批人可以批准自己的费用吗？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "passed",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "22b5870f32eb40f8a694b6b29135ab39",
+      "question": "出差回来报销，具体流程和时限是什么？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "passed",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "d908558066bd48ff9b3adfc51eda82b0",
+      "question": "临时通知我今天就要出差，正常的提前申请时间来不及了，该怎么办？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "passed",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "e67069bb1a864bdd99679ee4c74639e1",
+      "question": "如果是紧急出差，来不及提前申请呢？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "passed",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "20ce5c1ce8234fc1ae058242c1384cb7",
+      "question": "我已经紧急出差回来了，补办审批最晚是什么时候？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "passed",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "21c655e573bf4b06a89ad80734210ec8",
+      "question": "我是P2员工，出差到北京，住宿每晚最多报销多少？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "passed",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "b01f4e690953497aba46ebbf768a9a67",
+      "question": "遇到大型展会房价超过标准怎么办？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "repaired",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "b23dee44dbf049fe8e5588b59bcdc8f0",
+      "question": "出差审批通过后行程延期或取消，需要怎么办？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "passed",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "a56c0e3e8b3a4faf91cd06f1dcd5d7a3",
+      "question": "出差到上海，主办方包一顿正餐并统一提供市内交通，当天伙食和交通补助怎么算？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "passed",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "10b29ed0d07d423f8671f1e8546f0299",
+      "question": "出差住宿发票丢失，可以直接用付款截图代替发票报销吗？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "passed",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "5f47607ccda64ec5bc0170a5e4d2c215",
+      "question": "差旅制度中去火星出差的每日补贴标准是多少？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "passed",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "70bf1f94fdee48d09a3d9cf588ee85a3",
+      "question": "国内出差和国际/港澳台出差分别需要提前多久提交申请?审批权限如何按预算金额划分?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "eabe1c5dad304bb5830d9ec7f075ec93",
+      "question": "出差流程",
+      "options": 5,
+      "cache": "not_requested",
+      "contextCount": 0,
+      "status": "clarification"
+    },
+    {
+      "record": "8478435458de4e1792b0d08adcebc474",
+      "question": "如果我这次出差预算为6000元，需要哪些人审批？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "passed",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "ce2e1b8e23314b57b9ff717c4665660b",
+      "question": "如果是紧急出差，来不及提前申请呢？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "passed",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "90648ec4867841c9ba0cf981db5fb544",
+      "question": "账号怎么处理？",
+      "options": 0,
+      "cache": "not_requested",
+      "contextCount": 0,
+      "status": "clarification"
+    },
+    {
+      "record": "62b33fcde8f440e18e346f79c6bf7bca",
+      "question": "出差流程",
+      "options": 5,
+      "cache": "not_requested",
+      "contextCount": 0,
+      "status": "clarification"
+    },
+    {
+      "record": "49a9099c66b7426b900af4a4c60f1b32",
+      "question": "加值班制度",
+      "options": 5,
+      "cache": "not_requested",
+      "contextCount": 0,
+      "status": "clarification"
+    },
+    {
+      "record": "bb3d110101e34d4a809528e7cc364344",
+      "question": "怎么申请？",
+      "options": 0,
+      "cache": "not_requested",
+      "contextCount": 0,
+      "status": "clarification"
+    },
+    {
+      "record": "84284138953f481891747f912a0eb52b",
+      "question": "我是想申请加班，需要哪些步骤？",
+      "options": 0,
+      "cache": "not_requested",
+      "answerValidation": "passed",
+      "contextCount": 6,
+      "status": "answered"
+    },
+    {
+      "record": "eb907a5959a64ebcb3d888b41a298ead",
+      "question": "加班与调休管理制度的适用范围是什么?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "bccb8c82074b410cbd9b13db03002252",
+      "question": "加班费的计算基数如何确定?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "c66b6762f66a458c8358e646f7fc14b8",
+      "question": "加班、值班和请假制度",
+      "options": 5,
+      "cache": "not_requested",
+      "contextCount": 0,
+      "status": "clarification"
+    },
+    {
+      "record": "f4dd348f9e624967814632bf90f6c9fb",
+      "question": "账号怎么处理？",
+      "options": 5,
+      "cache": "not_requested",
+      "contextCount": 0,
+      "status": "clarification"
+    },
+    {
+      "record": "aede689227a346a288e49bb2881030aa",
+      "question": "申请账号权限需要满足哪些要求?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 1,
+      "status": "answered"
+    },
+    {
+      "record": "532b3e1aff1449a295aa24f75d4a63c6",
+      "question": "离职人员的账号应如何处理?",
+      "options": 0,
+      "cache": "hit",
+      "answerValidation": "passed",
+      "contextCount": 2,
+      "status": "answered"
+    }
+  ],
+  "errors": []
+}

@@ -25,7 +25,7 @@ use work::commands::{
     work_runtime_install, work_runtime_list, work_session_cancel, work_session_close,
     work_session_new, work_session_prompt, work_session_resolve_permission,
     work_session_set_config, work_skill_install, work_skill_local_state, work_skill_set_enabled,
-    work_skill_uninstall, work_status,
+    work_skill_uninstall, work_status, work_workspace_prepare,
 };
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -97,6 +97,7 @@ pub fn run() {
             work_runtime_check_update,
             work_runtime_install,
             work_provider_list,
+            work_workspace_prepare,
             work_preferences_get,
             work_preferences_save,
             work_provider_save,

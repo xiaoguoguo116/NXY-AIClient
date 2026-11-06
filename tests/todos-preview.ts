@@ -10,6 +10,6 @@ if (fixtureContacts) {
 }
 const { default: Todos } = await import('../src/views/homeWindow/pages/todos.vue')
 const router = createRouter({ history: createMemoryHistory(), routes: [{ path: '/', component: Todos }] })
-await router.push('/')
+await router.push('/' + window.location.search)
 await router.isReady()
 createApp(Todos).use(pinia).use(router).mount('#app')

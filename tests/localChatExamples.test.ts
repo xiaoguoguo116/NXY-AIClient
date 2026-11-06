@@ -18,7 +18,7 @@ const original = (): LocalChatData => ({
   ]
 })
 
-test('adds seven labeled groups and 86 attributed messages without altering existing data', () => {
+test('adds seven business groups and 86 attributed messages without altering existing data', () => {
   const data = original()
   const before = structuredClone(data)
   const now = new Date('2026-10-20T08:00:00Z')
@@ -30,11 +30,12 @@ test('adds seven labeled groups and 86 attributed messages without altering exis
   const groups = result.conversations.slice(1)
   assert.equal(groups.flatMap((group) => group.messages).length, 86)
   for (const group of groups) {
-    assert.match(group.name, /本地示例|模拟项目/)
+    assert.doesNotMatch(group.name, /示例|模拟|测试|演示/)
     assert.equal(group.notifications, false)
-    assert.match(group.announcement!, /模拟数据/)
+    assert.doesNotMatch(group.announcement!, /示例|模拟|测试|演示/)
     assert(group.members!.every((member) => member.kind === 'self' || member.kind === 'simulated'))
     for (const [index, message] of group.messages.entries()) {
+      assert.doesNotMatch(message.text, /模拟|测试|演示/)
       assert.equal(messageSender(group, message).id, message.senderId)
       assert.equal(message.status, 'done')
       assert(new Date(message.createdAt) < now)
@@ -43,6 +44,39 @@ test('adds seven labeled groups and 86 attributed messages without altering exis
   }
   const ids = groups.flatMap((group) => group.messages.map((message) => message.id))
   assert.equal(new Set(ids).size, ids.length)
+})
+
+test('existing case labels migrate once without changing references or ordinary chats', () => {
+  const data = original()
+  data.exampleGroupsVersion = 2
+  data.conversations[0].messages[0].text = '保留用户的测试环境说明'
+  data.conversations.push({
+    id: 'local-example-v2-ticket-delivery',
+    name: '客户工单平台·一期交付（模拟项目）',
+    messages: [
+      { id: 'source', role: 'user', text: '测试环境部署已完成，演示时间待确认。', status: 'done', createdAt: '' },
+      {
+        id: 'quote',
+        role: 'assistant',
+        text: '测试环境',
+        assistant: 'ragflow',
+        quoteId: 'source',
+        status: 'done',
+        createdAt: ''
+      }
+    ],
+    readState: { seenIds: ['source'], summaryIds: [] }
+  })
+  const before = structuredClone(data)
+  const result = withExampleConversations(data)
+  assert.deepEqual(data, before)
+  assert.deepEqual(result.conversations[0], before.conversations[0])
+  assert.equal(result.conversations[1].name, '客户工单平台·一期交付')
+  assert.equal(result.conversations[1].messages[0].text, '验证环境部署已完成，交流时间待确认。')
+  assert.deepEqual(result.conversations[1].messages[1], before.conversations[1].messages[1])
+  assert.deepEqual(result.conversations[1].readState, before.conversations[1].readState)
+  assert.equal(result.selectedId, before.selectedId)
+  assert.equal(withExampleConversations(result), result)
 })
 
 test('version two adds project groups without resurrecting removed version-one examples', () => {

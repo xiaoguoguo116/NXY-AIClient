@@ -1,0 +1,53 @@
+[
+  {
+    "at": 15967,
+    "traceId": "3c02bf5d",
+    "stage": "start",
+    "elapsedMs": 0
+  },
+  {
+    "at": 15977,
+    "traceId": "3c02bf5d",
+    "stage": "request_start",
+    "elapsedMs": 10,
+    "path": "config"
+  },
+  {
+    "at": 15997.799999999814,
+    "traceId": "3c02bf5d",
+    "stage": "response_headers",
+    "elapsedMs": 31,
+    "path": "config",
+    "durationMs": 21,
+    "status": 200
+  },
+  {
+    "at": 16002,
+    "traceId": "3c02bf5d",
+    "stage": "config_ready",
+    "elapsedMs": 35
+  },
+  {
+    "at": 16002.09999999986,
+    "traceId": "3c02bf5d",
+    "stage": "request_start",
+    "elapsedMs": 35,
+    "path": "ragflow-api/chats/1f8d4354c38711f193a109fdac79609a/sessions"
+  },
+  {
+    "at": 34973.39999999991,
+    "traceId": "3c02bf5d",
+    "stage": "response_headers",
+    "elapsedMs": 19007,
+    "path": "ragflow-api/chats/1f8d4354c38711f193a109fdac79609a/sessions",
+    "durationMs": 18971,
+    "status": 502
+  },
+  {
+    "at": 34973.5,
+    "traceId": "3c02bf5d",
+    "stage": "request_end",
+    "elapsedMs": 19007,
+    "aborted": false
+  }
+]

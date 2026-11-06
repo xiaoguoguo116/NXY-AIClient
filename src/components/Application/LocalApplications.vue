@@ -4,16 +4,16 @@
       <div class="card-heading">
         <span class="app-logo">合</span>
         <div>
-          <h3>合规工作台</h3>
-          <small>AI Work · 本地辅助审核</small>
+          <h3>任务助手</h3>
+          <small>AI Work · 文件处理与制度比对</small>
         </div>
         <span class="local-badge">内置功能</span>
       </div>
-      <p>制度比对、文本合规初审、报送草稿。制度查询请使用 RAG 知识问答，结果待人工审核。</p>
+      <p>处理 Excel、修改 Word、整理文件，左右对照制度原文差异。</p>
       <div class="tags">
         <span>原文溯源</span>
         <span>条款比对</span>
-        <span>风险初审</span>
+        <span>文件处理</span>
         <span>Word 草稿</span>
       </div>
       <div class="actions">
@@ -26,12 +26,12 @@
       <div class="card-heading">
         <span class="app-logo">R</span>
         <div>
-          <h3>RAGFlow 知识助手</h3>
-          <small>本机定制版 · 追问与知识检索</small>
+          <h3>制度知识助手</h3>
+          <small>查制度 · 找依据 · 找负责人</small>
         </div>
         <span class="local-badge">内嵌应用</span>
       </div>
-      <p>打开已有的升级版 RAGFlow 前端，保留追问选项、召回块、耗时信息及云端历史会话。</p>
+      <p>先澄清问题，再查询知识库；回答附原文依据，也能按职责查找负责人。</p>
       <div class="tags">
         <span>追问选项</span>
         <span>召回块</span>
@@ -43,7 +43,7 @@
         <button @click="edit = !edit">配置地址</button>
       </div>
       <form v-if="edit" @submit.prevent="save">
-        <p class="hint">在 AI Work 内显示原前端，复用 RAGFlow 登录。地址仅保存在此电脑，不使用群聊 DeepSeek 密钥。</p>
+        <p class="hint">在应用中心内显示原前端，复用 RAGFlow 登录。地址仅保存在此电脑，不使用群聊 DeepSeek 密钥。</p>
         <label>
           RAGFlow 地址
           <input v-model="draft.url" required aria-label="RAGFlow 地址" />
@@ -88,7 +88,7 @@
     </article>
     <p v-if="!matches && !matchesMarkdown && !matchesCompliance" class="hint">没有匹配的常用应用。</p>
     <p class="hint service-hint">文档上传智能体在应用中心内打开；需保持 8092 服务运行。</p>
-    <p class="hint service-hint">RAGFlow 在 AI Work → 知识问答中使用；需保持本机服务运行。</p>
+    <p class="hint service-hint">RAGFlow 在应用中心内打开；需保持本机服务运行。</p>
   </section>
 </template>
 <script setup lang="ts">
@@ -106,7 +106,7 @@
   } from '@/services/localApplications'
   const props = defineProps<{ keyword: string }>()
   const matchesCompliance = computed(() =>
-    '合规 工作台 制度 问答 比对 初审 监管 报送 原文 溯源'.includes(props.keyword.trim().toLowerCase())
+    '任务 文件 excel word 制度 比对 原文 溯源'.includes(props.keyword.trim().toLowerCase())
   )
   const emit = defineEmits<{ open: [url: string]; openMarkdown: [url: string] }>()
   const markdownUrl = ref(DEFAULT_MARKDOWN_AGENT.url)

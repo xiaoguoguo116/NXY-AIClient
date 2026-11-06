@@ -139,6 +139,7 @@
     "allow-work-runtime-check-update",
     "allow-work-runtime-install",
     "allow-work-provider-list",
+    "allow-work-workspace-prepare",
     "allow-work-preferences-get",
     "allow-work-preferences-save",
     "allow-work-provider-save",

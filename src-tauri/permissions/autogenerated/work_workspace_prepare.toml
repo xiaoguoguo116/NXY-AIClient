@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-work-workspace-prepare"
+description = "Enables the work_workspace_prepare command without any pre-configured scope."
+commands.allow = ["work_workspace_prepare"]
+
+[[permission]]
+identifier = "deny-work-workspace-prepare"
+description = "Denies the work_workspace_prepare command without any pre-configured scope."
+commands.deny = ["work_workspace_prepare"]

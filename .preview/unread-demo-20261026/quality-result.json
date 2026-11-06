@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "checks": {
+    "completed": true,
+    "exactSources": true,
+    "correctedDeadline": true,
+    "regressionOwner": true,
+    "monitoringOwner": true,
+    "completedDocument": true,
+    "releaseNotInvented": true,
+    "personalTodo": true,
+    "progressiveRendering": true,
+    "noOtherConversation": true,
+    "noReadHistory": true
+  },
+  "observations": [
+    "原模拟消息没有明确监控验证与指标核对的范围完全相同；模型保留关系确认提醒。保留已知的赵宁及18:00安排，不将这项范围确认误判为漏掉负责人。",
+    "总结为辅助结果，仍需结合可展开的原消息核对。"
+  ]
+}

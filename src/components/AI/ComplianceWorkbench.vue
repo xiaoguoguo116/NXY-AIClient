@@ -9,14 +9,11 @@
         {{ showLibrary ? '收起资料库' : '管理资料库' }}（{{ documents.length }}）
       </button>
     </header>
-    <p class="cw-notice">
-      本地试用版：资料与审核记录保存在此电脑，非正式合规结论。使用独立本地资料库，尚不自动同步 RAGFlow
-      全库或监管更新。引用校验仅确认原文一致性，不代表结论或适用性已获审核。
-    </p>
+    <p class="cw-notice">上传两份文件即可在本机查看文字差异。AI 分析可进一步给出条款解释和修订草稿，需人工审核。</p>
     <p v-if="error" class="cw-error" role="alert">{{ error }}</p>
     <p v-if="notice" role="status">{{ notice }}</p>
     <section v-if="showLibrary" class="cw-card">
-      <h3>添加依据文件 / 业务材料 / 报送模板</h3>
+      <h3>{{ mode === 'compare' ? '上传制度文件 / 粘贴正文' : '添加依据文件 / 业务材料 / 报送模板' }}</h3>
       <p class="cw-muted">
         文件在本机解析并保留原件。PDF 保留页码；Word 以提取文本段落定位，不保留原始页码。扫描文件请先 OCR；Word
         修订痕迹、文本框等内容需人工核对。
@@ -67,7 +64,7 @@
           v-model="pasted"
           rows="5"
           aria-label="资料全文"
-          placeholder="报送模板可用 {{指标名称}} 占位符，例如 {{报告期}}。"
+          :placeholder="mode === 'compare' ? '粘贴需要比对的完整正文' : '报送模板可使用指标占位符'"
           :disabled="!!pendingFile" />
       </label>
       <button class="cw-primary" :disabled="busy || importing" @click="addDocument">
@@ -78,6 +75,58 @@
         <button @click="openSource(doc, doc.paragraphs[0]?.id)">查看原文</button>
       </div>
     </section>
+    <section v-if="mode === 'compare'" class="cw-card cw-comparison-picker">
+      <div class="cw-diff-selectors">
+        <label>
+          基准 / 旧版文件
+          <select
+            :value="selectedIds[0] || ''"
+            aria-label="基准文件"
+            :disabled="busy"
+            @change="selectComparison(0, $event)">
+            <option value="">请选择文件</option>
+            <option v-for="doc in documents" :key="doc.id" :value="doc.id" :disabled="doc.id === selectedIds[1]">
+              {{ doc.name }}
+            </option>
+          </select>
+        </label>
+        <button
+          :disabled="busy || selectedIds.length !== 2"
+          @click="
+            selectedIds = [selectedIds[1], selectedIds[0]]
+            diffView = 'selected'
+          ">
+          交换左右
+        </button>
+        <label>
+          新版 / 待比对文件
+          <select
+            :value="selectedIds[1] || ''"
+            aria-label="新版文件"
+            :disabled="busy"
+            @change="selectComparison(1, $event)">
+            <option value="">请选择文件</option>
+            <option v-for="doc in documents" :key="doc.id" :value="doc.id" :disabled="doc.id === selectedIds[0]">
+              {{ doc.name }}
+            </option>
+          </select>
+        </label>
+      </div>
+      <label v-if="result?.mode === 'compare'">
+        差异来源
+        <select v-model="diffView" aria-label="差异来源">
+          <option value="selected">当前选择的文件</option>
+          <option value="result">历史结果中的原文快照</option>
+        </select>
+      </label>
+      <DocumentDiff
+        v-if="diffDocuments.length === 2"
+        :left="documentText(diffDocuments[0])"
+        :right="documentText(diffDocuments[1])"
+        :left-name="diffDocuments[0].name"
+        :right-name="diffDocuments[1].name" />
+      <p v-else class="cw-muted">选择两份文件后直接显示差异，无需等待 AI 分析。</p>
+    </section>
     <div class="cw-columns">
       <section class="cw-card cw-input">
         <h3>本次任务</h3>
@@ -85,15 +134,9 @@
           适用日期
           <input v-model="applicableDate" type="date" />
         </label>
-        <fieldset>
+        <fieldset v-if="mode !== 'compare'">
           <legend>
-            {{
-              mode === 'compare'
-                ? '选择两份文件（依次为基准 / 新版或待检查制度）'
-                : mode === 'report'
-                  ? '选择报送模板与参考材料'
-                  : '选择依据和材料'
-            }}
+            {{ mode === 'report' ? '选择报送模板与参考材料' : '选择依据和材料' }}
           </legend>
           <label v-for="doc in documents" :key="doc.id" class="cw-check">
             <input v-model="selectedIds" type="checkbox" :value="doc.id" :disabled="busy" />
@@ -102,13 +145,6 @@
           </label>
           <p v-if="!documents.length">暂无资料，请先在上方资料库上传或粘贴文件。</p>
         </fieldset>
-        <label v-if="mode === 'review'">
-          待审业务材料
-          <select v-model="targetId" aria-label="待审业务材料">
-            <option value="">请选择</option>
-            <option v-for="doc in selectedDocs" :key="doc.id" :value="doc.id">{{ doc.name }}</option>
-          </select>
-        </label>
         <label>
           {{ mode === 'policy' ? '查询问题（说明机构类型、业务范围和时点）' : '任务说明' }}
           <textarea v-model="question" rows="4" aria-label="合规任务说明" :placeholder="hints[mode]" />
@@ -141,7 +177,10 @@
           :key="r.id"
           class="cw-history"
           :disabled="busy"
-          @click="result = r">
+          @click="
+            result = r
+            diffView = 'result'
+          ">
           {{ displayTime(r.createdAt) }} · {{ r.question.slice(0, 28) }}
         </button>
       </section>
@@ -229,6 +268,7 @@
 
 <script setup lang="ts">
   import { computed, nextTick, onActivated, onBeforeUnmount, onMounted, reactive, ref, toRaw, watch } from 'vue'
+  import DocumentDiff from '@/components/AI/DocumentDiff.vue'
   import { API_KEY_KEY, CONFIG_KEY, DEFAULT_CONFIG, requestAi } from '@/services/localChat'
   import {
     MODE_LABELS,
@@ -238,7 +278,6 @@
     parseMetrics,
     parseWorkResult,
     persistRecord,
-    scanRiskPhrases,
     splitParagraphs,
     validateDocuments,
     type DocumentKind,
@@ -252,7 +291,6 @@
   const hints = {
     policy: '支付机构申请接入，需要哪些材料、核查要点和时限？',
     compare: '请对照新监管文件，列出内部制度疑似冲突和待核实缺口。',
-    review: '请初审这份对外业务方案，检查承诺措辞与依据是否一致。',
     report: '生成季度报告初稿，缺失数据明确标记待补充。'
   }
   const form = reactive({
@@ -272,7 +310,6 @@
     selectedIds.value.map((id) => documents.value.find((d) => d.id === id)!).filter(Boolean)
   )
   const question = ref(''),
-    targetId = ref(''),
     consent = ref(false),
     busy = ref(false),
     importing = ref(false),
@@ -284,6 +321,17 @@
     result = ref<WorkResult>(),
     source = ref<PolicyDocument>(),
     activeParagraph = ref('')
+  const diffView = ref<'selected' | 'result'>('selected')
+  const diffDocuments = computed(() =>
+    diffView.value === 'result' && result.value?.mode === 'compare' ? result.value.documents : selectedDocs.value
+  )
+  const documentText = (doc: PolicyDocument) => doc.paragraphs.map((p) => p.text).join('\n\n')
+  function selectComparison(index: number, event: Event) {
+    const next = [...selectedIds.value]
+    next[index] = (event.target as HTMLSelectElement).value
+    selectedIds.value = next.slice(0, 2)
+    diffView.value = 'selected'
+  }
   const applicableDate = ref(new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Shanghai' }))
   const displayTime = (value: string) =>
     new Date(value).toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai', hour12: false })
@@ -319,7 +367,7 @@
     }
   )
   watch(
-    [selectedIds, question, metricText, targetId, applicableDate],
+    [selectedIds, question, metricText, applicableDate],
     () => {
       consent.value = false
     },
@@ -379,7 +427,13 @@
       }
       await persistRecord('documents', doc)
       documents.value.push(doc)
-      selectedIds.value.push(id)
+      if (props.mode === 'compare') {
+        const next = [...selectedIds.value]
+        const slot = !next[0] ? 0 : 1
+        next[slot] = id
+        selectedIds.value = next.slice(0, 2)
+        diffView.value = 'selected'
+      } else selectedIds.value.push(id)
       pasted.value = ''
       pendingFile.value = undefined
       Object.assign(form, { name: '', number: '', issuer: '', version: '', effective: '', expires: '', scope: '' })
@@ -393,6 +447,7 @@
   async function record(r: WorkResult) {
     await persistRecord('results', r)
     result.value = r
+    diffView.value = 'result'
     history.value = [r, ...history.value.filter((x) => x.id !== r.id)]
   }
   async function run() {
@@ -405,12 +460,11 @@
     try {
       if (!question.value.trim()) throw new Error('请填写问题或任务说明。')
       const submittedQuestion = question.value,
-        submittedDate = applicableDate.value,
-        submittedTarget = targetId.value
+        submittedDate = applicableDate.value
       const docs = structuredClone(toRaw(selectedDocs.value).map((d) => toRaw(d)))
       const metrics = mode === 'report' ? parseMetrics(metricText.value) : undefined
       if (mode === 'report' && !docs.some((d) => d.kind === '报送模板')) throw new Error('请至少选择一份报送模板。')
-      const req = buildWorkRequest(mode, docs, submittedQuestion, submittedDate, submittedTarget, metrics)
+      const req = buildWorkRequest(mode, docs, submittedQuestion, submittedDate, metrics)
       const config = { ...DEFAULT_CONFIG, ...JSON.parse(localStorage.getItem(CONFIG_KEY) || '{}') }
       if (config.baseUrl !== modelBaseUrl.value) {
         refreshModel()
@@ -419,10 +473,6 @@
       const raw = await requestAi(config, localStorage.getItem(API_KEY_KEY) || '', req.messages, controller.signal)
       if (controller.signal.aborted) return
       const parsed = parseWorkResult(raw, docs)
-      if (mode === 'review') {
-        const target = docs.find((d) => d.id === submittedTarget)
-        if (target) parsed.findings = [...scanRiskPhrases(target), ...parsed.findings]
-      }
       await record({
         ...parsed,
         id: crypto.randomUUID(),
@@ -549,6 +599,19 @@
     padding: 12px 16px;
     border-radius: 10px;
     line-height: 1.7;
+  }
+  .cw-diff-selectors {
+    display: flex;
+    align-items: end;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .cw-diff-selectors label {
+    flex: 1;
+    min-width: 180px;
+  }
+  .cw-comparison-picker {
+    margin-top: 16px;
   }
   .cw-columns {
     display: grid;

@@ -1,0 +1,27 @@
+--- a/api/db/services/dialog_service.py
++++ b/api/db/services/dialog_service.py
+@@ -1296,8 +1296,14 @@
+         else:
+             stream_iter = chat_mdl.async_chat_streamly_delta(prompt + prompt4citation, msg[1:], gen_conf, images=image_files)
+         last_state = None
+-        async for kind, value, state in _stream_with_think_delta(stream_iter):
++        model_stream_started = timer()
++        preview_requested = kwargs.get("stream_preview") is True
++        # Preview clients need the first available model text without token batching.
++        async for kind, value, state in _stream_with_think_delta(stream_iter, min_tokens=0 if preview_requested else 16):
+             last_state = state
++            if kind == "text" and value and not state.in_think and "model_first_visible_text_ms" not in audit["timings"]:
++                audit["timings"]["model_first_visible_text_ms"] = (timer() - model_stream_started) * 1000
++                audit["timings"]["before_model_stream_ms"] = (model_stream_started - chat_start_ts) * 1000
+             if check_answer:
+                 # A consenting client can display an explicitly provisional preview.
+                 # Keep it outside "answer": structure_answer must only persist the
+@@ -1969,7 +1975,7 @@
+         if section == "think":
+             return text
+         state.answer_buffer += text
+-        if num_tokens_from_string(state.answer_buffer) >= min_tokens:
++        if min_tokens <= 0 or num_tokens_from_string(state.answer_buffer) >= min_tokens:
+             out = state.answer_buffer
+             state.answer_buffer = ""
+             return out

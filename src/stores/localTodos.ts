@@ -5,11 +5,13 @@ import {
   validDraft,
   isDue,
   todoReminderAt,
+  assertTodoEditable,
   type LocalTodo,
   type TodoDraft,
   type TodoRecipient
 } from '@/services/localTodos'
 import { inferTodoDeadline } from '@/services/todoTime'
+import { deleteTodoAttachments } from '@/services/todoAttachments'
 import { showNotification } from '@/utils/desktop/notification'
 
 export const todoState = reactive({ items: [] as LocalTodo[], error: '', alert: '', systemNotice: '' })
@@ -50,6 +52,9 @@ export function addTodo(draft: TodoDraft, sourceKey?: string, sourceName?: strin
   return todo
 }
 export function updateTodo(id: string, patch: Partial<LocalTodo>) {
+  initTodos()
+  // Check the stored deadline, not the proposed patch, including forms opened before expiry.
+  assertTodoEditable(todoState.items.find((item) => item.id === id))
   commit(
     todoState.items.map((t) => {
       if (t.id !== id) return t
@@ -60,6 +65,20 @@ export function updateTodo(id: string, patch: Partial<LocalTodo>) {
       return next
     })
   )
+}
+export async function deleteTodo(id: string) {
+  initTodos()
+  const todo = todoState.items.find((item) => item.id === id)
+  if (!todo) throw new Error('待办不存在，请刷新列表。')
+  // Expiry prevents editing, but does not prevent removing an unwanted record.
+  const remaining = todoState.items.filter((item) => item.id !== id)
+  commit(remaining)
+  const referenced = new Set(remaining.flatMap((item) => (item.attachments || []).map((file) => file.id)))
+  try {
+    await deleteTodoAttachments((todo.attachments || []).map((file) => file.id).filter((id) => !referenced.has(id)))
+  } catch {
+    todoState.systemNotice = '待办已删除，但附件清理失败。'
+  }
 }
 export function addAssignedTodos(
   draft: TodoDraft,

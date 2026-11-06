@@ -38,7 +38,11 @@ TOOLS = [
     schema("read_sheet", "Inspect xlsx/csv/tsv sheet names, dimensions and a bounded row window (1-based). Returns formulas, not calculated formula results.",
            {"path": S, "sheet": S, "start_row": {"type": "integer"}, "limit": {"type": "integer"}}, ["path"]),
     schema("edit_sheet", """Create or edit xlsx/csv/tsv into a NEW output file. Input path optional.
-Each operation must contain "type". Operations run in order on sheet (default first):
+Each operation must contain "type". Operations run in order on the top-level sheet (default first).
+An operation may set "sheet" to an EXISTING worksheet name (including a Summary sheet created earlier in this call).
+Omitting operation.sheet always uses the top-level/default sheet, NOT the last operation's sheet.
+summary creates target_sheet but does NOT change the default sheet. To format/edit its result, set sheet:"Summary" on that operation.
+Only the documented keys are accepted for each operation:
 {type:"set_cells",cells:{A1:value,...}}, {type:"append_rows",rows:[[...]]},
 trim {}, deduplicate {columns:[1,2],header:true}, sort {column:1,descending:false,header:true,numeric:false},
 summary {group_column:1,value_column:2,aggregate:"sum|average|count",target_sheet:"Summary"} (first row is header),
@@ -56,14 +60,10 @@ Unsupported legacy .doc files must be converted by the user.""",
            {"path": S, "output": S, "replacements": {"type": "array", "items": {"type": "object"}},
             "paragraphs": {"type": "array", "items": {"type": "object"}}}, ["output"]),
     schema("write_text", "Write UTF-8 txt/md/json into a NEW file.", {"output": S, "text": S}, ["output", "text"]),
-    schema("process_image", "Crop, resize, compress or convert png/jpg/webp into a NEW file. No AI background removal.",
-           {"path": S, "output": S, "width": {"type": "integer"}, "height": {"type": "integer"},
-            "crop": {"type": "array", "items": {"type": "integer"}, "minItems": 4, "maxItems": 4},
-            "quality": {"type": "integer"}}, ["path", "output"]),
     schema("copy_file", "Copy a workspace or attached file to a NEW named file inside the workspace. Does not delete originals.",
            {"path": S, "output": S}, ["path", "output"]),
 ]
-WRITE_TOOLS = {"edit_sheet", "write_document", "write_text", "process_image", "copy_file"}
+WRITE_TOOLS = {"edit_sheet", "write_document", "write_text", "copy_file"}
 
 
 class OfficeTools:
@@ -218,10 +218,28 @@ class OfficeTools:
             if sheet and sheet not in book.sheetnames:
                 book.create_sheet(sheet)
             ws = book[sheet] if sheet else book.active
+            default_sheet = ws.title
+            operation_fields = {
+                "set_cells": {"cells"}, "append_rows": {"rows"}, "trim": set(),
+                "deduplicate": {"columns", "header"},
+                "sort": {"column", "descending", "header", "numeric"},
+                "summary": {"group_column", "value_column", "aggregate", "target_sheet"},
+                "format": {"range", "bold", "number_format", "width"},
+                "chart": {"range", "title", "anchor"},
+            }
             for op in operations:
                 if self.cancelled():
                     raise InterruptedError("Task cancelled")
                 kind = op["type"]
+                if kind not in operation_fields:
+                    raise ValueError(f"Unsupported sheet operation: {kind}")
+                unknown = set(op) - operation_fields[kind] - {"type", "sheet"}
+                if unknown:
+                    raise ValueError(f"Unsupported {kind} parameters: {', '.join(sorted(unknown))}. Use sheet for an operation's worksheet.")
+                operation_sheet = op.get("sheet", default_sheet)
+                if operation_sheet not in book.sheetnames:
+                    raise ValueError(f"Worksheet does not exist: {operation_sheet}")
+                ws = book[operation_sheet]
                 if kind == "set_cells":
                     for address, value in op["cells"].items():
                         bounds = range_boundaries(address)
@@ -411,30 +429,6 @@ class OfficeTools:
         if Path(output).suffix.lower() not in {".txt", ".md", ".json"}:
             raise ValueError("Text output must be txt/md/json")
         return self.publish(output, lambda target: target.write_text(text, encoding="utf-8"))
-
-    def process_image(self, path, output, width=None, height=None, crop=None, quality=85):
-        from PIL import Image, ImageOps
-        if Path(output).suffix.lower() not in {".png", ".jpg", ".jpeg", ".webp"}:
-            raise ValueError("Image output must be png/jpg/webp")
-        with Image.open(self.path(path)) as original:
-            img = ImageOps.exif_transpose(original)
-            if crop:
-                if len(crop) != 4 or not (0 <= crop[0] < crop[2] <= img.width and 0 <= crop[1] < crop[3] <= img.height):
-                    raise ValueError("Crop is out of bounds")
-                img = img.crop(tuple(crop))
-            if width is not None or height is not None:
-                width = width if width is not None else round(img.width * height / img.height)
-                height = height if height is not None else round(img.height * width / img.width)
-                if not (1 <= width <= 10000 and 1 <= height <= 10000 and width * height <= 40_000_000):
-                    raise ValueError("Invalid image dimensions")
-                img = img.resize((width, height), Image.Resampling.LANCZOS)
-            if Path(output).suffix.lower() in {".jpg", ".jpeg"}:
-                img = img.convert("RGB")
-            def save(target):
-                img.save(target, quality=max(1, min(quality, 95)), optimize=True)
-                with Image.open(target) as check:
-                    check.verify()
-            return self.publish(output, save)
 
     def copy_file(self, path, output):
         import shutil

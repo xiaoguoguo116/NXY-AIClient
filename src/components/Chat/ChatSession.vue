@@ -8,6 +8,9 @@
         :peer-id="props.chat.peerId"
         :scene-type="props.chat.sceneType ?? SceneType.User" />
       <div class="chat-session__header-actions" @click.stop>
+        <n-button v-if="props.chat.sceneType === SceneType.Group" size="small" @click="knowledgeOpen = true">
+          问问本群
+        </n-button>
         <n-tooltip placement="bottom" :show-arrow="false">
           <template #trigger>
             <SvgIconButton href="#record" @click="onOpenChatRecord" />
@@ -56,13 +59,22 @@
         <template #second>
           <div class="chat-session__input">
             <div class="flex items-center gap-8px text-12px">
-              <button type="button" @click="editorRef?.insertText('@AI RAG助手 ')">@AI RAG助手</button>
+              <button type="button" @click="editorRef?.insertText('@制度知识助手 ')">@制度知识助手</button>
               <span>制度回答将由当前账号发送到聊天</span>
             </div>
             <div v-if="ragBusy" class="flex items-center gap-8px text-12px">
               <button type="button" @click="ragController?.abort()">停止 RAG</button>
             </div>
             <div v-if="ragStatus" role="status">{{ ragStatus }}</div>
+            <section v-if="ragPreview" class="rag-stream-preview" aria-label="RAG 生成预览">
+              <small>
+                {{ ragBusy ? '正在生成预览，完成后核对依据并发送。' : '未完成的预览，请以聊天中的最终回答为准。' }}
+              </small>
+              <p>
+                {{ ragPreview }}
+                <span v-if="ragBusy">▍</span>
+              </p>
+            </section>
             <div class="flex-1 flex w-full min-h-0">
               <MessageEditor
                 ref="editorRef"
@@ -161,6 +173,13 @@
         @history-deleted="onChatHistoryDeleted"
         @group-dissolved="onGroupDissolved"
         @friend-deleted="onFriendDeleted" />
+      <ChatKnowledgePanel
+        v-if="knowledgeOpen && props.chat.sceneType === SceneType.Group"
+        :key="`knowledge-${userStore.authInfo.userId}-${props.chat.sessionId}`"
+        :group-name="props.chat.peerName || '当前群聊'"
+        :load-history="loadOnlineKnowledgeHistory"
+        :revision="messages"
+        @close="knowledgeOpen = false" />
       <SelectGroupCallMembersModal
         v-if="props.chat.sceneType === SceneType.Group"
         v-model:show="groupCallModalVisible"
@@ -172,8 +191,31 @@
 <script setup lang="ts">
   import { useI18n } from 'vue-i18n'
   import { RAG_MENTION_ID, ragQuestion, requestRag, formatRagReply } from '@/services/ragChat'
+  import { progressiveText } from '@/services/chatStream'
+  import ChatKnowledgePanel from './ChatKnowledgePanel.vue'
+  import { loadGroupHistory } from '@/db/chatKnowledge'
+  const knowledgeOpen = ref(false)
+  async function loadOnlineKnowledgeHistory() {
+    const userId = userStore.authInfo.userId
+    const sessionId = props.chat.sessionId
+    if (props.chat.sceneType !== SceneType.Group) throw new Error('请先选择群聊。')
+    const history = await loadGroupHistory(userId, sessionId)
+    if (userId !== userStore.authInfo.userId || sessionId !== props.chat.sessionId)
+      throw new Error('当前账号或群聊已切换。')
+    return {
+      ...history,
+      messages: history.messages.map((message) => ({
+        ...message,
+        author:
+          message.author === userId
+            ? '我'
+            : nameStore.getCachedName('user', message.author, props.chat.peerId) || `成员 ${message.author}`
+      }))
+    }
+  }
   const ragBusy = ref(false),
-    ragStatus = ref('')
+    ragStatus = ref(''),
+    ragPreview = ref('')
   let ragController: AbortController | undefined
   onBeforeUnmount(() => ragController?.abort())
   import { avCallApi, groupApi, messageApi, robotApi } from '@/api'
@@ -246,8 +288,10 @@
   watch(
     () => props.chat.sessionId,
     () => {
+      knowledgeOpen.value = false
       ragController?.abort()
       ragStatus.value = ''
+      ragPreview.value = ''
     }
   )
 
@@ -752,7 +796,7 @@
   }
 
   const loadMentionableItems = () => {
-    const ragMention: MentionItem = { id: RAG_MENTION_ID, name: 'AI RAG助手', type: 'robot', tag: '制度知识问答' }
+    const ragMention: MentionItem = { id: RAG_MENTION_ID, name: '制度知识助手', type: 'robot', tag: '制度知识问答' }
     mentionableItems.value = [ragMention]
     buildRobotMentions()
       .then((robots) => {
@@ -1205,7 +1249,7 @@
     }
     if (question !== null && (!question || question.length > 12000 || ragBusy.value)) {
       window.$message.warning(
-        ragBusy.value ? '请等待当前 RAG 问答完成，或先停止。' : '请在 @AI RAG助手 后输入 1–12000 字的制度问题。'
+        ragBusy.value ? '请等待当前 RAG 问答完成，或先停止。' : '请在 @制度知识助手 后输入 1–12000 字的制度问题。'
       )
       return
     }
@@ -1229,6 +1273,7 @@
     if (ragRequest) {
       ragController = ragRequest
       ragBusy.value = true
+      ragPreview.value = ''
       ragStatus.value = '正在发送制度问题…'
     }
     const sendTasks = units.flatMap((unit, index) => {
@@ -1249,8 +1294,12 @@
             return
           }
           ragStatus.value = 'RAGFlow 正在检索制度…'
+          const output = progressiveText((text) => {
+            if (props.chat.sessionId === sessionId) ragPreview.value = text
+          }, controller.signal)
           try {
-            const result = await requestRag(question, controller.signal)
+            const result = await requestRag(question, controller.signal, { onText: output.push })
+            await output.finish(result.text)
             if (controller.signal.aborted || props.chat.sessionId !== sessionId || props.chat.peerId !== peerId) return
             const reply = { msgType: 'text' as const, content: { text: formatRagReply(result) }, mentions: [] }
             const staged = stageLocalMessage({
@@ -1265,6 +1314,7 @@
               quoteMsgId: sentId
             })
             const replyId = await sendLocalMessage(staged.id, reply, peerId, sessionId)
+            if (replyId && props.chat.sessionId === sessionId) ragPreview.value = ''
             if (props.chat.sessionId === sessionId)
               ragStatus.value = replyId ? 'RAG 回答已发送到当前聊天。' : 'RAG 回答发送失败，请在消息上重试发送。'
           } catch (error) {
@@ -1275,6 +1325,7 @@
                   ? error.message
                   : 'RAGFlow：连接失败，请检查应用中心的地址及服务状态。'
           } finally {
+            output.stop()
             if (ragController === controller) {
               ragController = undefined
               ragBusy.value = false
@@ -1518,6 +1569,19 @@
   }
 </script>
 <style scoped lang="scss">
+  .rag-stream-preview {
+    max-height: 180px;
+    overflow: auto;
+    padding: 10px;
+    border: 1px solid #cbdff8;
+    border-radius: 8px;
+    background: #f3f8ff;
+    white-space: pre-wrap;
+    font-size: 13px;
+    p {
+      margin: 6px 0;
+    }
+  }
   .chat-session {
     position: relative;
     height: 100%;

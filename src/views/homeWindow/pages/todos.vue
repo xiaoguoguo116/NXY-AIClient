@@ -28,7 +28,7 @@
       <div class="brief-heading">
         <div>
           <h2 id="daily-brief-title">今日工作简报</h2>
-          <p>自动整理本机个人待办与今日会议，可复制到日报或工作群。</p>
+          <p>只整理有效个人待办、今日完成和未结束会议，自动排除过期及历史完成事项。</p>
         </div>
         <button class="primary" type="button" @click="copyDailyBrief">复制简报</button>
       </div>
@@ -45,26 +45,56 @@
     </section>
 
     <template v-if="section === 'todos'">
+      <p v-if="reminderNotice" class="calendar-notice" role="status">{{ reminderNotice }}</p>
       <div class="todo-list-toolbar">
-        <nav class="view-switch" aria-label="待办视图">
-          <button :class="{ selected: view === 'received' }" @click="setView('received')">接收的待办</button>
-          <button :class="{ selected: view === 'published' }" @click="setView('published')">我发布的</button>
-        </nav>
         <div class="header-actions">
           <button
-            v-if="view === 'received'"
             :aria-expanded="recipientFilterOpen"
             aria-controls="todo-recipient-filter"
             @click="recipientFilterOpen = !recipientFilterOpen">
             {{ recipientFilterOpen ? '收起接收人筛选' : '筛选接收联系人' }}
           </button>
           <button class="primary" aria-label="新建待办" @click="openCreate">＋ 添加待办</button>
+          <button
+            aria-label="查看成员进度"
+            :aria-expanded="progressOpen"
+            aria-controls="todo-member-progress"
+            @click="progressOpen = !progressOpen">
+            {{ progressOpen ? '收起成员进度' : '查看成员进度' }}（{{ assignmentProgress.length }} 项）
+          </button>
         </div>
       </div>
-      <p v-if="view === 'received'" class="recipient-scope">
+      <section v-if="progressOpen" id="todo-member-progress" class="member-progress-panel" aria-label="成员完成进度">
+        <h2>成员完成进度</h2>
+        <p>显示你分配给其他成员的事项，包含未分配给自己的任务。状态来自本机记录。</p>
+        <p v-if="!assignmentProgress.length" class="empty">暂无分配给其他成员的待办。</p>
+        <article
+          v-for="group in assignmentProgress"
+          :key="group.id"
+          class="assignment-progress"
+          :class="{ expired: group.expired }">
+          <div class="assignment-heading">
+            <strong>{{ group.title }}</strong>
+            <span>已完成 {{ group.completed }}/{{ group.total }} 人</span>
+          </div>
+          <progress :value="group.completed" :max="group.total" :aria-label="`${group.title}完成进度`" />
+          <small v-if="group.expired">已过截止时间 · 仅供查看</small>
+          <small v-if="group.sourceName">来源：{{ group.sourceName }}</small>
+          <ul>
+            <li v-for="member in group.items" :key="member.id" class="member-status">
+              <span>{{ member.assigneeName || '我' }}</span>
+              <strong :class="{ completed: member.completed }">{{ member.completed ? '已完成' : '未完成' }}</strong>
+              <small v-if="member.completedAt">完成于 {{ new Date(member.completedAt).toLocaleString() }}</small>
+              <small v-if="todoIsExpired(member, now)">已过截止时间 · 只读</small>
+            </li>
+          </ul>
+        </article>
+      </section>
+      <p class="recipient-scope">
         当前查看：{{ viewers.length === 1 && viewers[0] === 'self' ? '我的待办' : selectedRecipientLabel }}
       </p>
-      <div v-if="view === 'received' && recipientFilterOpen" id="todo-recipient-filter" class="todo-workspace">
+      <p v-if="locatedNotice" role="status" class="calendar-notice">{{ locatedNotice }}</p>
+      <div v-if="recipientFilterOpen" id="todo-recipient-filter" class="todo-workspace">
         <div class="viewer-label">
           <div class="viewer-heading">
             <label id="todo-viewer-label">
@@ -112,91 +142,66 @@
           {{ item.label }}
         </button>
       </nav>
-      <template v-if="view === 'published'">
-        <p class="hint">
-          按发布任务汇总；未完成表示仍有人未完成。此处只查看进度，模拟操作请切换到“接收的待办”选择成员。
-        </p>
-        <p v-if="!visiblePublished.length" class="empty">
-          暂无匹配的已发布任务。在群聊中使用 @AI @成员 把某事项加入待办，即可在这里跟踪。
-        </p>
-        <article v-for="group in visiblePublished" :key="group.id" class="published-task">
-          <div class="published-heading">
-            <strong>{{ group.title }}</strong>
-            <span>
-              {{ group.completed === group.total ? '全部完成' : '进行中' }} · 已完成 {{ group.completed }}/{{
-                group.total
-              }}
-              人
-            </span>
-          </div>
-          <small>
-            来源：{{ group.sourceName || '本地会话' }} · 发布：{{ new Date(group.createdAt).toLocaleString() }}
+      <p class="hint">已过截止时间的待办排在列表底部，不能修改，仍可删除。</p>
+      <p v-if="!visible.length" class="empty">
+        <template v-if="!selectedRecipients.length">请选择一个或多个接收人。</template>
+        <template v-else>
+          {{ selectedRecipientLabel }}暂无{{
+            filter === 'done' ? '已完成' : filter === 'pending' ? '未完成' : ''
+          }}待办记录。这里查看本机保存的待办。
+        </template>
+      </p>
+      <article
+        v-for="item in visible"
+        :key="item.id"
+        :data-assignment-key="item.assignmentKey || item.sourceKey"
+        :class="{
+          done: item.completed,
+          expired: todoIsExpired(item, now),
+          located: (item.assignmentKey || item.sourceKey) === route.query.assignment
+        }">
+        <input
+          type="checkbox"
+          :checked="item.completed"
+          :disabled="todoIsExpired(item, now)"
+          :aria-label="`完成：${item.title}`"
+          @change="toggle(item)" />
+        <div class="content">
+          <strong>{{ item.title }}</strong>
+          <small v-if="todoIsExpired(item, now)" class="expired-label">已过截止时间 · 不可修改</small>
+          <small>接收人：{{ item.assigneeName || '我' }}{{ assigneeKindLabel(item.assigneeId) }}</small>
+          <small v-if="progressByTodo.get(item.id)">
+            成员进度：已完成 {{ progressByTodo.get(item.id)!.completed }}/{{ progressByTodo.get(item.id)!.total }}
+            人，详情见“查看成员进度”。
           </small>
-          <progress :value="group.completed" :max="group.total" :aria-label="`${group.title}完成进度`" />
-          <div v-for="recipient in group.items" :key="recipient.id" class="recipient-progress">
-            <span>{{ recipient.assigneeName || '我' }}{{ assigneeKindLabel(recipient.assigneeId) }}</span>
-            <span
-              :class="{
-                finished: recipient.completed,
-                overdue: !recipient.completed && !!recipient.dueAt && Date.parse(recipient.dueAt) <= now
-              }">
-              {{
-                recipient.completed
-                  ? '已完成'
-                  : recipient.dueAt && Date.parse(recipient.dueAt) <= now
-                    ? '已到期 · 未完成'
-                    : '未完成'
-              }}
-            </span>
-            <small v-if="recipient.completed && recipient.completedAt">
-              完成于 {{ new Date(recipient.completedAt).toLocaleString() }}
-            </small>
-            <small v-if="recipient.dueAt">结束时间：{{ new Date(recipient.dueAt).toLocaleString() }}</small>
-            <small v-if="todoReminderAt(recipient)">
-              提醒：{{ new Date(todoReminderAt(recipient)!).toLocaleString() }}
-            </small>
-            <button v-for="file in recipient.attachments || []" :key="file.id" @click="downloadAttachment(file)">
+          <small :class="{ overdue: !item.completed && !!item.dueAt && Date.parse(item.dueAt) <= now }">
+            {{ item.dueAt ? `结束时间：${new Date(item.dueAt).toLocaleString()}` : '未设置结束时间' }}
+          </small>
+          <small>
+            {{ todoReminderAt(item) ? `提醒：${new Date(todoReminderAt(item)!).toLocaleString()}` : '未设置提醒' }}
+          </small>
+          <div v-if="item.attachments?.length" class="todo-attachments">
+            <button
+              v-for="file in item.attachments"
+              :key="file.id"
+              :disabled="todoIsExpired(item, now)"
+              @click="downloadAttachment(file, item)">
               下载附件：{{ file.name }}
             </button>
           </div>
-        </article>
-      </template>
-      <template v-else>
-        <p v-if="!visible.length" class="empty">
-          <template v-if="!selectedRecipients.length">请选择一个或多个接收人。</template>
-          <template v-else>
-            {{ selectedRecipientLabel }}暂无{{
-              filter === 'done' ? '已完成' : filter === 'pending' ? '未完成' : ''
-            }}待办记录。这里查看本机保存的待办。
-          </template>
-        </p>
-        <article v-for="item in visible" :key="item.id" :class="{ done: item.completed }">
-          <input type="checkbox" :checked="item.completed" :aria-label="`完成：${item.title}`" @change="toggle(item)" />
-          <div class="content">
-            <strong>{{ item.title }}</strong>
-            <small>接收人：{{ item.assigneeName || '我' }}{{ assigneeKindLabel(item.assigneeId) }}</small>
-            <small :class="{ overdue: !item.completed && !!item.dueAt && Date.parse(item.dueAt) <= now }">
-              {{ item.dueAt ? `结束时间：${new Date(item.dueAt).toLocaleString()}` : '未设置结束时间' }}
-            </small>
-            <small>
-              {{ todoReminderAt(item) ? `提醒：${new Date(todoReminderAt(item)!).toLocaleString()}` : '未设置提醒' }}
-            </small>
-            <div v-if="item.attachments?.length" class="todo-attachments">
-              <button v-for="file in item.attachments" :key="file.id" @click="downloadAttachment(file)">
-                下载附件：{{ file.name }}
-              </button>
-            </div>
-            <small v-if="item.sourceName">来源：{{ item.sourceName }}</small>
-          </div>
-          <button v-if="!item.completed" @click="snooze(item)">15 分钟后提醒</button>
-          <button @click="edit(item)">编辑</button>
-        </article>
-      </template>
+          <small v-if="item.sourceName">来源：{{ item.sourceName }}</small>
+        </div>
+        <button v-if="!item.completed" type="button" :disabled="todoIsExpired(item, now)" @click="openReminder(item)">
+          设置提醒
+        </button>
+        <button :disabled="todoIsExpired(item, now)" @click="edit(item)">编辑</button>
+        <button class="delete-todo" :disabled="!!todoState.error" @click="deletingId = item.id">删除</button>
+      </article>
       <details class="reminder-help">
         <summary>提醒说明</summary>
         <p>
           客户端运行时每 15
-          秒检查提醒；退出后不会后台提醒，下次启动补报。没有设置时间的事项仅保存，不提醒。系统提醒只提醒“我”，模拟成员状态仅供本机演示。
+          秒检查提醒；退出后不会后台提醒，下次启动补报。没有设置时间的事项仅保存，不提醒。系统提醒只提醒“我”，其他成员的状态保存在本机。
         </p>
       </details>
     </template>
@@ -205,7 +210,7 @@
       <div class="meeting-toolbar">
         <div>
           <h2>会议提醒</h2>
-          <p>查看安排和参会反馈；模拟成员的反馈可在本机切换用于演示。</p>
+          <p>查看安排和参会反馈；成员反馈可在本机更新。</p>
         </div>
         <button class="primary" @click="assistantOpen = true">＋ 发布会议</button>
       </div>
@@ -250,10 +255,7 @@
           <div class="participant-list">
             <div v-for="person in meeting.participants" :key="person.id" class="participant-row">
               <span class="participant-avatar">{{ person.name.slice(0, 1) }}</span>
-              <span class="participant-name">
-                {{ person.name
-                }}{{ person.kind === 'simulated' ? ' · 模拟成员' : person.kind === 'contact' ? ' · 联系人' : '' }}
-              </span>
+              <span class="participant-name">{{ person.name }}{{ person.kind === 'contact' ? ' · 联系人' : '' }}</span>
               <strong :class="`response-${person.response}`">{{ responseLabel(person.response) }}</strong>
               <div v-if="meetingCanChange(meeting, now)" class="response-actions">
                 <button
@@ -300,7 +302,7 @@
       <div class="schedule-heading">
         <div>
           <h2>我的日程</h2>
-          <p>会议和设置了结束时间的待办会自动汇总到这里。</p>
+          <p>会议和设置了结束时间的待办会自动汇总到这里，按时间倒序排列。</p>
         </div>
         <strong>{{ scheduleMonth }}</strong>
       </div>
@@ -346,6 +348,29 @@
           @cancel="reset" />
       </div>
     </NModal>
+    <NModal :show="!!deletingTodo" :mask-closable="false" :close-on-esc="!deleting" @update:show="deletingId = ''">
+      <div
+        class="todo-editor-dialog todo-delete-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="todo-delete-title">
+        <h2 id="todo-delete-title">删除待办</h2>
+        <p>确定删除“{{ deletingTodo?.title }}”（接收人：{{ deletingTodo?.assigneeName || '我' }}）？删除后无法恢复。</p>
+        <p v-if="deleteError" class="error" role="alert">{{ deleteError }}</p>
+        <div class="header-actions">
+          <button :disabled="deleting" @click="deletingId = ''">取消</button>
+          <button class="delete-todo" :disabled="deleting" @click="confirmDelete">
+            {{ deleting ? '删除中…' : '确认删除' }}
+          </button>
+        </div>
+      </div>
+    </NModal>
+    <TodoReminderDialog
+      v-if="reminderTodo"
+      :key="reminderTodo.id"
+      :todo="reminderTodo"
+      @close="reminderId = ''"
+      @saved="onReminderSaved" />
     <WorkAssistantDialog
       v-if="assistantOpen"
       :participants="assistantParticipants"
@@ -355,15 +380,19 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+  import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
   import { NConfigProvider, NModal, NSelect, lightTheme, type SelectOption } from 'naive-ui'
   import { useRoute } from 'vue-router'
   import WorkAssistantDialog from '@/components/WorkAssistantDialog.vue'
   import TodoEditor from '@/components/TodoEditor.vue'
-  import { todoState, initTodos, updateTodo } from '@/stores/localTodos'
+  import TodoReminderDialog from '@/components/TodoReminderDialog.vue'
+  import { todoState, initTodos, updateTodo, deleteTodo } from '@/stores/localTodos'
   import {
-    publishedTodos,
+    todoIsExpired,
+    assertTodoEditable,
+    compareTodoDeadline,
     todoReminderAt,
+    publishedTodos,
     type LocalTodo,
     type TodoRecipient,
     type TodoAttachment
@@ -410,7 +439,32 @@
     }
   )
   const editorOpen = ref(false)
+  const deletingId = ref('')
+  const deleting = ref(false)
+  const deleteError = ref('')
+  const deletingTodo = computed(() => todoState.items.find((item) => item.id === deletingId.value))
+  watch(deletingId, () => {
+    deleteError.value = ''
+  })
+  async function confirmDelete() {
+    if (!deletingTodo.value || deleting.value) return
+    deleting.value = true
+    try {
+      await deleteTodo(deletingId.value)
+      deletingId.value = ''
+      error.value = ''
+    } catch (cause) {
+      deleteError.value = cause instanceof Error ? cause.message : '删除失败，请检查本机存储。'
+    } finally {
+      deleting.value = false
+    }
+  }
+  const reminderId = ref('')
+  const reminderNotice = ref('')
+  const reminderTodo = computed(() => todoState.items.find((item) => item.id === reminderId.value))
   const recipientFilterOpen = ref(false)
+  const progressOpen = ref(false)
+  const locatedNotice = ref('')
   const editing = ref(''),
     error = ref(''),
     filter = ref('pending'),
@@ -419,15 +473,21 @@
     calendarNotice = ref('')
   const briefNotice = ref('')
   const viewers = ref<string[]>(['self']),
-    view = ref<'received' | 'published'>('received'),
     assistantOpen = ref(false),
     meetingFilter = ref<'upcoming' | 'past' | 'all'>('upcoming')
   const timer = setInterval(() => {
     now.value = Date.now()
-  }, 15000)
+  }, 1000)
   onBeforeUnmount(() => clearInterval(timer))
-  const published = computed(() => publishedTodos(todoState.items))
   const dailyBrief = computed(() => buildDailyBrief(todoState.items, meetingState.items, now.value))
+  const assignmentProgress = computed(() =>
+    publishedTodos(todoState.items)
+      .map((group) => ({ ...group, expired: group.items.every((item) => todoIsExpired(item, now.value)) }))
+      .sort((a, b) => Number(a.expired) - Number(b.expired) || Date.parse(b.createdAt) - Date.parse(a.createdAt))
+  )
+  const progressByTodo = computed(
+    () => new Map(assignmentProgress.value.flatMap((group) => group.items.map((item) => [item.id, group] as const)))
+  )
   async function copyDailyBrief() {
     try {
       await writeText(dailyBrief.value.text)
@@ -437,11 +497,16 @@
     }
   }
   const editingTodo = computed(() => todoState.items.find((item) => item.id === editing.value))
-  const visiblePublished = computed(() =>
-    published.value.filter(
-      (group) => filter.value === 'all' || (group.completed === group.total) === (filter.value === 'done')
-    )
-  )
+  watch(now, () => {
+    if (
+      (editingTodo.value && todoIsExpired(editingTodo.value, now.value)) ||
+      (reminderTodo.value && todoIsExpired(reminderTodo.value, now.value))
+    ) {
+      reset()
+      reminderId.value = ''
+      error.value = '待办已过截止时间，已切换为只读；未保存的修改未生效。'
+    }
+  })
   const recipientOptions = computed(() => buildTodoViewerOptions(contactsStore.friendList, todoState.items))
   const contactCount = computed(() => recipientOptions.value.filter((option) => option.kind === 'contact').length)
   const selectedRecipients = computed(() =>
@@ -496,7 +561,37 @@
     scopedItems.value
       .filter((item) => filter.value === 'all' || item.completed === (filter.value === 'done'))
       .slice()
-      .sort((a, b) => (a.dueAt ? Date.parse(a.dueAt) : Infinity) - (b.dueAt ? Date.parse(b.dueAt) : Infinity))
+      .sort((a, b) => compareTodoDeadline(a, b, now.value))
+  )
+  watch(
+    () => route.query.assignment,
+    async (key) => {
+      locatedNotice.value = ''
+      if (typeof key !== 'string' || !key) return
+      const matches = todoState.items.filter((item) => item.assignmentKey === key || item.sourceKey === key)
+      if (!matches.length) {
+        locatedNotice.value = '这项待办未找到，请检查本机记录。'
+        return
+      }
+      section.value = 'todos'
+      filter.value = 'all'
+      setViewers(
+        recipientOptions.value
+          .filter(
+            (option) =>
+              option.kind !== 'all' && matches.some((item) => option.assigneeIds.includes(item.assigneeId || 'self'))
+          )
+          .map((option) => option.value)
+      )
+      recipientFilterOpen.value = true
+      progressOpen.value = matches.some((item) => item.assigneeId && item.assigneeId !== 'self')
+      locatedNotice.value = `已定位“${matches[0].title}”，已显示全部接收人的记录。`
+      await nextTick()
+      Array.from(document.querySelectorAll<HTMLElement>('[data-assignment-key]'))
+        .find((el) => el.dataset.assignmentKey === key)
+        ?.scrollIntoView({ block: 'center' })
+    },
+    { immediate: true }
   )
   const upcomingMeetings = computed(() =>
     meetingState.items.filter((meeting) => !meeting.cancelledAt && Date.parse(meeting.startAt) >= now.value)
@@ -552,7 +647,7 @@
       ...todoState.items
         .filter((item) => item.dueAt && !item.completed && (!item.assigneeId || item.assigneeId === 'self'))
         .map((item) => ({ id: item.id, kind: 'todo' as const, title: item.title, at: item.dueAt! }))
-    ].sort((a, b) => Date.parse(a.at) - Date.parse(b.at))
+    ].sort((a, b) => Date.parse(b.at) - Date.parse(a.at))
   )
   const scheduleGroups = computed(() => {
     const groups = new Map<string, ScheduleItem[]>()
@@ -572,11 +667,6 @@
     })
   })
   const scheduleMonth = computed(() => new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long' }))
-  function setView(next: 'received' | 'published') {
-    view.value = next
-    filter.value = next === 'published' ? 'all' : 'pending'
-    reset()
-  }
   function attempt(action: () => void) {
     try {
       action()
@@ -596,18 +686,19 @@
   function onTodoSaved() {
     if (!editing.value) {
       section.value = 'todos'
-      view.value = 'received'
       viewers.value = ['self']
       filter.value = 'pending'
     }
     reset()
   }
   function edit(item: LocalTodo) {
+    if (todoIsExpired(item)) return
     editing.value = item.id
     editorOpen.value = true
   }
-  async function downloadAttachment(file: TodoAttachment) {
+  async function downloadAttachment(file: TodoAttachment, item: LocalTodo) {
     try {
+      assertTodoEditable(item)
       await downloadTodoAttachment(file)
       error.value = ''
     } catch (cause) {
@@ -619,10 +710,14 @@
       updateTodo(item.id, { completed: !item.completed, remindedAt: item.completed ? undefined : item.remindedAt })
     )
   }
-  function snooze(item: LocalTodo) {
-    attempt(() =>
-      updateTodo(item.id, { reminderAt: new Date(Date.now() + 900000).toISOString(), remindedAt: undefined })
-    )
+  function openReminder(item: LocalTodo) {
+    if (todoIsExpired(item)) return
+    reminderNotice.value = ''
+    reminderId.value = item.id
+  }
+  function onReminderSaved(message: string) {
+    reminderId.value = ''
+    reminderNotice.value = message
   }
   function monthDayLabel(value: string) {
     return new Date(value).toLocaleDateString('zh-CN', { month: 'long', day: 'numeric' })
@@ -663,7 +758,6 @@
       meetingFilter.value = 'all'
     } else {
       section.value = 'todos'
-      view.value = 'received'
       filter.value = 'all'
       viewers.value = ['self']
     }
@@ -677,6 +771,100 @@
 </script>
 
 <style scoped>
+  .delete-todo {
+    color: #bf3030;
+    border-color: #e9baba;
+  }
+  .todo-delete-dialog p {
+    overflow-wrap: anywhere;
+    line-height: 1.6;
+  }
+  .todos-page > article.located {
+    outline: 2px solid #71aee9;
+    outline-offset: 2px;
+  }
+  .member-progress-panel {
+    margin: 0 0 20px;
+    padding: 18px;
+    border: 1px solid #dce6f2;
+    border-radius: 14px;
+    background: #f6faff;
+  }
+  .member-progress-panel h2 {
+    margin: 0 0 6px;
+    font-size: 17px;
+  }
+  .member-progress-panel > p {
+    margin: 0 0 14px;
+    color: #64758b;
+    font-size: 13px;
+  }
+  .assignment-progress {
+    padding: 16px;
+    margin-top: 12px;
+    background: white;
+    border: 1px solid #dce6f2;
+    border-radius: 10px;
+  }
+  .assignment-progress.expired {
+    background: #f2f4f7;
+    color: #64758b;
+  }
+  .assignment-heading {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px;
+    align-items: baseline;
+  }
+  .assignment-heading > strong {
+    font-size: 15px;
+    overflow-wrap: anywhere;
+  }
+  .assignment-heading > span {
+    font-size: 13px;
+    white-space: nowrap;
+  }
+  .assignment-progress progress {
+    display: block;
+    width: 100%;
+    height: 8px;
+    margin: 12px 0;
+    accent-color: #2685ed;
+  }
+  .assignment-progress > small {
+    display: block;
+    color: #64758b;
+  }
+  .assignment-progress ul {
+    list-style: none;
+    margin: 10px 0 0;
+    padding: 0;
+  }
+  .member-status {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px 16px;
+    padding: 8px 0;
+    border-top: 1px solid #e8eef5;
+    font-size: 14px;
+  }
+  .member-status > span {
+    min-width: 64px;
+  }
+  .member-status > strong {
+    font-size: 13px;
+    font-weight: 500;
+    color: #947020;
+  }
+  .member-status > strong.completed {
+    color: #23825b;
+  }
+  .member-status > small {
+    color: #64758b;
+    font-size: 12px;
+  }
   .todos-page {
     height: 100%;
     overflow: auto;
@@ -798,7 +986,6 @@
     background: #e5f1ff;
     font-size: 11px;
   }
-  .view-switch,
   .filter-nav,
   .meeting-filters {
     display: flex;
@@ -831,9 +1018,6 @@
     flex-wrap: wrap;
     gap: 12px;
     margin-bottom: 16px;
-  }
-  .todo-list-toolbar .view-switch {
-    margin-bottom: 0;
   }
   .todo-list-toolbar .header-actions {
     flex-wrap: wrap;
@@ -956,8 +1140,7 @@
     background: #2685ed;
     color: white;
   }
-  .todos-page > article,
-  .published-task {
+  .todos-page > article {
     display: flex;
     gap: 12px;
     align-items: center;
@@ -989,37 +1172,17 @@
     text-decoration: line-through;
     color: #718198;
   }
-  .published-task {
-    flex-direction: column;
-    align-items: stretch;
+  .todos-page > article.expired {
+    background: #f0f3f7;
+    border-color: #dfe5ec;
   }
-  .published-heading {
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
+  .expired-label {
+    color: #9a5b24;
   }
-  .published-heading span {
-    font-size: 12px;
-    color: #1769c6;
-  }
-  .published-task progress {
-    width: 100%;
-    height: 8px;
-    accent-color: #2685ed;
-  }
-  .recipient-progress {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 10px 0;
-    border-top: 1px solid #edf3fb;
-    font-size: 13px;
-  }
-  .recipient-progress > span:first-child {
-    flex: 1;
-  }
-  .finished {
-    color: #168360;
+  button:disabled,
+  input:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
   }
   .hint,
   p,

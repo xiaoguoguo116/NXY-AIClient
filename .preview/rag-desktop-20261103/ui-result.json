@@ -1,0 +1,89 @@
+{
+  "logs": [
+    {
+      "at": 11366.200000000186,
+      "traceId": "be2a52b8",
+      "stage": "start",
+      "elapsedMs": 0
+    },
+    {
+      "at": 11376.799999999814,
+      "traceId": "be2a52b8",
+      "stage": "request_start",
+      "elapsedMs": 11,
+      "path": "config"
+    },
+    {
+      "at": 11397,
+      "traceId": "be2a52b8",
+      "stage": "response_headers",
+      "elapsedMs": 31,
+      "path": "config",
+      "durationMs": 20,
+      "status": 200
+    },
+    {
+      "at": 11400.399999999907,
+      "traceId": "be2a52b8",
+      "stage": "config_ready",
+      "elapsedMs": 34
+    },
+    {
+      "at": 11400.600000000093,
+      "traceId": "be2a52b8",
+      "stage": "request_start",
+      "elapsedMs": 35,
+      "path": "ragflow-api/chats/1f8d4354c38711f193a109fdac79609a/sessions"
+    },
+    {
+      "at": 11477.200000000186,
+      "traceId": "be2a52b8",
+      "stage": "response_headers",
+      "elapsedMs": 111,
+      "path": "ragflow-api/chats/1f8d4354c38711f193a109fdac79609a/sessions",
+      "durationMs": 77,
+      "status": 200
+    },
+    {
+      "at": 11480.5,
+      "traceId": "be2a52b8",
+      "stage": "session_ready",
+      "elapsedMs": 114,
+      "reused": false
+    },
+    {
+      "at": 11480.600000000093,
+      "traceId": "be2a52b8",
+      "stage": "request_start",
+      "elapsedMs": 115,
+      "path": "ragflow-api/chat/completions"
+    },
+    {
+      "at": 11535.399999999907,
+      "traceId": "be2a52b8",
+      "stage": "response_headers",
+      "elapsedMs": 169,
+      "path": "ragflow-api/chat/completions",
+      "durationMs": 55,
+      "status": 200
+    },
+    {
+      "at": 131371.8999999999,
+      "traceId": "be2a52b8",
+      "stage": "request_end",
+      "elapsedMs": 120006,
+      "aborted": true
+    }
+  ],
+  "updates": [],
+  "conversationId": "9302cafe-f412-461a-ab18-c4a05beece5f",
+  "status": "error",
+  "error": "请求超时，请稍后重试。",
+  "text": "",
+  "build": {
+    "executable": "src-tauri/target/release/em.exe",
+    "installer": "src-tauri/target/release/bundle/msi/EM_2.0.1_x64_en-US.msi",
+    "new_sha256": "a5e87f929fdf7a89f3702da4a1a48dd0851eb04db44813b1409b5ce1386911e2",
+    "previous_sha256": "2fedd3c457e867008eac410830d839c332432f43178dcf885174cdfeb777a7eb"
+  }
+}

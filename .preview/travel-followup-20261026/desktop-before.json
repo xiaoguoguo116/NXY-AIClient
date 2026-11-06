@@ -1,0 +1,110 @@
+{
+  "checks": [
+    {
+      "label": "workflow",
+      "session": "7416d710d0d811f1b9eacd99fe22c3f4",
+      "answer": "这个问题可能涉及不同的业务场景。请选择你想了解的方向，或在输入框补充说明。",
+      "complete": true,
+      "options": [
+        {
+          "id": "b5ec0e9be5d34274aad36676947862e2",
+          "question": "国内出差和国际及港澳台出差分别需要提前多久提交申请,不同预算金额由谁审批?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "f2356a4c21a844c2911321d1336ff5fa",
+          "question": "出差返程后报销应按什么顺序提交,财务多久完成审核?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "35712b4059544c388df9f6e435996c50",
+          "question": "出差伙食补助和市内交通补助按什么标准计算?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "656f7615c3294817993c259bbe0b7b62",
+          "question": "出差期间无法正常打卡应如何提交和确认?",
+          "sources": [
+            "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md"
+          ]
+        }
+      ],
+      "record": "671a8d5eec284c8587030872fb4514f2",
+      "cache": "not_requested",
+      "candidates": 24,
+      "visibleOptions": 4,
+      "error": ""
+    },
+    {
+      "label": "history-restored",
+      "session": "7416d710d0d811f1b9eacd99fe22c3f4",
+      "answer": "这个问题可能涉及不同的业务场景。请选择你想了解的方向，或在输入框补充说明。",
+      "complete": true,
+      "options": [
+        {
+          "id": "b5ec0e9be5d34274aad36676947862e2",
+          "question": "国内出差和国际及港澳台出差分别需要提前多久提交申请,不同预算金额由谁审批?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "f2356a4c21a844c2911321d1336ff5fa",
+          "question": "出差返程后报销应按什么顺序提交,财务多久完成审核?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "35712b4059544c388df9f6e435996c50",
+          "question": "出差伙食补助和市内交通补助按什么标准计算?",
+          "sources": [
+            "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md"
+          ]
+        },
+        {
+          "id": "656f7615c3294817993c259bbe0b7b62",
+          "question": "出差期间无法正常打卡应如何提交和确认?",
+          "sources": [
+            "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md"
+          ]
+        }
+      ],
+      "record": "671a8d5eec284c8587030872fb4514f2",
+      "cache": "not_requested",
+      "visibleOptions": 4,
+      "error": ""
+    },
+    {
+      "label": "selected",
+      "session": "7416d710d0d811f1b9eacd99fe22c3f4",
+      "answer": "国内出差应至少提前两个工作日提交目的、地点、日期、拜访对象、交通方案和预算；国际及港澳台出差至少提前五个工作日申请[ID:0]。预算不超过5,000元由部门负责人和成本中心审批，5,001—20,000元增加分管负责人审批，超过20,000元增加财务负责人审批[ID:0]。",
+      "complete": true,
+      "options": [],
+      "record": "e91e83a65d5548daadbaa776edaf660f",
+      "cache": "hit",
+      "candidates": 1,
+      "visibleOptions": 0,
+      "error": ""
+    },
+    {
+      "label": "typed-followup",
+      "session": "7416d710d0d811f1b9eacd99fe22c3f4",
+      "answer": "预算6,000元属于5,001—20,000元区间，需要部门负责人、成本中心和分管负责人审批[ID:0]。",
+      "complete": true,
+      "options": [],
+      "record": "6e89a2ba42a1426bb0eb9223539d7755",
+      "cache": "not_requested",
+      "candidates": 29,
+      "visibleOptions": 0,
+      "error": ""
+    }
+  ],
+  "passed": true
+}

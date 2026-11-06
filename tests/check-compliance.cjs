@@ -2,7 +2,8 @@
 const {chromium}=require('C:/Users/94719/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
 const assert=require('node:assert/strict');
 const {Document,Packer,Paragraph}=require('docx');
-const output='C:/Users/94719/.codex/visualizations/2026/10/12/01a12e05-f80d-7992-8795-27ce084b02ee/';
+const output=require('node:path').resolve('.preview/office-verification',`compliance-${Date.now()}`)+require('node:path').sep;
+require('node:fs').mkdirSync(output,{recursive:true});
 (async()=>{
  const browser=await chromium.launch({channel:'msedge',headless:true});
  const page=await browser.newPage({viewport:{width:1440,height:1000}});
@@ -26,13 +27,12 @@ const output='C:/Users/94719/.codex/visualizations/2026/10/12/01a12e05-f80d-7992
   await page.locator('.cw-evidence button').first().click();await page.getByRole('dialog',{name:'原文溯源'}).waitFor();assert((await page.locator('.cw-source-text .cited').innerText()).includes('申请材料'));await page.getByRole('button',{name:'关闭原文'}).click();
   await page.getByRole('button',{name:'制度比对',exact:true}).click();await page.getByLabel('合规任务说明').fill('对照两份文件');await run();
   await page.getByLabel('人工处理',{exact:true}).selectOption('已接受');await page.getByRole('button',{name:'保存审核与草稿'}).click();
-  await page.getByRole('button',{name:'合规初审',exact:true}).click();await page.getByLabel('待审业务材料').selectOption({label:'测试内部制度'});await page.getByLabel('合规任务说明').fill('检查此材料');await run();
   await page.getByRole('button',{name:/管理资料库/}).click();await add('测试报告模板','# 季度报告\n\n报告期：{{报告期}}\n\n交易金额：{{交易金额}}\n\n整改情况：{{整改情况}}','报送模板');
   await page.getByRole('button',{name:'报送助手',exact:true}).click();await page.getByLabel('报送指标').fill('{"报告期":"2026年第三季度","交易金额":"123.4500 万元","数据来源":"验收模拟数据"}');
-  await page.getByRole('button',{name:'仅填充模板（不调用模型）'}).click();assert.match(await page.getByLabel('合规草稿').inputValue(),/123.4500 万元/);assert.match(await page.getByLabel('合规草稿').inputValue(),/待补充：整改情况/);assert.equal(calls,3);
+  await page.getByRole('button',{name:'仅填充模板（不调用模型）'}).click();assert.match(await page.getByLabel('合规草稿').inputValue(),/123.4500 万元/);assert.match(await page.getByLabel('合规草稿').inputValue(),/待补充：整改情况/);assert.equal(calls,2);
   const download=page.waitForEvent('download');await page.getByRole('button',{name:'导出 Word'}).click();const file=await download;await file.saveAs(output+'compliance-report-test.docx');
   const exported=await require('mammoth').extractRawText({path:output+'compliance-report-test.docx'});assert.match(exported.value,/123.4500 万元/);assert.match(exported.value,/待补充：整改情况/);assert.match(exported.value,/待人工审核/);
-  await page.getByLabel('合规任务说明').fill('生成季度草稿');await run();assert.equal(calls,4);
+  await page.getByLabel('合规任务说明').fill('生成季度草稿');await run();assert.equal(calls,3);
   await page.getByRole('button',{name:'制度比对',exact:true}).click();await page.locator('.cw-history').first().click();assert.equal(await page.getByLabel('人工处理',{exact:true}).inputValue(),'已接受');
   await page.screenshot({path:output+'compliance-workbench.png',fullPage:true});
   await page.reload();await page.getByRole('button',{name:'制度比对',exact:true}).click();await page.locator('.cw-history').first().click();assert.equal(await page.getByLabel('人工处理',{exact:true}).inputValue(),'已接受');
@@ -43,6 +43,6 @@ const output='C:/Users/94719/.codex/visualizations/2026/10/12/01a12e05-f80d-7992
   await page.locator('input[type=file]').setInputFiles({name:'pdf-import-test.pdf',mimeType:'application/pdf',buffer:pdf});await page.getByRole('button',{name:'保存资料到本机',exact:true}).click();await page.locator('.cw-library-item').filter({hasText:'pdf-import-test.pdf'}).waitFor({timeout:30000});
   await page.locator('.cw-library-item').filter({hasText:'pdf-import-test.pdf'}).getByRole('button',{name:'查看原文'}).click();assert((await page.locator('.cw-source-text').innerText()).includes('第 1 页'));await page.getByRole('button',{name:'关闭原文'}).click();
   assert.equal(errors.length,0,errors.join('\n'));
-  console.log('PASS: four workflows (mock model), citation jump, review persistence, exact template values, missing markers, PDF page extraction and DOCX import/export. No real regulatory judgement tested.');
+  console.log(`PASS: comparison/report and legacy policy logic (mock model), citation jump, review-state persistence, exact template values, missing markers, PDF page extraction and DOCX import/export. Evidence: ${output}`);
  }finally{await browser.close()}
 })().catch(e=>{console.error(e);process.exitCode=1});

@@ -395,7 +395,8 @@
     (tabId) => {
       const targetPath = menuOptions.value.find((item) => item.id === tabId)?.path
       if (targetPath && route.path !== targetPath) {
-        void router.push(targetPath)
+        // Preserve the pending destination payload; a bare path cancels in-flight task/meeting navigation.
+        void homeTabStore.applyNavigate(tabId, homeTabStore.tabPayload[tabId])
       }
     }
   )

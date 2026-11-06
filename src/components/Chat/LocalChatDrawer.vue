@@ -13,13 +13,13 @@
         <div class="members-head">
           <span>群成员 {{ members.length }} 人</span>
           <div>
-            <button aria-label="添加本地模拟成员" @click="adding = !adding">＋</button>
+            <button aria-label="添加成员" @click="adding = !adding">＋</button>
             <button aria-label="搜索群成员" @click="searching = !searching">⌕</button>
           </div>
         </div>
         <input v-if="searching" v-model="memberQuery" aria-label="搜索成员姓名" placeholder="搜索成员姓名" />
         <form v-if="adding" class="inline-form" @submit.prevent="addMember">
-          <input v-model="newName" aria-label="模拟成员姓名" placeholder="模拟成员姓名" maxlength="30" required />
+          <input v-model="newName" aria-label="成员姓名" placeholder="成员姓名" maxlength="30" required />
           <button>添加</button>
         </form>
         <div class="member-grid">
@@ -86,9 +86,7 @@
           导出聊天记录
           <span>›</span>
         </button>
-        <p class="hint">
-          本地测试群：成员为模拟成员；分享仅复制群信息，不生成入群邀请。消息通知仅提示本机 AI 回复完成。
-        </p>
+        <p class="hint">群信息保存在本机；分享仅复制群信息，不生成入群邀请。消息通知仅提示本机 AI 回复完成。</p>
       </template>
       <template v-else-if="mode === 'announcement'">
         <p class="hint">群通知保存在此电脑，不会推送给其他真人。</p>
@@ -159,7 +157,7 @@
     props.chat.members = members.value.filter((m) => m.id !== member.id)
     removeId.value = ''
     emit('save')
-    feedback.value = '已移除本地模拟成员；历史消息和待办保留。'
+    feedback.value = '已移除成员；历史消息和待办保留。'
   }
   const nameDraft = ref(props.chat.name),
     announcementDraft = ref(props.chat.announcement || '')
@@ -194,7 +192,7 @@
     props.chat.members = [...members.value, { id: crypto.randomUUID(), name, color: '#5b9fbb', kind: 'simulated' }]
     emit('save')
     newName.value = ''
-    feedback.value = '已添加本地模拟成员'
+    feedback.value = '已添加成员'
     expanded.value = true
   }
   function rename() {
@@ -208,7 +206,7 @@
     try {
       const { writeText } = await import('@tauri-apps/plugin-clipboard-manager')
       await writeText(
-        `本地群：${props.chat.name}\n成员：${members.value.map((m) => m.name).join('、')}\n仅本机演示，不是入群邀请链接。`
+        `本地群：${props.chat.name}\n成员：${members.value.map((m) => m.name).join('、')}\n群信息保存在本机，不是入群邀请链接。`
       )
       feedback.value = '已复制群信息'
     } catch {

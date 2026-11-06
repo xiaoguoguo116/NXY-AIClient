@@ -1,0 +1,591 @@
+{
+  "chat_id": "1f8d4354c38711f193a109fdac79609a",
+  "chat_name": "Markdown问答与追问验证",
+  "dataset_ids": [
+    "e249538ec38611f193a109fdac79609a"
+  ],
+  "documents": [
+    {
+      "id": "1b5978b0cc4d11f18fb2ef7ad2230155",
+      "name": "09-非银行支付机构监督管理条例实施细则.a297851c5981.83826c428c09eb58c9f4.md",
+      "chunk_count": 3,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "18f26802cc4d11f18fb2ef7ad2230155",
+      "name": "08-支付结算办法_含2024年修改_.3ed6d0710ac6.93f88f06ec989c00bba8.md",
+      "chunk_count": 3,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "17bb319ecc4d11f18fb2ef7ad2230155",
+      "name": "07-支付结算业务代理办法.103473a735f7.253b36a7448ca8ce4b50.md",
+      "chunk_count": 1,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "1553fd32cc4d11f18fb2ef7ad2230155",
+      "name": "06-银行卡收单业务管理办法.0ac61aa51c7b.c4468f5ebb870041891b.md",
+      "chunk_count": 3,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "141dff76cc4d11f18fb2ef7ad2230155",
+      "name": "05-人民币银行结算账户管理办法实施细则.8c9f48871ceb.10377732b1a6bd9a9064.md",
+      "chunk_count": 1,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "12e86e0ccc4d11f18fb2ef7ad2230155",
+      "name": "04-人民币银行结算账户管理办法.37173235b564.885e0e015181e1fbc1df.md",
+      "chunk_count": 1,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "11b8845ecc4d11f18fb2ef7ad2230155",
+      "name": "03-非银行支付机构网络支付业务管理办法.236bce3dc228.26869b5d746793458ffb.md",
+      "chunk_count": 1,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "10829b1acc4d11f18fb2ef7ad2230155",
+      "name": "02-非银行支付机构客户备付金存管办法.5fe73ead8c55.3bb1c15bc2b7b4e12d9d.md",
+      "chunk_count": 1,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "0eb373e0cc4d11f18fb2ef7ad2230155",
+      "name": "01-非银行支付机构监督管理条例.3bbc49c3800e.9324b08469bc68ff410e.md",
+      "chunk_count": 1,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "8866a47cc87511f19e46a11529d1411d",
+      "name": "04_请假休假管理制度.0f0d264c8848.c54ab24733f94b18fa7b.md",
+      "chunk_count": 23,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "f4ff9752c60d11f1a116bd1dc42aeac2",
+      "name": "M14_2026-09-18_数字档案与质量体系例会.15a035de313a.5836538afaf70a289c12.md",
+      "chunk_count": 3,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "f2908ea4c60d11f1a116bd1dc42aeac2",
+      "name": "M13_2026-09-04_登录安全与账号治理例会.c8ea48e6709d.ab1d3d2c6f23c48fb684.md",
+      "chunk_count": 4,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "ef890376c60d11f1a116bd1dc42aeac2",
+      "name": "M12_2026-08-26_财务岗位资格与轮岗会.e4b08b2afa2b.b8117ec60c319e14b648.md",
+      "chunk_count": 5,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "ed193368c60d11f1a116bd1dc42aeac2",
+      "name": "M11_2026-08-14_工程供应商资质审核会.db37db46bb79.1188cda5ca403b7716bf.md",
+      "chunk_count": 4,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "eaad95f6c60d11f1a116bd1dc42aeac2",
+      "name": "M10_2026-08-05_人才培养与培训验收会.6ac21e859c23.5259624367420f1059cf.md",
+      "chunk_count": 4,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "e79a445ec60d11f1a116bd1dc42aeac2",
+      "name": "M09_2026-09-21_年度预算预审会.b336a763ab5d.12e600a70132d08cfc6e.md",
+      "chunk_count": 5,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "e49076d4c60d11f1a116bd1dc42aeac2",
+      "name": "M08_2026-09-16_档案系统可信验证专题会.a8d584f9a8bb.25f9683b88beba0a6dd9.md",
+      "chunk_count": 5,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "e1a4858cc60d11f1a116bd1dc42aeac2",
+      "name": "M07_2026-09-09_供应商接入验收会.a8b34bc311e6.986259d33d330982a3d9.md",
+      "chunk_count": 5,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "dc307d90c60d11f1a116bd1dc42aeac2",
+      "name": "M06_2026-09-02_客户门户故障复盘会.6431f4ef66da.34bb348f634d9b05172c.md",
+      "chunk_count": 5,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "dc2a7c9cc60d11f1a116bd1dc42aeac2",
+      "name": "M05_2026-08-24_财务共享中心月度例会.e0a29c2c4ea5.549d81db773b1098c319.md",
+      "chunk_count": 4,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "dad7e49cc60d11f1a116bd1dc42aeac2",
+      "name": "M04_2026-08-18_移动审批安全评审会.7bfb68aa68bf.544f961dfc8b93159c6c.md",
+      "chunk_count": 2,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "d87456a4c60d11f1a116bd1dc42aeac2",
+      "name": "M03_2026-08-12_政务接口联调例会.1d99f9b066bd.c7a75543dd5709c37ddf.md",
+      "chunk_count": 4,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "d59a35acc60d11f1a116bd1dc42aeac2",
+      "name": "M02_2026-08-07_电子签章服务续期评审会.2c180a25b582.5c921d9b1162404f5c34.md",
+      "chunk_count": 2,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "d593bf4cc60d11f1a116bd1dc42aeac2",
+      "name": "M01_2026-08-03_采购平台上线协调会.0dec617e4c13.f54653ded7a4410cee7a.md",
+      "chunk_count": 2,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "c4c0f364c60911f1a116bd1dc42aeac2",
+      "name": "监控自动入库验证.36ae148d0c.1646d2126cd8.ceaaf900eb1180ccbef0.md",
+      "chunk_count": 3,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "aca4e5f6c60911f1a116bd1dc42aeac2",
+      "name": "监控自动入库验证.36ae148d0c.260ed644c040.0de0b8249a95d92ec4d4.md",
+      "chunk_count": 3,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "c909ffe4c47711f18038430839a8e6eb",
+      "name": "21_保密与信息分级制度.42981f3ff733.5d6c85f8a321c584e828.md",
+      "chunk_count": 23,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "c903a428c47711f18038430839a8e6eb",
+      "name": "20_会议管理制度.967c3b529dde.9e079c1e3dbbe3e61ce7.md",
+      "chunk_count": 23,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "acff142ec47711f18038430839a8e6eb",
+      "name": "19_项目管理制度.7fcdc1cdc88a.03ff71614215e9e8e22d.md",
+      "chunk_count": 23,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "acf278a4c47711f18038430839a8e6eb",
+      "name": "18_客户投诉管理制度.7c085d65153f.48a26ffcbbf571750e11.md",
+      "chunk_count": 23,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "90e62dfec47711f18038430839a8e6eb",
+      "name": "17_预算管理制度.b67a60a8e087.ce2e31f9c14a86e510b0.md",
+      "chunk_count": 23,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "90e558a2c47711f18038430839a8e6eb",
+      "name": "16_固定资产管理制度.68a6d31149c7.483203e35ee7f4be2959.md",
+      "chunk_count": 23,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "74c61f80c47711f18038430839a8e6eb",
+      "name": "15_档案管理制度.575753e1f623.daa9c89e4da4d6c5e449.md",
+      "chunk_count": 23,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "74c0d980c47711f18038430839a8e6eb",
+      "name": "14_印章与证照管理制度.421af9b9a594.a78457db4f16340f1523.md",
+      "chunk_count": 23,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "58b5da56c47711f18038430839a8e6eb",
+      "name": "13_合同管理制度.8bb5da8cf5f5.fabca1435d2edc7e8f46.md",
+      "chunk_count": 23,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "58b0ced0c47711f18038430839a8e6eb",
+      "name": "12_采购管理制度.94ac86c2be83.59c1a87576a1fbb5dbc6.md",
+      "chunk_count": 23,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "3c2e2d2ac47711f18038430839a8e6eb",
+      "name": "11_业务招待管理制度.14851af48b02.8ce924f654ab0a898cae.md",
+      "chunk_count": 23,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "3c27ef1ec47711f18038430839a8e6eb",
+      "name": "10_远程办公管理制度.0661197500c3.109a94309f7e0772dce0.md",
+      "chunk_count": 23,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "a87dc12ac44a11f1a95931487e8dab93",
+      "name": "09_薪酬与奖金管理制度.ef6e55b2087e.a8cffde97a4947170d3c.md",
+      "chunk_count": 23,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "8cdce770c44a11f1a95931487e8dab93",
+      "name": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+      "chunk_count": 23,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "8cdc01b6c44a11f1a95931487e8dab93",
+      "name": "05_加班与调休管理制度.04d9121c5a2d.5f5d872c1d676735082f.md",
+      "chunk_count": 23,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "949ad6b8c44811f1a95931487e8dab93",
+      "name": "08_培训与发展管理制度.c9263654ab42.cd1b7f6bd7cad80133aa.md",
+      "chunk_count": 23,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "9491580ec44811f1a95931487e8dab93",
+      "name": "07_绩效管理制度.ee2e6305fca2.fdddebbe822fe130b825.md",
+      "chunk_count": 23,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "5d1cead2c44811f1a95931487e8dab93",
+      "name": "04_请假休假管理制度.4c8e6fe1028c.73b7840524069b9aab26.md",
+      "chunk_count": 23,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "5d152130c44811f1a95931487e8dab93",
+      "name": "03_招聘录用管理制度.cd8dcd1b7571.7ebe560274bf921e8f0d.md",
+      "chunk_count": 23,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "411ab698c44811f1a95931487e8dab93",
+      "name": "02_考勤管理制度.820eb973f2be.7d8815aacaf8076a54bc.md",
+      "chunk_count": 23,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "4119a910c44811f1a95931487e8dab93",
+      "name": "01_值班管理制度.59febb973eb6.92a99568789577f0a052.md",
+      "chunk_count": 23,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "bccd8542c44611f1a95931487e8dab93",
+      "name": "业务分析报告.0a7048181247.2608606a1da78ca9fed1.md",
+      "chunk_count": 4,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "b6bc65bac44611f1a95931487e8dab93",
+      "name": "信息安全管理制度.212718b4bfd3.30010621ed37840e95b1.md",
+      "chunk_count": 6,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "b6c3620cc44611f1a95931487e8dab93",
+      "name": "项目上线会议纪要.f79f0d6ce4c1.e29338796ce5bcb05bad.md",
+      "chunk_count": 4,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "1ab77e08c38711f193a109fdac79609a",
+      "name": "项目上线会议纪要.30e742520242d6c8.a3bec64b8b93edf2.md",
+      "chunk_count": 8,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "185eaa64c38711f193a109fdac79609a",
+      "name": "信息安全管理制度.bdb9da804ed7cc43.be58e8cb3fe6a574.md",
+      "chunk_count": 4,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    },
+    {
+      "id": "13d9bb32c38711f193a109fdac79609a",
+      "name": "业务分析报告.552dd4b0c7e12482.4805f21e667c4f6f.md",
+      "chunk_count": 4,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a"
+    }
+  ],
+  "travel_documents": [
+    {
+      "id": "8cdce770c44a11f1a95931487e8dab93",
+      "name": "06_差旅与费用报销制度.dcea98756334.2f1db51e8c77bc0137d4.md",
+      "chunk_count": 23,
+      "run": "UNSTART",
+      "progress": 0.0,
+      "status": "1",
+      "dataset_id": "e249538ec38611f193a109fdac79609a",
+      "chunks": [
+        {
+          "id": "ce021d4204cde82d",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：1/23\n上下文：差旅与费用报销管理制度\n\n# 差旅与费用报销管理制度\n\n> 文档属性：内部制度示例｜用途：RAGFlow 长文分块与检索验证｜状态：待业务与法务审核\n\n"
+        },
+        {
+          "id": "c8e7fc7b4c78251b",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：2/23\n上下文：差旅与费用报销管理制度 > 第一章 总则 > 第一条\n\n## 第一章 总则\n\n**第一条**\n为规范因公出差、业务招待和日常费用的申请、消费、报销与复核，兼顾业务效率、成本控制和票据合规，结合公司实际，制定本制度。本制度为知识库验证样例，正式发布前应由人力资源、财务、法务等责任部门结合所在地法律和公司授权完成审核。\n\n"
+        },
+        {
+          "id": "0a7991e7393fab47",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：3/23\n上下文：差旅与费用报销管理制度 > 第一章 总则 > 第二条\n\n**第二条**\n本制度适用于员工因公发生的交通、住宿、餐费、招待、采购及其他经批准可报销费用。劳务派遣、外包、实习或合作方人员是否适用，应依据合同、管理边界和实际工作场景另行明确。\n\n"
+        },
+        {
+          "id": "ace1af69e27b59a7",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：5/23\n上下文：差旅与费用报销管理制度 > 第一章 总则 > 第四条\n\n**第四条**\n财务部是本制度的归口部门，负责解释、培训、记录检查和版本维护；各部门负责人负责组织实施，员工应如实提交信息并配合合理核验。审批人对其权限范围内决定负责。\n\n"
+        },
+        {
+          "id": "01c82cc48347291e",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：6/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第五条\n\n## 第二章 管理规则\n\n**第五条**\n费用应遵循真实发生、业务相关、标准适当和凭证完整原则。任何人不得拆分报销规避审批，不得报销个人消费、虚假交易或已由第三方承担的费用。\n\n"
+        },
+        {
+          "id": "5eaf33cda95782ca",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：4/23\n上下文：差旅与费用报销管理制度 > 第一章 总则 > 第三条\n\n**第三条**\n制度执行遵循合法合规、事实可核验、权责一致、信息最小必要和持续改进原则。处理个别事项时，应同时考虑员工权益、业务连续性和风险程度。\n\n"
+        },
+        {
+          "id": "45b931f9d15e08c8",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：8/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第七条\n\n**第七条**\n职级P1—P3乘坐飞机经济舱、高铁或动车二等座、普通列车硬卧；P4—P5及M1—M2可乘飞机经济舱、高铁或动车一等座、普通列车软卧；M3及以上可乘前述标准，单程飞行超过6小时可事前申请公务舱。超标准部分未经批准由个人承担，低于标准按实际金额报销，不发放差额。\n\n"
+        },
+        {
+          "id": "d80b632f31f245a1",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：10/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第九条\n\n**第九条**\n住宿费在限额内凭票据按实际金额报销，不向员工支付节约差额。两人自愿合住一间房时仍按一间房实际金额报销。大型展会、极端天气导致价格普遍超过限额的，应提交三个可比酒店价格，经分管负责人事前批准后可上浮，最高不超过原限额的30%。\n\n"
+        },
+        {
+          "id": "5786c4fce296d8e8",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：7/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第六条\n\n**第六条**\n国内出差应至少提前两个工作日提交目的、地点、日期、拜访对象、交通方案和预算；国际及港澳台出差至少提前五个工作日申请。预算不超过5,000元由部门负责人和成本中心审批，5,001—20,000元增加分管负责人审批，超过20,000元增加财务负责人审批。紧急出差先取得有权审批人口头同意，并在返程后两个工作日内补办。\n\n"
+        },
+        {
+          "id": "05ea79f2c3a53519",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：9/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第八条\n\n**第八条**\n住宿限额按每间夜、含税价控制：A类城市P1—P3为500元、P4—P5及M1—M2为650元、M3及以上为850元；B类城市分别为400元、520元、700元；C类城市分别为320元、420元、560元。A类包括北京、上海、广州、深圳；B类包括天津、重庆、杭州、南京、苏州、成都、武汉、西安及其他省会城市；其他境内城市为C类。\n\n"
+        },
+        {
+          "id": "9cf74693d51d51ef",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：14/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十三条\n\n**第十三条**\n返程后十五个工作日内，员工应按“填写报销单—关联出差申请—上传交通、住宿及支付凭证—直属负责人确认业务—成本中心复核预算—财务审核票据—出纳付款”的顺序提交。电子发票应验真查重；纸质票据按档案要求移交。材料齐全后财务原则上在五个工作日内完成审核，并在下一付款批次支付。\n\n"
+        },
+        {
+          "id": "ffdb8a429109d21b",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：12/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十一条\n\n**第十一条**\n出差伙食补助按自然日计算：A类城市120元/人/天、B类城市100元/人/天、C类城市80元/人/天；市内交通补助分别为80元、60元和50元/人/天。出发日和返程日均按全天计算。主办方每提供一顿正餐，伙食补助扣减30元；统一提供市内交通的，当日不再发放交通补助。\n\n"
+        },
+        {
+          "id": "8610c5be68770297",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：15/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十四条\n\n**第十四条**\n审批人对业务真实性、必要性和预算负责，财务部对标准、票据和会计处理负责。审批人不得审批本人费用；上级与财务复核不能相互替代。\n\n"
+        },
+        {
+          "id": "2ee54499d9047ca8",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：13/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十二条\n\n**第十二条**\n城际交通票、机场或车站往返交通费按批准路线凭票据实报销。市内使用交通补助后，普通通勤不再另报出租车；携带大型设备、夜间23:00后到达或无公共交通等情形，经说明可凭票另报，不扣减当日交通补助。自驾出差须事前批准，按0.8元/公里报销燃油及车辆损耗，高速费和停车费凭票另报。\n\n"
+        },
+        {
+          "id": "0cb236e7f19b0bc9",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：11/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十条\n\n**第十条**\n业务招待应事前说明对象、目的、人数和预算，接待标准应适度。报销时列明实际参与人员及业务事项；涉及客户个人信息的，仅保留财务审核所需信息并限制访问。\n\n| 城市类别 | P1—P3住宿上限 | P4—P5、M1—M2 | M3及以上 | 伙食/交通补助 |\n| --- | ---: | ---: | ---: | ---: |\n| A类：北上广深 | 500元/间夜 | 650元/间夜 | 850元/间夜 | 120元/80元每天 |\n| B类：省会及重点城市 | 400元/间夜 | 520元/间夜 | 700元/间夜 | 100元/60元每天 |\n| C类：其他境内城市 | 320元/间夜 | 420元/间夜 | 560元/间夜 | 80元/50元每天 |\n\n"
+        },
+        {
+          "id": "b2c702ec93e485cc",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：18/23\n上下文：差旅与费用报销管理制度 > 第三章 申请、记录与监督 > 第十七条\n\n## 第三章 申请、记录与监督\n\n**第十七条**\n申请人应如实填写事项、时间、原因和必要附件。审批人应核对事实、规则、权限和业务影响；系统自动通过或退回不能替代应有的人工判断，重大例外应说明依据。\n\n"
+        },
+        {
+          "id": "9f37d2570e2b702b",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：19/23\n上下文：差旅与费用报销管理制度 > 第三章 申请、记录与监督 > 第十八条\n\n**第十八条**\n事项发生变化、取消或延期时，申请人应及时更新，审批人重新确认影响。紧急情形允许先采取保护人员、资产或业务连续性的必要措施，事后按规定补充记录。\n\n"
+        },
+        {
+          "id": "cb6f304ef88e54a4",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：16/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十五条\n\n**第十五条**\n财务部发现异常费用时，应列明疑点并退回补充，不得要求提供与审核无关的大量个人信息。涉嫌虚假报销的，应保存证据并启动调查，在结论作出前听取相关人员说明。\n\n"
+        },
+        {
+          "id": "e37f95ee71a6732f",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：17/23\n上下文：差旅与费用报销管理制度 > 第二章 管理规则 > 第十六条\n\n**第十六条**\n员工对退回、扣减或逾期处理有异议的，可提交复核。财务部应说明依据；制度标准变化影响已批准行程时，原则上按批准时或对员工更合理的有效规则衔接处理。\n\n"
+        },
+        {
+          "id": "351c198b3bdce551",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：23/23\n上下文：差旅与费用报销管理制度 > 第四章 异议、责任与附则 > 第二十二条\n\n**第二十二条**\n本制度由财务部负责解释和定期评估，自批准发布之日起施行。法律法规、组织结构或业务流程发生重大变化时，应及时修订；新旧规定衔接不清的，由归口部门提出处理意见并留档。\n"
+        },
+        {
+          "id": "fc18dbbf661cf791",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：22/23\n上下文：差旅与费用报销管理制度 > 第四章 异议、责任与附则 > 第二十一条\n\n## 第四章 异议、责任与附则\n\n**第二十一条**\n违反本制度的，应先调查事实、听取说明并区分故意、过失、客观障碍和管理责任。处理措施应与行为性质和影响相称；涉嫌违法或重大风险的，按授权移交相应部门。\n\n"
+        },
+        {
+          "id": "b266882eeef9c2df",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：21/23\n上下文：差旅与费用报销管理制度 > 第三章 申请、记录与监督 > 第二十条\n\n**第二十条**\n员工对处理结果有异议的，可先向归口部门申请复核；涉及本人直接利益的，复核人员应保持相对独立。任何人不得因员工咨询、提出异议或依法反映问题而实施不利对待。\n\n"
+        },
+        {
+          "id": "3bd3b08ae1fff3dd",
+          "text": "来源：06_差旅与费用报销制度.md\n分块：20/23\n上下文：差旅与费用报销管理制度 > 第三章 申请、记录与监督 > 第十九条\n\n**第十九条**\n归口部门应保存申请、审批、变更、执行和复核记录，确保能够追溯谁在何时基于何种材料作出决定。超过保存期限的资料应按档案和个人信息规则处置。\n\n"
+        }
+      ]
+    }
+  ]
+}

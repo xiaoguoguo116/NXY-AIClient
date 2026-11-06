@@ -8,7 +8,11 @@ const pinia = require('pinia')
 function harness() {
   const data = new Map()
   const localStorage = { getItem: key => data.get(key) ?? null }
-  const modules = { pinia, './ragChat.ts': { ragQuestion: () => null } }
+  const modules = {
+    pinia,
+    './chatStream.ts': { readSse: async function* () {} },
+    './ragChat.ts': { ragQuestion: () => null }
+  }
   const load = (name, file) => {
     const module = { exports: {} }
     const code = ts.transpileModule(fs.readFileSync(file, 'utf8'), {
@@ -23,7 +27,8 @@ function harness() {
   }
   const global = load('@/services/localChat', 'src/services/localChat.ts')
   const helper = load('@/services/workGlobalModel', 'src/services/workGlobalModel.ts')
-  modules['@/services/workService'] = {}
+  const workspaceCalls = []
+  modules['@/services/workService'] = { prepareWorkspace: async id => { workspaceCalls.push(id); return 'C:/test/app/workspace' } }
   const stores = load('store', 'src/stores/app/workAssistant.ts')
   pinia.setActivePinia(pinia.createPinia())
   const store = stores.useWorkAssistantStore()
@@ -31,7 +36,7 @@ function harness() {
     data.set(global.CONFIG_KEY, JSON.stringify({ baseUrl, model, contextCount: 12 }))
     data.set(global.API_KEY_KEY, key)
   }
-  return { data, global, helper, store, set }
+  return { data, global, helper, store, set, workspaceCalls }
 }
 
 test('task model follows actual global settings; key changes invalidate session signature', async () => {
@@ -72,4 +77,21 @@ test('DeepSeek missing key produces actionable global-model setup error', () => 
   const { set, helper } = harness()
   set('https://api.deepseek.com/v1', 'configured-model')
   assert.throws(() => helper.readWorkGlobalModel(), /WORK_PROVIDER_KEY_REQUIRED/)
+})
+
+
+test('workspace is created by default; legacy chat setting migrates without discarding a chosen directory', async () => {
+  const { store, workspaceCalls } = harness()
+  assert.equal(store.scopeMode, 'workspace')
+  await store.ensureWorkspace()
+  assert.equal(store.workspacePath, 'C:/test/app/workspace')
+  assert.equal(workspaceCalls.length, 1)
+  await store.ensureWorkspace()
+  assert.equal(workspaceCalls.length, 1)
+  store.scopeMode = 'chat'
+  store.workspacePath = 'D:/chosen'
+  await store.ensureWorkspace()
+  assert.equal(store.scopeMode, 'workspace')
+  assert.equal(store.workspacePath, 'D:/chosen')
+  assert.equal(workspaceCalls.length, 1)
 })
