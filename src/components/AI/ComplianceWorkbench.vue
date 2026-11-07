@@ -93,7 +93,7 @@
         <button
           :disabled="busy || selectedIds.length !== 2"
           @click="
-            selectedIds = [selectedIds[1], selectedIds[0]]
+            selectedIds = [selectedIds[1], selectedIds[0]];
             diffView = 'selected'
           ">
           交换左右
@@ -178,7 +178,7 @@
           class="cw-history"
           :disabled="busy"
           @click="
-            result = r
+            result = r;
             diffView = 'result'
           ">
           {{ displayTime(r.createdAt) }} · {{ r.question.slice(0, 28) }}
